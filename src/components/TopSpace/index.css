@@ -1,0 +1,11 @@
+#hide-region {
+     color: gray;
+     outline: 3px solid gray;
+     outline-offset: -10px;
+}
+
+h1 {
+     padding-top: 20px;
+     padding-bottom: 10px;
+     font-size: 72px;
+}

@@ -1,0 +1,19 @@
+.item-wrapper {
+     padding-top: 20px;
+}
+
+.Options {
+     font-size: 40px;
+}
+
+button {
+     background-color: white;
+     border: none;
+     color: black;
+     height: 80px;
+     width: 120px;
+     text-align: center;
+     text-decoration: none;
+     display: inline-block;
+     font-size: 36px;
+}

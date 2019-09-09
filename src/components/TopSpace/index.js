@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import './index.css';
 import Options from './Options';
 
@@ -34,8 +35,7 @@ class TopSpace extends React.Component {
                          <div className="col-1"></div>
                          <div className="col-5" id="options-region">
                               <Options hidden={this.state.optsHidden}
-                                   toggle={this.props.toggle}
-                                   opts={this.props.opts} />
+                                   toggle={this.props.toggle} />
                          </div>
                          <div className="col-6" id="hide-region"
                            style={{display: this.updateCss()}}
@@ -47,5 +47,9 @@ class TopSpace extends React.Component {
           );
      }
 }
+
+TopSpace.propTypes = {
+     toggle: PropTypes.func
+};
 
 export default TopSpace;

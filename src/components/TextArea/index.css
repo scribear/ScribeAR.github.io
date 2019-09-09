@@ -1,6 +1,6 @@
 #out {
      font-family: sans-serif;
-     font-size: 48px;
+     font-size: 14px;
      overflow-y: scroll;
      position: relative;
      bottom: 0;
@@ -10,7 +10,7 @@
 
 .element {
      font-family: sans-serif;
-     font-size: 48px;
+     font-size: 14px;
      margin-left: 5%;
      margin-right: 5%;
 }

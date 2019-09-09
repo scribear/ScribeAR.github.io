@@ -1,26 +1,29 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import './index.css';
+import { useSelector, useDispatch } from 'react-redux';
 
-export default function PlusMinus({ item, value, decrement, increment }) {
+export default function PlusMinus(props) {
+     const setting = useSelector(props.setting);
+     const dispatch = useDispatch();
+     console.log(setting);
      return (
           <div className="row">
                <div className="col-2 align-items-center">
-                    <button onClick={decrement}>-</button>
+                    <button
+                      className="btn btn-default"
+                      onClick={() => dispatch(props.decrement())}>-</button>
                </div>
-               <div className="col-6">
-                    <p>{item}</p>
+               <div className="col-5">
+                    <p>{props.item}</p>
+               </div>
+               <div className="col-1">
+                    <p style={{textAlign:"right"}}>{setting}</p>
                </div>
                <div className="col-2 align-items-center">
-                    <button onClick={increment}>+</button>
+                    <button
+                      className="btn btn-default"
+                      onClick={() => dispatch(props.increment())}>+</button>
                </div>
           </div>
      );
-}
-
-PlusMinus.propTypes = {
-     item: PropTypes.string,
-     value: PropTypes.string,
-     decrement: PropTypes.func,
-     increment: PropTypes.func,
 }

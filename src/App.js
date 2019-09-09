@@ -1,31 +1,23 @@
 import React from 'react';
-import './App.css';
+import { useSelector, useDispatch } from 'react-redux';
+import { increment } from './redux/actions';
 import TextArea from './components/TextArea';
 import TopSpace from './components/TopSpace';
+import './App.css';
 
-var DEFAULT_TEXT_SIZE = 48;
+/* var DEFAULT_TEXT_SIZE = 48;
 var DEFAULT_LINE_WIDTH = 10;
 var DEFAULT_NUM_LINES = 4;
+360 x 640 screen */
 
 class App extends React.Component {
-     state = {
-          textSize: DEFAULT_TEXT_SIZE,
-          lineWidth: DEFAULT_LINE_WIDTH,
-          numLines: DEFAULT_NUM_LINES,
-          lockScreen: true,
-          invertColors: false
-     }
-
-     changeSetting(obj) {
-          this.setState(obj);
-     }
-
      render() {
           return (
                <div className="App">
-                    <div className="grid-container">
-                         <TopSpace toggle={this.changeSetting.bind(this)}
-                              opts={this.state} />
+                    <div className="row-8">
+                         <TopSpace />
+                    </div>
+                    <div className="row-4">
                          <TextArea />
                     </div>
                </div>

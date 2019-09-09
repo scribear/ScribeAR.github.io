@@ -2,7 +2,7 @@
   "name": "scribe_react",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://ap-ack.github.io/ScribeAR",
+  "homepage": "https://ScribeAR.github.io/",
   "dependencies": {
     "prop-types": "^15.7.2",
     "react": "^16.9.0",

@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/static/css/main.dc93d613.chunk.css",
-    "main.js": "/static/js/main.fc7ea7aa.chunk.js",
-    "main.js.map": "/static/js/main.fc7ea7aa.chunk.js.map",
-    "runtime~main.js": "/static/js/runtime~main.c64907de.js",
-    "runtime~main.js.map": "/static/js/runtime~main.c64907de.js.map",
-    "static/js/2.997d0f9a.chunk.js": "/static/js/2.997d0f9a.chunk.js",
-    "static/js/2.997d0f9a.chunk.js.map": "/static/js/2.997d0f9a.chunk.js.map",
-    "index.html": "/index.html",
-    "precache-manifest.f025c9b1b7f2bf408dafbde635284648.js": "/precache-manifest.f025c9b1b7f2bf408dafbde635284648.js",
-    "service-worker.js": "/service-worker.js",
-    "static/css/main.dc93d613.chunk.css.map": "/static/css/main.dc93d613.chunk.css.map"
+    "main.css": "/ScribeAR.github.io/static/css/main.dc93d613.chunk.css",
+    "main.js": "/ScribeAR.github.io/static/js/main.cfbe158f.chunk.js",
+    "main.js.map": "/ScribeAR.github.io/static/js/main.cfbe158f.chunk.js.map",
+    "runtime~main.js": "/ScribeAR.github.io/static/js/runtime~main.653a97ef.js",
+    "runtime~main.js.map": "/ScribeAR.github.io/static/js/runtime~main.653a97ef.js.map",
+    "static/js/2.997d0f9a.chunk.js": "/ScribeAR.github.io/static/js/2.997d0f9a.chunk.js",
+    "static/js/2.997d0f9a.chunk.js.map": "/ScribeAR.github.io/static/js/2.997d0f9a.chunk.js.map",
+    "index.html": "/ScribeAR.github.io/index.html",
+    "precache-manifest.044d85ba8c0555d34f3773cdd01cddbe.js": "/ScribeAR.github.io/precache-manifest.044d85ba8c0555d34f3773cdd01cddbe.js",
+    "service-worker.js": "/ScribeAR.github.io/service-worker.js",
+    "static/css/main.dc93d613.chunk.css.map": "/ScribeAR.github.io/static/css/main.dc93d613.chunk.css.map"
   }
 }

@@ -1,17 +1,19 @@
 .item-wrapper {
-     padding-top: 20px;
-}
-
-.Options {
-     font-size: 40px;
+     padding-top: 2vh;
 }
 
 button {
      background-color: white;
-     height: 80px;
-     width: 120px;
+     height: 8vh;
+     width: 6vw;
 }
 
 p {
      text-align: left;
+}
+
+h1 {
+     padding-top: 2vh;
+     padding-bottom: 1vh;
+     font-size: 7vh;
 }

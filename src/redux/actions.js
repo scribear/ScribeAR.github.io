@@ -1,3 +1,17 @@
+export const set_screenWidth = (width) => {
+     return {
+          type: 'SET_SCREENWIDTH',
+          value: width
+     };
+}
+
+export const set_screenHeight = (height) => {
+     return {
+          type: 'SET_SCREENHEIGHT',
+          value: height
+     };
+}
+
 export const increment_textSize = () => {
      return { type: 'INCREMENT_TEXTSIZE' };
 }

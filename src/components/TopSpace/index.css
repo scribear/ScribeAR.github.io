@@ -1,11 +1,28 @@
-#hide-region {
+.TopSpace {
+     height: 70vh;
+}
+
+.Container {
+     display: flex;
+     height: 100%;
+     width: 100%;
+     font-size: 4vh;
+}
+
+.TheBox1 {
+     flex: 1;
+     padding-left: 2rem;
+}
+
+.TheBox2 {
+     flex: 1;
      color: gray;
+     line-height: 70vh;
+     text-align: center;
      outline: 3px solid gray;
      outline-offset: -10px;
 }
 
-h1 {
-     padding-top: 20px;
-     padding-bottom: 10px;
-     font-size: 72px;
+.GavinBelsonSignatureBox {
+     display: inline-block;
 }

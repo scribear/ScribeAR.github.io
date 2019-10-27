@@ -1,5 +1,23 @@
 import { combineReducers } from 'redux';
+/*
+const windowWidthReducer = (state, action) => {
+     switch (action.type) {
+          case 'SET_SCREENWIDTH':
+               return action.value;
+          default:
+               return state;
+     }
+}
 
+const windowHeightReducer = (state, action) => {
+     switch (action.type) {
+          case 'SET_SCREENHEIGHT':
+               return action.value;
+          default:
+               return state;
+     }
+}
+*/
 const textSizeReducer = (state = 48, action) => {
      switch (action.type) {
           case 'INCREMENT_TEXTSIZE':
@@ -46,6 +64,8 @@ const invertColorsReducer = (state = false, action) => {
 }
 
 const allReducers = combineReducers({
+//     windowWidth: windowWidthReducer,
+//     windowHeight: windowHeightReducer,
      textSize: textSizeReducer,
      lineWidth: lineWidthReducer,
      numLines: numLinesReducer,

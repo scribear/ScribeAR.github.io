@@ -3,24 +3,27 @@
      padding: 0;
      margin: 0;
      height: 100%;
-     font-size: 48px;
 }
 
 body {
+     padding: 0;
+     margin: 0;
      background-color: black;
-     min-height: 100%;
      color: white;
 }
 
-.grid-container {
-     display: grid;
+/* .Bottom {
+     overflow: auto;
+     height: 30vh;
+     position: relative;
      width: 100%;
-     height: 100vh;
-     grid-template-columns: 1fr;
-     grid-template-rows: 70% 30%;
+     backface-visibility: hidden;
+     will-change: overflow;
+     -webkit-overflow-scrolling: touch;
+     -ms-overflow-style: none;
 }
 
-.grid-item {
-     margin-left: 5%;
-     margin-right: 5%;
+.Bottom::-webkit-scrollbar {
+    display: none;
 }
+*/

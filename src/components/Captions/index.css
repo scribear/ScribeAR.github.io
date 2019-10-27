@@ -1,0 +1,16 @@
+.Captions {
+     overflow: auto;
+     height: 30vh;
+     padding-left: 3rem;
+     padding-right: 3rem;
+     position: relative;
+     width: 100%;
+     backface-visibility: hidden;
+     will-change: overflow;
+     -webkit-overflow-scrolling: touch;
+     -ms-overflow-style: none;
+}
+
+.Captions::-webkit-scrollbar {
+    display: none;
+}

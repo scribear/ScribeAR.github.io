@@ -7,49 +7,34 @@ class TopSpace extends React.Component {
      constructor(props) {
           super(props);
           this.state = {
-               optsHidden: false
-          };
-          this.updateCss = this.updateCss.bind(this);
-          this.toggle = this.toggle.bind(this);
-     }
-     updateCss() {
-          if (this.state.optsHidden)
-               return 'none';
-          return 'block';
+               display: null
+          }
+          this.hide = this.hide.bind(this)
+          this.show = this.show.bind(this)
      }
      hide() {
-          this.setState({
-               optsHidden: true
-          });
+          this.setState({ display: 'none' });
+          document.getElementById('outer').addEventListener('click', this.show)
      }
-     toggle() {
-          if (this.state.optsHidden)
-               this.setState({
-                    optsHidden: false
-               });
+     show() {
+          this.setState({ display: null })
+          document.getElementById('outer').removeEventListener('click', this.show)
      }
+
      render() {
           return (
-               <div className="container-fluid" onClick={this.toggle}>
-                    <div className="row">
-                         <div className="col-1"></div>
-                         <div className="col-5" id="options-region">
-                              <Options hidden={this.state.optsHidden}
-                                   toggle={this.props.toggle} />
+               <div className="TopSpace" id="outer">
+                    <div className="Container" id="inner" style={this.state}>
+                         <div className="TheBox1">
+                              <Options />
                          </div>
-                         <div className="col-6" id="hide-region"
-                           style={{display: this.updateCss()}}
-                           onClick={this.hide.bind(this)}>
-                              <p>Hide</p>
+                         <div className="TheBox2" onClick={this.hide}>
+                              <div className="GavinBelsonSignatureBox">Hide</div>
                          </div>
                     </div>
                </div>
-          );
+          )
      }
 }
-
-TopSpace.propTypes = {
-     toggle: PropTypes.func
-};
 
 export default TopSpace;

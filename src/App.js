@@ -1,8 +1,8 @@
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { increment } from './redux/actions';
-import TextArea from './components/TextArea';
-import TopSpace from './components/TopSpace';
+import { useSelector, useDispatch } from 'react-redux'
+import { increment } from './redux/actions'
+import TopSpace from './components/TopSpace'
+import Captions from './components/Captions'
 import './App.css';
 
 /* var DEFAULT_TEXT_SIZE = 48;
@@ -14,14 +14,10 @@ class App extends React.Component {
      render() {
           return (
                <div className="App">
-                    <div className="row-8">
-                         <TopSpace />
-                    </div>
-                    <div className="row-4">
-                         <TextArea />
-                    </div>
+                    <TopSpace />
+                    <Captions />
                </div>
-          );
+          )
      }
 }
 

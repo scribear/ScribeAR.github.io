@@ -14,9 +14,6 @@ import {
      decrement_numLines,
 } from '../../../redux/actions'
 
-/* first line used to be:
- <div className="Options" id="options-space" style={{display: this.updateCss()}}> */
-
 export default function Options() {
      const textSize = (state) => state.textSize;
      const lineWidth = (state) => state.lineWidth;

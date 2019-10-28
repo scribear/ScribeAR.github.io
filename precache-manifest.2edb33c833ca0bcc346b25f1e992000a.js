@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "65b8c4d2cea33e4f22f10daf900a3898",
+    "revision": "015ff49cf60ff5b826ef1c5583618528",
     "url": "/ScribeAR.github.io/index.html"
   },
   {
-    "revision": "f0d285e855d30e8d560d",
+    "revision": "69ff16686cf19c4b5994",
     "url": "/ScribeAR.github.io/static/css/main.0ae49aee.chunk.css"
   },
   {
@@ -12,8 +12,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/ScribeAR.github.io/static/js/2.4f516645.chunk.js"
   },
   {
-    "revision": "f0d285e855d30e8d560d",
-    "url": "/ScribeAR.github.io/static/js/main.27f2b058.chunk.js"
+    "revision": "69ff16686cf19c4b5994",
+    "url": "/ScribeAR.github.io/static/js/main.4fb324c8.chunk.js"
   },
   {
     "revision": "c03fd9e925687451093d",

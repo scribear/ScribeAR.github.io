@@ -1,3 +1,5 @@
+/* This does nothing right now.
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
@@ -13,11 +15,11 @@ const mapStateToProps = (state) => ({
 const screenWidth = (state) => state.screenWidth;
 const screenHeight = (state) => state.screenHeight;
 
-/*
+/ *
 eventListener for scren resize when the setting is off?
 update css from this doc? should affect the app itself
 componentdidmount vs compoenentdidupdate?
-*/
+* /
 
 class Sizing extends React.component {
      componentDidMount() {
@@ -41,3 +43,4 @@ Sizing.propTypes = {
 Sizing = connect(mapStateToProps)(Sizing);
 
 export default Sizing
+*/

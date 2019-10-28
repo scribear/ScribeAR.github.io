@@ -1,7 +1,3 @@
-.TopSpace {
-     height: 70vh;
-}
-
 .Container {
      display: flex;
      height: 100%;
@@ -11,7 +7,13 @@
 
 .TheBox1 {
      flex: 1;
+     overflow-y: auto;
+     overflow-x: hidden;
      padding-left: 2rem;
+}
+
+.TheBox1::-webkit-scrollbar {
+    display: none;
 }
 
 .TheBox2 {
@@ -19,8 +21,8 @@
      color: gray;
      line-height: 70vh;
      text-align: center;
-     outline: 3px solid gray;
-     outline-offset: -10px;
+     outline: .5vh solid gray;
+     outline-offset: -1vh;
 }
 
 .GavinBelsonSignatureBox {

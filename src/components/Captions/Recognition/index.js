@@ -1,25 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import { useSelector, useDispatch } from 'react-redux'
-import './index.css'
-import Recognition from './Recognition'
-
-export default function Captions(props) {
-     const lineWidth = useSelector((state) => state.lineWidth)
-     var paddingString = (11 - lineWidth) * 3 + 'vw'
-     var h = props.height
-     var sz = props.textSize
-     return (
-          <div className="Captions" id="out" style={{
-               fontSize: sz,
-               height: h,
-               paddingLeft: paddingString,
-               paddingRight: paddingString }}>
-               <Recognition />
-          </div>
-     )
-}
-/*
 
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
 const recognition = new SpeechRecognition()
@@ -27,7 +6,7 @@ recognition.lang = 'en-US'
 recognition.continuous = false
 recognition.interimResults = true
 
-class Captions extends React.Component {
+class Recognition extends React.Component {
      constructor() {
           super()
           this.state = {
@@ -83,16 +62,17 @@ class Captions extends React.Component {
      }
 
      render() {
-
-
           return (
-               <div className='Captions' id='out'>
+               <div>
                     <div id='outtwo'></div>
+                    <div>Hello world.</div>
+                    <div>Hello world.</div>
+                    <div>Hello world.</div>
+                    <div>Hello world.</div>
                     <div id='curr'>{this.state.line}</div>
                </div>
           )
      }
 }
 
-export default Captions
-*/
+export default Recognition

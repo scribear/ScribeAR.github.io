@@ -5,7 +5,7 @@ import Options from './Options';
 
 class TopSpace extends React.Component {
      constructor(props) {
-          super(props);
+          super(props)
           this.state = {
                display: null
           }
@@ -22,8 +22,9 @@ class TopSpace extends React.Component {
      }
 
      render() {
+          var h = this.props.height
           return (
-               <div className="TopSpace" id="outer">
+               <div className="TopSpace" id="outer" style={{ height: h }}>
                     <div className="Container" id="inner" style={this.state}>
                          <div className="TheBox1">
                               <Options />

@@ -18,7 +18,7 @@ const windowHeightReducer = (state, action) => {
      }
 }
 */
-const textSizeReducer = (state = 48, action) => {
+const textSizeReducer = (state = 6, action) => {
      switch (action.type) {
           case 'INCREMENT_TEXTSIZE':
                return state + 1;
@@ -32,7 +32,7 @@ const textSizeReducer = (state = 48, action) => {
 const lineWidthReducer = (state = 10, action) => {
      switch (action.type) {
           case 'INCREMENT_LINEWIDTH':
-               return state + 1;
+               return Math.min(10, state + 1)
           case 'DECREMENT_LINEWIDTH':
                return Math.max(1, state - 1);
           default:
@@ -51,7 +51,7 @@ const numLinesReducer = (state = 4, action) => {
      }
 }
 
-const lockScreenReducer = (state = true, action) => {
+const lockScreenReducer = (state = false, action) => {
      if (action.type == 'FLIP_LOCKSCREEN')
           return !state;
      else return state;

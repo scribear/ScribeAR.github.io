@@ -27,7 +27,7 @@ class Recognition extends React.Component {
 
      componentDidMount() {
           recognition.addEventListener('result', e => { this.onResult(e) })
-          //this.start()
+          this.start()
      }
 
      onResult(e) {
@@ -65,10 +65,6 @@ class Recognition extends React.Component {
           return (
                <div>
                     <div id='outtwo'></div>
-                    <div>Hello world.</div>
-                    <div>Hello world.</div>
-                    <div>Hello world.</div>
-                    <div>Hello world.</div>
                     <div id='curr'>{this.state.line}</div>
                </div>
           )

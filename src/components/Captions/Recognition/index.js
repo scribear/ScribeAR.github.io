@@ -34,9 +34,7 @@ class Recognition extends React.PureComponent {
 
      componentDidMount() {
           recognition.addEventListener('result', e => { this.onResult(e) })
-
           this.start()
-          console.log('hello')
      }
 
      onResult(e) {

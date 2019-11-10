@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from 'react-redux'
 
 export default function PlusMinus(props) {
      const setting = useSelector(props.setting)
-     const lockScreen = useSelector((state) => state.lockScreen)
      const dispatch = useDispatch()
      return (
           <div className="row">

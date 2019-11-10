@@ -15,11 +15,13 @@ export default function Record(props) {
                <div className="col-2 align-items-center" id="icon">
                     <input className={setting ? "hidden" : "shown"}
                          type="image" id="record" height="60vh"
-                         src={"./record_btn.jpg"}
+                         alt="Record"
+                         src={"./public/record_btn.jpg"}
                          onClick={() => dispatch(flip_recording())} />
                     <input className={setting ? "shown" : "hidden"}
                          type="image" id="stop" height="60vh"
-                         src={"./stop_btn.jpg"}
+                         alt="Stop"
+                         src={"./public/stop_btn.jpg"}
                          onClick={() => dispatch(flip_recording())} />
                </div>
           </div>

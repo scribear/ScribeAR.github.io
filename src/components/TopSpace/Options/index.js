@@ -1,17 +1,16 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import OnOff from './OnOff'
 import PlusMinus from './PlusMinus'
 import Record from './Record'
 import './index.css'
 import {
-     flip_recording,
      flip_invertColors,
      increment_textSize,
      decrement_textSize,
      increment_lineWidth,
      decrement_lineWidth,
      increment_numLines,
-     decrement_numLines,
+     decrement_numLines
 } from '../../../redux/actions'
 
 export default function Options() {

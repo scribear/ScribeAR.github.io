@@ -1,11 +1,11 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector } from 'react-redux'
 import './index.css'
 import Recognition from './Recognition'
 
 export default function Captions(props) {
      const lineWidth = useSelector((state) => state.lineWidth)
+     const recording = useSelector((state) => state.recording)
      var paddingString = (11 - lineWidth) * 3 + 'vw'
      var h = props.height
      var sz = props.textSize
@@ -15,7 +15,7 @@ export default function Captions(props) {
                height: h,
                paddingLeft: paddingString,
                paddingRight: paddingString }}>
-               <Recognition />
+               <Recognition isRecording={recording} />
           </div>
      )
 }

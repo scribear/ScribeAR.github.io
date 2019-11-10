@@ -1,6 +1,5 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { useSelector, useDispatch } from 'react-redux';
+import React from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 
 export default function PlusMinus(props) {
      const setting = useSelector(props.setting)
@@ -10,10 +9,7 @@ export default function PlusMinus(props) {
           <div className="row">
                <div className="col-2 align-items-center">
                     <button className="btn btn-default"
-                      onClick={() => {
-                         if (!lockScreen)
-                              dispatch(props.decrement())
-                      }}>-</button>
+                      onClick={() => dispatch(props.decrement())}>-</button>
                </div>
                <div className="col-5">
                     <p>{props.item}</p>
@@ -23,10 +19,7 @@ export default function PlusMinus(props) {
                </div>
                <div className="col-2 align-items-center">
                     <button className="btn btn-default"
-                      onClick={() => {
-                         if (!lockScreen)
-                              dispatch(props.increment())
-                      }}>+</button>
+                      onClick={() => dispatch(props.increment())}>+</button>
                </div>
           </div>
      );

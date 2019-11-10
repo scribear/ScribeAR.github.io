@@ -1,9 +1,8 @@
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux'
-import { increment } from './redux/actions'
+import { useSelector } from 'react-redux'
 import TopSpace from './components/TopSpace'
 import Captions from './components/Captions'
-import './App.css';
+import './App.css'
 
 export default function App() {
      const textSize = useSelector((state) => state.textSize)

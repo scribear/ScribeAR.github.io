@@ -43,3 +43,7 @@ export const flip_lockScreen = () => {
 export const flip_invertColors = () => {
      return { type: 'FLIP_INVERTCOLORS' };
 }
+
+export const flip_recording = () => {
+     return { type: 'FLIP_RECORDING' };
+}

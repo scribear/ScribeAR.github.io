@@ -1,0 +1,5 @@
+#icon input {
+     position: absolute;
+     align-self: center;
+     transition: visibility 0s 300ms, opacity 500ms ease;
+}

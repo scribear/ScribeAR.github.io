@@ -1,11 +1,9 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import { useSelector, useDispatch } from 'react-redux'
 
 export default function OnOff(props) {
      const setting = useSelector(props.setting)
      const dispatch = useDispatch()
-     console.log(setting)
      return (
           <div className="row">
                <div className="col-8">

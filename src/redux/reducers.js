@@ -1,23 +1,5 @@
 import { combineReducers } from 'redux';
-/*
-const windowWidthReducer = (state, action) => {
-     switch (action.type) {
-          case 'SET_SCREENWIDTH':
-               return action.value;
-          default:
-               return state;
-     }
-}
 
-const windowHeightReducer = (state, action) => {
-     switch (action.type) {
-          case 'SET_SCREENHEIGHT':
-               return action.value;
-          default:
-               return state;
-     }
-}
-*/
 const textSizeReducer = (state = 6, action) => {
      switch (action.type) {
           case 'INCREMENT_TEXTSIZE':
@@ -52,25 +34,30 @@ const numLinesReducer = (state = 4, action) => {
 }
 
 const lockScreenReducer = (state = false, action) => {
-     if (action.type == 'FLIP_LOCKSCREEN')
+     if (action.type === 'FLIP_LOCKSCREEN')
           return !state;
      else return state;
 }
 
 const invertColorsReducer = (state = false, action) => {
-     if (action.type == 'FLIP_INVERTCOLORS')
+     if (action.type === 'FLIP_INVERTCOLORS')
           return !state;
      else return state;
 }
 
+const recordingReducer = (state = true, action) => {
+     if (action.type === 'FLIP_RECORDING')
+          return !state
+     else return state
+}
+
 const allReducers = combineReducers({
-//     windowWidth: windowWidthReducer,
-//     windowHeight: windowHeightReducer,
      textSize: textSizeReducer,
      lineWidth: lineWidthReducer,
      numLines: numLinesReducer,
      lockScreen: lockScreenReducer,
      invertColors: invertColorsReducer,
+     recording: recordingReducer
 });
 
 export default allReducers;

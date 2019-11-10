@@ -6,13 +6,20 @@ recognition.lang = 'en-US'
 recognition.continuous = false
 recognition.interimResults = true
 
-class Recognition extends React.Component {
+class Recognition extends React.PureComponent {
      constructor() {
           super()
           this.state = {
-               line: 'Hello world.'
+               line: '',
+               recording: true
           }
           this.appendLine = this.appendLine.bind(this)
+     }
+
+     componentDidUpdate() {
+          if (this.props.isRecording)
+               this.start()
+          else this.stop()
      }
 
      start() {
@@ -27,7 +34,9 @@ class Recognition extends React.Component {
 
      componentDidMount() {
           recognition.addEventListener('result', e => { this.onResult(e) })
+
           this.start()
+          console.log('hello')
      }
 
      onResult(e) {

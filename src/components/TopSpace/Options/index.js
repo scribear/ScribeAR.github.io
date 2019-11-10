@@ -1,10 +1,10 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import OnOff from './OnOff';
-import PlusMinus from './PlusMinus';
-import './index.css';
+import React, { useState, useEffect } from 'react'
+import OnOff from './OnOff'
+import PlusMinus from './PlusMinus'
+import Record from './Record'
+import './index.css'
 import {
-     flip_lockScreen,
+     flip_recording,
      flip_invertColors,
      increment_textSize,
      decrement_textSize,
@@ -15,11 +15,10 @@ import {
 } from '../../../redux/actions'
 
 export default function Options() {
-     const textSize = (state) => state.textSize;
-     const lineWidth = (state) => state.lineWidth;
-     const numLines = (state) => state.numLines;
-     const invertColors = (state) => state.invertColors;
-     const lockScreen = (state) => state.lockScreen;
+     const textSize = (state) => state.textSize
+     const lineWidth = (state) => state.lineWidth
+     const numLines = (state) => state.numLines
+     const invertColors = (state) => state.invertColors
 
      return (
           <div className="Options" id="options-space">
@@ -40,12 +39,11 @@ export default function Options() {
                          decrement={decrement_numLines} />
                </div>
                <div className="item-wrapper">
-                    <OnOff item="Lock screen" setting={lockScreen}
-                         action={flip_lockScreen} />
-               </div>
-               <div className="item-wrapper">
                     <OnOff item="Invert colors" setting={invertColors}
                          action={flip_invertColors} />
+               </div>
+               <div className="item-wrapper">
+                    <Record />
                </div>
           </div>
      );

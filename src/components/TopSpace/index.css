@@ -1,3 +1,7 @@
+/* .TopSpace {
+     z-index: 1;
+} */
+
 .Container {
      display: flex;
      height: 100%;
@@ -21,11 +25,9 @@
      color: gray;
      line-height: 70vh;
      text-align: center;
-     outline: .5vh solid gray;
-     outline-offset: -1vh;
 }
 
-.GavinBelsonSignatureBox {
+.TheBox3 {
      display: inline-block;
 }
 

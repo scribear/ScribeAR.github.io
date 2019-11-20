@@ -14,9 +14,14 @@ class Recognition extends React.PureComponent {
                recording: true
           }
           this.appendLine = this.appendLine.bind(this)
+          this.start = this.start.bind(this)
+          this.stop = this.stop.bind(this)
+          this.onResult = this.onResult.bind(this)
      }
 
-     componentDidUpdate() {
+     componentDidUpdate(prevProps, prevState) {
+          if (prevProps.isRecording === this.props.isRecording)
+               return
           if (this.props.isRecording)
                this.start()
           else this.stop()

@@ -7,6 +7,12 @@ export default function Record(props) {
      const recording = (state) => state.recording
      const setting = useSelector(recording)
      const dispatch = useDispatch()
+
+     document.body.onkeyup = function(e) {
+          if (e.keyCode == 32)
+               dispatch(flip_recording())
+     }
+
      return (
           <div className="row">
                <div className="col-8">
@@ -16,12 +22,12 @@ export default function Record(props) {
                     <input className={setting ? "hidden" : "shown"}
                          type="image" id="record" height="60vh"
                          alt="Record"
-                         src={"./public/record_btn.jpg"}
+                         src={"./record_btn.png"}
                          onClick={() => dispatch(flip_recording())} />
                     <input className={setting ? "shown" : "hidden"}
                          type="image" id="stop" height="60vh"
                          alt="Stop"
-                         src={"./public/stop_btn.jpg"}
+                         src={"./stop_btn.png"}
                          onClick={() => dispatch(flip_recording())} />
                </div>
           </div>

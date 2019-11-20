@@ -11,19 +11,3 @@ body {
      background-color: black;
      color: white;
 }
-
-/* .Bottom {
-     overflow: auto;
-     height: 30vh;
-     position: relative;
-     width: 100%;
-     backface-visibility: hidden;
-     will-change: overflow;
-     -webkit-overflow-scrolling: touch;
-     -ms-overflow-style: none;
-}
-
-.Bottom::-webkit-scrollbar {
-    display: none;
-}
-*/

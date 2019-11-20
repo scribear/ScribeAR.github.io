@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/ScribeAR.github.io/precache-manifest.475d1d44f0cae279feb1128457fadaad.js"
+  "/ScribeAR.github.io/precache-manifest.b8e58ed50635cad005d3e1c519d0ed21.js"
 );
 
 self.addEventListener('message', (event) => {

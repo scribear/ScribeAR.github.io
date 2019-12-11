@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/ScribeAR.github.io/static/css/main.d47c5ef2.chunk.css",
-    "main.js": "/ScribeAR.github.io/static/js/main.0a40055e.chunk.js",
-    "main.js.map": "/ScribeAR.github.io/static/js/main.0a40055e.chunk.js.map",
+    "main.css": "/ScribeAR.github.io/static/css/main.44550a24.chunk.css",
+    "main.js": "/ScribeAR.github.io/static/js/main.005f1f9c.chunk.js",
+    "main.js.map": "/ScribeAR.github.io/static/js/main.005f1f9c.chunk.js.map",
     "runtime~main.js": "/ScribeAR.github.io/static/js/runtime~main.653a97ef.js",
     "runtime~main.js.map": "/ScribeAR.github.io/static/js/runtime~main.653a97ef.js.map",
     "static/js/2.4ad6ee91.chunk.js": "/ScribeAR.github.io/static/js/2.4ad6ee91.chunk.js",
     "static/js/2.4ad6ee91.chunk.js.map": "/ScribeAR.github.io/static/js/2.4ad6ee91.chunk.js.map",
     "index.html": "/ScribeAR.github.io/index.html",
-    "precache-manifest.b8e58ed50635cad005d3e1c519d0ed21.js": "/ScribeAR.github.io/precache-manifest.b8e58ed50635cad005d3e1c519d0ed21.js",
+    "precache-manifest.d0f3453234ff0dfbd885d6e62fcd4c1a.js": "/ScribeAR.github.io/precache-manifest.d0f3453234ff0dfbd885d6e62fcd4c1a.js",
     "service-worker.js": "/ScribeAR.github.io/service-worker.js",
-    "static/css/main.d47c5ef2.chunk.css.map": "/ScribeAR.github.io/static/css/main.d47c5ef2.chunk.css.map"
+    "static/css/main.44550a24.chunk.css.map": "/ScribeAR.github.io/static/css/main.44550a24.chunk.css.map"
   }
 }

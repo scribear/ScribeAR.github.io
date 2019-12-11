@@ -1,8 +1,6 @@
 .Captions {
      overflow: auto;
      height: 36vh;
-     padding-left: 3rem;
-     padding-right: 3rem;
      position: relative;
      width: 100%;
      backface-visibility: hidden;

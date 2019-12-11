@@ -1,5 +1,47 @@
-#icon input {
+.record-btn-wrapper {
      position: absolute;
-     align-self: center;
-     transition: visibility 0s 300ms, opacity 500ms ease;
+     top: 0;
+     right: 0;
+     display: inline-block;
+     height: 8vh;
+     width: 8vh;
+     transition: visibility 0s 300ms, opacity 5000ms ease;
+}
+
+.record-btn {
+     position: absolute;
+     background-color: red;
+     height: 8vh;
+     width: 8vh;
+     cursor: pointer;
+     border-radius: 50%;
+     border: 0px;
+}
+
+.stop-btn {
+     position: absolute;
+     display: inline;
+     height: 8vh;
+     width: 8vh;
+     cursor: pointer;
+}
+.stop-btn:before {
+     position: absolute;
+     display: inline;
+     height: 7vh;
+     width: 7vh;
+     content: "";
+     background-color: black;
+     border-radius: 50%;
+     border: 0.5vh solid white;
+}
+.stop-btn:after {
+     position: absolute;
+     top: 2.5vh;
+     left: 2.5vh;
+     display: inline;
+     height: 3vh;
+     width: 3vh;
+     content: "";
+     background-color: white;
 }

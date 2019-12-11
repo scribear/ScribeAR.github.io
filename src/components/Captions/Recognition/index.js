@@ -54,29 +54,29 @@ class Recognition extends React.PureComponent {
      }
 
      updateCurrentLine(str) {
-          const out = document.getElementById('out')
-          var isScrolledToBottom = out.scrollHeight - out.clientHeight <= out.scrollTop + 1
+          const capts = document.getElementById('captionsSpace')
+          var isScrolledToBottom = capts.scrollHeight - capts.clientHeight <= capts.scrollTop + 1
           this.setState({ line: str })
           if (isScrolledToBottom)
-               out.scrollTop = out.scrollHeight - out.clientHeight
+               capts.scrollTop = capts.scrollHeight - capts.clientHeight
      }
 
      appendLine(str) {
-          const out = document.getElementById('out')
-          const outtwo = document.getElementById('outtwo')
-          var isScrolledToBottom = out.scrollHeight - out.clientHeight <= out.scrollTop + 1
+          const capts = document.getElementById('captionsSpace')
+          const outtwo = document.getElementById('out')
+          var isScrolledToBottom = capts.scrollHeight - capts.clientHeight <= capts.scrollTop + 1
           var div = document.createElement('div')
           div.textContent = str
           outtwo.appendChild(div)
           this.setState({ line: '' })
           if (isScrolledToBottom)
-               out.scrollTop = out.scrollHeight - out.clientHeight
+               capts.scrollTop = capts.scrollHeight - capts.clientHeight
      }
 
      render() {
           return (
                <div>
-                    <div id='outtwo'></div>
+                    <div id='out'></div>
                     <div id='curr'>{this.state.line}</div>
                </div>
           )

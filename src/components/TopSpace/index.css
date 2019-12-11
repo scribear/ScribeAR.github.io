@@ -1,7 +1,3 @@
-/* .TopSpace {
-     z-index: 1;
-} */
-
 .Container {
      display: flex;
      height: 100%;
@@ -9,26 +5,23 @@
      font-size: 3vh;
 }
 
-#TheBox1 {
+#optionsSpace {
      flex: 1;
      overflow-y: auto;
      overflow-x: hidden;
      padding-left: 2rem;
 }
 
-.TheBox1::-webkit-scrollbar {
+#optionsSpace::-webkit-scrollbar {
     display: none;
 }
 
-.TheBox2 {
+#hideSpace {
      flex: 1;
      color: gray;
      line-height: 70vh;
      text-align: center;
-}
-
-.TheBox3 {
-     display: inline-block;
+     cursor: default;
 }
 
 .shown {

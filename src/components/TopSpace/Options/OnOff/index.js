@@ -1,21 +1,23 @@
 import React from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import './index.css'
+import { /*useSelector, */useDispatch } from 'react-redux'
+
+/*
+This code only works if the initial state is Off. It's surprisingly way harder
+to get this to work if you want the inital state of the checkbox to be checked.
+*/
 
 export default function OnOff(props) {
-     const setting = useSelector(props.setting)
+     //const setting = useSelector(props.setting)
      const dispatch = useDispatch()
+
      return (
-          <div className="row">
-               <div className="col-8">
-                    <p>{props.item}</p>
-               </div>
-               <div className="col-2 align-items-center">
-                    <button
-                      className={setting ? "btn btn-danger" : "btn btn-success"}
-                      onClick={() => dispatch(props.action())}>
-                         {setting ? 'OFF' : 'ON'}
-                    </button>
-               </div>
+          <div>
+               {props.item}
+               <label className="switch">
+                    <input type="checkbox" onChange={() => dispatch(props.action())}></input>
+                    <span className="slider"></span>
+               </label>
           </div>
      )
 }

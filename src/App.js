@@ -17,8 +17,7 @@ export default function App() {
      return (
           <div className="App" style={{
                backgroundColor: bgColor,
-               color: color
-          }}>
+               color: color }}>
                <TopSpace height={topHeight} />
                <Captions height={botHeight} textSize={sizeString} />
           </div>

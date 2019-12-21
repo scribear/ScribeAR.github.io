@@ -11,12 +11,15 @@ class Recognition extends React.PureComponent {
           super()
           this.state = {
                line: '',
-               recording: true
+               //recording: true
           }
           this.appendLine = this.appendLine.bind(this)
           this.start = this.start.bind(this)
           this.stop = this.stop.bind(this)
-          this.onResult = this.onResult.bind(this)
+     }
+
+     componentDidMount() {
+          this.start()
      }
 
      componentDidUpdate(prevProps, prevState) {
@@ -28,33 +31,28 @@ class Recognition extends React.PureComponent {
      }
 
      start() {
-          recognition.addEventListener('end', recognition.start)
           recognition.start()
+          recognition.onresult = (e) => {
+               let words = Array.from(e.results)
+                 .map(result => result[0])
+                 .map(result => result.transcript)
+                 .join('');
+               words = words.charAt(0).toUpperCase() + words.slice(1)
+               if (e.results[0].isFinal)
+                    this.appendLine(words + '.')
+               else this.updateCurrentLine(words)
+          }
+          recognition.onend = recognition.start
      }
 
      stop() {
-          recognition.removeEventListener('end', recognition.start)
+          recognition.onresult = () => {}
+          recognition.onend = () => {}
           recognition.stop()
      }
 
-     componentDidMount() {
-          recognition.addEventListener('result', e => { this.onResult(e) })
-          this.start()
-     }
-
-     onResult(e) {
-          let line_ = Array.from(e.results)
-            .map(result => result[0])
-            .map(result => result.transcript)
-            .join('');
-          line_ = line_.charAt(0).toUpperCase() + line_.slice(1)
-          if (e.results[0].isFinal)
-               this.appendLine(line_ + '.')
-          else this.updateCurrentLine(line_)
-     }
-
      updateCurrentLine(str) {
-          const capts = document.getElementById('captionsSpace')
+          const capts = document.querySelector('captionsSpace')
           var isScrolledToBottom = capts.scrollHeight - capts.clientHeight <= capts.scrollTop + 1
           this.setState({ line: str })
           if (isScrolledToBottom)

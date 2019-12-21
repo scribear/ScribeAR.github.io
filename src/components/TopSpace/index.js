@@ -7,11 +7,11 @@ class TopSpace extends React.Component {
           super(props)
           this.state = {
                shown: true,
-               //timeoutId: setTimeout(this.hide.bind(this), 15000)
+               timeoutId: setTimeout(this.hide.bind(this), 15000)
           }
           this.hide = this.hide.bind(this)
           this.show = this.show.bind(this)
-          //this.resetTimeout = this.resetTimeout.bind(this)
+          this.resetTimeout = this.resetTimeout.bind(this)
      }
      hide() {
           this.setState({ shown: false })
@@ -20,13 +20,15 @@ class TopSpace extends React.Component {
      show() {
           this.setState({ shown: true })
           document.getElementById('outer').removeEventListener('click', this.show)
-          //this.resetTimeout()
+          this.resetTimeout()
      }
-     // resetTimeout() {
-     //      clearTimeout(this.state.timeoutId)
-     //      var toId = setTimeout(this.hide, 15000)
-     //      this.setState({timeoutId: toId})
-     // }
+
+     resetTimeout() {
+          clearTimeout(this.state.timeoutId)
+          var toId = setTimeout(this.hide, 15000)
+          this.setState({timeoutId: toId})
+     }
+     
      componentDidMount() {
           document.getElementById('optionsSpace').addEventListener('click', this.show)
      }

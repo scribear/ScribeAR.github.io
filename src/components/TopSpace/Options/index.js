@@ -2,6 +2,7 @@ import React from 'react'
 import OnOff from './OnOff'
 import PlusMinus from './PlusMinus'
 import Record from './Record'
+import Slider from './Slider'
 import './index.css'
 import {
      flip_invertColors,
@@ -23,12 +24,12 @@ export default function Options() {
           <div className="Options" id="options-space">
                <h1>Options</h1>
                <div className="item-wrapper">
-                    <PlusMinus item="Text size" setting={textSize}
+                    <Slider item="Text size" setting={textSize}
                          increment={increment_textSize}
                          decrement={decrement_textSize} />
                </div>
                <div className="item-wrapper">
-                    <PlusMinus item="Line width" setting={lineWidth}
+                    <Slider item="Line width" setting={lineWidth}
                          increment={increment_lineWidth}
                          decrement={decrement_lineWidth} />
                </div>

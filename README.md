@@ -24,11 +24,11 @@ Here are some relevant files worth knowing about. These files are present in any
           * `dependencies`, which specifies the dependencies and version numbers we are using in our project.
           * `scripts`, which allows us to use shorthand for some common commands.
      * Note that `package.json` is committed to Git.
-          * When you want to add a new dependency to the project, you can run `npm install <dependencyname>` and npm will automatically update your `node_modules` and your `package.json`.
-          * When you push a commit, you will push this file with any dependencies and scripts that you added (i.e. it's not in `.gitignore`).
+          * When you want to add a new dependency to the project, run `npm install <dependencyname>` and npm will automatically update `node_modules` and `package.json`.
+          * When you push a commit, you will include this file with any dependencies and scripts that you added (i.e. it's not in `.gitignore`).
           * When you pull a commit, it may contain updated dependencies or scripts. This information will be stored in this file. Run `npm update` to apply these changes locally to your `node_modules`.
                * After your first time cloning the directory, you should be able to just run `npm update`, which will take a few minutes to create the `node_modules` folder, then if you run `npm start` it should load the page in a browser.
-          * Essentially, `node_modules` runs a whole lot of code. But `package.json` tells our machines what to put in `node_modules`
+          * Essentially, `node_modules` runs a whole lot of code. But `package.json` dictates what `node_modules` should contain.
 * `public` directory holds `index.html`, the home html file. It is automatically connected to `src/App.js` and you will rarely need to touch the html or anything else in `public`. `manifest.json` holds some basic information used by `index.html` and I don’t really know what it does.
      * Any external CSS libraries you want to use should be linked in the `index.html` file. (Right now there aren't any.)
      * All images should be stored in the public directory and referenced in the project as though they are in the same folder, i.e. simply as `./imgname.jpg`.
@@ -57,16 +57,16 @@ There are two main types of files in the existing project: JavaScript and CSS fi
      * Data can be passed down from parent to child components through props, which are kind of like arguments or parameters passed to the child. However, data cannot be passed up from a child to a parent. This is why React is said to have a *unidirectional data flow*. One workaround is to pass a function down as a prop, which the child can call to be executed by the parent. This is done in `Options`, which passes functions to the `OnOff`, etc. components in order to reuse `OnOff` for different purposes if necessary.
      * Components can modify their own state (via the function `setState`), and they can modify their children’s props, but they can’t modify their own props.
 * Here is a look at the component tree for the site so far. If you expand the `src/components` folder of the code, you’ll see the same structure. Of course, the component tree will change over time.
-     ```mermaid
-     stateDiagram
-     App --> TopSpace
-     TopSpace --> Options
-     Options --> OnOff
-     Options --> PlusMinus
-     Options --> Record
-     Options --> Slider
-     App --> Captions
-     Captions --> Recognition
+     ```
+     ├ App
+     ├─── Captions
+     └─────── Recognition
+     ├─── TopSpace
+     ├─────── Options
+     ├─────────── OnOff
+     ├─────────── PlusMinus
+     ├─────────── Record
+     └─────────── Slider
      ```
 * I haven’t found a perfect course for React but I’m sure there are some good ones on [Udemy](udemy.com). [This YouTube video](https://www.youtube.com/watch?v=DLX62G4lc44) seems good (but really long. May be a good use of time over winter break):
      * Also check out the [React docs](https://reactjs.org/docs/getting-started.html).

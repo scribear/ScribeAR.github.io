@@ -51,8 +51,8 @@ There are two main types of files in the existing project: JavaScript and CSS fi
           * A class component must have a `render()` function which returns a `<div>` of JSX code.
           * `TopSpace` and `Recognition` are examples of class components.
      * Functional components look just like JavaScript functions. They must return a `<div>` of JSX code.
-     * Functional components are generally preferred when possible. I think lifecycle methods can be implemented in functional components in different ways by using Hooks. That's not important right now. Class components work fine when you need lifecycle methods and other user-defined functions.
-     * Most components in ScribeAR are functional components.
+          * Functional components are generally preferred when possible. I think lifecycle methods can be implemented in functional components in different ways by using Hooks. That's not important right now. Class components work fine when you need lifecycle methods and other user-defined functions.
+          * Most components in ScribeAR are functional components.
 * State is generally maintained directly in components, except when a global state manager like Redux is used.
      * Data can be passed down from parent to child components through props, which are kind of like arguments or parameters passed to the child. However, data cannot be passed up from a child to a parent. This is why React is said to have a *unidirectional data flow*. One workaround is to pass a function down as a prop, which the child can call to be executed by the parent. This is done in `Options`, which passes functions to the `OnOff`, etc. components in order to reuse `OnOff` for different purposes if necessary.
      * Components can modify their own state (via the function `setState`), and they can modify their children’s props, but they can’t modify their own props.
@@ -75,6 +75,7 @@ There are two main types of files in the existing project: JavaScript and CSS fi
 **CSS** is used for styling. This is what makes everything look nice and user-friendly.
 * CSS syntax is very simple but there are many different variables and there is a lot to learn. I took a google-as-you-go approach to the CSS and as a result, it was a mess until I took the CSS course referenced below. (I find that Googling your problems is useful in any programming language but you never want to rely on this too heavily.)
 * One of the biggest challenges with styling ScribeAR is that it’s fixed on the screen and we don’t want to scroll the entire page. There aren’t a lot of examples online for sites like this but there are useful approaches/libraries like Grid and Flexbox.
+* In React, CSS is applied across the whole page. So even if you put some CSS in `src/components/TopSpace/Options/OnOff/index.css`, that CSS will still apply to the Captions component. Because of this, be very intentional with your `className`s.
 * [This Udemy course](https://www.udemy.com/course/css-zero-to-hero/) is a great way to learn CSS. It’s $10 but if you don’t want to pay for it, the same content is [available on YouTube](https://www.youtube.com/watch?v=1Rs2ND1ryYc), just a bit less convenient to follow along. The course is long but you could skip sections that don’t seem relevant. I think Lynda.com also offers courses that are free to U of I students, but not sure if that’s still true since they integrated their site with LinkedIn.
 * [Complete list of CSS properties](https://www.w3schools.com/cssref/)
 

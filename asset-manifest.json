@@ -1,15 +1,22 @@
 {
   "files": {
-    "main.css": "/ScribeAR.github.io/static/css/main.44550a24.chunk.css",
-    "main.js": "/ScribeAR.github.io/static/js/main.005f1f9c.chunk.js",
-    "main.js.map": "/ScribeAR.github.io/static/js/main.005f1f9c.chunk.js.map",
-    "runtime~main.js": "/ScribeAR.github.io/static/js/runtime~main.653a97ef.js",
-    "runtime~main.js.map": "/ScribeAR.github.io/static/js/runtime~main.653a97ef.js.map",
-    "static/js/2.4ad6ee91.chunk.js": "/ScribeAR.github.io/static/js/2.4ad6ee91.chunk.js",
-    "static/js/2.4ad6ee91.chunk.js.map": "/ScribeAR.github.io/static/js/2.4ad6ee91.chunk.js.map",
+    "main.css": "/ScribeAR.github.io/static/css/main.78680f1a.chunk.css",
+    "main.js": "/ScribeAR.github.io/static/js/main.81a82eaf.chunk.js",
+    "main.js.map": "/ScribeAR.github.io/static/js/main.81a82eaf.chunk.js.map",
+    "runtime-main.js": "/ScribeAR.github.io/static/js/runtime-main.2e7fd284.js",
+    "runtime-main.js.map": "/ScribeAR.github.io/static/js/runtime-main.2e7fd284.js.map",
+    "static/js/2.7a81a4fa.chunk.js": "/ScribeAR.github.io/static/js/2.7a81a4fa.chunk.js",
+    "static/js/2.7a81a4fa.chunk.js.map": "/ScribeAR.github.io/static/js/2.7a81a4fa.chunk.js.map",
     "index.html": "/ScribeAR.github.io/index.html",
-    "precache-manifest.d0f3453234ff0dfbd885d6e62fcd4c1a.js": "/ScribeAR.github.io/precache-manifest.d0f3453234ff0dfbd885d6e62fcd4c1a.js",
+    "precache-manifest.863e05f6aaaad4e5d1bfecc7a011cd9a.js": "/ScribeAR.github.io/precache-manifest.863e05f6aaaad4e5d1bfecc7a011cd9a.js",
     "service-worker.js": "/ScribeAR.github.io/service-worker.js",
-    "static/css/main.44550a24.chunk.css.map": "/ScribeAR.github.io/static/css/main.44550a24.chunk.css.map"
-  }
+    "static/css/main.78680f1a.chunk.css.map": "/ScribeAR.github.io/static/css/main.78680f1a.chunk.css.map",
+    "static/js/2.7a81a4fa.chunk.js.LICENSE": "/ScribeAR.github.io/static/js/2.7a81a4fa.chunk.js.LICENSE"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.2e7fd284.js",
+    "static/js/2.7a81a4fa.chunk.js",
+    "static/css/main.78680f1a.chunk.css",
+    "static/js/main.81a82eaf.chunk.js"
+  ]
 }

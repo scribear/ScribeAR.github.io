@@ -1,3 +1,5 @@
+// Actions are the functions that we call throughout the project to change global state.
+
 export const set_screenWidth = (width) => {
      return {
           type: 'SET_SCREENWIDTH',

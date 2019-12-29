@@ -1,3 +1,4 @@
+/* See flexbox */
 .Container {
      display: flex;
      height: 100%;
@@ -12,6 +13,8 @@
      padding-left: 2rem;
 }
 
+/* Hide scrollbar in Chrome (webkit = Chrome).
+Please improve browser compatibility. */
 #optionsSpace::-webkit-scrollbar {
     display: none;
 }
@@ -24,12 +27,12 @@
      cursor: default;
 }
 
+/* These classes create a nice fade effect for showing/hiding options. */
 .shown {
      visibility: visible;
      opacity: 1;
      transition: opacity 500ms ease;
 }
-
 .hidden {
      visibility: hidden;
      opacity: 0;

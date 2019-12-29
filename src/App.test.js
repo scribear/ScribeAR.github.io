@@ -1,3 +1,5 @@
+// THIS FILE, EXCEPT FOR THIS COMMENT, IS AUTOMATICALLY PROVIDED BY NPX
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';

@@ -15,6 +15,8 @@ import {
 } from '../../../redux/actions'
 
 export default function Options() {
+     // These are functions that take an object and return an element of the object.
+     // They are passed to useSelector, which feeds the global state object into them.
      const textSize = (state) => state.textSize
      const lineWidth = (state) => state.lineWidth
      const numLines = (state) => state.numLines

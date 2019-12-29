@@ -1,3 +1,6 @@
+/* The record and stop buttons are CSS shapes rather than images.
+They fade much like the options menu does. */
+
 .record-btn-wrapper {
      position: absolute;
      top: 0;
@@ -25,6 +28,7 @@
      width: 8vh;
      cursor: pointer;
 }
+/* Inner black circle of stop button */
 .stop-btn:before {
      position: absolute;
      display: inline;
@@ -35,6 +39,7 @@
      border-radius: 50%;
      border: 0.5vh solid white;
 }
+/* Inner white square of stop button */
 .stop-btn:after {
      position: absolute;
      top: 2.5vh;

@@ -3,7 +3,8 @@ import './index.css'
 import { useSelector, useDispatch } from 'react-redux'
 
 export default function PlusMinus(props) {
-     const setting = useSelector(props.setting)
+     const setting = useSelector(props.setting) // Get current value of the setting.
+     // useDispatch returns the state modifying function, invoked below.
      const dispatch = useDispatch()
      return (
           <div>

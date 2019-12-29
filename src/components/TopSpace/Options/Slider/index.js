@@ -2,6 +2,8 @@ import React from 'react'
 import './index.css'
 import { useSelector, useDispatch } from 'react-redux'
 
+// To do: turn this into a slider. https://www.w3schools.com/howto/howto_js_rangeslider.asp
+
 export default function Slider(props) {
      const setting = useSelector(props.setting)
      const dispatch = useDispatch()

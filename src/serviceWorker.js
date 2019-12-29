@@ -1,3 +1,5 @@
+// THIS ENTIRE FILE, INCLUDING COMMENTS EXCEPT FOR THIS ONE, IS AUTOMATICALLY PROVIDED BY NPX
+
 // This optional code is used to register a service worker.
 // register() is not called by default.
 

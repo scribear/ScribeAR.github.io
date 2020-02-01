@@ -11,7 +11,7 @@
      position: absolute;
      right: 5vw;
      display: inline;
-     width: 5vw;
+     width: 10vw;
      height: 8vh;
      text-align: center;
      line-height: 8vh;
@@ -21,8 +21,8 @@ button {
      position: absolute;
      top: 0;
      display: inline-block;
-     height: 8vh;
-     width: 5vw;
+     height: 20vh;
+     width: 10vw;
      background-color: #ccc;
      border-radius: 10%;
      border: 0;

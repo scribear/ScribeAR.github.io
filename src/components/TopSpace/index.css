@@ -19,12 +19,19 @@ Please improve browser compatibility. */
     display: none;
 }
 
-#hideSpace {
-     flex: 1;
-     color: gray;
-     line-height: 70vh;
-     text-align: center;
-     cursor: default;
+@media screen and (orientation:landscape) {
+   #hideSpace {
+      flex: 1;
+      color: gray;
+      line-height: 70vh;
+      text-align: center;
+      cursor: default;
+   }
+}
+@media screen and (orientation:portrait) {
+  #hideSpace {
+    visibility: hidden;
+  }
 }
 
 /* These classes create a nice fade effect for showing/hiding options. */

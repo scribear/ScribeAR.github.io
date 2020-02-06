@@ -7,33 +7,65 @@
      width: 12vw;
 }
 
-.setting {
-     position: absolute;
-     right: 5vw;
-     display: inline;
-     width: 5vw;
-     height: 8vh;
-     text-align: center;
-     line-height: 8vh;
-}
 
-button {
-     position: absolute;
-     top: 0;
-     display: inline-block;
-     height: 8vh;
-     width: 5vw;
-     background-color: #ccc;
-     border-radius: 10%;
-     border: 0;
-     cursor: pointer;
-     line-height: 8vh;
-}
 
-.minus {
-     right: 10vw;
-}
+@media screen and (orientation:landscape) {
+  .setting {
+       position: absolute;
+       right: 5vw;
+       display: inline;
+       width: 5vw;
+       height: 8vh;
+       text-align: center;
+       line-height: 8vh;
+  }
+  button {
+      position: absolute;
+      top: 0;
+      display: inline-block;
+      height: 8vh;
+      width: 5vw;
+      background-color: #ccc;
+      border-radius: 10%;
+      border: 0;
+      cursor: pointer;
+      line-height: 8vh;
+   }
+   .minus {
+        right: 10vw;
+   }
 
-.plus {
-     right: 0;
+   .plus {
+        right: 0;
+   }
+}
+@media screen and (orientation:portrait) {
+  .setting {
+       position: absolute;
+       right: 13vw;
+       display: inline;
+       width: 5vw;
+       height: 8vh;
+       text-align: center;
+       line-height: 8vh;
+  }
+  button {
+      position: absolute;
+      top: 0;
+      display: inline-block;
+      height: 8vh;
+      width: 10vw;
+      background-color: #ccc;
+      border-radius: 10%;
+      border: 0;
+      cursor: pointer;
+      line-height: 8vh;
+   }
+   .minus {
+        right: 19vw;
+   }
+
+   .plus {
+        left: 1vw;
+   }
 }

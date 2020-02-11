@@ -14,7 +14,8 @@ export default function Captions(props) {
           style={{
             fontSize: sz,
             height: h,
-            width: "calc(100vh - 2 * " + paddingString + ")",
+            overflow: "auto",
+            width: "calc(100vw - 2 * " + paddingString + ")",
             paddingLeft: paddingString,
             paddingRight: paddingString }}>
                <Recognition isRecording={recording} />

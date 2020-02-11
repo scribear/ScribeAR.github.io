@@ -1,4 +1,5 @@
 .App {
+     overflow:hidden;
      box-sizing: border-box;
      height: 100%;
 }

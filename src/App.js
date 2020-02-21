@@ -5,6 +5,7 @@ import Captions from './components/Captions'
 import './App.css'
 
 export default function App() {
+     const darkMode = getComputedStyle(document.documentElement).getPropertyValue('--primary'); // #999999
      // Get global state from Redux. See the React Redux tutorial.
      const textSize = useSelector((state) => state.textSize)
      const numLines = useSelector((state) => state.numLines)
@@ -18,17 +19,32 @@ export default function App() {
      // topHeight + botHeight should always = 100vh because we don't want the full
      // page to scroll (we only want the individual areas to scroll).
      var topHeight = 100 - botHeight + 'vh'
+
      botHeight += 'vh'
-     var bgColor = invertColors ? 'white' : 'black'
-     var color = invertColors ? 'black' : 'white'
+     var bgColor = invertColors ? 'black': 'white'
+     var color = invertColors ? 'white' : 'black'
+     if (bgColor == 'black') {
+       return (
+            <div className="App-1" style={{
+                 backgroundColor: 'black',
+                 color: 'white'
+                }}>
+                 <TopSpace height={topHeight} />
+                 <Captions height={botHeight} textSize={sizeString} />
+            </div>
+       )
+     } else {
+       return (
+            <div className="App-2" style={{
+                 backgroundColor: 'white',
+                 color: 'black'
+                }}>
+                 <TopSpace height={topHeight} />
+                 <Captions height={botHeight} textSize={sizeString} />
+            </div>
+       )
+     }
      // You can't comment in JSX.
      // The style tag is the easiest way to set style based on JS variables.
-     return (
-          <div className="App" style={{
-               backgroundColor: bgColor,
-               color: color }}>
-               <TopSpace height={topHeight} />
-               <Captions height={botHeight} textSize={sizeString} />
-          </div>
-     )
+
 }

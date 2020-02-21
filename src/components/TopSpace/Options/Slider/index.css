@@ -19,17 +19,30 @@
        text-align: center;
        line-height: 8vh;
   }
+
   button {
       position: absolute;
+      color: white;
       top: 0;
-      display: inline-block;
+      font-family: 'Arial'; font-size: 2.5vw;
+      text-align: center;
+      vertical-align: middle;
+      position: absolute;
       height: 8vh;
       width: 5vw;
-      background-color: #ccc;
-      border-radius: 10%;
-      border: 0;
+      border: solid white;
+      border-radius: 15%;
+      background: #000000;
+      background: -moz-linear-gradient(left, #000000 0%, #0B0B0B 55%, #181818 100%);
+      background: -webkit-linear-gradient(left, #000000 0%, #0B0B0B 55%, #181818 100%);
+      background: linear-gradient(to right, #000000 0%, #0B0B0B 55%, #181818 100%);
       cursor: pointer;
-      line-height: 8vh;
+   }
+   button:hover {
+     border-color: #33FF33;
+   }
+   button:active {
+     border-color: black;
    }
    .minus {
         right: 10vw;
@@ -38,6 +51,7 @@
    .plus {
         right: 0;
    }
+
 }
 @media screen and (orientation:portrait) {
   .setting {
@@ -51,15 +65,24 @@
   }
   button {
       position: absolute;
-      top: 0;
-      display: inline-block;
       height: 8vh;
       width: 10vw;
-      background-color: #ccc;
-      border-radius: 10%;
-      border: 0;
+      color: white;
+      top: 0;
+      font-family: 'Arial'; font-size: 2.5vh;
+      text-align: center;
+      vertical-align: middle;
+      position: absolute;
+      border: solid white;
+      border-radius: 15%;
+      background: #000000;
+      background: -moz-linear-gradient(left, #000000 0%, #0B0B0B 55%, #181818 100%);
+      background: -webkit-linear-gradient(left, #000000 0%, #0B0B0B 55%, #181818 100%);
+      background: linear-gradient(to right, #000000 0%, #0B0B0B 55%, #181818 100%);
       cursor: pointer;
-      line-height: 8vh;
+   }
+   button:active {
+     border-color: #33FF33;
    }
    .minus {
         right: 19vw;

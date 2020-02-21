@@ -1,8 +1,8 @@
 /* See flexbox */
 .Container {
      display: flex;
-     height: 100%;
-     width: 100%;
+     height: 100vh;
+     width: 100vw;
      font-size: 3vh;
 }
 
@@ -30,7 +30,8 @@ Please improve browser compatibility. */
 }
 @media screen and (orientation:portrait) {
   #hideSpace {
-    visibility: hidden;
+      flex: 0;
+      visibility: hidden;
   }
 }
 

@@ -1,14 +1,27 @@
-.Captions {
-     overflow: auto;
-     height: 36vh;
-     position: relative;
-     width: 100%;
-     backface-visibility: hidden;
-     will-change: overflow;
-     -webkit-overflow-scrolling: touch;
-     -ms-overflow-style: none;
+@media screen and (orientation:landscape) {
+  .Captions {
+      overflow: auto;
+      height: 36vh;
+      position: relative;
+      width: 20%;
+      backface-visibility: hidden;
+      will-change: overflow;
+      -webkit-overflow-scrolling: touch;
+      -ms-overflow-style: none;
+   }
 }
-
 .Captions::-webkit-scrollbar {
     display: none;
+}
+@media screen and (orientation:portrait) {
+  .Captions {
+      overflow: auto;
+      height: 36vh;
+      position: relative;
+      width: 60vw;
+      backface-visibility: hidden;
+      will-change: overflow;
+      -webkit-overflow-scrolling: touch;
+      -ms-overflow-style: none;
+   }
 }

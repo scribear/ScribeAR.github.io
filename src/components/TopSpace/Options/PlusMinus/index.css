@@ -17,13 +17,14 @@
      line-height: 8vh;
 }
 
-button {
+.button {
      position: absolute;
+     background-color: red;
      top: 0;
      display: inline-block;
      height: 20vh;
      width: 10vw;
-     background-color: #ccc;
+
      border-radius: 10%;
      border: 0;
      cursor: pointer;
@@ -31,7 +32,7 @@ button {
 }
 
 .minus {
-     right: 10vw;
+     right: 30vw;
 }
 
 .plus {

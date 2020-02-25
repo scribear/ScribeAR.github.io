@@ -1,22 +1,22 @@
 {
   "files": {
-    "main.css": "/ScribeAR.github.io/static/css/main.78680f1a.chunk.css",
-    "main.js": "/ScribeAR.github.io/static/js/main.81a82eaf.chunk.js",
-    "main.js.map": "/ScribeAR.github.io/static/js/main.81a82eaf.chunk.js.map",
-    "runtime-main.js": "/ScribeAR.github.io/static/js/runtime-main.2e7fd284.js",
-    "runtime-main.js.map": "/ScribeAR.github.io/static/js/runtime-main.2e7fd284.js.map",
-    "static/js/2.7a81a4fa.chunk.js": "/ScribeAR.github.io/static/js/2.7a81a4fa.chunk.js",
-    "static/js/2.7a81a4fa.chunk.js.map": "/ScribeAR.github.io/static/js/2.7a81a4fa.chunk.js.map",
+    "main.css": "/ScribeAR.github.io/static/css/main.b6aec3f8.chunk.css",
+    "main.js": "/ScribeAR.github.io/static/js/main.2775d2db.chunk.js",
+    "main.js.map": "/ScribeAR.github.io/static/js/main.2775d2db.chunk.js.map",
+    "runtime-main.js": "/ScribeAR.github.io/static/js/runtime-main.8965f101.js",
+    "runtime-main.js.map": "/ScribeAR.github.io/static/js/runtime-main.8965f101.js.map",
+    "static/js/2.15587fa7.chunk.js": "/ScribeAR.github.io/static/js/2.15587fa7.chunk.js",
+    "static/js/2.15587fa7.chunk.js.map": "/ScribeAR.github.io/static/js/2.15587fa7.chunk.js.map",
     "index.html": "/ScribeAR.github.io/index.html",
-    "precache-manifest.863e05f6aaaad4e5d1bfecc7a011cd9a.js": "/ScribeAR.github.io/precache-manifest.863e05f6aaaad4e5d1bfecc7a011cd9a.js",
+    "precache-manifest.ad7d95176362d64e66c15081493a53e9.js": "/ScribeAR.github.io/precache-manifest.ad7d95176362d64e66c15081493a53e9.js",
     "service-worker.js": "/ScribeAR.github.io/service-worker.js",
-    "static/css/main.78680f1a.chunk.css.map": "/ScribeAR.github.io/static/css/main.78680f1a.chunk.css.map",
-    "static/js/2.7a81a4fa.chunk.js.LICENSE": "/ScribeAR.github.io/static/js/2.7a81a4fa.chunk.js.LICENSE"
+    "static/css/main.b6aec3f8.chunk.css.map": "/ScribeAR.github.io/static/css/main.b6aec3f8.chunk.css.map",
+    "static/js/2.15587fa7.chunk.js.LICENSE": "/ScribeAR.github.io/static/js/2.15587fa7.chunk.js.LICENSE"
   },
   "entrypoints": [
-    "static/js/runtime-main.2e7fd284.js",
-    "static/js/2.7a81a4fa.chunk.js",
-    "static/css/main.78680f1a.chunk.css",
-    "static/js/main.81a82eaf.chunk.js"
+    "static/js/runtime-main.8965f101.js",
+    "static/js/2.15587fa7.chunk.js",
+    "static/css/main.b6aec3f8.chunk.css",
+    "static/js/main.2775d2db.chunk.js"
   ]
 }

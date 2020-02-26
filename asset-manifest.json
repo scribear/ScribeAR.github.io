@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/ScribeAR.github.io/static/css/main.b6aec3f8.chunk.css",
+    "main.js": "/ScribeAR.github.io/static/js/main.2775d2db.chunk.js",
+    "main.js.map": "/ScribeAR.github.io/static/js/main.2775d2db.chunk.js.map",
+    "runtime-main.js": "/ScribeAR.github.io/static/js/runtime-main.8965f101.js",
+    "runtime-main.js.map": "/ScribeAR.github.io/static/js/runtime-main.8965f101.js.map",
+    "static/js/2.15587fa7.chunk.js": "/ScribeAR.github.io/static/js/2.15587fa7.chunk.js",
+    "static/js/2.15587fa7.chunk.js.map": "/ScribeAR.github.io/static/js/2.15587fa7.chunk.js.map",
+    "index.html": "/ScribeAR.github.io/index.html",
+    "precache-manifest.ad7d95176362d64e66c15081493a53e9.js": "/ScribeAR.github.io/precache-manifest.ad7d95176362d64e66c15081493a53e9.js",
+    "service-worker.js": "/ScribeAR.github.io/service-worker.js",
+    "static/css/main.b6aec3f8.chunk.css.map": "/ScribeAR.github.io/static/css/main.b6aec3f8.chunk.css.map",
+    "static/js/2.15587fa7.chunk.js.LICENSE": "/ScribeAR.github.io/static/js/2.15587fa7.chunk.js.LICENSE"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.8965f101.js",
+    "static/js/2.15587fa7.chunk.js",
+    "static/css/main.b6aec3f8.chunk.css",
+    "static/js/main.2775d2db.chunk.js"
+  ]
+}

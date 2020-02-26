@@ -22,7 +22,7 @@ const lineWidthReducer = (state = 10, action) => {
      }
 }
 
-const numLinesReducer = (state = 3, action) => {
+const numLinesReducer = (state = 4, action) => {
      switch (action.type) {
           case 'INCREMENT_NUMLINES':
                return state + 1;

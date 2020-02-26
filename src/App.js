@@ -21,8 +21,8 @@ export default function App() {
      var topHeight = 100 - botHeight + 'vh'
 
      botHeight += 'vh'
-     var bgColor = invertColors ? 'black': 'white'
-     var color = invertColors ? 'white' : 'black'
+     var bgColor = invertColors ? 'white': 'black'
+     var color = invertColors ? 'black' : 'white'
      if (bgColor == 'black') {
        return (
             <div className="App-1" style={{

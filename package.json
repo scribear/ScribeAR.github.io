@@ -2,7 +2,7 @@
   "name": "ScribeAR",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://classtranscribe.github.io/ScribeAR.github.io/",
+  "homepage": "https://ScribeAR.github.io/",
   "dependencies": {
     "handlebars": "^4.5.3",
     "prop-types": "^15.7.2",

@@ -24,7 +24,8 @@ https://www.w3schools.com/howto/howto_css_switch.asp and modified slightly */
      bottom: 0;
      left: 0;
      border-radius: 6vh;
-     background-color: #ccc;
+     background: rgb(162,162,162);
+     background: linear-gradient(90deg, rgba(162,162,162,1) 0%, rgba(173,173,173,1) 48%, rgba(194,193,193,1) 100%);
      cursor: pointer;
      -webkit-transition: .2s;
      transition: .2s;
@@ -37,14 +38,24 @@ https://www.w3schools.com/howto/howto_css_switch.asp and modified slightly */
      width: 6vh;
      bottom: 1vh;
      left: 1vh;
+     box-shadow: 1px 1px black;
      border-radius: 50%;
-     background-color: white;
+     background: #FFFFFF;
+     background: -moz-linear-gradient(-45deg, #FFFFFF 0%, #F3F3F3 67%, #909090 100%);
+     background: -webkit-linear-gradient(-45deg, #FFFFFF 0%, #F3F3F3 67%, #909090 100%);
+     background: linear-gradient(135deg, #FFFFFF 0%, #F3F3F3 67%, #909090 100%);
      -webkit-transition: .2s;
      transition: .2s;
 }
 
+.slider:hover {
+    background: rgb(162,162,162);
+    background: linear-gradient(90deg, rgba(150,150,150,1) 0%, rgba(153,153,153,1) 48%, rgba(174,173,173,1) 100%);
+}
+
 input:checked + .slider {
-     background-color: green;
+    background: rgb(50,190,20);
+background: linear-gradient(90deg, rgba(50,190,20,1) 0%, rgba(45,170,17,1) 50%, rgba(38,148,14,1) 100%);
 }
 
 input:focus + .slider {

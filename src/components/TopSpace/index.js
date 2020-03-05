@@ -51,7 +51,7 @@ class TopSpace extends React.Component {
      }
 
      render() {
-          var h = '64vh'; // I don't remember why I set the height like this.
+          var h = '32vh'; // I don't remember why I set the height like this.
           // The Options component takes a function as a prop.
           return (
                <div className="TopSpace" id="outer" style={{ height: h }}>

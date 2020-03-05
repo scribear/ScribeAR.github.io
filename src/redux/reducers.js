@@ -39,6 +39,12 @@ const lockScreenReducer = (state = false, action) => {
      else return state;
 }
 
+const invertMicVisualReducer = (state = false, action) => {
+  if (action.type == 'FLIP_MICVISUAL')
+    return !state;
+  else return state;
+}
+
 const invertColorsReducer = (state = false, action) => {
      if (action.type === 'FLIP_INVERTCOLORS')
           return !state;
@@ -57,7 +63,8 @@ const allReducers = combineReducers({
      numLines: numLinesReducer,
      lockScreen: lockScreenReducer,
      invertColors: invertColorsReducer,
-     recording: recordingReducer
+     recording: recordingReducer,
+     mic: invertMicVisualReducer
 });
 
 export default allReducers;

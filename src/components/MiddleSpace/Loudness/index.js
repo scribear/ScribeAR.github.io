@@ -1,3 +1,4 @@
+
 import React, { Component } from 'react';
 import AudioAnalyser from './AudioAnalyser';
 
@@ -7,8 +8,8 @@ class Index extends Component {
    this.state = {
      audio: null
    };
-
   this.toggleMicrophone = this.toggleMicrophone.bind(this);
+
  }
 
  async getMicrophone() {
@@ -31,7 +32,6 @@ class Index extends Component {
       this.getMicrophone();
     }
   }
-
 
   render() {
      return (

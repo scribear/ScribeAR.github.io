@@ -20,6 +20,8 @@ export default function App() {
      var midHeight = 32 + 'vh'
      // topHeight + botHeight should always = 100vh because we don't want the full
      // page to scroll (we only want the individual areas to scroll).
+
+     var midHeight = 32
      var topHeight = 100 - botHeight + 'vh'
 
      
@@ -33,6 +35,7 @@ export default function App() {
                 }}>
                  <TopSpace height={topHeight} />
                  <Middle height = {midHeight}/>
+
                  <Captions height={botHeight} textSize={sizeString} />
             </div>
        )

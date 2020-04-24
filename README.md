@@ -1,3 +1,4 @@
+permalink: /index.html
 # ScribeAR
 
 * For all other documents and references, see our Box folder. If you can't access Box with your Illinois account, go to https://cloud-dashboard.illinois.edu/cbdash/ and turn U of I Box on.

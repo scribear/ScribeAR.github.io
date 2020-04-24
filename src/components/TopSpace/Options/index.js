@@ -3,9 +3,11 @@ import OnOff from './OnOff'
 import PlusMinus from './PlusMinus'
 import Record from './Record'
 import Slider from './Slider'
+import Micvisual from './Micvisual'
 import './index.css'
 import {
      flip_invertColors,
+     flip_micVisual,
      increment_textSize,
      decrement_textSize,
      increment_lineWidth,
@@ -21,6 +23,7 @@ export default function Options() {
      const lineWidth = (state) => state.lineWidth
      const numLines = (state) => state.numLines
      const invertColors = (state) => state.invertColors
+     
 
      return (
           <div className="Options" id="options-space">
@@ -43,6 +46,9 @@ export default function Options() {
                <div className="item-wrapper">
                     <OnOff item="Invert colors" setting={invertColors}
                          action={flip_invertColors} />
+               </div>
+               <div className="item-wrapper">
+                    <Micvisual />
                </div>
                <div className="item-wrapper">
                     <Record />

@@ -49,3 +49,7 @@ export const flip_invertColors = () => {
 export const flip_recording = () => {
      return { type: 'FLIP_RECORDING' };
 }
+
+export const flip_micVisual = () => {
+     return { type: 'FLIP_MICVISUAL' };
+}

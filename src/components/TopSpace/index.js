@@ -51,10 +51,10 @@ class TopSpace extends React.Component {
      }
 
      render() {
-          var h = '32vh'; // I don't remember why I set the height like this.
+          var h = "32vh"; // I don't remember why I set the height like this.
           // The Options component takes a function as a prop.
           return (
-               <div className="TopSpace" id="outer" style={{ height: h }}>
+               <div className="TopSpace" id="outer" style={{ height: h ,overflow:"auto"}}>
                     <div className={"Container " + (this.state.shown ? "shown" : "hidden")}>
                          <div id="optionsSpace">
                               <Options resetTimeout={this.resetTimeout} />

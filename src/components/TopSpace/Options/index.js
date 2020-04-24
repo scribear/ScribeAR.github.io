@@ -27,22 +27,22 @@ export default function Options() {
 
      return (
           <div className="Options" id="options-space">
-               <h1>Options</h1>
+               <h2>Options</h2>
                <div className="item-wrapper">
                     <Slider item="Text size" setting={textSize}
                          increment={increment_textSize}
                          decrement={decrement_textSize} />
                </div>
-               <div className="item-wrapper">
+               {/* <div className="item-wrapper">
                     <Slider item="Line width" setting={lineWidth}
                          increment={increment_lineWidth}
-                         decrement={decrement_lineWidth} />
-               </div>
+                         decrement={decrement_lineWidth} /> */}
+               {/* </div>
                <div className="item-wrapper">
                     <PlusMinus item="Number of lines" setting={numLines}
                          increment={increment_numLines}
-                         decrement={decrement_numLines} />
-               </div>
+                         decrement={decrement_numLines} /> */}
+               {/* </div> */}
                <div className="item-wrapper">
                     <OnOff item="Invert colors" setting={invertColors}
                          action={flip_invertColors} />
@@ -53,6 +53,7 @@ export default function Options() {
                <div className="item-wrapper">
                     <Record />
                </div>
+
           </div>
      );
 }

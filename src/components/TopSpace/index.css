@@ -1,8 +1,7 @@
 /* See flexbox */
 .Container {
      display: flex;
-     height: 100vh;
-
+     height: 30vh;
      width: 100vw;
      font-size: 3vh;
 }

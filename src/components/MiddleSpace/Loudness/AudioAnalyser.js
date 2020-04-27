@@ -1,5 +1,7 @@
 import React, {Component } from 'react';
 import AudioVisualiser from './AudioVisualiser'
+
+
 /*global Unit8Array*/
 
 
@@ -24,7 +26,16 @@ class AudioAnalyser extends Component {
    }
 
      tick() {
-     this.analyser.getByteTimeDomainData(this.dataArray);
+         if (this.props.mic == 1){
+             //console.log("1");n
+             this.analyser.getByteTimeDomainData(this.dataArray);
+         }else if (this.props.mic == 2){
+             //console.log("2");
+             this.analyser.getByteFrequencyData(this.dataArray);
+         }else if (this.props.mic == 3){
+             this.analyser.getByteFrequencyData(this.dataArray);
+             //this.analyser.getByteTimeDomainData(this.dataArray);
+         }
      this.setState({ audioData: this.dataArray });
      this.rafId = requestAnimationFrame(this.tick);
    }
@@ -36,7 +47,7 @@ class AudioAnalyser extends Component {
   }
 
   render() {
-      return <AudioVisualiser audioData={this.state.audioData} />;
+      return <AudioVisualiser audioData={this.state.audioData} iscolor = {this.props.iscolor} mic = {this.props.mic}/>;
     }
 
 

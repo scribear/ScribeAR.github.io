@@ -12,22 +12,37 @@ export default function Micvisual(props) {
     const setting = useSelector(mic) // Get current value of recording.
     // useDispatch returns the state modifying function, invoked below.
     const dispatch = useDispatch()
+    let result = ""
+    let text = ""
 
     // flip recording when space bar is pressed
 
      //const setting = useSelector(props.setting)
      // useDispatch returns the state modifying function, invoked below.
 
+     if (setting == 0){
+         result = "No Visualization"
+         text = "None"
+     }else if (setting == 1){
+         result = "Line Visualization"
+         text = "Line"
+     }else if (setting == 2){
+         result = "Spectrum Visualization"
+         text = "Spectrum"
+     }else{
+         result = "Circular Visualization"
+         text = "Circular"
+     }
 
      return (
           <div>
-               {!setting? "Get Mic Input" : "Stop Mic Input"}
-               <div className="record-btn-wrapper">
-                    <div className={!setting ? "record-btn hidden" : "record-btn shown"}
-                         onClick={() => dispatch(flip_micVisual())} />
-                       <div className={!setting ? "stop-btn shown" : "stop-btn hidden"}
-                         onClick={() => dispatch(flip_micVisual())} />
+              {result}
+               <div className="audio_visual">
+                    <button className="audio_plus"
+                         onClick={() => dispatch(flip_micVisual())} >{text}</button>
+
                </div>
           </div>
      )
 }
+

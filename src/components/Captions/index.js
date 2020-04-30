@@ -10,14 +10,16 @@ export default function Captions(props) {
      var paddingString = (11 - lineWidth) * 3 + 'vw'
      var h = props.height
      var sz = props.textSize
-
+     // var wid = "calc(100vh - 2 * " + paddingString + ")"
+     // if(window.innerHeight > window.innerWidth) {
+     //   wid = "calc(100vw - 2 * " + paddingString + ")"
+     // }
      return ( <div className="captionsSpace" id="captionsSpace"
           style={{
             fontSize: sz,
             height: h,
             width: "90vw",
-            overflow:"auto",
-
+            overflow: "auto",
             paddingLeft: paddingString,
             paddingRight: paddingString }}>
                <Recognition isRecording={recording} />

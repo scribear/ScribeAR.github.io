@@ -22,7 +22,7 @@ const lineWidthReducer = (state = 10, action) => {
      }
 }
 
-const numLinesReducer = (state = 3, action) => {
+const numLinesReducer = (state = 4, action) => {
      switch (action.type) {
           case 'INCREMENT_NUMLINES':
                return state + 1;
@@ -37,6 +37,16 @@ const lockScreenReducer = (state = false, action) => {
      if (action.type === 'FLIP_LOCKSCREEN')
           return !state;
      else return state;
+}
+
+const invertMicVisualReducer = (state = 0, action) => {
+  if (action.type === 'FLIP_MICVISUAL'){
+       state = state + 1;
+       if (state == 4) {
+            state = 0;
+       }
+  }
+  return state;
 }
 
 const invertColorsReducer = (state = false, action) => {
@@ -57,7 +67,8 @@ const allReducers = combineReducers({
      numLines: numLinesReducer,
      lockScreen: lockScreenReducer,
      invertColors: invertColorsReducer,
-     recording: recordingReducer
+     recording: recordingReducer,
+     mic: invertMicVisualReducer
 });
 
 export default allReducers;

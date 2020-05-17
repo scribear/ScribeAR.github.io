@@ -3,9 +3,12 @@ import OnOff from './OnOff'
 import PlusMinus from './PlusMinus'
 import Record from './Record'
 import Slider from './Slider'
+import Micvisual from './Micvisual'
 import './index.css'
+import SwipeableTemporaryDrawer from "../../Drawer"
 import {
      flip_invertColors,
+     flip_micVisual,
      increment_textSize,
      decrement_textSize,
      increment_lineWidth,
@@ -21,6 +24,7 @@ export default function Options() {
      const lineWidth = (state) => state.lineWidth
      const numLines = (state) => state.numLines
      const invertColors = (state) => state.invertColors
+     
 
      return (
           <div className="Options" id="options-space">
@@ -35,18 +39,22 @@ export default function Options() {
                          increment={increment_lineWidth}
                          decrement={decrement_lineWidth} />
                </div>
-               <div className="item-wrapper">
-                    <PlusMinus item="Number of lines" setting={numLines}
-                         increment={increment_numLines}
-                         decrement={decrement_numLines} />
-               </div>
+               {/*<div className="item-wrapper">*/}
+               {/*     <PlusMinus item="Number of lines" setting={numLines}*/}
+               {/*          increment={increment_numLines}*/}
+               {/*          decrement={decrement_numLines} />*/}
+               {/*</div>*/}
                <div className="item-wrapper">
                     <OnOff item="Invert colors" setting={invertColors}
                          action={flip_invertColors} />
                </div>
                <div className="item-wrapper">
+                    <Micvisual />
+               </div>
+               <div className="item-wrapper">
                     <Record />
                </div>
+
           </div>
      );
 }

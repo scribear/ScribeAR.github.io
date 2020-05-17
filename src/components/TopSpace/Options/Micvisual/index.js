@@ -4,6 +4,7 @@ import './index.css'
 import { flip_micVisual } from '../../../../redux/actions'
 import { Button } from "@material-ui/core"
 
+
 // This code only works if the initial state is Off. It's surprisingly way harder
 // to get this to work if you want the inital state of the checkbox to be checked.
 

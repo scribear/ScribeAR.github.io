@@ -50,6 +50,7 @@ export default function MiddleSpace(props) {
                       </div>
                   </Droppable>
                   <Droppable className = "d1" id = "dr2" style = {{
+
                     width:'25vw',
                     height: '34vh',
                     margin: '1px'}}>
@@ -63,6 +64,7 @@ export default function MiddleSpace(props) {
                   </Droppable>
                   <Droppable className = "d1" id = "dr2" style = {{
                     width:'25vw',
+
                     height: '34vh',
                     margin: '1px'}}>
                       <div className = "show1"></div>
@@ -77,6 +79,7 @@ export default function MiddleSpace(props) {
                     height: '34vh',
                     margin: '1px'}}>
                     <div className = "show1">      
+
                       <Draggable id = "item1" style = {{margin:'8px'}}><Index ismic = {mic} iscolor = {color} style={{
                         position:"relative",
                       }}/> 
@@ -100,6 +103,7 @@ export default function MiddleSpace(props) {
                     height: '34vh',
                     margin: '1px'}}>
                       <div className = "show1"></div>
+
                   </Droppable>
               </Wrapper>
           </div> )

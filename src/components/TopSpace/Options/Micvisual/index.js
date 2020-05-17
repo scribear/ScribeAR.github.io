@@ -2,6 +2,8 @@ import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import './index.css'
 import { flip_micVisual } from '../../../../redux/actions'
+import { Button } from "@material-ui/core"
+
 
 // This code only works if the initial state is Off. It's surprisingly way harder
 // to get this to work if you want the inital state of the checkbox to be checked.
@@ -38,8 +40,9 @@ export default function Micvisual(props) {
           <div>
               {result}
                <div className="audio_visual">
-                    <button className="audio_plus"
-                         onClick={() => dispatch(flip_micVisual())} >{text}</button>
+                    <Button className="audio_plus" color = "primary" variant = "outlined"
+                         onClick={() => dispatch(flip_micVisual())} >{text}
+                    </Button>
 
                </div>
           </div>

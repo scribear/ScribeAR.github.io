@@ -36,7 +36,7 @@ export default function MiddleSpace(props) {
       return ( <div className="MiddleSpace">    
             <Wrapper>
                   <Droppable className = "d1" id = "dr1" style = {{
-                    width:'50vw',
+                    width:'25vw',
                     height: '34vh',
                     margin: '1px'}}>
                     <div className = "show1">
@@ -50,7 +50,21 @@ export default function MiddleSpace(props) {
                       </div>
                   </Droppable>
                   <Droppable className = "d1" id = "dr2" style = {{
-                    width:'50vw',
+
+                    width:'25vw',
+                    height: '34vh',
+                    margin: '1px'}}>
+                      <div className = "show1"></div>
+                  </Droppable>
+                  <Droppable className = "d1" id = "dr2" style = {{
+                    width:'25vw',
+                    height: '34vh',
+                    margin: '1px'}}>
+                      <div className = "show1"></div>
+                  </Droppable>
+                  <Droppable className = "d1" id = "dr2" style = {{
+                    width:'25vw',
+
                     height: '34vh',
                     margin: '1px'}}>
                       <div className = "show1"></div>
@@ -61,19 +75,35 @@ export default function MiddleSpace(props) {
     return ( <div className="MiddleSpace">    
             <Wrapper>
                   <Droppable className = "d2" id = "dr1" style = {{
-                    width:'50vw',
+                    width:'25vw',
                     height: '34vh',
                     margin: '1px'}}>
+                    <div className = "show1">      
+
                       <Draggable id = "item1" style = {{margin:'8px'}}><Index ismic = {mic} iscolor = {color} style={{
                         position:"relative",
                       }}/> 
                     </Draggable>
-                      
+                    </div>
                   </Droppable>
                   <Droppable className = "d2" id = "dr2" style = {{
-                    width:'50vw',
+                    width:'25vw',
                     height: '34vh',
                     margin: '1px'}}>
+                      <div className = "show1"></div>
+                  </Droppable>
+                  <Droppable className = "d2" id = "dr2" style = {{
+                    width:'25vw',
+                    height: '34vh',
+                    margin: '1px'}}>
+                      <div className = "show1"></div>
+                  </Droppable>
+                  <Droppable className = "d2" id = "dr2" style = {{
+                    width:'25vw',
+                    height: '34vh',
+                    margin: '1px'}}>
+                      <div className = "show1"></div>
+
                   </Droppable>
               </Wrapper>
           </div> )

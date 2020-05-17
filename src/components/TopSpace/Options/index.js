@@ -5,6 +5,7 @@ import Record from './Record'
 import Slider from './Slider'
 import Micvisual from './Micvisual'
 import './index.css'
+import SwipeableTemporaryDrawer from "../../Drawer"
 import {
      flip_invertColors,
      flip_micVisual,
@@ -53,6 +54,7 @@ export default function Options() {
                <div className="item-wrapper">
                     <Record />
                </div>
+
           </div>
      );
 }

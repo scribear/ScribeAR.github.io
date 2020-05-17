@@ -109,7 +109,8 @@ componentDidUpdate() {
       }else if (this.props.mic == 2){
           width = "1600vw"
       }else if (this.props.mic == 3){
-          width = "800vw"
+          width = "400vw"
+
       }
 
     return <canvas width={width} height="300vh" ref={this.canvas} />;

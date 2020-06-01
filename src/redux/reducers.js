@@ -39,10 +39,14 @@ const lockScreenReducer = (state = false, action) => {
      else return state;
 }
 
-const invertMicVisualReducer = (state = false, action) => {
-  if (action.type == 'FLIP_MICVISUAL')
-    return !state;
-  else return state;
+const invertMicVisualReducer = (state = 0, action) => {
+  if (action.type === 'FLIP_MICVISUAL'){
+       state = state + 1;
+       if (state == 4) {
+            state = 0;
+       }
+  }
+  return state;
 }
 
 const invertColorsReducer = (state = false, action) => {

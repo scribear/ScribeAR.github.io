@@ -1,6 +1,7 @@
 import React from 'react'
 import './index.css'
 import { useSelector, useDispatch } from 'react-redux'
+import { Button } from '@material-ui/core';
 
 export default function PlusMinus(props) {
      const setting = useSelector(props.setting) // Get current value of the setting.
@@ -9,7 +10,7 @@ export default function PlusMinus(props) {
      return (
           <div>
                {props.item}
-               <div className="setting-wrapper">
+               <div className="plus-and-minus">
                     <button className="minus"
                       onClick={() => dispatch(props.decrement())}>-</button>
                     <div className="setting">{setting}</div>

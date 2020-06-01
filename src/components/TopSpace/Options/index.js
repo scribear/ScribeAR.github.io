@@ -5,6 +5,7 @@ import Record from './Record'
 import Slider from './Slider'
 import Micvisual from './Micvisual'
 import './index.css'
+import SwipeableTemporaryDrawer from "../../Drawer"
 import {
      flip_invertColors,
      flip_micVisual,
@@ -23,26 +24,25 @@ export default function Options() {
      const lineWidth = (state) => state.lineWidth
      const numLines = (state) => state.numLines
      const invertColors = (state) => state.invertColors
-     
+
 
      return (
           <div className="Options" id="options-space">
-               <h1>Options</h1>
                <div className="item-wrapper">
-                    <Slider item="Text size" setting={textSize}
+                    <PlusMinus item="Text size" setting={textSize}
                          increment={increment_textSize}
                          decrement={decrement_textSize} />
                </div>
-               <div className="item-wrapper">
-                    <Slider item="Line width" setting={lineWidth}
+               {/* <div className="item-wrapper">
+                    <PlusMinus item="Line width" setting={lineWidth}
                          increment={increment_lineWidth}
                          decrement={decrement_lineWidth} />
-               </div>
-               <div className="item-wrapper">
-                    <PlusMinus item="Number of lines" setting={numLines}
-                         increment={increment_numLines}
-                         decrement={decrement_numLines} />
-               </div>
+               </div> */}
+               {/*<div className="item-wrapper">*/}
+               {/*     <PlusMinus item="Number of lines" setting={numLines}*/}
+               {/*          increment={increment_numLines}*/}
+               {/*          decrement={decrement_numLines} />*/}
+               {/*</div>*/}
                <div className="item-wrapper">
                     <OnOff item="Invert colors" setting={invertColors}
                          action={flip_invertColors} />
@@ -53,6 +53,7 @@ export default function Options() {
                <div className="item-wrapper">
                     <Record />
                </div>
+
           </div>
      );
 }

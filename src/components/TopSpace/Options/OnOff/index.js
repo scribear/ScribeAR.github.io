@@ -13,10 +13,12 @@ export default function OnOff(props) {
      return (
           <div>
                {props.item}
-               <label className="switch">
-                    <input type="checkbox" onChange={() => dispatch(props.action())}></input>
-                    <span className="slider"></span>
-               </label>
+               <div className="alll">
+                 <label className="switch">
+                      <input type="checkbox" onChange={() => dispatch(props.action())}></input>
+                      <span className="slider"></span>
+                 </label>
+              </div>
           </div>
      )
 }

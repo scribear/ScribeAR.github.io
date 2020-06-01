@@ -2,12 +2,12 @@
 They fade much like the options menu does. */
 
 .record-btn-wrapper {
-     position: absolute;
+     position: relative;
      top: 0;
-     right: 3vh;
+     left: 1vw;
      display: inline-block;
-     height: 8vh;
-     width: 8vh;
+     height: 0vh;
+     width: 0vh;
      transition: visibility 0s 300ms, opacity 5000ms ease;
 }
 
@@ -20,7 +20,7 @@ They fade much like the options menu does. */
      height: 8vh;
      width: 8vh;
      cursor: pointer;
-     border-radius: 50%;
+     border-radius: 80%;
      border: 0px;
 }
 
@@ -35,8 +35,8 @@ They fade much like the options menu does. */
 .stop-btn:before {
      position: absolute;
      display: inline;
-     height: 7vh;
-     width: 7vh;
+     height: 8vh;
+     width: 8vh;
      content: "";
      background-color: black;
      border-radius: 50%;

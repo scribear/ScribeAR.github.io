@@ -1,6 +1,7 @@
 import React from 'react';
 import AudioAnalyser from './AudioAnalyser';
 
+
 class Index extends React.PureComponent {
   constructor() {
    super()
@@ -16,9 +17,9 @@ class Index extends React.PureComponent {
 
 
  componentDidUpdate(prevProps,prevState) {
-   if(prevProps.ismic == this.props.ismic)
+   if(prevProps.ismic === this.props.ismic)
       return
-   if(this.props.ismic){
+   if(this.props.ismic > 0){
       this.getMicrophone()
     }
    else this.stopMicrophone()
@@ -41,8 +42,8 @@ class Index extends React.PureComponent {
   render() {
      return (
 
-         <div className="controls" style = {{height:"100%",width:"100%"}}>
-           {this.state.audio ? <AudioAnalyser audio={this.state.audio} /> : ''}
+         <div className="controls" >
+           {this.state.audio ? <AudioAnalyser audio={this.state.audio}  iscolor = {this.props.iscolor}  mic = {this.props.ismic}/> : ''}
          </div>
 
      );

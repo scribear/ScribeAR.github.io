@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux'
 import TopSpace from './components/TopSpace'
 import Captions from './components/Captions'
 import MiddleSpace from './components/MiddleSpace'
+import DNDTest from './components/DnD/DNDTest'
 import './App.css'
 
 export default function App() {
@@ -16,7 +17,7 @@ export default function App() {
      // Size of bottom space (text area) relative to text size and number of lines.
      // 1.5 is an estimate of the ratio of line size to text size.
      // This is a sloppy way of calculating the height. Please improve on this.
-     var botHeight = 36
+     var botHeight = 57
      // topHeight + botHeight should always = 100vh because we don't want the full
      // page to scroll (we only want the individual areas to scroll).
 
@@ -34,8 +35,9 @@ export default function App() {
                  color: 'white'
                 }}>
                  <TopSpace height={topHeight} />
-                 <MiddleSpace height={midHeight} />
+                 <MiddleSpace height={midHeight} color = {bgColor}/>
                  <Captions height={botHeight} textSize={sizeString} />
+                 {/* <DNDTest /> */}
             </div>
        )
      } else {
@@ -45,8 +47,9 @@ export default function App() {
                  color: 'black'
                 }}>
                  <TopSpace height={topHeight} />
-                 <MiddleSpace height={midHeight} />
+                 <MiddleSpace height={midHeight} color = {bgColor}/>
                  <Captions height={botHeight} textSize={sizeString} />
+                 {/* <DNDTest /> */}
             </div>
        )
      }

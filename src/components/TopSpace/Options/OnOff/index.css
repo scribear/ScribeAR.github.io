@@ -2,12 +2,17 @@
 https://www.w3schools.com/howto/howto_css_switch.asp and modified slightly */
 
 /* The switch - the box around the slider */
+
+.alll {
+  position: relative;
+  height: 0vh;
+}
 .switch {
      position: absolute;
-     right: 0;
+     left: 4vw;
      display: inline-block;
-     height: 8vh;
-     width: 14vh;
+     height: 6vh;
+     width: 12vh;
 }
 
 /* Hide default HTML checkbox */
@@ -34,9 +39,9 @@ https://www.w3schools.com/howto/howto_css_switch.asp and modified slightly */
 .slider:before {
      position: absolute;
      content: "";
-     height: 6vh;
-     width: 6vh;
-     bottom: 1vh;
+     height: 5vh;
+     width: 5vh;
+     bottom: 0.5vh;
      left: 1vh;
      box-shadow: 1px 1px black;
      border-radius: 50%;

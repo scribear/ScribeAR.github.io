@@ -3,7 +3,7 @@ import { combineReducers } from 'redux';
 const textSizeReducer = (state = 6, action) => {
      switch (action.type) {
           case 'INCREMENT_TEXTSIZE':
-               return state + 1;
+               return (state) % 12+1;
           case 'DECREMENT_TEXTSIZE':
                return Math.max(1, state - 1);
           default:

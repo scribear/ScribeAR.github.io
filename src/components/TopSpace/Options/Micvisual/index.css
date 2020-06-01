@@ -10,14 +10,12 @@
 
 
 .audio_plus {
-     right:-10vh;
+     right:-20vh;
      text-align: center;
      padding: 14px 40px;
      font-family: 'Arial'; font-size: 20px;
      border-radius: 15%;
      cursor: pointer;
-     width: 10vw;
-     
-
+     width: 5vw;
 }
 

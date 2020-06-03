@@ -97,9 +97,10 @@ export default function PersistentDrawerLeft(props) {
   };
 
   return (
-    <ThemeProvider theme = {mytheme}>
+    
       <div className={classes.root}>
         <CssBaseline />
+        <ThemeProvider theme = {mytheme}>
         <AppBar
           position="fixed"
           className={clsx(classes.appBar, {
@@ -122,6 +123,7 @@ export default function PersistentDrawerLeft(props) {
             </Typography>
           </Toolbar>
         </AppBar>
+        </ThemeProvider>
         <Drawer
           className={classes.drawer}
           width = "50%"
@@ -133,7 +135,7 @@ export default function PersistentDrawerLeft(props) {
           }}
         >
           <div className={classes.drawerHeader}>
-            <IconButton onClick={handleDrawerClose} color = {choice}>
+            <IconButton onClick={handleDrawerClose} color = "inherit">
               {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
             </IconButton>
           </div>
@@ -156,6 +158,5 @@ export default function PersistentDrawerLeft(props) {
 
         </main>
       </div>
-    </ThemeProvider>
   );
 }

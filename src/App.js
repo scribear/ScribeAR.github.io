@@ -7,19 +7,19 @@ import PlaceHolder from "./components/PlaceHolder"
 import './App.css'
 
 export default function App() {
-     const darkMode = getComputedStyle(document.documentElement).getPropertyValue('--primary'); // #999999
+     // const darkMode = getComputedStyle(document.documentElement).getPropertyValue('--primary'); // #999999
      // Get global state from Redux. See the React Redux tutorial.
      const textSize = useSelector((state) => state.textSize)
-     const numLines = useSelector((state) => state.numLines)
+     // const numLines = useSelector((state) => state.numLines)
      const invertColors = useSelector((state) => state.invertColors)
      // Convert variables to CSS-friendly strings.
      var sizeString = textSize + 'vh'
      // Size of bottom space (text area) relative to text size and number of lines.
-     var botHeight = 41 + 'vh'
+     var botHeight = 43 + 'vh'
      // topHeight + botHeight should always = 100vh because we don't want the full
      // page to scroll (we only want the individual areas to scroll).
      var bgColor = invertColors ? 'white': 'black'
-     var color = invertColors ? 'black' : 'white'
+     // var color = invertColors ? 'black' : 'white'
      if (bgColor == 'black') {
        return (
             <div className="App-1" style={{

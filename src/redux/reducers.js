@@ -61,6 +61,17 @@ const recordingReducer = (state = true, action) => {
      else return state
 }
 
+const instructionsReducer = (state = false, action) => {
+     if (action.type == 'FLIP_INSTRUCTIONS')
+          return !state
+     else return state
+}
+
+const menuhideReducer = (state = false, action) => {
+     if (action.type == 'FLIP_MENUHIDE')
+          return !state
+     else return state
+}
 const allReducers = combineReducers({
      textSize: textSizeReducer,
      lineWidth: lineWidthReducer,
@@ -68,7 +79,9 @@ const allReducers = combineReducers({
      lockScreen: lockScreenReducer,
      invertColors: invertColorsReducer,
      recording: recordingReducer,
-     mic: invertMicVisualReducer
+     mic: invertMicVisualReducer,
+     ins: instructionsReducer,
+     meh: menuhideReducer,
 });
 
 export default allReducers;

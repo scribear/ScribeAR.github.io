@@ -18,6 +18,10 @@ export default function Captions(props) {
             overflow: "auto",
             paddingLeft: paddingString,
             paddingRight: paddingString }}>
+               <p className = "tutorial">Welcome to ScribeAR</p>
+               <p className = "tutorial">There are some tips for you to start to use ScribeAR,</p> 
+               <p className = "tutorial">Click button on the upperleft to open the menu.</p>
+               <p className = "tutorial">Detailed instructions can be found in option menu.</p>
                <Recognition isRecording={recording} />
           </div> )
 }

@@ -1,5 +1,6 @@
 import React from 'react'
 import './index.css'
+import MenuHider from './MenuHider'
 
 
 export default function PlaceHolder(props){
@@ -9,6 +10,6 @@ export default function PlaceHolder(props){
                 fontSize:sz,
             }
         }>
-            Fontsize Preview
+            <MenuHider />
         </div>
 }

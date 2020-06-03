@@ -36,3 +36,14 @@ h1 {
      padding-bottom: 1vh;
      font-size: 7vh;
 }
+.appear{
+     display:inline-block;
+     margin:5px;
+     padding: 2px;
+     width:18w;
+     overflow-x: hidden;
+     overflow-y: auto;
+}
+.disappear{
+     display:none;
+}

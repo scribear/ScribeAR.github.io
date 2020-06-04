@@ -15,6 +15,8 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import Options from "../TopSpace/Options";
 import {ThemeProvider} from "@material-ui/core/styles";
 import mytheme from './theme'
+import blue from "@material-ui/core/colors/blue"
+import orange from "@material-ui/core/colors/orange"
 
 
 const drawerWidth = '20vw';//drawer width
@@ -46,6 +48,14 @@ const useStyles = makeStyles((theme) => ({
   drawer: {
     width: drawerWidth,
     flexShrink: 0,
+  },
+  drawerPaperO: {
+    width: drawerWidth,
+    background: orange[800],
+  },
+  drawerPaperB: {
+    width: drawerWidth,
+    background: blue[800],
   },
   drawerPaper: {
     width: drawerWidth,
@@ -123,16 +133,19 @@ export default function PersistentDrawerLeft(props) {
             </Typography>
           </Toolbar>
         </AppBar>
-        </ThemeProvider>
+
         <Drawer
           className={classes.drawer}
           width = "50%"
           variant="persistent"
           anchor="left"
           open={open}
-          classes={{
-            paper: classes.drawerPaper,
-          }}
+          // classes={bgColor == 'black' ? {
+          //   paper: classes.drawerPaperO,
+          // }:{
+          //   paper: classes.drawerPaperB,
+          // }}
+          classes = {{paper:classes.drawerPaper}}
         >
           <div className={classes.drawerHeader}>
             <IconButton onClick={handleDrawerClose} color = "inherit">
@@ -157,6 +170,7 @@ export default function PersistentDrawerLeft(props) {
           <div className={classes.drawerHeader} />
 
         </main>
+        </ThemeProvider>
       </div>
   );
 }

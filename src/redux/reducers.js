@@ -1,6 +1,12 @@
 import { combineReducers } from 'redux';
 
-const textSizeReducer = (state = 6, action) => {
+var savedTextSize = localStorage.getItem('text')
+var choiceTextSize = 6
+if (savedTextSize != null){
+     choiceTextSize = savedTextSize
+}
+
+const textSizeReducer = (state = savedTextSize, action) => {
      switch (action.type) {
           case 'INCREMENT_TEXTSIZE':
                return (state) % 12+1;

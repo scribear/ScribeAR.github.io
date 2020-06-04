@@ -14,7 +14,7 @@ export default function TopSpace(props){
           const setting = useSelector(meh)
           var choice = setting ? "hidden" : "visible"
           return (
-               <div className="TopSpace" id="outer" style={{ height: h , visibility:choice}}>
+               <div className= {setting ? "TopSpace hidden" : "TopSpace shown"} id="outer" style={{ height: h }}>
                     <div >
                           <div className="item-wrapper" >
                               <PersistentDrawerLeft color = {props.color}/>

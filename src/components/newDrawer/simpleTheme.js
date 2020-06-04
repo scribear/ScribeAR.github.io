@@ -4,13 +4,13 @@ import blue from '@material-ui/core/colors/blue';
 import orange from '@material-ui/core/colors/orange';
 
 
-const mytheme = createMuiTheme({
+const simpleTheme = createMuiTheme({
   palette: {
     primary: {
-        main:blue[900]
+        main: grey[800]
     },
     secondary: {
-        main:orange[800]
+        main: grey[400]
     },
   },
   status: {
@@ -18,4 +18,4 @@ const mytheme = createMuiTheme({
   },
 });
 
-export default mytheme;
+export default simpleTheme;

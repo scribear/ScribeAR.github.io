@@ -53,3 +53,11 @@ export const flip_recording = () => {
 export const flip_micVisual = () => {
      return { type: 'FLIP_MICVISUAL' };
 }
+
+export const flip_instructions = () =>{
+     return { type: 'FLIP_INSTRUCTIONS'};
+}
+
+export const flip_menuhide = () =>{
+     return { type: 'FLIP_MENUHIDE'};
+}

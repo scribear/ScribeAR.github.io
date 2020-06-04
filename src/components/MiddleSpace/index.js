@@ -10,7 +10,7 @@ import './index.css'
 
 const Wrapper = styled.div`
     width:100%;
-    padding:32px;
+    padding:2px;
     display:flex;
     justify-content: center;
 `;
@@ -20,7 +20,7 @@ const droppableStyle = {
     backgroundColor: '#555',
     width:'50vw',
     height: '32vh',
-    margin: '1px'
+    margin: '0px'
 };
  
 export default function MiddleSpace(props) {
@@ -40,7 +40,7 @@ export default function MiddleSpace(props) {
                     height: '34vh',
                     margin: '1px'}}>
                     <div className = "show1">
-                      <Draggable id = "item1" style = {{margin:'8px'}}>
+                      <Draggable id = "item1" style = {{margin:'0.5px'}}>
                         
                           <Index ismic = {mic} iscolor = {color} style={{
                           position:"relative",
@@ -50,7 +50,6 @@ export default function MiddleSpace(props) {
                       </div>
                   </Droppable>
                   <Droppable className = "d1" id = "dr2" style = {{
-
                     width:'25vw',
                     height: '34vh',
                     margin: '1px'}}>
@@ -64,11 +63,11 @@ export default function MiddleSpace(props) {
                   </Droppable>
                   <Droppable className = "d1" id = "dr2" style = {{
                     width:'25vw',
-
                     height: '34vh',
                     margin: '1px'}}>
                       <div className = "show1"></div>
                   </Droppable>
+
               </Wrapper>
           </div> )
   }else{
@@ -79,8 +78,7 @@ export default function MiddleSpace(props) {
                     height: '34vh',
                     margin: '1px'}}>
                     <div className = "show1">      
-
-                      <Draggable id = "item1" style = {{margin:'8px'}}><Index ismic = {mic} iscolor = {color} style={{
+                      <Draggable id = "item1" style = {{margin:'0.5px'}}><Index ismic = {mic} iscolor = {color} style={{
                         position:"relative",
                       }}/> 
                     </Draggable>
@@ -103,8 +101,8 @@ export default function MiddleSpace(props) {
                     height: '34vh',
                     margin: '1px'}}>
                       <div className = "show1"></div>
-
                   </Droppable>
+
               </Wrapper>
           </div> )
   }

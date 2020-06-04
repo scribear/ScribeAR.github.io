@@ -51,11 +51,21 @@ They fade much like the options menu does. */
      top: 2.5vh;
      left: 2.5vh;
      display: inline;
-     height: 3vh;
-     width: 3vh;
+
      content: "";
      background-color: white;
 }
 .stop-btn:hover::after {
   background-color: #C1C1C1;
+}
+
+.Play{
+     position: absolute;
+     left:10vw;
+}
+.pause{
+     transform: scale(2.0);
+}
+.start{
+     transform: scale(2.0);
 }

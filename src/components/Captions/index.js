@@ -10,10 +10,6 @@ export default function Captions(props) {
      var paddingString = (11 - lineWidth) * 3 + 'vw'
      var h = props.height
      var sz = props.textSize
-     // var wid = "calc(100vh - 2 * " + paddingString + ")"
-     // if(window.innerHeight > window.innerWidth) {
-     //   wid = "calc(100vw - 2 * " + paddingString + ")"
-     // }
      return ( <div className="captionsSpace" id="captionsSpace"
           style={{
             fontSize: sz,
@@ -22,6 +18,10 @@ export default function Captions(props) {
             overflow: "auto",
             paddingLeft: paddingString,
             paddingRight: paddingString }}>
+               <p className = "tutorial">Welcome to ScribeAR</p>
+               <p className = "tutorial">There are some tips for you to start to use ScribeAR,</p> 
+               <p className = "tutorial">Click button on the upperleft to open the menu.</p>
+               <p className = "tutorial">Detailed instructions can be found in option menu.</p>
                <Recognition isRecording={recording} />
           </div> )
 }

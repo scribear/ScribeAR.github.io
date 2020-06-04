@@ -14,11 +14,14 @@
 }
 .show1{
     width:25vw;
-    height: 34vh;
+    height:34vh;
 }
 .show1:hover{
     background-color: grey;
 }
 .d2:active{
     background-color: grey;
+}
+.MiddleSpace{
+    height:34vh;
 }

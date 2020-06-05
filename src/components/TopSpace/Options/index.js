@@ -4,6 +4,7 @@ import PlusMinus from './PlusMinus'
 import Record from './Record'
 import Micvisual from './Micvisual'
 import Instru from "./Instru"
+import Save from './Save'
 import Divider from '@material-ui/core/Divider';
 import './index.css'
 import {useSelector} from "react-redux"
@@ -29,6 +30,9 @@ export default function Options() {
           <div className="Options" id="options-space">
                <h2 style = {{fontFamily:"Arial"}}>OPTIONS</h2>
                <Divider/>
+               <div className="item-wrapper">
+                    <Save />
+               </div>
                <div className="item-wrapper">
                     <PlusMinus item="Text size" setting={textSize}
                          increment={increment_textSize}
@@ -58,6 +62,7 @@ export default function Options() {
                     <p style = {{margin:0}}>-For circular graph, try to drag it around.</p>
                     <p style = {{margin:0}}>-To stop captioning just click switch button for Recording. Also 
                     click again to resume captioning.</p>
+                    <p style = {{margin:0}}>-To memorize textsize option, click save after chose a proper size of the text.</p>
                </div>
 
           </div>

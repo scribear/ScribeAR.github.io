@@ -2,12 +2,10 @@
 They fade much like the options menu does. */
 
 .record-btn-wrapper {
-     position: relative;
-     top: 0;
-     left: 1vw;
+     position: absolute;
+     top: 2vh;
+     left: 10vw;
      display: inline-block;
-     height: 0vh;
-     width: 0vh;
      transition: visibility 0s 300ms, opacity 5000ms ease;
 }
 
@@ -25,7 +23,7 @@ They fade much like the options menu does. */
 }
 
 .stop-btn {
-     position: absolute;
+     position: relative;
      display: inline;
      height: 8vh;
      width: 8vh;

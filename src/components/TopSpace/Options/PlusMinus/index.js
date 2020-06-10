@@ -9,13 +9,14 @@ export default function PlusMinus(props) {
      const dispatch = useDispatch()
      return (
           <div>
-               {props.item}
+               {props.item + ":"}
                <div className="plus-and-minus">
-                    <button className="minus"
-                      onClick={() => dispatch(props.decrement())}>-</button>
-                    <div className="setting">{setting}</div>
-                    <button className="plus"
-                      onClick={() => dispatch(props.increment())}>+</button>
+                 <div className="setting">{setting}</div>
+
+                    <Button variant="outlined" className="minus"
+                      onClick={() => dispatch(props.decrement())}> - </Button>
+                    <Button variant="outlined" className="plus"
+                      onClick={() => dispatch(props.increment())}> + </Button>
                </div>
           </div>
      );

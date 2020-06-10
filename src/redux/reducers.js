@@ -11,6 +11,8 @@ const textSizeReducer = (state = 6, action) => {
      }
 }
 
+
+
 const lineWidthReducer = (state = 10, action) => {
      switch (action.type) {
           case 'INCREMENT_LINEWIDTH':

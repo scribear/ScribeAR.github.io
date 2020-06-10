@@ -4,12 +4,11 @@ https://www.w3schools.com/howto/howto_css_switch.asp and modified slightly */
 /* The switch - the box around the slider */
 
 .alll {
-  position: relative;
-  height: 0vh;
+  position: absolute;
 }
 .switch {
      position: absolute;
-     left: 4vw;
+     left: 9vw;
      display: inline-block;
      height: 6vh;
      width: 12vh;
@@ -42,7 +41,7 @@ https://www.w3schools.com/howto/howto_css_switch.asp and modified slightly */
      height: 5vh;
      width: 5vh;
      bottom: 0.5vh;
-     left: 1vh;
+     left: 0.5vh;
      box-shadow: 1px 1px black;
      border-radius: 50%;
      background: #FFFFFF;

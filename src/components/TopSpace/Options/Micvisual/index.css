@@ -1,7 +1,5 @@
 .audio_visual {
      position: relative;
-     top: 0;
-     left: 0vw;
      display: inline-block;
      height: 0vh;
      width: 40vh;
@@ -10,11 +8,12 @@
 
 
 .audio_plus {
-     left: 5vw;
+     left: 9vw;
      text-align: center;
-     padding: 14px 40px;
+     padding: 24px 40px;
      font-family: 'Arial'; font-size: 20px;
      border-radius: 15%;
      cursor: pointer;
      width: 6vw;
+     height: 6vh;
 }

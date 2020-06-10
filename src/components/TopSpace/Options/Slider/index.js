@@ -1,22 +1,42 @@
-import React from 'react'
-import './index.css'
+import React, { useState } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
+import Slider from '@material-ui/core/Slider';
 import { useSelector, useDispatch } from 'react-redux'
 
-// To do: turn this into a slider. https://www.w3schools.com/howto/howto_js_rangeslider.asp
+const useStyles = makeStyles({
+  root: {
+    width: 220,
+  },
+});
 
-export default function Slider(props) {
-     const setting = useSelector(props.setting)
-     const dispatch = useDispatch()
-     return (
-          <div>
-               {props.item}
-               <div className="setting-wrapper">
-                    <button className="minus"
-                      onClick={() => dispatch(props.decrement())}>-</button>
-                    <div className="setting">{setting}</div>
-                    <button className="plus"
-                      onClick={() => dispatch(props.increment())}>+</button>
-               </div>
-          </div>
-     );
+function valuetext(value) {
+  return `${value}`;
+}
+
+export default function DiscreteSlider(props) {
+  const classes = useStyles();
+  const [value, setValue] = useState(20)
+  const dispatch = useDispatch()
+  const setting = useSelector(props.setting)
+
+
+  return (
+    <div className={classes.root}>
+      <Typography id="discrete-slider" gutterBottom>
+        {props.item}
+      </Typography>
+      <Slider
+        defaultValue={setting}
+        getAriaValueText={valuetext}
+        aria-labelledby="discrete-slider"
+        valueLabelDisplay="auto"
+        onChange= {() => dispatch(props.decrement())}
+        step={1}
+        marks
+        min={1}
+        max={10}
+      />
+    </div>
+  );
 }

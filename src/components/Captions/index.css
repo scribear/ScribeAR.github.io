@@ -25,3 +25,10 @@
       -ms-overflow-style: none;
    }
 }
+
+
+.scroll {
+  position: relative;
+  left: 80vw;
+  top: 25vh;
+}

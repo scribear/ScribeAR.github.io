@@ -12,6 +12,12 @@
      background: rgb(255,255,255);
      background: linear-gradient(0deg, rgba(255,255,255,1) 22%, rgba(209,209,209,1) 38%, rgba(205,205,205,1) 100%);
 }
+
+
+.offline {
+  text-align: center;
+  font-family: arial;
+}
 body {
      padding: 0;
      margin: 0;

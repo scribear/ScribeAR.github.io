@@ -1,17 +1,13 @@
 .plus-and-minus {
-     position:relative;
-     top:10;
+     position:absolute;
      display: inline-block;
-     height: 100px;
-     width: 200px;
-     left: 2vw;
 }
 
 
 .minus {
-     width: 5vw;
+  left: 2vw;
 }
 
 .plus {
-     width: 5vw
+  left: 2.5vw;
 }

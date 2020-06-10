@@ -39,7 +39,7 @@ export default function Micvisual(props) {
           <div>
               {result}
                <div className="audio_visual">
-                    <Button className="audio_plus" color = "secondary" variant = "contained"
+                    <Button className="audio_plus" variant = "contained"
                          onClick={() => dispatch(flip_micVisual())} >{text}
                     </Button>
 

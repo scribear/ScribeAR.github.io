@@ -1,4 +1,13 @@
 import React from 'react'
+import { Button } from "@material-ui/core"
+import "./index.css";
+import $ from 'jquery';
+import ScrollButton from 'react-scroll-button'
+import ScrollToBottom from 'react-scroll-to-bottom';
+
+
+
+
 
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
 const recognition = new SpeechRecognition()
@@ -11,11 +20,12 @@ recognition.interimResults = true
 // is finished, the buffer is flushed: a new div is appended to the 'out' div and
 // this.state.line is reset for the next line.
 
-class Recognition extends React.PureComponent {
+export class Recognition extends React.PureComponent {
      constructor() {
           super()
           this.state = {
                line: '',
+               targetID: 'curr'
                //recording: true
           }
           this.appendLine = this.appendLine.bind(this)
@@ -55,6 +65,28 @@ class Recognition extends React.PureComponent {
           recognition.onend = recognition.start // override this behavior
      }
 
+    downloadTxtFile = () => {
+       const element = document.createElement("a");
+
+
+       var results = [];
+       results.push("transcript History \n\n\n\n");
+       var searchEles = document.getElementById("out").children;
+       for(var i = 0; i < searchEles.length; i++) {
+         console.log(searchEles[i].innerHTML[1,searchEles[i].innerHTML.length-2]);
+         results.push(searchEles[i].innerHTML + '\n');
+       }
+
+       // const file = new Blob([document.getElementById('out').value],
+       //             {type: 'text/plain;charset=utf-8'});
+       const file = new Blob([results],
+                   {type: 'text/plain;charset=utf-8'});
+       element.href = URL.createObjectURL(file);
+       element.download = "Script.txt";
+       document.body.appendChild(element);
+       element.click();
+     }
+
      stop() {
           recognition.onresult = () => {} // do nothing with results
           recognition.onend = () => {} // don't restart when ending
@@ -81,14 +113,30 @@ class Recognition extends React.PureComponent {
                capts.scrollTop = capts.scrollHeight - capts.clientHeight // scroll to bottom
      }
 
+     scrollBottom() {
+       var element = document.getElementById("curr");
+       element.scrollIntoView({behavior: "smooth"});
+     }
+
      render() {
+
+
           // out holds all past lines. curr holds the current line.
+          // if( $('#out').is(':empty') ){
+          //   return (
+          //        <div className="whatever">
+          //             <div id='out'></div>
+          //             <div id='curr'>{this.state.line}</div>
+          //        </div>
+          // )
+          //   } else {
           return (
-               <div>
-                    <div id='out'></div>
-                    <div id='curr'>{this.state.line}</div>
-               </div>
-          )
+             <div>
+                  <div id='out'></div>
+                  <div id='curr'>{this.state.line}</div>
+             </div>
+
+           )
      }
 }
 

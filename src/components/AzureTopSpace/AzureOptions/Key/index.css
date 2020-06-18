@@ -1,0 +1,53 @@
+.keytext {
+    position: absolute;
+    font-family: 'Arial';
+    margin-top: 5.5%;
+    font-size: 16px;
+    margin-left: 2%;
+/*    vertical-align: middle;*/
+/*    text-align: center;*/
+}
+
+.keybox {
+    position: absolute;
+    margin-top: 16%;
+    margin-left: 5%;
+}
+
+#azure_key_value {
+    font-family: 'Arial';
+    font-size: 20px;
+}
+
+.keysubmit {
+    font-family: 'Arial';
+    font-size: 20px;
+    position: absolute;
+    margin-top: 15.4%;
+    margin-left: 33.8%;
+}
+
+input[type=submit] {
+    background-color: white;
+    border-radius: 15%;
+    width: 70px;
+    height: 30px;
+}
+
+.azuremenutext {
+    position: absolute;
+    margin-top: -22%;
+    font-size: 33px;
+    margin-left: 4.5%;
+}
+
+.azuremenutext2 {
+    position: absolute;
+    margin-top: -14%;
+    font-size: 33px;
+    margin-left: 4%;
+}
+
+.divider {
+    margin-top: 50%;
+}

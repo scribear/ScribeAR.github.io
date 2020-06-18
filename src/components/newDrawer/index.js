@@ -17,9 +17,14 @@ import {ThemeProvider} from "@material-ui/core/styles";
 import mytheme from './theme'
 import blue from "@material-ui/core/colors/blue"
 import orange from "@material-ui/core/colors/orange"
+import ButtomNavi from '../ButtomNavi'
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import {useSelector,useDispatch} from 'react-redux';
+import { submenu1,submenu2 } from '../../redux/actions';
+import PopMenu from '../PopMenu'
 
-
-const drawerWidth = '20vw';//drawer width
+const drawerWidth = '21vw';//drawer width
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -87,6 +92,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function PersistentDrawerLeft(props) {
+  const submenu = (state) => state.submenu;
+  const dispatch = useDispatch();
+  const setting = useSelector(submenu);
+
   const classes = useStyles();
   const theme = useTheme();
   var bgColor = props.color;
@@ -106,9 +115,65 @@ export default function PersistentDrawerLeft(props) {
     setOpen(false);
   };
 
-  return (
-    
-      <div className={classes.root}>
+  if (setting == 1){
+    return (
+        <div className={classes.root}>
+          <CssBaseline />
+          <ThemeProvider theme = {mytheme}>
+          <AppBar
+            position="fixed"
+            className={clsx(classes.appBar, {
+              [classes.appBarShift]: open,
+            })}
+            color = {choice}
+          >
+            <Toolbar >
+              <IconButton
+                color="inherit"
+                aria-label="open drawer"
+                onClick={handleDrawerOpen}
+                edge="start"
+                className={clsx(classes.menuButton, open && classes.hide)}
+              >
+                <MenuIcon />
+              </IconButton>
+              <Typography variant="h6" noWrap>
+                Welcome to ScribeAR
+              </Typography>
+            </Toolbar>
+          </AppBar>
+
+          <Drawer
+            className={classes.drawer}
+            width = "50%"
+            variant="persistent"
+            anchor="left"
+            open={open}
+            classes = {{paper:classes.drawerPaper}}
+          >
+            <div className={classes.drawerHeader}>
+              <PopMenu />
+              <IconButton onClick={handleDrawerClose} color = "inherit">
+                {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+              </IconButton>
+
+            </div>
+            <Options />
+          </Drawer>
+          <main
+            className={clsx(classes.content, {
+              [classes.contentShift]: open,
+            })}
+          >
+            <div className={classes.drawerHeader} />
+
+          </main>
+          </ThemeProvider>
+        </div>
+    );
+  }else{
+    return (
+        <div className={classes.root}>
         <CssBaseline />
         <ThemeProvider theme = {mytheme}>
         <AppBar
@@ -140,27 +205,16 @@ export default function PersistentDrawerLeft(props) {
           variant="persistent"
           anchor="left"
           open={open}
-          // classes={bgColor == 'black' ? {
-          //   paper: classes.drawerPaperO,
-          // }:{
-          //   paper: classes.drawerPaperB,
-          // }}
           classes = {{paper:classes.drawerPaper}}
         >
           <div className={classes.drawerHeader}>
+            <PopMenu />
             <IconButton onClick={handleDrawerClose} color = "inherit">
               {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
             </IconButton>
+
           </div>
-
-          <List>
-              <Options />
-
-          </List>
-
-          <List>
-
-          </List>
+          <div>...</div>
         </Drawer>
         <main
           className={clsx(classes.content, {
@@ -171,6 +225,7 @@ export default function PersistentDrawerLeft(props) {
 
         </main>
         </ThemeProvider>
-      </div>
-  );
+        </div>
+    )
+  } 
 }

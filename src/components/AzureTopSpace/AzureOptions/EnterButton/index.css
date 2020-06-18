@@ -1,0 +1,53 @@
+.enter {
+/*
+  position: absolute;
+  color: white;
+  top: 0;
+  font-family: 'Arial'; font-size: 2.5vw;
+  text-align: center;
+  vertical-align: middle;
+  position: absolute;
+  height: 8vh;
+  width: 5vw;
+  border: solid white;
+  border-radius: 15%;
+  background: orange;
+  background: -moz-linear-gradient(left, #000000 0%, #0B0B0B 55%, #181818 100%);
+  background: -webkit-linear-gradient(left, #000000 0%, #0B0B0B 55%, #181818 100%);
+  background: linear-gradient(to right, #000000 0%, #0B0B0B 55%, #181818 100%);
+  cursor: pointer;
+  right: 0;
+  right: 10vw;
+}
+*/
+}
+
+.enter {
+    background-color: white;
+    border-radius: 15%;
+    height: 70px;
+    width: 100px;
+    margin-left: 26%;
+    margin-top: 50%;
+    cursor: pointer;
+    border: solid black;
+}
+.setting-button2 {
+    background-color: white;
+    border-radius: 15%;
+    height: 70px;
+    width: 100px;
+    margin-left: 26%;
+    margin-top: 50%;
+    cursor: pointer;
+    border: solid black;
+}
+
+#entertext {
+    color: black;
+    text-align: center;
+    margin: auto;
+    font-size: 15px;
+    font-family: 'Arial';
+    font-weight: 100;
+}

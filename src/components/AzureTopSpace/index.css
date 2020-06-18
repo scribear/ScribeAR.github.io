@@ -1,0 +1,48 @@
+/* See flexbox */
+.Container {
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+    font-size: 3vh;
+}
+
+#optionsSpace {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-left: 2rem;
+}
+
+/* Hide scrollbar in Chrome (webkit = Chrome).
+Please improve browser compatibility. */
+#optionsSpace::-webkit-scrollbar {
+   display: none;
+}
+
+@media screen and (orientation:landscape) {
+  #hideSpace {
+     flex: 1;
+     color: gray;
+     line-height: 70vh;
+     text-align: center;
+     cursor: default;
+  }
+}
+@media screen and (orientation:portrait) {
+ #hideSpace {
+     flex: 0;
+     visibility: hidden;
+ }
+}
+
+/* These classes create a nice fade effect for showing/hiding options. */
+.shown {
+    visibility: visible;
+    opacity: 1;
+    transition: opacity 500ms ease;
+}
+.hidden {
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s 500ms, opacity 500ms ease;
+}

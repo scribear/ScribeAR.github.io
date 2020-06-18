@@ -1,0 +1,27 @@
+@media screen and (orientation:landscape) {
+    .AzureCaptions {
+        overflow: auto;
+        height: 36vh;
+        position: relative;
+        width: 20%;
+        backface-visibility: hidden;
+        will-change: overflow;
+        -webkit-overflow-scrolling: touch;
+        -ms-overflow-style: none;
+     }
+  }
+  .AzureCaptions::-webkit-scrollbar {
+      display: none;
+  }
+  @media screen and (orientation:portrait) {
+    .AzureCaptions {
+        overflow: auto;
+        height: 36vh;
+        position: relative;
+        width: 60vw;
+        backface-visibility: hidden;
+        will-change: overflow;
+        -webkit-overflow-scrolling: touch;
+        -ms-overflow-style: none;
+     }
+  }

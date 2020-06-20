@@ -1,0 +1,69 @@
+/* All code in this document is taken from
+https://www.w3schools.com/howto/howto_css_switch.asp and modified slightly */
+
+/* The switch - the box around the slider */
+.switch {
+    position: absolute;
+    right: 0;
+    display: inline-block;
+    height: 8vh;
+    width: 14vh;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+    opacity: 0;
+    height: 0;
+    width: 0;
+}
+
+.slider {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    border-radius: 6vh;
+    background: rgb(162,162,162);
+    background: linear-gradient(90deg, rgba(162,162,162,1) 0%, rgba(173,173,173,1) 48%, rgba(194,193,193,1) 100%);
+    cursor: pointer;
+    -webkit-transition: .2s;
+    transition: .2s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 6vh;
+    width: 6vh;
+    bottom: 1vh;
+    left: 1vh;
+    box-shadow: 1px 1px black;
+    border-radius: 50%;
+    background: #FFFFFF;
+    background: -moz-linear-gradient(-45deg, #FFFFFF 0%, #F3F3F3 67%, #909090 100%);
+    background: -webkit-linear-gradient(-45deg, #FFFFFF 0%, #F3F3F3 67%, #909090 100%);
+    background: linear-gradient(135deg, #FFFFFF 0%, #F3F3F3 67%, #909090 100%);
+    -webkit-transition: .2s;
+    transition: .2s;
+}
+
+.slider:hover {
+   background: rgb(162,162,162);
+   background: linear-gradient(90deg, rgba(150,150,150,1) 0%, rgba(153,153,153,1) 48%, rgba(174,173,173,1) 100%);
+}
+
+input:checked + .slider {
+   background: rgb(50,190,20);
+background: linear-gradient(90deg, rgba(50,190,20,1) 0%, rgba(45,170,17,1) 50%, rgba(38,148,14,1) 100%);
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+    -webkit-transform: translateX(6vh);
+    -ms-transform: translateX(6vh);
+    transform: translateX(6vh);
+}

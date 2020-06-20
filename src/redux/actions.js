@@ -46,18 +46,58 @@ export const flip_invertColors = () => {
      return { type: 'FLIP_INVERTCOLORS' };
 }
 
+export const flip_switchMenus = () => {
+     return { type: 'FLIP_SWITCHMENUS' };
+}
 export const flip_recording = () => {
      return { type: 'FLIP_RECORDING' };
 }
 
+export const flip_recording_azure = () => {
+     return {type: 'FLIP_RECORDING_AZURE'}
+}
+
+export const azure_key = (key) => {
+     return {
+          type: 'KEY_AZURE',
+          key: "dsfdsf"
+     }
+}
+export const azure_region = (region) => {
+     return {
+          type: 'AZURE_REGION',
+          region: "dsfdsf"
+     }
+}
 export const flip_micVisual = () => {
      return { type: 'FLIP_MICVISUAL' };
 }
-
+export const flip_entered_key = () => {
+     return { type: 'FLIP_ENTERED_KEY' };
+}
+export const flip_entered_region = () => {
+     return { type: 'FLIP_ENTERED_REGION' };
+}
+export const flip_correct_azureKey = () => {
+     return { type: 'FLIP_CORRECT_AZUREKEY' };
+}
+export const flip_switch_to_azure = () => {
+     return { type: 'FLIP_SWITCH_TO_AZURE' };
+}
+export const flip_check_azureKey = () => {
+     return { type: 'FLIP_CHECK_AZUREKEY' };
+}
 export const flip_instructions = () =>{
      return { type: 'FLIP_INSTRUCTIONS'};
 }
 
 export const flip_menuhide = () =>{
      return { type: 'FLIP_MENUHIDE'};
+}
+
+export const submenu1 = () =>{
+     return { type: 'SUBMENU_1'}
+}
+export const submenu2 = () =>{
+     return { type: 'SUBMENU_2'}
 }

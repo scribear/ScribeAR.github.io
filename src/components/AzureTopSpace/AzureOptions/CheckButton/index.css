@@ -1,0 +1,40 @@
+.setting-wrapper {
+     position: absolute;
+     top: 0;
+     right: 0;
+     display: inline-block;
+     height: 8vh;
+     width: 12vw;
+}
+
+.setting {
+     position: absolute;
+     right: 5vw;
+     display: inline;
+     width: 10vw;
+     height: 8vh;
+     text-align: center;
+     line-height: 8vh;
+}
+
+.button{
+     position: absolute;
+     background-color: red;
+     top: 0;
+     display: inline-block;
+     height: 20vh;
+     width: 10vw;
+
+     border-radius: 10%;
+     border: 0;
+     cursor: pointer;
+     line-height: 8vh;
+}
+
+.minus {
+     right: 30vw;
+}
+
+.plus {
+     right: 0;
+}

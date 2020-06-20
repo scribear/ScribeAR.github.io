@@ -1,0 +1,39 @@
+.item-wrapper {
+    position: left;
+    height: 10vh;
+    padding: 0;
+}
+
+/* Button styling from https://fdossena.com/?p=html5cool/buttons/i.frag */
+.mybutton{
+    display:inline-block;
+    width: 14vw;
+    padding:0.3vh 1.2vh;
+    margin:0 0.1em 0.1em 0;
+    border:0.16em solid rgba(255,255,255,0);
+    border-radius:1vh;
+    box-sizing: border-box;
+    text-decoration:none;
+    color:black;
+    text-align:center;
+}
+
+@media all and (max-width:30em){
+    .mybutton{
+         display:block;
+         margin:0.2em auto;
+    }
+}
+
+
+/*
+.azuremenutext {
+    font-size: 100px;
+}
+*/
+
+/*
+p {
+    text-align: left;
+}
+*/

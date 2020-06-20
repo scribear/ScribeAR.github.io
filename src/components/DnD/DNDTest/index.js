@@ -33,7 +33,7 @@ export default class DNDTest extends React.Component{
                     <Draggable id = "item2" style = {{margin:'8px'}}><Item>Some other text</Item></Draggable>
                 </Droppable>
                 <Droppable id = "dr2" style = {droppableStyle}>
-                   
+
                 </Droppable>
             </Wrapper>
         )

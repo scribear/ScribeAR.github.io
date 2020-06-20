@@ -1,6 +1,6 @@
 import React from 'react'
 import './index.css'
-import { useDispatch } from 'react-redux'
+import { /*useSelector, */useDispatch } from 'react-redux'
 
 // This code only works if the initial state is Off. It's surprisingly way harder
 // to get this to work if you want the inital state of the checkbox to be checked.

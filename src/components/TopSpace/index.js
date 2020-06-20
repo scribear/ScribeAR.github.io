@@ -8,13 +8,14 @@ import {useSelector} from 'react-redux'
 // addEventListener, removeEventListener
 // React functions used: constructor, setState, componentDidMount, render
 export default function TopSpace(props){
-          var h = '9vh'; // I don't remember why I set the height like this.
+
+          var h = props.height; // I don't remember why I set the height like this.
           // The Options component takes a function as a prop.
           const meh = (state) => state.meh
           const setting = useSelector(meh)
-          var choice = setting ? "hidden" : "visible"
+          var choice = setting ? "none" : "block"
           return (
-               <div className= {setting ? "TopSpace hidden" : "TopSpace shown"} id="outer" style={{ height: h }}>
+               <div className="TopSpace" id="outer" style={{ height: h , display:choice}}>
                     <div >
                           <div className="item-wrapper" >
                               <PersistentDrawerLeft color = {props.color}/>

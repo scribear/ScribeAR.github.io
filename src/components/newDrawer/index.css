@@ -1,0 +1,25 @@
+.download {
+  right: 0;
+}
+
+
+
+.d-table {
+display:table;
+}
+
+.d-table-cell {
+display:table-cell;
+}
+
+.w-100 {
+width: 100%;
+}
+
+.tar {
+text-align: right;
+}
+
+.tar2 {
+  padding: 10px;
+}

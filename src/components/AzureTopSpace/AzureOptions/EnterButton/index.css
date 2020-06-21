@@ -3,7 +3,7 @@
   border-radius: 15%;
   height: 60px;
   width: 200px;
-  margin-left: -45%;
+  margin-left: 30%;
   margin-top: 90%;
   cursor: pointer;
 }
@@ -14,7 +14,7 @@
     border-radius: 15%;
     height: 60px;
     width: 200px;
-    margin-left: -45%;
+    margin-left: 30%;
     margin-top: 90%;
     cursor: pointer;
     border: solid black;

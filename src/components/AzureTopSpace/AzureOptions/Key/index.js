@@ -17,11 +17,13 @@ class UserInput extends React.Component {
     if (store.azureKeyReducer == undefined) {
     this.state = {value: temp_azure_key};
     } else {
+      if (store.azureKeyReducer != 'incorrect' && store.azureKeyReducer != 'empty') {
       var temp = store.azureKeyReducer;
       var astr_str ='';
       if (temp.length > 5) {
       temp = temp.substr(temp.length - 4);
       astr_str = new Array(store.azureKeyReducer.length - 4).join( '*' );
+    }
       }
       this.state = {value: astr_str + temp};
     }

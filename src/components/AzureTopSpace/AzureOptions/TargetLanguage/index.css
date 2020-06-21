@@ -5,6 +5,11 @@
     margin-top: 2%;
 }
 
+.targetLanguageSelect {
+    right: 29%;
+    position: absolute;
+}
+
 #targetlanguageoptions {
     border-radius: 15%;
     margin-left: 57.5%;

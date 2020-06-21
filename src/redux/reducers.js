@@ -19,7 +19,8 @@ const submenuReducer = (state = 1, action) => {
 const textSizeReducer = (state = choiceTextSize, action) => {
      switch (action.type) {
           case 'INCREMENT_TEXTSIZE':
-               return state + 1;
+               state++;
+               return state;
           case 'DECREMENT_TEXTSIZE':
                return Math.max(1, state - 1);
           default:

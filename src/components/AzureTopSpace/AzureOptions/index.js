@@ -78,8 +78,11 @@ const items = [
     return (
          <div className="AzureOptions" id="azure-options-space">
              <div className = "azuremenutext">
-                    <b>Microsoft Azure</b>
-              </div>
+                    <b>AZURE</b>
+                </div>
+              <div className = "azuremenutext2">
+                    <b>OPTIONS</b>
+               </div>
                   <div className = "divider">
                     <Divider variant="middle" />
                </div>
@@ -87,18 +90,16 @@ const items = [
 
 
                <div className="item-wrapper">
-                  <UserInput store ={store}/>
+                    <UserInput store ={store}/>
                </div>
-               <br></br>
-               <br></br>
-               <br></br>
 
-              <div className="dd-wrapper">
-
-                    <br></br>
-
-                    <Dropdown title="" items={items}/>
-              </div>
+               <br></br> <br></br><br></br><br></br>
+               <div>
+                 <div className = "regionText">
+                     Region:
+                 </div>
+                 <Dropdown/>
+               </div>
               <div className="item-wrapper">
                    <EnterButton />
               </div>

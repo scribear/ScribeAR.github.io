@@ -149,9 +149,6 @@ export default function PersistentDrawerLeft() {
                   <MenuItem onClick={handleClose}>
                     <Button variant="contained" variant="text" onClick={new Recognition().downloadTxtFile} startIcon={<SaveIcon fontSize='large'/>}>Download</Button>
                   </MenuItem>
-                  <MenuItem onClick={handleClose}>
-                    <GoogleDrive/>
-                  </MenuItem>
                 </Menu>
               </div>
           </div>

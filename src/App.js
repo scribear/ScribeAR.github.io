@@ -24,14 +24,17 @@ export default function App() {
      // Size of bottom space (text area) relative to text size and number of lines.
      // 1.5 is an estimate of the ratio of line size to text size.
      // This is a sloppy way of calculating the height. Please improve on this.
+
      var botHeight = 52
+     // var botHeight = 56.5  if no button
+
      // topHeight + botHeight should always = 100vh because we don't want the full
      // page to scroll (we only want the individual areas to scroll).
 
      var midHeight = 32
-     var topHeight = 100 - botHeight + 'vh'
+     var topHeight = 100 - botHeight - midHeight + 'vh'
      midHeight += 'vh'
-     botHeight += 'vh'
+     // botHeight += 'vh'
      // botHeight += 'vh'
      var bgColor = invertColors ? 'white': 'black'
      var color = invertColors ? 'black' : 'white'

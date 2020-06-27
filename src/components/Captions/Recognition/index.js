@@ -4,7 +4,7 @@ import "./index.css";
 import $ from 'jquery';
 import ScrollButton from 'react-scroll-button'
 import ScrollToBottom from 'react-scroll-to-bottom';
-
+import { Resizable } from "re-resizable";
 
 
 
@@ -70,19 +70,18 @@ export class Recognition extends React.PureComponent {
 
 
        var results = [];
-       results.push("transcript History \n\n\n\n");
+       results.push("Transcript History \n\n\n");
        var searchEles = document.getElementById("out").children;
        for(var i = 0; i < searchEles.length; i++) {
-         console.log(searchEles[i].innerHTML[1,searchEles[i].innerHTML.length-2]);
          results.push(searchEles[i].innerHTML + '\n');
        }
 
        // const file = new Blob([document.getElementById('out').value],
        //             {type: 'text/plain;charset=utf-8'});
-       const file = new Blob([results],
+       const file = new Blob(results,
                    {type: 'text/plain;charset=utf-8'});
        element.href = URL.createObjectURL(file);
-       element.download = "Script.txt";
+       element.download = "Transcript.txt";
        document.body.appendChild(element);
        element.click();
      }
@@ -117,10 +116,15 @@ export class Recognition extends React.PureComponent {
        var element = document.getElementById("curr");
        element.scrollIntoView({behavior: "smooth"});
      }
+     // whetherBottom() {
+     //   if(document.getElementById("curr").scrollTop() + document.getElementById("curr").height() === document.getElementById("text-box").height()) {
+     //     return true;
+     //   } else {
+     //     return false;
+     //   }
+     // }
 
      render() {
-
-
           // out holds all past lines. curr holds the current line.
           // if( $('#out').is(':empty') ){
           //   return (
@@ -131,7 +135,7 @@ export class Recognition extends React.PureComponent {
           // )
           //   } else {
           return (
-             <div>
+             <div id='text-box'>
                   <div id='out'></div>
                   <div id='curr'>{this.state.line}</div>
              </div>

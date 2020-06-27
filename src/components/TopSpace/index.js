@@ -3,7 +3,6 @@ import './index.css'
 import Options from './Options'
 import Droppable from '../DnD/Droppable'
 import '../MiddleSpace/index.css'
-import SwipeableTemporaryDrawer from '../Drawer'
 import PersistentDrawerLeft from '../newDrawer'
 
 // JavaScript functions used: setTimeout, clearTimeout, bind, getElementById,

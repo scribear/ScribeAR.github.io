@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import clsx from 'clsx';
 import './index.css';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
@@ -6,26 +6,24 @@ import Drawer from '@material-ui/core/Drawer';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import List from '@material-ui/core/List';
-import SaveAltIcon from '@material-ui/icons/SaveAlt';
-import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
 import Options from "../TopSpace/Options"
 import { Button } from "@material-ui/core"
 import Recognition from "../Captions/Recognition"
 import mytheme from './theme'
 import {ThemeProvider} from "@material-ui/core/styles";
-
-
+import ShareIcon from '@material-ui/icons/Share';
+import {EmailShareButton} from 'react-share';
+import {EmailIcon} from "react-share";
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import SaveIcon from '@material-ui/icons/SaveSharp';
+import GoogleDrive from '../GoogleDrive/GoogleDrive';
 
 const drawerWidth = 240;
 
@@ -100,6 +98,16 @@ export default function PersistentDrawerLeft() {
     setOpen(false);
   };
 
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -125,8 +133,27 @@ export default function PersistentDrawerLeft() {
           <div class="border d-table w-100">
             <h2 class="d-table-cell tar2">Welcome to ScribeAR</h2>
             <div class="d-table-cell tar">
-              <Button variant="contained" variant="text" color="secondary" onClick={new Recognition().downloadTxtFile} startIcon={<SaveAltIcon/>}>Download transcript</Button>
-            </div>
+                <Button aria-controls="simple-menu" aria-haspopup="true" variant="contained" variant="text" color="secondary" onClick={handleClick} startIcon={<ShareIcon/>}>Share</Button>
+                <Menu
+                  id="simple-menu"
+                  anchorEl={anchorEl}
+                  keepMounted
+                  open={Boolean(anchorEl)}
+                  onClose={handleClose}
+                >
+                  <MenuItem onClick={handleClose}>
+                    <EmailShareButton subject="Transcript History">
+                      <Button startIcon={<MailIcon/>}> EMAIL</Button>
+                    </EmailShareButton>
+                  </MenuItem>
+                  <MenuItem onClick={handleClose}>
+                    <Button variant="contained" variant="text" onClick={new Recognition().downloadTxtFile} startIcon={<SaveIcon fontSize='large'/>}>Download</Button>
+                  </MenuItem>
+                  <MenuItem onClick={handleClose}>
+                    <GoogleDrive/>
+                  </MenuItem>
+                </Menu>
+              </div>
           </div>
         </Toolbar>
       </AppBar>

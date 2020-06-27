@@ -5,7 +5,6 @@ import Record from './Record'
 import Slider from './Slider'
 import Micvisual from './Micvisual'
 import './index.css'
-import SwipeableTemporaryDrawer from "../../Drawer"
 import {
      flip_invertColors,
      flip_micVisual,
@@ -33,7 +32,7 @@ export default function Options() {
                          increment={increment_textSize}
                          decrement={decrement_textSize} />
                </div>
-               
+
 
                <div className="item-wrapper">
                     <OnOff item="Invert colors" setting={invertColors}

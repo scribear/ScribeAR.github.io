@@ -31,7 +31,7 @@ export default function App() {
      var sizeString = textSize + 'vh'
      // Size of bottom space (text area) relative to text size and number of lines.
      var botHeight = 43 + 'vh'
-     var topHeight = 9 + 'vh'
+     var topHeight = 14 + 'vh'
      var placeHeight = 5 + 'vh'
      var midHeight = 34 + 'vh'
      //----------------------
@@ -123,7 +123,7 @@ export default function App() {
                  overflow: 'hidden',
 
                 }}>
-                 <TopSpace color = {bgColor}/>
+                 <TopSpace color = {bgColor} height = {topHeight}/>
                  <PlaceHolder color = {bgColor} textSize = {sizeString}/>
                  <MiddleSpace color = {bgColor}/>
                  <Captions height={botHeight} textSize={sizeString} />
@@ -140,7 +140,7 @@ export default function App() {
                  overflow: 'hidden',
 
                 }}>
-                 <TopSpace color = {bgColor} />
+                 <TopSpace color = {bgColor} height = {topHeight}/>
                  <PlaceHolder color = {bgColor} textSize = {sizeString}/>
                  <MiddleSpace color = {bgColor}/>
                  <Captions height={botHeight} textSize={sizeString} />

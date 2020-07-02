@@ -101,3 +101,9 @@ export const submenu1 = () =>{
 export const submenu2 = () =>{
      return { type: 'SUBMENU_2'}
 }
+export const next_page = () => {
+     return { type: 'NEXT_PAGE'}
+}
+export const prev_page = () => {
+     return {type: 'PREV_PAGE'}
+}

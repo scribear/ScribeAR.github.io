@@ -1,0 +1,27 @@
+.detail_wrap{
+    -webkit-transition: 0.6s;
+    -moz-transition: 0.6s;
+    -ms-transition: 0.6s;
+    -o-transition: 0.6s;
+    transition: 0.6s;
+    visibility: 0;
+    opacity: 0;
+    height: 0;
+
+}
+.detail_wrap:hover {
+    opacity: 1;
+    visibility: 1;
+    height: 9vh;
+}
+.active { 
+    opacity: 1;
+    visibility: 1;
+    height: 9vh;
+}
+
+.exit{
+    position: absolute;
+    left:90vw;
+    top:8vh;
+}

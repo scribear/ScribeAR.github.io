@@ -21,9 +21,13 @@ import ButtomNavi from '../ButtomNavi'
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import {useSelector,useDispatch} from 'react-redux';
-import { submenu1,submenu2 } from '../../redux/actions';
 import PopMenu from '../PopMenu'
-
+import AzureOption from '../AzureTopSpace/AzureOptions'
+import MenuSwitch from '../PopMenu/MenuSwitch'
+import MenuHider from '../PlaceHolder/MenuHider'
+import './index.css'
+import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
+import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 const drawerWidth = '21vw';//drawer width
 
 const useStyles = makeStyles((theme) => ({
@@ -49,6 +53,9 @@ const useStyles = makeStyles((theme) => ({
   },
   hide: {
     display: 'none',
+  },
+  show: {
+    display: 'block',
   },
   drawer: {
     width: drawerWidth,
@@ -93,8 +100,17 @@ const useStyles = makeStyles((theme) => ({
 
 export default function PersistentDrawerLeft(props) {
   const submenu = (state) => state.submenu;
+  const menuhide = (state) => state.meh;
   const dispatch = useDispatch();
   const setting = useSelector(submenu);
+  const shouldShow = useSelector(menuhide);
+  var pick = "detail_wrap"
+  if (!shouldShow){
+    pick += '.active'
+  }else{
+    pick = 'detail_wrap'
+  }
+  
 
   const classes = useStyles();
   const theme = useTheme();
@@ -120,29 +136,37 @@ export default function PersistentDrawerLeft(props) {
         <div className={classes.root}>
           <CssBaseline />
           <ThemeProvider theme = {mytheme}>
-          <AppBar
-            position="fixed"
-            className={clsx(classes.appBar, {
-              [classes.appBarShift]: open,
-            })}
-            color = {choice}
-          >
-            <Toolbar >
-              <IconButton
-                color="inherit"
-                aria-label="open drawer"
-                onClick={handleDrawerOpen}
-                edge="start"
-                className={clsx(classes.menuButton, open && classes.hide)}
-              >
-                <MenuIcon />
-              </IconButton>
-              <Typography variant="h6" noWrap>
-                Welcome to ScribeAR
-              </Typography>
-            </Toolbar>
-          </AppBar>
+          <div className = {pick}>
+            <AppBar
+              position="fixed"
+              className={clsx(classes.appBar, {
+                [classes.appBarShift]: open,
+              } 
+              )} 
+              color = {choice}
+            >
+              <Toolbar >
+                <IconButton
+                  color="inherit"
+                  aria-label="open drawer"
+                  onClick={handleDrawerOpen}
+                  edge="start"
+                  className={clsx(classes.menuButton, open && classes.hide)}
+                >
+                  <MenuIcon />
+                </IconButton>
 
+                <Typography variant="h6" noWrap>
+                  Welcome to ScribeAR
+                </Typography>
+                <MenuHider />
+              </Toolbar>
+
+            </AppBar>
+          </div>
+          <div className = 'exit'>
+           
+          </div>
           <Drawer
             className={classes.drawer}
             width = "50%"
@@ -152,6 +176,7 @@ export default function PersistentDrawerLeft(props) {
             classes = {{paper:classes.drawerPaper}}
           >
             <div className={classes.drawerHeader}>
+              <MenuSwitch title = 'WebSpeech'/>
               <PopMenu />
               <IconButton onClick={handleDrawerClose} color = "inherit">
                 {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
@@ -176,28 +201,31 @@ export default function PersistentDrawerLeft(props) {
         <div className={classes.root}>
         <CssBaseline />
         <ThemeProvider theme = {mytheme}>
-        <AppBar
-          position="fixed"
-          className={clsx(classes.appBar, {
-            [classes.appBarShift]: open,
-          })}
-          color = {choice}
-        >
-          <Toolbar >
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              onClick={handleDrawerOpen}
-              edge="start"
-              className={clsx(classes.menuButton, open && classes.hide)}
-            >
-              <MenuIcon />
-            </IconButton>
-            <Typography variant="h6" noWrap>
-              Welcome to ScribeAR
-            </Typography>
-          </Toolbar>
-        </AppBar>
+        <div className = {pick}>
+          <AppBar
+            position="fixed"
+            className={clsx(classes.appBar, {
+              [classes.appBarShift]: open,
+            })}
+            color = {choice}
+          >
+            <Toolbar >
+              <IconButton
+                color="inherit"
+                aria-label="open drawer"
+                onClick={handleDrawerOpen}
+                edge="start"
+                className={clsx(classes.menuButton, open && classes.hide)}
+              >
+                <MenuIcon />
+              </IconButton>
+              <Typography variant="h6" noWrap>
+                Welcome to ScribeAR
+              </Typography>
+              <MenuHider />
+            </Toolbar>
+          </AppBar>
+        </div>
 
         <Drawer
           className={classes.drawer}
@@ -208,13 +236,14 @@ export default function PersistentDrawerLeft(props) {
           classes = {{paper:classes.drawerPaper}}
         >
           <div className={classes.drawerHeader}>
+            <MenuSwitch title = 'Azure'/>
             <PopMenu />
             <IconButton onClick={handleDrawerClose} color = "inherit">
               {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
             </IconButton>
 
           </div>
-          <div>...</div>
+          <AzureOption />
         </Drawer>
         <main
           className={clsx(classes.content, {

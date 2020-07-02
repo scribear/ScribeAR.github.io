@@ -26,11 +26,13 @@
 }
 
 
-/*
+
 .azuremenutext {
-    font-size: 100px;
+    /* font-size: 100px; */
+    position: absolute;
+    top:10vh;
 }
-*/
+
 
 /*
 p {

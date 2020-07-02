@@ -12,6 +12,10 @@ const submenuReducer = (state = 1, action) => {
                return 1;
           case 'SUBMENU_2':
                return 2;
+          case 'NEXT_PAGE':
+               return Math.min(2,state+1);
+          case 'PREV_PAGE':
+               return Math.max(1,state-1);
           default: return state;
      }
 }

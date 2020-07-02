@@ -9,13 +9,14 @@ export default function PlaceHolder(props){
         var sz = props.textSize;
         const meh = (state) => state.meh
         const setting = useSelector(meh)
-        var h = setting ? '23vh' : '14vh';
+        // var h = setting ? '23vh' : '14vh';
+        var h = '14vh'
         return <div className = "PlaceHolder" style = {
             {
                 // fontSize:sz,
-                height:h,
+                // height:h,
             }
         }>
-            <MenuHider />
+      
         </div>
 }

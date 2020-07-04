@@ -2,7 +2,11 @@ import React from 'react'
 import { useSelector , useDispatch} from 'react-redux'
 import './index.css'
 import Recognition from './Recognition'
+import { Button } from "@material-ui/core"
+import mytheme from '../newDrawer/theme'
 import Extender from './Extender'
+import {ThemeProvider} from "@material-ui/core/styles";
+import ScrollButton from 'react-scroll-button'
 import {
      increment_numLines,
      decrement_numLines,
@@ -28,6 +32,7 @@ export default function Captions(props) {
                                         increment={increment_numLines}
                                         decrement={decrement_numLines}  />
                     </div>
+                     <Button className="scroll" variant="outlined" onClick= {new Recognition().scrollBottom} color="secondary">Scroll to Bottom</Button>
                     <div className="captionsSpace" id="captionsSpace"
                     style={{
                     fontSize: sz,
@@ -37,7 +42,7 @@ export default function Captions(props) {
                     paddingLeft: paddingString,
                     paddingRight: paddingString }}>
                          Welcome to ScribeAR<br />
-                         There are some tips for you to start to use ScribeAR,<br /> 
+                         There are some tips for you to start to use ScribeAR,<br />
                          Click button on the upperleft to open the menu.<br />
                          Detailed instructions can be found in option menu.<br />
                          <Recognition isRecording={recording} />

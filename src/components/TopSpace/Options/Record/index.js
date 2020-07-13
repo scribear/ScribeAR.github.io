@@ -27,7 +27,7 @@ export default function Record(props) {
                  </IconButton>
             </div>
        )
-     } else if (store.isSuccessReducer == 'success') {
+     } else if (store.desiredAPI == 'azure') {
        if (settingAzure == true){
           return(
                <div>
@@ -48,7 +48,6 @@ export default function Record(props) {
           )
      }
      } else {
-       
        if (setting == true){
              return(
                   <div>

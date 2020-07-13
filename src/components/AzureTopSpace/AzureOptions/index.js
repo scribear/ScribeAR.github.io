@@ -26,18 +26,9 @@ export default function AzureOptions() {
     // These are functions that take an object and return an element of the object.
     // They are passed to useSelector, which feeds the global state object into them.
     return (
+
          <div className="AzureOptions" id="azure-options-space">
-             <div className = "azuremenutext">
-                    <b>AZURE</b>
-                </div>
-              <div className = "azuremenutext2">
-                    <b>OPTIONS</b>
-               </div>
-                  <div className = "divider">
-                    <Divider variant="middle" />
-               </div>
-
-
+                  <h2 style = {{fontFamily:"Arial"}}>AZURE LOGIN</h2>
 
                <div className="item-wrapper">
                     <UserInput store ={store}/>

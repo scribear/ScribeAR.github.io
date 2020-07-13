@@ -35,10 +35,10 @@ export class Recognition extends React.PureComponent {
      }
 
      componentDidMount() {
-        if (store.azureKeyReducer == undefined) {
-          this.start()
-        }  else {
+        if (store.desiredAPI == 'azure') {
           this.stop()
+        }  else {
+          this.start()
         }
      }
 
@@ -49,7 +49,9 @@ export class Recognition extends React.PureComponent {
                return
           if (this.props.isRecording)
                this.start()
-          else this.stop()
+          else {
+              this.stop()
+          }
      }
 
      start() {
@@ -72,8 +74,6 @@ export class Recognition extends React.PureComponent {
 
      downloadTxtFile = () => {
        const element = document.createElement("a");
-
-
        var results = [];
        results.push("transcript History \n\n\n\n");
        var searchEles = document.getElementById("out").children;

@@ -1,21 +1,22 @@
-.languageText {
-    font-size: 17px;
-    position: absolute;
-    margin-top: -19%;
-    margin-left: 2.5%;
-}
+  .languageText {
+    position: static;
+    font-size: 115%;
+    padding-bottom: 15vh;
+    margin-top: -17vh;
+    padding-left: 1vw;
 
-.languageSelect {
-    right: 20%;
-    position: absolute;
-    margin-top: -18%;
-}
+  }
 
-#languageOptions {
+  .languageSelect {
+    margin-top: -17vh;
+    margin-left: 9vw;
+    position: absolute;
+  }
+
+  #languageOptions {
     border-radius: 15%;
-    margin-left: 30%;
-    margin-top: -10%;
-    height: 51px;
-    width: 108px;
+    margin-left: 4.3vw;
+    height: 5vh;
+    width: 7vw;
     border-color: black;
-}
+  }

@@ -1,31 +1,31 @@
-.enter {
-  background-color: white;
-  border-radius: 15%;
-  height: 60px;
-  width: 200px;
-  margin-left: 30%;
-  margin-top: 90%;
-  cursor: pointer;
-}
-
-
-.setting-wrapper2 {
+  .enter {
     background-color: white;
     border-radius: 15%;
-    height: 60px;
-    width: 200px;
-    margin-left: 30%;
-    margin-top: 90%;
+    margin-left: 6vw;
+    margin-top: 10vh;
+    width: 10vw;
+    height: 7vh;
     cursor: pointer;
-    border: solid black;
-    border-width: thin;
-}
+  }
 
-#entertext {
-    color: black;
-    text-align: center;
 
-    font-size: 30px;
-    font-family: 'Arial';
-    font-weight: 100;
-}
+  .setting-wrapper2 {
+      background-color: white;
+      border-radius: 15%;
+      margin-left: 6vw;
+      margin-top: 10vh;
+      width: 10vw;
+      height: 7vh;
+      cursor: pointer;
+      border: solid black;
+      border-width: thin;
+  }
+
+  #entertext {
+      position: static;
+      color: black;
+      text-align: center;
+      font-size: 30px;
+      font-family: 'Arial';
+      font-weight: 100;
+  }

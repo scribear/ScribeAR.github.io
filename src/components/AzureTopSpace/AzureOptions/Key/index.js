@@ -12,7 +12,6 @@ class UserInput extends React.Component {
   constructor(props) {
 
     super(props);
-    console.log(store.azureKeyReducer)
     var temp_azure_key = localStorage.getItem('azure_subscription_key');
     if (store.azureKeyReducer == undefined) {
     this.state = {value: temp_azure_key};

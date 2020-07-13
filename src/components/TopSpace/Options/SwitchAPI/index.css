@@ -1,0 +1,71 @@
+/* The record and stop buttons are CSS shapes rather than images.
+They fade much like the options menu does. */
+
+.record-btn-wrapper {
+     position: absolute;
+     top: 0;
+     right: 3vh;
+     display: inline-block;
+     height: 8vh;
+     width: 8vh;
+     transition: visibility 0s 300ms, opacity 5000ms ease;
+}
+
+.record-btn {
+     position: absolute;
+     background: #CE2724;
+     background: -moz-linear-gradient(-45deg, #CE2724 0%, #A42525 50%, #9F2222 100%);
+     background: -webkit-linear-gradient(-45deg, #CE2724 0%, #A42525 50%, #9F2222 100%);
+     background: linear-gradient(135deg, #CE2724 0%, #A42525 50%, #9F2222 100%);
+     height: 8vh;
+     width: 8vh;
+     cursor: pointer;
+     border-radius: 50%;
+     border: 0px;
+}
+
+.stop-btn {
+     position: absolute;
+     display: inline;
+     height: 8vh;
+     width: 8vh;
+     cursor: pointer;
+}
+/* Inner black circle of stop button */
+.stop-btn:before {
+     position: absolute;
+     display: inline;
+     height: 7vh;
+     width: 7vh;
+     content: "";
+     background-color: black;
+     border-radius: 50%;
+     border: 0.5vh solid white;
+}
+.stop-btn:hover::before {
+  border: 0.5vh solid #C1C1C1;
+}
+/* Inner white square of stop button */
+.stop-btn:after {
+     position: absolute;
+     top: 2.5vh;
+     left: 2.5vh;
+     display: inline;
+
+     content: "";
+     background-color: white;
+}
+.stop-btn:hover::after {
+  background-color: #C1C1C1;
+}
+
+.Play{
+     position: absolute;
+     left:10vw;
+}
+.pause{
+     transform: scale(2.0);
+}
+.start{
+     transform: scale(2.0);
+}

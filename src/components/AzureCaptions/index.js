@@ -13,10 +13,9 @@ decrement_numLines, flip_correct_azureKey, flip_check_azureKey } from '../../red
 
 
 export default function AzureCaptions(props) {
-    console.log(store.azureRegionOptionsReducer);
      const dispatch = useDispatch()
      const lineWidth = useSelector((state) => state.lineWidth)
-    const numLines = useSelector((state) => state.numLines)
+     const numLines = useSelector((state) => state.numLines)
      const recording = useSelector((state) => state.recordingAzure)
      const checkAzureKey = useSelector((state) => state.checkAzureKey)
      const correctAzureKey = useSelector((state) => state.correctAzureKey)
@@ -25,9 +24,18 @@ export default function AzureCaptions(props) {
      var h = numLines + 'vh'
      var resH = (43 - numLines) + 'vh'
      var sz = props.textSize
-
+     if (props.wantWebspeech == true && store.isSuccessReducer == 'success') {
+       store.desiredAPI = 'webspeech';
+       return (
+         <div>
+            <AzureRecognition switchOffAzure = {true} />
+         </div>
+        )
+     } else {
+       store.desiredAPI = 'azure';
        return ( <div>
                       <div style = {{
+                          position : 'fixed',
                            height : resH,
                            margin : '0.5vh',
                       }}>
@@ -35,6 +43,7 @@ export default function AzureCaptions(props) {
                                           increment={increment_numLines}
                                           decrement={decrement_numLines}  />
                       </div>
+                      <Button className="scroll" position="fixed" variant="outlined" onClick= {new AzureRecognition().scrollBottom} color="secondary">Scroll to Bottom</Button>
                       <div className="captionsSpace" id="captionsSpace"
                       style={{
                       fontSize: sz,
@@ -45,7 +54,8 @@ export default function AzureCaptions(props) {
                       paddingRight: paddingString }}>
 
                            <AzureRecognition isRecording = {recording} isCrorrect = {correctAzureKey} checkKey = {checkAzureKey}
-                            key = {store.azureKeyReducer} region = {store.azureRegionOptionsReducer} />
+                            key = {store.azureKeyReducer} region = {store.azureRegionOptionsReducer} switchOffAzure = {false} />
                       </div>
                 </div> )
-  }
+        }
+}

@@ -32,7 +32,6 @@ export default function EnterButton(props) {
     } else {
       store.azureRegionOptionsReducer = 'northcentralus';
     }
-    console.log("in here???")
 
     // flip recording when space bar is pressed
 

@@ -1,10 +1,28 @@
 import { combineReducers } from 'redux';
 
 var savedTextSize = localStorage.getItem('text')
+var savedColor = localStorage.getItem('color')
+var savedMic = localStorage.getItem('mic')
+var savedBox = localStorage.getItem('box')
+var savedMeh = localStorage.getItem('meh')
+
+// var choiceColor = false
+var choiceMeh = 0
+// var choiceMic = 0
+var choiceBox = 40
 var choiceTextSize = 6
 if (savedTextSize != null){
      choiceTextSize = savedTextSize
 }
+if (savedMeh != null){
+     choiceMeh = savedMeh
+}
+if (savedBox != null){
+     choiceBox = savedBox
+}
+// if (savedMic != null){
+//      choiceMic = savedMic
+// }
 
 const submenuReducer = (state = 1, action) => {
      switch(action.type) {
@@ -12,15 +30,24 @@ const submenuReducer = (state = 1, action) => {
                return 1;
           case 'SUBMENU_2':
                return 2;
+          case 'NEXT_PAGE':
+               return Math.min(2,state+1);
+          case 'PREV_PAGE':
+               return Math.max(1,state-1);
           default: return state;
      }
+}
+
+const onWebspeechReducer = (state = true, action) =>{
+     if (action.type == 'FLIP_ON_WEBSPEECH')
+          return !state
+     else return state
 }
 
 const textSizeReducer = (state = choiceTextSize, action) => {
      switch (action.type) {
           case 'INCREMENT_TEXTSIZE':
-               state++;
-               return state;
+               return state%12 + 1;
           case 'DECREMENT_TEXTSIZE':
                return Math.max(1, state - 1);
           default:
@@ -39,10 +66,10 @@ const lineWidthReducer = (state = 10, action) => {
      }
 }
 
-const numLinesReducer = (state = 35, action) => {
+const numLinesReducer = (state = choiceBox, action) => {
      switch (action.type) {
           case 'INCREMENT_NUMLINES':
-               return Math.min(state + 1,40);
+               return Math.min(state + 1,50);
           case 'DECREMENT_NUMLINES':
                return Math.max(1, state - 1);
           default:
@@ -56,15 +83,7 @@ const lockScreenReducer = (state = false, action) => {
      else return state;
 }
 
-const invertMicVisualReducer = (state = 0, action) => {
-  if (action.type === 'FLIP_MICVISUAL'){
-       state = state + 1;
-       if (state == 4) {
-            state = 0;
-       }
-  }
-  return state;
-}
+
 
 const switchMenusReducer = (state = false, action) => {
      if (action.type === 'FLIP_SWITCHMENUS')
@@ -127,13 +146,50 @@ const instructionsReducer = (state = false, action) => {
      else return state
 }
 
-const menuhideReducer = (state = false, action) => {
+const menuhideReducer = (state = choiceMeh, action) => {
      if (action.type == 'FLIP_MENUHIDE')
-          return !state
+          return (state+1)%2
      else return state
 }
 
+const invertStereo = (state = 0, action) =>{
+     if(action.type === 'FLIP_STEREO')
+          return !state;
+     else return state;
+}
+
+const invertStereoVisualReducer = (state = 0, action) =>{
+     switch (action.type) {
+          case 'FORWARD_STEREOVISUAL':
+              return (state + 1)%4;
+          case 'BACKWARD_STEREOVISUAL':
+               state = state -1;
+               if(state < 0){
+                    state = 3
+               }
+               return state;
+           default:
+                return state;
+     }
+}
+
+const invertMicVisualReducer = (state = 0, action) => {
+     switch (action.type) {
+          case 'FORWARD_MICVISUAL':
+              return (state + 1)%4;
+          case 'BACKWARD_MICVISUAL':
+               state = state -1;
+               if(state < 0){
+                    state = 3
+               }
+               return state;
+           default:
+                return state;
+     }
+}
+
 const allReducers = combineReducers({
+     onWebspeech: onWebspeechReducer,
      switchToAzure: switchToAzureReducer,
      checkAzureKey: checkAzureKeyReducer,
      correctAzureKey: correctAzureKeyReducer,
@@ -151,6 +207,8 @@ const allReducers = combineReducers({
      ins: instructionsReducer,
      meh: menuhideReducer,
      submenu: submenuReducer,
+     steromic: invertStereoVisualReducer,
+     stereo:invertStereo,
 });
 
 export default allReducers;

@@ -8,7 +8,7 @@ import {useSelector,useDispatch} from 'react-redux';
 import { submenu1,submenu2 } from '../../redux/actions';
 
 
- 
+
 
 
 export default function SimpleMenu(props) {
@@ -40,8 +40,8 @@ export default function SimpleMenu(props) {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <MenuItem onClick={() => dispatch(submenu1())}>item1</MenuItem>
-        <MenuItem onClick={() => dispatch(submenu2())}>item2</MenuItem>
+        <MenuItem onClick={() => dispatch(submenu1())}>Webspeech</MenuItem>
+        <MenuItem onClick={() => dispatch(submenu2())}>Azure</MenuItem>
         {/* <MenuItem>{setting}</MenuItem> */}
         <MenuItem onClick={handleClose}>return</MenuItem>
       </Menu>

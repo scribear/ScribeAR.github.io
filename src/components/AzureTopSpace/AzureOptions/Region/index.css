@@ -1,21 +1,23 @@
-.regionText {
-    font-size: 17px;
-    position: absolute;
-    margin-top: -15%;
-    margin-left: 2.5%;
-}
+  .regionText {
+    position: static;
+    font-size: 115%;
+    padding-bottom: 15vh;
+    margin-top: -8vh;
+    padding-left: 1vw;
 
-.regionSelect {
-    right: 20%;
-    position: absolute;
-    margin-top: -22%;
-}
 
-#regionOptions {
+  }
+
+  .regionSelect {
+    margin-top: -17vh;
+    margin-left: 9vw;
+    position: absolute;
+  }
+
+  #regionOptions {
     border-radius: 15%;
-    margin-left: 30%;
-    margin-top: 15%;
-    height: 51px;
-    width: 108px;
+    margin-left: 4.3vw;
+    height: 5vh;
+    width: 7vw;
     border-color: black;
-}
+  }

@@ -1,25 +1,50 @@
-.download {
-  right: 0;
+.detail_wrap{
+    -webkit-transition: 0.6s;
+    -moz-transition: 0.6s;
+    -ms-transition: 0.6s;
+    -o-transition: 0.6s;
+    transition: 0.6s;
+    visibility: 0;
+    opacity: 0;
+    height: 0;
+
+}
+.detail_wrap:hover {
+    opacity: 1;
+    visibility: 1;
+    height: 9vh;
+}
+.active {
+    opacity: 1;
+    visibility: 1;
+    height: 9vh;
 }
 
-
-
-.d-table {
-display:table;
+.exit{
+    position: absolute;
+    left:90vw;
+    top:8vh;
+}
+.lock-wrap{
+    position: absolute;
+    left:90vw;
+}
+.hidden-text{
+    display: none;
 }
 
-.d-table-cell {
-display:table-cell;
+.lock-wrap:hover .hidden-text{
+    display: block;
 }
-
-.w-100 {
-width: 100%;
+.d-table-cell-tar {
+  transform: scale(1.4);
+  position: absolute;
+  left:92vw;
 }
-
-.tar {
-text-align: right;
+.hidden-text-download{
+  font-size: 10px;
+  display: none;
 }
-
-.tar2 {
-  padding: 10px;
+.d-table-cell-tar:hover .hidden-text-download{
+    display: block;
 }

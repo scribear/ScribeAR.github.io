@@ -1,0 +1,29 @@
+.control_result {
+     position:absolute;
+     top:1vh;
+     left:1vw;
+     display: inline-block;
+     height: 8vh;
+     width:20vh;
+}
+
+.control_visual {
+     position: absolute;
+     top: 0;
+     left: 2vw;
+     display: inline-block;
+     height: 8vh;
+     width: 20vh;
+}
+
+
+.control_plus {
+     right:-20vh;
+     text-align: center;
+     padding: 14px 40px;
+     font-family: 'Arial';
+     font-size: 20px;
+     border-radius: 15%;
+     cursor: pointer;
+     width: 5vw;
+}

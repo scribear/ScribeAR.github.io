@@ -12,8 +12,8 @@ import ScrollToBottom from 'react-scroll-to-bottom';
 import {useSelector, connect} from 'react-redux'
 import {bindActionCreators} from "redux"
 var key = 'empty';
-//const key = this.props.key;
 var regionOption = 'northcentralus';
+var tempKey = 'empty';
 var lang = 'en-US';
 var targetLang = 'en';
 var speechConfig = null;
@@ -24,6 +24,7 @@ export class AzureRecognition extends React.PureComponent {
         super()
         this.state = {
            line: '',
+           targetID: 'azureCurr',
         }
         this.appendLine = this.appendLine.bind(this)
         this.start = this.start.bind(this)
@@ -31,12 +32,30 @@ export class AzureRecognition extends React.PureComponent {
     }
 
     componentDidMount() {
-        this.start();
+        if (store.desiredAPI == 'webspeech') {
+          this.stop();
+        } else {
+          this.start();
+        }
     }
     scrollBottom() {
-      var element = document.getElementById("curr");
+      var element = document.getElementById("azureCurr");
       element.scrollIntoView({behavior: "smooth"});
     }
+
+    downloadTxtFile = () => {
+      const element = document.createElement("a");
+      var results = [];
+      results.push("transcript History \n\n\n\n");
+      var searchEles = document.getElementById("out");
+      results.push(searchEles.innerHTML);
+      const file = new Blob([results], {type: 'text/plain;charset=utf-8'});
+      element.href = URL.createObjectURL(file);
+      element.download = "Script.txt";
+      document.body.appendChild(element);
+      element.click();
+    }
+
 
     appendLine(str) {
      const capts = document.getElementById('captionsSpace')
@@ -53,14 +72,14 @@ export class AzureRecognition extends React.PureComponent {
     componentDidUpdate(prevProps, prevState) {
         if (prevProps.isRecording === this.props.isRecording)
              return
-      if (this.props.isRecording)
+        if (this.props.isRecording)
              this.start()
         else this.stop()
    }
     start() {
-        console.log(store.isSuccessReducer)
         if (store.isSuccessReducer != 'success') {
-        store.isSuccessReducer = 'inProgress';
+          store.isSuccessReducer = 'inProgress';
+        }
         if (store.azureKeyReducer == undefined || store.azureRegionOptionsReducer == undefined || store.azureKeyReducer == '' || store.azureRegionOptionsReducer == '') {
           store.azureKeyReducer = 'empty'
           store.azureRegionOptionsReducer = 'empty'
@@ -73,17 +92,26 @@ export class AzureRecognition extends React.PureComponent {
           targetLang = store.targetLanguageReducer;
           speechConfig.speechRecognitionLanguage = lang;
           speechConfig.addTargetLanguage(targetLang);
+          //allow all profanity (raw);
+          speechConfig.setProfanity(2);
+
           reco = new SpeechSDK.TranslationRecognizer(speechConfig, audioConfig);
-        }
 
         var out = document.getElementById('out');
         var lastRecognized = out.innerHTML;
+        reco.sessionStarted = function(s,e) {
+          if (store.isSuccessReducer != 'success') {
+          store.isSuccessReducer = 'success';
+          swal({
+            title: "Success!",
+            text: "Connected to Azure Speech Recognition!",
+            icon: "success",
+            timer: 2000,
+          })
+        }
+      }
 
         reco.recognizing = function(s, e) {
-            if (store.isSuccessReducer != 'success') {
-              alert("Success")
-            }
-            store.isSuccessReducer = 'success';
             var language = targetLang;
             out.innerHTML = lastRecognized + e.result.translations.get(language);
             const capts = document.getElementById('captionsSpace')
@@ -119,14 +147,13 @@ export class AzureRecognition extends React.PureComponent {
                 reco.close();
                 reco = undefined;
             }
-        )
+        );
     }
     render() {
-        // out holds all past lines. curr holds the current line.
         return (
              <div>
                   <div id='out'></div>
-                    <p>{this.props.key}</p>
+                    <div id='azureCurr'>{this.props.key}</div>
              </div>
         )
    }

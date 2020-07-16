@@ -1,10 +1,15 @@
 import React from 'react'
 import { Button } from "@material-ui/core"
 import "./index.css";
-import $ from 'jquery';
-import ScrollButton from 'react-scroll-button'
-import ScrollToBottom from 'react-scroll-to-bottom';
-import { Resizable } from "re-resizable";
+import {getAuthenticatedClient, upload123} from '../../LogIn/graphService';
+import config from '../../LogIn/Config';
+import MuiAlert from '@material-ui/lab/Alert';
+import Snackbar from '@material-ui/core/Snackbar';
+
+
+function Alert(props) {
+     return <MuiAlert elevation={6} variant="filled" {...props} />;
+   }
 
 
 
@@ -21,21 +26,22 @@ recognition.interimResults = true
 // this.state.line is reset for the next line.
 
 export class Recognition extends React.PureComponent {
-     constructor() {
-          super()
+     constructor(props) {
+          super(props)
           this.state = {
                line: '',
-               targetID: 'curr'
-               //recording: true
+               targetID: 'curr',
           }
           this.appendLine = this.appendLine.bind(this)
           this.start = this.start.bind(this)
           this.stop = this.stop.bind(this)
+          this.uploadFile = this.uploadFile.bind(this)
      }
 
      componentDidMount() {
           this.start()
      }
+     
 
      // Global state 'recording' is passed as a prop. componentDidUpdate is invoked
      // when props change, therefore also when 'recording' changes.
@@ -65,12 +71,14 @@ export class Recognition extends React.PureComponent {
           recognition.onend = recognition.start // override this behavior
      }
 
-    downloadTxtFile = () => {
+     downloadTxtFile = () => {
        const element = document.createElement("a");
 
 
        var results = [];
-       results.push("Transcript History \n\n\n");
+       results.push("Transcript History \n");
+       results.push(new Date().toLocaleString());
+       results.push("\n\n")
        var searchEles = document.getElementById("out").children;
        for(var i = 0; i < searchEles.length; i++) {
          results.push(searchEles[i].innerHTML + '\n');
@@ -81,10 +89,37 @@ export class Recognition extends React.PureComponent {
        const file = new Blob(results,
                    {type: 'text/plain;charset=utf-8'});
        element.href = URL.createObjectURL(file);
-       element.download = "Transcript.txt";
+       element.download = "Transcript History_" + new Date().toLocaleString() + ".txt";
        document.body.appendChild(element);
        element.click();
      }
+
+     async uploadFile() {
+          this.setState({uploadStatus: true});
+          var results = [];
+          results.push("Transcript History \n");
+          results.push(new Date().toLocaleString());
+          results.push("\n\n");
+          var searchEles = document.getElementById("out").children;
+          for(var i = 0; i < searchEles.length; i++) {
+          results.push(searchEles[i].innerHTML + '\n');
+          }
+          const blob = new Blob(results,
+                    {type: 'text/plain;charset=utf-8'});
+
+          try {
+              var accessToken = await window.msal.acquireTokenSilent({
+                  scopes: config.scopes
+              });
+      
+              if (accessToken) {
+                  var upload = await upload123(accessToken, blob);
+              }
+            }
+            catch(err) {
+              console.log(err)
+            }
+          }
 
      stop() {
           recognition.onresult = () => {} // do nothing with results
@@ -112,35 +147,22 @@ export class Recognition extends React.PureComponent {
                capts.scrollTop = capts.scrollHeight - capts.clientHeight // scroll to bottom
      }
 
+
+
      scrollBottom() {
        var element = document.getElementById("curr");
        element.scrollIntoView({behavior: "smooth"});
      }
-     // whetherBottom() {
-     //   if(document.getElementById("curr").scrollTop() + document.getElementById("curr").height() === document.getElementById("text-box").height()) {
-     //     return true;
-     //   } else {
-     //     return false;
-     //   }
-     // }
-
+     
      render() {
-          // out holds all past lines. curr holds the current line.
-          // if( $('#out').is(':empty') ){
-          //   return (
-          //        <div className="whatever">
-          //             <div id='out'></div>
-          //             <div id='curr'>{this.state.line}</div>
-          //        </div>
-          // )
-          //   } else {
-          return (
-             <div id='text-box'>
-                  <div id='out'></div>
-                  <div id='curr'>{this.state.line}</div>
-             </div>
-
-           )
+               return (
+                    <div id='text-box'>
+                         <div id='out'></div>
+                         <div id='curr'>{this.state.line}</div>
+                    </div>
+       
+                  )
+          
      }
 }
 

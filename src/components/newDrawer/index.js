@@ -13,7 +13,8 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import MailIcon from '@material-ui/icons/Mail';
 import Options from "../TopSpace/Options"
-import { Button } from "@material-ui/core"
+import { Button, Tooltip } from "@material-ui/core"
+import Upload from "../Upload/Upload"
 import Recognition from "../Captions/Recognition"
 import mytheme from './theme'
 import {ThemeProvider} from "@material-ui/core/styles";
@@ -23,7 +24,15 @@ import {EmailIcon} from "react-share";
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import SaveIcon from '@material-ui/icons/SaveSharp';
-import GoogleDrive from '../GoogleDrive/GoogleDrive';
+import LogIn from "../LogIn/LogIn";
+import Welcome from '../LogIn/Welcome'
+import Fade from '@material-ui/core/Fade';
+import Folders from '../Upload/Folders';
+
+
+
+
+
 
 const drawerWidth = 240;
 
@@ -88,7 +97,7 @@ const useStyles = makeStyles((theme) => ({
 export default function PersistentDrawerLeft() {
   const classes = useStyles();
   const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -132,6 +141,10 @@ export default function PersistentDrawerLeft() {
 
           <div class="border d-table w-100">
             <h2 class="d-table-cell tar2">Welcome to ScribeAR</h2>
+                {/* <Welcome
+                isAuthenticated={isAuthenticated}
+                user = {user}
+                /> */}
             <div class="d-table-cell tar">
                 <Button aria-controls="simple-menu" aria-haspopup="true" variant="contained" variant="text" color="secondary" onClick={handleClick} startIcon={<ShareIcon/>}>Share</Button>
                 <Menu
@@ -141,15 +154,28 @@ export default function PersistentDrawerLeft() {
                   open={Boolean(anchorEl)}
                   onClose={handleClose}
                 >
+                  <Tooltip TransitionComponent={Fade} title="Share through emails" arrow>
                   <MenuItem onClick={handleClose}>
                     <EmailShareButton subject="Transcript History">
                       <Button startIcon={<MailIcon/>}> EMAIL</Button>
                     </EmailShareButton>
                   </MenuItem>
+                  </Tooltip>
+                  <Tooltip TransitionComponent={Fade} title="Download the transcript as a .txt file" arrow>
                   <MenuItem onClick={handleClose}>
                     <Button variant="contained" variant="text" onClick={new Recognition().downloadTxtFile} startIcon={<SaveIcon fontSize='large'/>}>Download</Button>
                   </MenuItem>
+                  </Tooltip>
+                  {/* <Tooltip TransitionComponent={Fade} title="Upload the transcript to OneDrive" arrow> */}
+                  {/* <MenuItem onClick={handleClose}>
+                    <Upload/>                  
+                  </MenuItem> */}
+                  {/* <MenuItem onClick={handleClose}>
+                    <Folders/>                  
+                  </MenuItem> */}
+                  {/* </Tooltip> */}
                 </Menu>
+                <LogIn/>
               </div>
           </div>
         </Toolbar>

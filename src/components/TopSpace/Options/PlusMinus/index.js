@@ -11,7 +11,7 @@ export default function PlusMinus(props) {
      const dispatch = useDispatch()
      const textC = props.item + ':' + setting
      return (
-          <div>
+          <div className= "textsize-wrapper">
                {textC}
                <div className = "setting_wrapper">
                     <Button className = "minus" color = "inherit" variant = "outlined" size = "small"

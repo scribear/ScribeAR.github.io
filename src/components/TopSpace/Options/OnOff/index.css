@@ -4,7 +4,7 @@ https://www.w3schools.com/howto/howto_css_switch.asp and modified slightly */
 /* The switch - the box around the slider */
 .switch {
      position: absolute;
-     left: 12vw;
+     left: 9vw;
      display: inline-block;
      height: 8vh;
      width: 14vh;
@@ -66,4 +66,10 @@ input:checked + .slider:before {
      -webkit-transform: translateX(6vh);
      -ms-transform: translateX(6vh);
      transform: translateX(6vh);
+}
+
+.switch-wrapper{
+     position: relative;
+     top:1vh;
+     left: 1vw;
 }

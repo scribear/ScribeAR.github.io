@@ -46,6 +46,14 @@ export const flip_invertColors = () => {
      return { type: 'FLIP_INVERTCOLORS' };
 }
 
+export const pick_black = () => {
+     return { type: 'PICK_BLACK'};
+}
+
+export const pick_white = () => {
+     return { type: 'PICK_WHITE'}
+}
+
 export const flip_switchMenus = () => {
      return { type: 'FLIP_SWITCHMENUS' };
 }
@@ -69,9 +77,13 @@ export const azure_region = (region) => {
           region: "dsfdsf"
      }
 }
-export const flip_micVisual = () => {
-     return { type: 'FLIP_MICVISUAL' };
+export const next_azure = () =>{
+     return {type:'NEXT_AZURE'}
 }
+export const prev_azure = () =>{
+     return {type:'PREV_AZURE'}
+}
+
 export const flip_entered_key = () => {
      return { type: 'FLIP_ENTERED_KEY' };
 }
@@ -101,9 +113,27 @@ export const submenu1 = () =>{
 export const submenu2 = () =>{
      return { type: 'SUBMENU_2'}
 }
+export const submenu3 = () =>{
+     return { type: 'SUBMENU_3'}
+}
 export const next_page = () => {
      return { type: 'NEXT_PAGE'}
 }
 export const prev_page = () => {
      return {type: 'PREV_PAGE'}
+}
+export const flip_stereo = () =>{
+     return { type: 'FLIP_STEREO'};
+}
+export const forward_stereoVisual = () => {
+     return {type: 'FORWARD_STEREOVISUAL'};
+}
+export const backward_stereoVisual = () => {
+     return {type: 'BACKWARD_STEREOVISUAL'};
+}
+export const forward_micVisual = () => {
+     return { type: 'FORWARD_MICVISUAL' };
+}
+export const backward_micVisual = () => {
+     return {type: 'BACKWARD_MICVISUAL'};
 }

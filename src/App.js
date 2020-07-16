@@ -30,9 +30,9 @@ export default function App() {
      // Convert variables to CSS-friendly strings.
      var sizeString = textSize + 'vh'
      // Size of bottom space (text area) relative to text size and number of lines.
-     var botHeight = 43 + 'vh'
+     var botHeight = 60+ 'vh'
      var topHeight = 14 + 'vh'
-     var placeHeight = 5 + 'vh'
+     var placeHeight = 2 + 'vh'
      var midHeight = 34 + 'vh'
      //----------------------
      // var topHeight = 9 + 'vh'
@@ -54,9 +54,13 @@ export default function App() {
      var isChecking = checkAzureKey ? true : false
      var wantsAzure = switchToAzure ? true : false
 
-
-     var bgColor = invertColors ? 'white': 'black'
-     var color = invertColors ? 'black' : 'white'
+    
+     var bgColor = 'black'
+     if (invertColors == 1){
+       bgColor = 'white'
+     }else{
+       bgColor = 'black'
+     }
 
      if (store.azureKeyReducer == 'incorrect' && checkAzureKey == true) {
        store.azureKeyReducer = 'empty'

@@ -25,3 +25,14 @@
     left:90vw;
     top:8vh;
 }
+.lock-wrap{
+    position: absolute;
+    left:85vw;
+}
+.hidden-text{
+    display: none;
+}
+
+.lock-wrap:hover .hidden-text{
+    display: block;
+}

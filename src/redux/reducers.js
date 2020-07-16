@@ -1,9 +1,25 @@
 import { combineReducers } from 'redux';
 
 var savedTextSize = localStorage.getItem('text')
+var savedColor = localStorage.getItem('color')
+var savedBox = localStorage.getItem('box')
+var savedMeh = localStorage.getItem('meh')
+
+var choiceColor = 0//0 = black; 1 = white
+var choiceMeh = 0
+var choiceBox = 40
 var choiceTextSize = 6
 if (savedTextSize != null){
      choiceTextSize = savedTextSize
+}
+if (savedMeh != null){
+     choiceMeh = savedMeh
+}
+if (savedBox != null){
+     choiceBox = savedBox
+}
+if (savedColor != null){
+      choiceColor = savedColor 
 }
 
 const submenuReducer = (state = 1, action) => {
@@ -12,9 +28,21 @@ const submenuReducer = (state = 1, action) => {
                return 1;
           case 'SUBMENU_2':
                return 2;
+          case 'SUBMENU_3' :
+               return 3;
           case 'NEXT_PAGE':
-               return Math.min(2,state+1);
+               return Math.min(3,state+1);
           case 'PREV_PAGE':
+               return Math.max(1,state-1);
+          default: return state;
+     }
+}
+
+const azureSwitchReducer = (state = 1, action)=>{
+     switch(action.type){
+          case 'NEXT_AZURE':
+               return Math.min(2,state+1);
+          case 'PREV_AZURE':
                return Math.max(1,state-1);
           default: return state;
      }
@@ -23,7 +51,7 @@ const submenuReducer = (state = 1, action) => {
 const textSizeReducer = (state = choiceTextSize, action) => {
      switch (action.type) {
           case 'INCREMENT_TEXTSIZE':
-               return state + 1;
+               return state%12 + 1;
           case 'DECREMENT_TEXTSIZE':
                return Math.max(1, state - 1);
           default:
@@ -42,10 +70,10 @@ const lineWidthReducer = (state = 10, action) => {
      }
 }
 
-const numLinesReducer = (state = 35, action) => {
+const numLinesReducer = (state = choiceBox, action) => {
      switch (action.type) {
           case 'INCREMENT_NUMLINES':
-               return Math.min(state + 1,40);
+               return Math.min(state + 1,50);
           case 'DECREMENT_NUMLINES':
                return Math.max(1, state - 1);
           default:
@@ -59,15 +87,7 @@ const lockScreenReducer = (state = false, action) => {
      else return state;
 }
 
-const invertMicVisualReducer = (state = 0, action) => {
-  if (action.type === 'FLIP_MICVISUAL'){
-       state = state + 1;
-       if (state == 4) {
-            state = 0;
-       }
-  }
-  return state;
-}
+
 
 const switchMenusReducer = (state = false, action) => {
      if (action.type === 'FLIP_SWITCHMENUS')
@@ -75,10 +95,14 @@ const switchMenusReducer = (state = false, action) => {
      else return state;
 }
 
-const invertColorsReducer = (state = false, action) => {
+const invertColorsReducer = (state = choiceColor, action) => {
      if (action.type === 'FLIP_INVERTCOLORS')
-          return !state;
-     else return state;
+          return (state + 1)%2;
+     if (action.type === 'PICK_BLACK')
+          return 0;
+     if (action.type === 'PICK_WHITE')
+          return 1;
+     else return state ;
 }
 
 const recordingReducer = (state = true, action) => {
@@ -130,10 +154,46 @@ const instructionsReducer = (state = false, action) => {
      else return state
 }
 
-const menuhideReducer = (state = false, action) => {
+const menuhideReducer = (state = choiceMeh, action) => {
      if (action.type == 'FLIP_MENUHIDE')
-          return !state
+          return (state+1)%2
      else return state
+}
+
+const invertStereo = (state = 0, action) =>{
+     if(action.type === 'FLIP_STEREO')
+          return !state;
+     else return state;
+}
+
+const invertStereoVisualReducer = (state = 0, action) =>{
+     switch (action.type) {
+          case 'FORWARD_STEREOVISUAL':
+              return (state + 1)%4;
+          case 'BACKWARD_STEREOVISUAL':
+               state = state -1;
+               if(state < 0){
+                    state = 3
+               }
+               return state;
+           default:
+                return state;
+     }
+}
+
+const invertMicVisualReducer = (state = 0, action) => {
+     switch (action.type) {
+          case 'FORWARD_MICVISUAL':
+              return (state + 1)%4;
+          case 'BACKWARD_MICVISUAL':
+               state = state -1;
+               if(state < 0){
+                    state = 3
+               }
+               return state;
+           default:
+                return state;
+     }
 }
 
 const allReducers = combineReducers({
@@ -154,6 +214,9 @@ const allReducers = combineReducers({
      ins: instructionsReducer,
      meh: menuhideReducer,
      submenu: submenuReducer,
+     steromic: invertStereoVisualReducer,
+     stereo:invertStereo,
+     azuresw:azureSwitchReducer,
 });
 
 export default allReducers;

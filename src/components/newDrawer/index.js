@@ -28,6 +28,8 @@ import MenuHider from '../PlaceHolder/MenuHider'
 import './index.css'
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
+import {prev_page, next_page} from '../../redux/actions'
+import AudioOption from '../AudioOption';
 const drawerWidth = '21vw';//drawer width
 
 const useStyles = makeStyles((theme) => ({
@@ -104,11 +106,15 @@ export default function PersistentDrawerLeft(props) {
   const dispatch = useDispatch();
   const setting = useSelector(submenu);
   const shouldShow = useSelector(menuhide);
+
+  var hiddenText = ''
   var pick = "detail_wrap"
-  if (!shouldShow){
+  if (shouldShow == 0){
     pick += '.active'
+    hiddenText = 'visible'
   }else{
     pick = 'detail_wrap'
+    hiddenText = 'auto-hide'
   }
   
 
@@ -136,14 +142,14 @@ export default function PersistentDrawerLeft(props) {
         <div className={classes.root}>
           <CssBaseline />
           <ThemeProvider theme = {mytheme}>
-          <div className = {pick}>
+          <div className = {pick} >
             <AppBar
               position="fixed"
               className={clsx(classes.appBar, {
                 [classes.appBarShift]: open,
               } 
               )} 
-              color = {choice}
+              color = {choice}  
             >
               <Toolbar >
                 <IconButton
@@ -159,13 +165,16 @@ export default function PersistentDrawerLeft(props) {
                 <Typography variant="h6" noWrap>
                   Welcome to ScribeAR
                 </Typography>
-                <MenuHider />
+                <div className='lock-wrap'>
+                  <MenuHider />
+                  <div className = 'hidden-text'>
+                    {hiddenText}
+                  </div>
+                </div>
+                
               </Toolbar>
 
             </AppBar>
-          </div>
-          <div className = 'exit'>
-           
           </div>
           <Drawer
             className={classes.drawer}
@@ -176,7 +185,7 @@ export default function PersistentDrawerLeft(props) {
             classes = {{paper:classes.drawerPaper}}
           >
             <div className={classes.drawerHeader}>
-              <MenuSwitch title = 'WebSpeech'/>
+              <MenuSwitch title = 'MainMenu' left = {prev_page} right={next_page}/>
               <PopMenu />
               <IconButton onClick={handleDrawerClose} color = "inherit">
                 {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
@@ -196,7 +205,7 @@ export default function PersistentDrawerLeft(props) {
           </ThemeProvider>
         </div>
     );
-  }else{
+  }else if (setting == 2){
     return (
         <div className={classes.root}>
         <CssBaseline />
@@ -222,7 +231,12 @@ export default function PersistentDrawerLeft(props) {
               <Typography variant="h6" noWrap>
                 Welcome to ScribeAR
               </Typography>
-              <MenuHider />
+              <div className='lock-wrap'>
+                 <MenuHider />
+                <div className = 'hidden-text'>
+                    {hiddenText}
+                </div>
+              </div>
             </Toolbar>
           </AppBar>
         </div>
@@ -236,7 +250,7 @@ export default function PersistentDrawerLeft(props) {
           classes = {{paper:classes.drawerPaper}}
         >
           <div className={classes.drawerHeader}>
-            <MenuSwitch title = 'Azure'/>
+          <MenuSwitch title = 'Azure' left = {prev_page} right={next_page}/>
             <PopMenu />
             <IconButton onClick={handleDrawerClose} color = "inherit">
               {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
@@ -255,6 +269,71 @@ export default function PersistentDrawerLeft(props) {
         </main>
         </ThemeProvider>
         </div>
+    )
+  }else{
+    return(
+      <div className={classes.root}>
+      <CssBaseline />
+      <ThemeProvider theme = {mytheme}>
+      <div className = {pick}>
+        <AppBar
+          position="fixed"
+          className={clsx(classes.appBar, {
+            [classes.appBarShift]: open,
+          })}
+          color = {choice}
+        >
+          <Toolbar >
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawerOpen}
+              edge="start"
+              className={clsx(classes.menuButton, open && classes.hide)}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography variant="h6" noWrap>
+              Welcome to ScribeAR
+            </Typography>
+            <div className='lock-wrap'>
+               <MenuHider />
+              <div className = 'hidden-text'>
+                  {hiddenText}
+              </div>
+            </div>
+          </Toolbar>
+        </AppBar>
+      </div>
+
+      <Drawer
+        className={classes.drawer}
+        width = "50%"
+        variant="persistent"
+        anchor="left"
+        open={open}
+        classes = {{paper:classes.drawerPaper}}
+      >
+        <div className={classes.drawerHeader}>
+        <MenuSwitch title = 'AudioV' left = {prev_page} right={next_page}/>
+          <PopMenu />
+          <IconButton onClick={handleDrawerClose} color = "inherit">
+            {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+          </IconButton>
+
+        </div>
+        <AudioOption />
+      </Drawer>
+      <main
+        className={clsx(classes.content, {
+          [classes.contentShift]: open,
+        })}
+      >
+        <div className={classes.drawerHeader} />
+
+      </main>
+      </ThemeProvider>
+      </div>
     )
   } 
 }

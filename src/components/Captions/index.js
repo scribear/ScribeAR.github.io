@@ -16,7 +16,7 @@ export default function Captions(props) {
      // Sloppy styling. Please change.
      var paddingString = (11 - lineWidth) * 3 + 'vw'
      var h = numLines + 'vh'
-     var resH = (43 - numLines) + 'vh'
+     var resH = (51.5 - numLines) + 'vh'
      var sz = props.textSize
 
      return ( <div>

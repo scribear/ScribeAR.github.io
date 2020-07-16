@@ -5,7 +5,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import {useSelector,useDispatch} from 'react-redux';
-import { submenu1,submenu2 } from '../../redux/actions';
+import { submenu1,submenu2,submenu3 } from '../../redux/actions';
 
 
  
@@ -40,9 +40,10 @@ export default function SimpleMenu(props) {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <MenuItem onClick={() => dispatch(submenu1())}>WebSpeech</MenuItem>
+        <MenuItem onClick={() => dispatch(submenu1())}>Main Menu</MenuItem>
         <MenuItem onClick={() => dispatch(submenu2())}>Azure</MenuItem>
         {/* <MenuItem>{setting}</MenuItem> */}
+        <MenuItem onClick={() => dispatch(submenu3())}>Audio Visualization</MenuItem>
         <MenuItem onClick={handleClose}>return</MenuItem>
       </Menu>
     </div>

@@ -9,11 +9,11 @@ export default function MenuSwitch(props){
     const dispatch = useDispatch()
     return (
         <div>
-            <IconButton color = 'inherit' onClick = {()=>(dispatch(prev_page()))}>
+            <IconButton color = 'inherit' onClick = {()=>(dispatch(props.left()))}>
                 <ArrowBackIosIcon />
             </IconButton>
             {props.title}
-            <IconButton color = 'inherit' onClick = {()=>(dispatch(next_page()))}>
+            <IconButton color = 'inherit' onClick = {()=>(dispatch(props.right()))}>
                 <ArrowForwardIosIcon />
             </IconButton>
         </div>

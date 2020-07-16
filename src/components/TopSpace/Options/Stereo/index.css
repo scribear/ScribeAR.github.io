@@ -1,4 +1,4 @@
-.audio_result{
+.stereo_result{
      position: absolute;
      top:0;
      left:1vw;
@@ -7,7 +7,7 @@
      width: 20vh;
 }
 
-.audio_visual {
+.stereo_visual {
      position: absolute;
      top: 0;
      /*right: 2vw;*/
@@ -19,15 +19,12 @@
 
 
 
-/*.audio_plus {*/
+/*.stereo_plus {*/
 /*     right:-10vh;*/
 /*     text-align: center;*/
 /*     padding: 14px 40px;*/
-/*     font-family: 'Arial';*/
-/*     font-size: 20px;*/
+/*     font-family: 'Arial'; font-size: 20px;*/
 /*     border-radius: 15%;*/
 /*     cursor: pointer;*/
 /*     width: 10vw;*/
-
 /*}*/
-

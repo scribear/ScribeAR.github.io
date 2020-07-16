@@ -11,7 +11,7 @@ export default function OnOff(props) {
      const dispatch = useDispatch()
 
      return (
-          <div>
+          <div className="switch-wrapper">
                {props.item}
                <label className="switch">
                     <input type="checkbox" onChange={() => dispatch(props.action())}></input>

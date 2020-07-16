@@ -69,3 +69,9 @@ They fade much like the options menu does. */
 .start{
      transform: scale(2.0);
 }
+
+.item-wrapper-record{
+     position: relative;
+     top:1vh;
+     left:1vw;
+}

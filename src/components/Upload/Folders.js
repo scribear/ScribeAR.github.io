@@ -3,6 +3,7 @@ import config from '../LogIn/Config';
 import { UserAgentApplication } from 'msal';
 import {getFolders} from '../LogIn/graphService';
 import { Button } from 'reactstrap';
+import MenuItem from '@material-ui/core/MenuItem';
 
 
 export default class Folders extends Component {
@@ -26,7 +27,6 @@ export default class Folders extends Component {
         if (accessToken) {
             this.setState({folders : await getFolders(accessToken)});
             this.setState({folders : this.state.folders.value});
-            console.log(this.state.folders)
         }
       }
       catch(err) {
@@ -40,10 +40,11 @@ export default class Folders extends Component {
       const returnedArray = Array.from(this.state.folders)
         return (
           <div>
+
             {
               returnedArray.map((item) => {
                 if (item.folder)
-                return <h1>{item.name}</h1>
+                return <MenuItem key={item.name} value={"wtf"}>{item.name}</MenuItem>
               }
               )
             }

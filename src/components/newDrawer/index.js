@@ -167,12 +167,9 @@ export default function PersistentDrawerLeft() {
                   </MenuItem>
                   </Tooltip>
                   {/* <Tooltip TransitionComponent={Fade} title="Upload the transcript to OneDrive" arrow> */}
-                  {/* <MenuItem onClick={handleClose}>
+                  <MenuItem onClick={handleClose}>
                     <Upload/>                  
-                  </MenuItem> */}
-                  {/* <MenuItem onClick={handleClose}>
-                    <Folders/>                  
-                  </MenuItem> */}
+                  </MenuItem>
                   {/* </Tooltip> */}
                 </Menu>
                 <LogIn/>

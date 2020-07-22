@@ -18,6 +18,15 @@ import { ImageIcon } from 'office-ui-fabric-react/lib/Icon';
 import { mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
 import { css } from 'office-ui-fabric-react/lib/Utilities';
 import { TestImages } from '@uifabric/example-data';
+import Folders from './Folders';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import InputLabel from '@material-ui/core/InputLabel';
+import Input from '@material-ui/core/Input';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
 
 
 
@@ -36,6 +45,14 @@ const useStyles = makeStyles((theme) => ({
       marginTop: theme.spacing(2),
     },
   },
+    container: {
+      display: 'flex',
+      flexWrap: 'wrap',
+    },
+    formControl: {
+      margin: theme.spacing(1),
+      minWidth: 120,
+    },
 }));
 
 
@@ -68,13 +85,32 @@ registerIcons({
 
 
 export default function CustomizedSnackbars() {
-  initializeIcons();
+  
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
+  const [SelectOpen, setSelectOpen] = React.useState(false);
+
   const [anchorEl, setAnchorEl] = useState(null);
+  const [folder, setFolder] = useState('');
+  const [diaOpen, setDiaOpen] = React.useState(false);
+
+
 
   const handleClickAnchor = (event) => {
     setAnchorEl(event.currentTarget);
+  };
+
+  const handleChange = (event) => {
+    setFolder(event.target.value);
+    console.log(folder)
+  };
+
+  const handleClickDiaOpen = () => {
+    setDiaOpen(true);
+  };
+
+  const handleDiaClose = () => {
+    setDiaOpen(false);
   };
 
   const handleCloseAnchor = () => {
@@ -89,7 +125,6 @@ export default function CustomizedSnackbars() {
     if (reason === 'clickaway') {
       return;
     }
-
     setOpen(false);
   };
 
@@ -104,15 +139,41 @@ export default function CustomizedSnackbars() {
         onClose={handleCloseAnchor}
       >
         <MenuItem onClick={handleCloseAnchor}>
-          <div onClick={handleClick}>
-            <Button variant="contained" variant="text" onClick={new Recognition().uploadFile} startIcon={<FontIcon iconName="onedrive-svg" className={iconClass}/>}>OneDrive</Button>
-            <div class = "upload">
+          <div>
+          <Button variant="contained" variant="text" onClick={handleClickDiaOpen} startIcon={<FontIcon iconName="onedrive-svg" className={iconClass}/>}>OneDrive</Button>
+          <Dialog disableBackdropClick disableEscapeKeyDown open={diaOpen} onClose={handleDiaClose}>
+            <DialogTitle>Select Folders</DialogTitle>
+            <DialogContent>
+              <form className={classes.container}>
+                <FormControl className={classes.formControl}>
+                  <InputLabel id="demo-dialog-select-label">folders</InputLabel>
+                  <Select
+                    value={folder}
+                    onChange={handleChange}
+                    input={<Input id="demo-dialog-native" />}
+                  >
+                   <Folders/>
+                  </Select>
+                </FormControl>
+              </form>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleDiaClose} color="primary">
+                Cancel
+              </Button>
+              <Button onClick={handleDiaClose} color="primary">
+                Ok
+              </Button>
+            </DialogActions>
+         </Dialog>
+            {/* <Button variant="contained" variant="text" onClick={new Recognition().uploadFile} startIcon={<FontIcon iconName="onedrive-svg" className={iconClass}/>}>OneDrive</Button> */}
+            {/* <div class = "upload">
             <Snackbar open={open} autoHideDuration={8000} onClose={handleClose}>
               <Alert onClose={handleClose} severity="success">
                 Upload Successful!
               </Alert>
             </Snackbar>
-            </div>
+            </div> */}
           </div>
         </MenuItem>
         <MenuItem onClick={handleCloseAnchor}>
@@ -124,3 +185,4 @@ export default function CustomizedSnackbars() {
       </div>
     );
 }
+

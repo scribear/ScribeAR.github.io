@@ -162,7 +162,6 @@ export class Recognition extends React.PureComponent {
                     </div>
        
                   )
-          
      }
 }
 

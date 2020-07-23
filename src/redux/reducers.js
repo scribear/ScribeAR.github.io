@@ -71,6 +71,7 @@ const textSizeReducer = (state = choiceTextSize, action) => {
      switch (action.type) {
           case 'INCREMENT_TEXTSIZE':
                return state%12 + 1;
+
           case 'DECREMENT_TEXTSIZE':
                return Math.max(1, state - 1);
           default:

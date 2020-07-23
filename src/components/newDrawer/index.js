@@ -1,18 +1,31 @@
 import React from 'react';
 import clsx from 'clsx';
+import store from '../../store'
+import './index.css';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
+
+import List from '@material-ui/core/List';
+import SaveAltIcon from '@material-ui/icons/SaveAlt';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import InboxIcon from '@material-ui/icons/MoveToInbox';
+import MailIcon from '@material-ui/icons/Mail';
 import Options from "../TopSpace/Options";
 import {ThemeProvider} from "@material-ui/core/styles";
+import { Button } from "@material-ui/core"
+import Recognition from "../Captions/Recognition"
+import AzureRecognition from "../AzureCaptions/AzureRecognition"
 import mytheme from './theme'
 import blue from "@material-ui/core/colors/blue"
 import orange from "@material-ui/core/colors/orange"
@@ -21,11 +34,8 @@ import AzureOption from '../AzureTopSpace/AzureOptions'
 import MenuSwitch from '../PopMenu/MenuSwitch'
 import MenuHider from '../PlaceHolder/MenuHider'
 import './index.css'
-import SaveAltIcon from '@material-ui/icons/SaveAlt';
-import Recognition from "../Captions/Recognition"
 import {prev_page, next_page} from '../../redux/actions'
 import AudioOption from '../AudioOption';
-import { Button } from "@material-ui/core"
 
 const drawerWidth = '21vw';//drawer width
 
@@ -134,7 +144,7 @@ export default function PersistentDrawerLeft(props) {
   const handleDrawerClose = () => {
     setOpen(false);
   };
-
+  
   if (setting == 1){
     return (
         <div className={classes.root}>
@@ -177,6 +187,7 @@ export default function PersistentDrawerLeft(props) {
                 </div>
                 
               </Toolbar>
+
 
             </AppBar>
           </div>
@@ -361,4 +372,6 @@ export default function PersistentDrawerLeft(props) {
       </div>
     )
   } 
-}
+
+  }
+//}

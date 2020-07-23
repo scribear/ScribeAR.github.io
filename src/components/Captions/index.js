@@ -3,7 +3,10 @@ import { useSelector , useDispatch} from 'react-redux'
 import './index.css'
 import Recognition from './Recognition'
 import { Button } from "@material-ui/core"
+import mytheme from '../newDrawer/theme'
 import Extender from './Extender'
+import {ThemeProvider} from "@material-ui/core/styles";
+import ScrollButton from 'react-scroll-button'
 import {
      increment_numLines,
      decrement_numLines,
@@ -38,7 +41,9 @@ export default function Captions(props) {
                                         increment={increment_numLines}
                                         decrement={decrement_numLines}  />
                     </div>
+
                      <Button className="scroll" position="fixed" variant="outlined"  color = 'inherit' onClick= {new Recognition().scrollBottom} color="secondary">Scroll to Bottom</Button>
+
                     <div className="captionsSpace" id="captionsSpace"
                     style={{
                     fontSize: sz,

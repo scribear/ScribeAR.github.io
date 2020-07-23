@@ -6,6 +6,7 @@ import store from '../../../store/';
 // import ScrollToBottom from 'react-scroll-to-bottom';
 
 
+
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
 const recognition = new SpeechRecognition()
 
@@ -35,10 +36,12 @@ export class Recognition extends React.PureComponent {
      }
 
      componentDidMount() {
+
         if (store.desiredAPI == 'azure') {
           this.stop()
         }  else {
           this.start()
+
         }
      }
 
@@ -74,6 +77,7 @@ export class Recognition extends React.PureComponent {
 
      downloadTxtFile = () => {
        const element = document.createElement("a");
+
        var results = [];
        results.push("transcript History \n\n\n\n");
        var searchEles = document.getElementById("out").children;

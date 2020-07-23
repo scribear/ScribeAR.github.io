@@ -60,6 +60,10 @@ export const flip_switchMenus = () => {
 export const flip_recording = () => {
      return { type: 'FLIP_RECORDING' };
 }
+export const flip_on_webspeech = () =>{
+     return { type: 'FLIP_ON_WEBSPEECH'};
+}
+
 
 export const flip_recording_azure = () => {
      return {type: 'FLIP_RECORDING_AZURE'}
@@ -122,18 +126,27 @@ export const next_page = () => {
 export const prev_page = () => {
      return {type: 'PREV_PAGE'}
 }
-export const flip_stereo = () =>{
-     return { type: 'FLIP_STEREO'};
+export const audiovis_flip = () => {
+     return {type: 'AUDIOVIS_FLIP'}
 }
-export const forward_stereoVisual = () => {
-     return {type: 'FORWARD_STEREOVISUAL'};
+export const mono_line = () => {
+     return {type: 'MONO_LINE'}
 }
-export const backward_stereoVisual = () => {
-     return {type: 'BACKWARD_STEREOVISUAL'};
+export const mono_spectrum = () => {
+     return {type: 'MONO_SPECTRUM'}
 }
-export const forward_micVisual = () => {
-     return { type: 'FORWARD_MICVISUAL' };
+export const mono_circular = () => {
+     return {type: 'MONO_CIRCULAR'}
 }
-export const backward_micVisual = () => {
-     return {type: 'BACKWARD_MICVISUAL'};
+export const stereo_circular = () => {
+     return {type: 'STEREO_CIRCULAR'}
+}
+export const stereo_rectangular = () => {
+     return {type: 'STEREO_RECTANGULAR'}
+}
+export const stereo_spectrum = () => {
+     return {type: 'STEREO_SPECTRUM'}
+}
+export const audiovis_off = () => {
+     return {type: 'AUDIOVIS_OFF'}
 }

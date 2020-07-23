@@ -5,7 +5,6 @@ import Drawer from '@material-ui/core/Drawer';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
@@ -17,19 +16,17 @@ import {ThemeProvider} from "@material-ui/core/styles";
 import mytheme from './theme'
 import blue from "@material-ui/core/colors/blue"
 import orange from "@material-ui/core/colors/orange"
-import ButtomNavi from '../ButtomNavi'
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
 import {useSelector,useDispatch} from 'react-redux';
-import PopMenu from '../PopMenu'
 import AzureOption from '../AzureTopSpace/AzureOptions'
 import MenuSwitch from '../PopMenu/MenuSwitch'
 import MenuHider from '../PlaceHolder/MenuHider'
 import './index.css'
-import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
-import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
+import SaveAltIcon from '@material-ui/icons/SaveAlt';
+import Recognition from "../Captions/Recognition"
 import {prev_page, next_page} from '../../redux/actions'
 import AudioOption from '../AudioOption';
+import { Button } from "@material-ui/core"
+
 const drawerWidth = '21vw';//drawer width
 
 const useStyles = makeStyles((theme) => ({
@@ -107,6 +104,7 @@ export default function PersistentDrawerLeft(props) {
   const setting = useSelector(submenu);
   const shouldShow = useSelector(menuhide);
 
+  var hiddenTextDownload = 'Download Text'
   var hiddenText = ''
   var pick = "detail_wrap"
   if (shouldShow == 0){
@@ -165,6 +163,12 @@ export default function PersistentDrawerLeft(props) {
                 <Typography variant="h6" noWrap>
                   Welcome to ScribeAR
                 </Typography>
+                <div class="d-table-cell-tar">
+                  <Button variant="contained" style={{ color: 'white' }} variant="text" onClick={new Recognition().downloadTxtFile} startIcon={<SaveAltIcon/>}></Button>
+                  <div className = 'hidden-text-download'>
+                    {hiddenTextDownload}
+                  </div>
+                </div>
                 <div className='lock-wrap'>
                   <MenuHider />
                   <div className = 'hidden-text'>
@@ -185,8 +189,7 @@ export default function PersistentDrawerLeft(props) {
             classes = {{paper:classes.drawerPaper}}
           >
             <div className={classes.drawerHeader}>
-              <MenuSwitch title = 'MainMenu' left = {prev_page} right={next_page}/>
-              <PopMenu />
+              <MenuSwitch title = 'MainMenu' left = {prev_page} right={next_page} submenu = 'true'/>
               <IconButton onClick={handleDrawerClose} color = "inherit">
                 {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
               </IconButton>
@@ -231,6 +234,18 @@ export default function PersistentDrawerLeft(props) {
               <Typography variant="h6" noWrap>
                 Welcome to ScribeAR
               </Typography>
+              <div class="d-table-cell-tar">
+                  <Button variant="contained" style={{ color: 'white' }} variant="text" onClick={new Recognition().downloadTxtFile} startIcon={<SaveAltIcon/>}></Button>
+                  <div className = 'hidden-text-download'>
+                    {hiddenTextDownload}
+                  </div>
+                </div>
+                <div className='lock-wrap'>
+                  <MenuHider />
+                  <div className = 'hidden-text'>
+                    {hiddenText}
+                  </div>
+                </div>
               <div className='lock-wrap'>
                  <MenuHider />
                 <div className = 'hidden-text'>
@@ -250,8 +265,7 @@ export default function PersistentDrawerLeft(props) {
           classes = {{paper:classes.drawerPaper}}
         >
           <div className={classes.drawerHeader}>
-          <MenuSwitch title = 'Azure' left = {prev_page} right={next_page}/>
-            <PopMenu />
+          <MenuSwitch title = 'Source' left = {prev_page} right={next_page} submenu = 'true'/>
             <IconButton onClick={handleDrawerClose} color = "inherit">
               {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
             </IconButton>
@@ -296,6 +310,18 @@ export default function PersistentDrawerLeft(props) {
             <Typography variant="h6" noWrap>
               Welcome to ScribeAR
             </Typography>
+            <div class="d-table-cell-tar">
+                  <Button variant="contained" style={{ color: 'white' }} variant="text" onClick={new Recognition().downloadTxtFile} startIcon={<SaveAltIcon/>}></Button>
+                  <div className = 'hidden-text-download'>
+                    {hiddenTextDownload}
+                  </div>
+                </div>
+                <div className='lock-wrap'>
+                  <MenuHider />
+                  <div className = 'hidden-text'>
+                    {hiddenText}
+                  </div>
+            </div>
             <div className='lock-wrap'>
                <MenuHider />
               <div className = 'hidden-text'>
@@ -315,8 +341,7 @@ export default function PersistentDrawerLeft(props) {
         classes = {{paper:classes.drawerPaper}}
       >
         <div className={classes.drawerHeader}>
-        <MenuSwitch title = 'AudioV' left = {prev_page} right={next_page}/>
-          <PopMenu />
+        <MenuSwitch title = 'AudioV' left = {prev_page} right={next_page} submenu = 'true'/>
           <IconButton onClick={handleDrawerClose} color = "inherit">
             {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
           </IconButton>

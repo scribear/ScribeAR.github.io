@@ -1,26 +1,44 @@
 import React from 'react';
-import VisualControl from '../TopSpace/Options/VisualControl';
+
 import Micvisual from '../TopSpace/Options/Micvisual';
 import Stereovisual from '../TopSpace/Options/Stereo';
 import Divider from '@material-ui/core/Divider';
+import {Button, IconButton} from "@material-ui/core"
+import { useSelector, useDispatch } from 'react-redux'
+import {audiovis_off} from '../../redux/actions'
+import NotInterestedIcon from '@material-ui/icons/NotInterested';
 
 import '../TopSpace/Options/index.css'
 
 export default function AudioOption (props){
+
+    const dispatch = useDispatch()
     
     return (
         <div>
             <h2>Audio Setting</h2>
             <Divider />
-            <div className = 'item-wrapper'>
-                 <VisualControl />
+            <div className="off_wrapper">
+            <IconButton color='inherit' onClick={()=>(dispatch(audiovis_off()))}>
+               <NotInterestedIcon fontSize="large"/>
+            </IconButton>
+                Turn Off Visualization
             </div>
+            <h3>Mono</h3>
+              <Divider/>
+              <div className="item-wrapper">
+             <Micvisual />
+              </div>
+              <h3>Stereo</h3>
+            <Divider/>
             <div className="item-wrapper">
-                <Micvisual />
+            <Stereovisual/>
             </div>
-            <div className="item-wrapper">
-                <Stereovisual/>
-            </div>
+            {/*<h3>Setting</h3>*/}
+            {/*<Divider/>*/}
+            {/*<div className="item-wrapper">*/}
+            {/*    Sensitivity*/}
+            {/*</div>*/}
         </div>
 
 

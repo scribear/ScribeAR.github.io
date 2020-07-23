@@ -1,0 +1,13 @@
+
+.item-wrap-sw{
+     position: relative;
+     top:1vh;
+     left:1vw;
+
+}
+
+.Switch{
+     position: absolute;
+     left:7vw;
+     display: inline;
+}

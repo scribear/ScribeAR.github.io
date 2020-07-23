@@ -1,53 +1,279 @@
-.keytext {
-    position: absolute;
-    font-family: 'Arial';
-    margin-top: 5.5%;
-    font-size: 16px;
-    margin-left: 2%;
-/*    vertical-align: middle;*/
-/*    text-align: center;*/
+@media screen and (max-width: 1920px) and (max-height: 1080px) {
+  .keytext {
+      position: static;
+      font-family: 'Arial';
+      margin-top: 7%;
+      font-size: 110%;
+  /*    vertical-align: middle;*/
+  /*    text-align: center;*/
+      display: flex;
+      flex-wrap: wrap;
+  }
+
+  .keybox {
+      position: static;
+      margin-top: 4%;
+      margin-left: 10%;
+      display: flex;
+      flex-wrap: wrap;
+  }
+
+  #azure_key_value {
+      font-family: 'Arial';
+      width: 90%;
+      font-size: 15px;
+  }
+
+  .azuremenutext {
+      position: absolute;
+      margin-top: -12%;
+      font-size: 150%;
+      display: flex;
+      flex-wrap: wrap;
+  }
+
+  .divider {
+      width: 100%;
+      margin-top: 30%;
+  }
 }
 
-.keybox {
-    position: absolute;
-    margin-top: 16%;
-    margin-left: 5%;
+@media screen and (max-width: 1680px) and (max-height: 1050px) {
+  .keytext {
+      position: static;
+      font-family: 'Arial';
+      margin-top: 7%;
+      font-size: 110%;
+  /*    vertical-align: middle;*/
+  /*    text-align: center;*/
+      display: flex;
+      flex-wrap: wrap;
+  }
+
+  .keybox {
+      position: static;
+      margin-top: 5%;
+      margin-left: 10%;
+      display: flex;
+      flex-wrap: wrap;
+  }
+
+  #azure_key_value {
+      font-family: 'Arial';
+      width: 90%;
+      font-size: 15px;
+  }
+
+  .azuremenutext {
+      position: absolute;
+      margin-top: -12%;
+      font-size: 150%;
+      display: flex;
+      flex-wrap: wrap;
+  }
+
+  .divider {
+      width: 100%;
+      margin-top: 33%;
+  }
 }
 
-#azure_key_value {
-    font-family: 'Arial';
-    font-size: 20px;
+@media screen and (max-width: 1600px) and (max-height: 900px) {
+  .keytext {
+      position: static;
+      font-family: 'Arial';
+      margin-top: 5%;
+      font-size: 110%;
+  /*    vertical-align: middle;*/
+  /*    text-align: center;*/
+      display: flex;
+      flex-wrap: wrap;
+  }
+
+  .keybox {
+      position: static;
+      margin-top: 4%;
+      margin-left: 10%;
+      display: flex;
+      flex-wrap: wrap;
+  }
+
+  #azure_key_value {
+      font-family: 'Arial';
+      width: 90%;
+      font-size: 15px;
+  }
+
+  .azuremenutext {
+      position: absolute;
+      margin-top: -12%;
+      font-size: 150%;
+      display: flex;
+      flex-wrap: wrap;
+  }
+
+  .divider {
+      width: 100%;
+      margin-top: 34%;
+  }
 }
 
-.keysubmit {
-    font-family: 'Arial';
-    font-size: 20px;
-    position: absolute;
-    margin-top: 15.4%;
-    margin-left: 33.8%;
+@media screen and (max-width: 1440px) and (max-height: 900px) {
+  .keytext {
+      position: static;
+      font-family: 'Arial';
+      margin-top: 6%;
+      font-size: 110%;
+  /*    vertical-align: middle;*/
+  /*    text-align: center;*/
+      display: flex;
+      flex-wrap: wrap;
+  }
+
+  .keybox {
+      position: static;
+      margin-top: 4%;
+      margin-left: 10%;
+      display: flex;
+      flex-wrap: wrap;
+  }
+
+  #azure_key_value {
+      font-family: 'Arial';
+      width: 90%;
+      font-size: 15px;
+  }
+
+  .azuremenutext {
+      position: absolute;
+      margin-top: -12.7%;
+      font-size: 150%;
+      display: flex;
+      flex-wrap: wrap;
+  }
+
+  .divider {
+      width: 100%;
+      margin-top: 34%;
+  }
 }
 
-input[type=submit] {
-    background-color: white;
-    border-radius: 15%;
-    width: 70px;
-    height: 30px;
+@media screen and (max-width: 1400px) and (max-height: 1050px) {
+  .keytext {
+      position: static;
+      font-family: 'Arial';
+      margin-top: 6%;
+      font-size: 110%;
+  /*    vertical-align: middle;*/
+  /*    text-align: center;*/
+      display: flex;
+      flex-wrap: wrap;
+  }
+
+  .keybox {
+      position: static;
+      margin-top: 4%;
+      margin-left: 10%;
+      display: flex;
+      flex-wrap: wrap;
+  }
+
+  #azure_key_value {
+      font-family: 'Arial';
+      width: 90%;
+      font-size: 15px;
+  }
+
+  .azuremenutext {
+      position: absolute;
+      margin-top: -14%;
+      font-size: 150%;
+      display: flex;
+      flex-wrap: wrap;
+  }
+
+  .divider {
+      width: 100%;
+      margin-top: 34%;
+  }
 }
 
-.azuremenutext {
-    position: absolute;
-    margin-top: -22%;
-    font-size: 33px;
-    margin-left: 4.5%;
+@media screen and (max-width: 1366px) and (max-height: 768px) {
+  .keytext {
+      position: static;
+      font-family: 'Arial';
+      margin-top: 6%;
+      font-size: 110%;
+  /*    vertical-align: middle;*/
+  /*    text-align: center;*/
+      display: flex;
+      flex-wrap: wrap;
+  }
+
+  .keybox {
+      position: static;
+      margin-top: 2%;
+      margin-left: 10%;
+      display: flex;
+      flex-wrap: wrap;
+  }
+
+  #azure_key_value {
+      font-family: 'Arial';
+      width: 90%;
+      font-size: 15px;
+  }
+
+  .azuremenutext {
+      position: absolute;
+      margin-top: -14%;
+      font-size: 150%;
+      display: flex;
+      flex-wrap: wrap;
+  }
+
+  .divider {
+      width: 100%;
+      margin-top: 34%;
+  }
 }
 
-.azuremenutext2 {
-    position: absolute;
-    margin-top: -14%;
-    font-size: 33px;
-    margin-left: 4%;
-}
+@media screen and (max-width: 1280px) and (1020px) {
+  .keytext {
+      position: static;
+      font-family: 'Arial';
+      margin-top: 6%;
+      font-size: 110%;
+  /*    vertical-align: middle;*/
+  /*    text-align: center;*/
+      display: flex;
+      flex-wrap: wrap;
+  }
 
-.divider {
-    margin-top: 50%;
+  .keybox {
+      position: static;
+      margin-top: 2%;
+      margin-left: 10%;
+      display: flex;
+      flex-wrap: wrap;
+  }
+
+  #azure_key_value {
+      font-family: 'Arial';
+      width: 90%;
+      font-size: 15px;
+  }
+
+  .azuremenutext {
+      position: absolute;
+      margin-top: -14%;
+      font-size: 150%;
+      display: flex;
+      flex-wrap: wrap;
+  }
+
+  .divider {
+      width: 100%;
+      margin-top: 34%;
+  }
 }

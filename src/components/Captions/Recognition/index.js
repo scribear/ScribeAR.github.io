@@ -1,7 +1,14 @@
 import React from 'react'
+import store from '../../../store/';
+
+// import $ from 'jquery';
+// import ScrollButton from 'react-scroll-button'
+// import ScrollToBottom from 'react-scroll-to-bottom';
+
 
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
 const recognition = new SpeechRecognition()
+
 recognition.lang = 'en-US'
 recognition.continuous = false
 recognition.interimResults = true
@@ -11,11 +18,15 @@ recognition.interimResults = true
 // is finished, the buffer is flushed: a new div is appended to the 'out' div and
 // this.state.line is reset for the next line.
 
-class Recognition extends React.PureComponent {
+
+
+
+export class Recognition extends React.PureComponent {
      constructor() {
           super()
           this.state = {
                line: '',
+               targetID: 'curr'
                //recording: true
           }
           this.appendLine = this.appendLine.bind(this)
@@ -24,7 +35,11 @@ class Recognition extends React.PureComponent {
      }
 
      componentDidMount() {
+        if (store.desiredAPI == 'azure') {
+          this.stop()
+        }  else {
           this.start()
+        }
      }
 
      // Global state 'recording' is passed as a prop. componentDidUpdate is invoked
@@ -34,7 +49,9 @@ class Recognition extends React.PureComponent {
                return
           if (this.props.isRecording)
                this.start()
-          else this.stop()
+          else {
+              this.stop()
+          }
      }
 
      start() {
@@ -53,6 +70,28 @@ class Recognition extends React.PureComponent {
           }
           // By default, recognition stops when it gets a final result.
           recognition.onend = recognition.start // override this behavior
+     }
+
+     downloadTxtFile = () => {
+       const element = document.createElement("a");
+       var results = [];
+       results.push("transcript History \n\n\n\n");
+       var searchEles = document.getElementById("out").children;
+       console.log(searchEles);
+
+       for(var i = 0; i < searchEles.length; i++) {
+         console.log(searchEles[i].innerHTML[1,searchEles[i].innerHTML.length-2]);
+         results.push(searchEles[i].innerHTML + '\n');
+       }
+
+       // const file = new Blob([document.getElementById('out').value],
+       //             {type: 'text/plain;charset=utf-8'});
+       const file = new Blob([results],
+                   {type: 'text/plain;charset=utf-8'});
+       element.href = URL.createObjectURL(file);
+       element.download = "Script.txt";
+       document.body.appendChild(element);
+       element.click();
      }
 
      stop() {
@@ -79,6 +118,11 @@ class Recognition extends React.PureComponent {
           this.setState({ line: '' }) // reset line
           if (isScrolledToBottom)
                capts.scrollTop = capts.scrollHeight - capts.clientHeight // scroll to bottom
+     }
+
+     scrollBottom() {
+       var element = document.getElementById("curr");
+       element.scrollIntoView({behavior: "smooth"});
      }
 
      render() {

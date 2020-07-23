@@ -5,13 +5,12 @@ import MenuItem from '@material-ui/core/MenuItem';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import {useSelector,useDispatch} from 'react-redux';
-import { submenu1,submenu2,submenu3 } from '../../redux/actions';
 
 
  
 
 
-export default function SimpleMenu(props) {
+export default function PopAPI(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const textContent = props.text;
   const titleContent = props.title;
@@ -40,9 +39,9 @@ export default function SimpleMenu(props) {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <MenuItem onClick={() => dispatch(submenu1())}>Main Menu</MenuItem>
-        <MenuItem onClick={() => dispatch(submenu2())}>Source Setting</MenuItem>
-        <MenuItem onClick={() => dispatch(submenu3())}>Audio Visualization</MenuItem>
+        <MenuItem >Azure</MenuItem>
+        <MenuItem >WebSpeech</MenuItem>
+        {/* <MenuItem onClick={() => dispatch(submenu3())}>Audio Visualization</MenuItem> */}
       </Menu>
     </div>
   );

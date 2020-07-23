@@ -12,50 +12,35 @@ class UserInput extends React.Component {
   constructor(props) {
 
     super(props);
-
     var temp_azure_key = localStorage.getItem('azure_subscription_key');
-
     if (store.azureKeyReducer == undefined) {
     this.state = {value: temp_azure_key};
     } else {
+      if (store.azureKeyReducer != 'incorrect' && store.azureKeyReducer != 'empty') {
       var temp = store.azureKeyReducer;
       var astr_str ='';
       if (temp.length > 5) {
       temp = temp.substr(temp.length - 4);
       astr_str = new Array(store.azureKeyReducer.length - 4).join( '*' );
+    }
       }
-
-
       this.state = {value: astr_str + temp};
+    }
+    if (this.state != undefined) {
+      if (this.state.value != undefined && this.state.value != "") {
+        store.azureKeyReducer = this.state.value;
+      }
     }
 
     this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
 
+  }
   handleChange(event) {
     this.setState({value: event.target.value});
-  }
-
-  handleSubmit(event) {
-
-    alert('A key was submitted: ' + this.state.value);
-    store.azureKeyReducer = this.state.value;
+    store.azureKeyReducer = event.target.value;
     event.preventDefault();
-    localStorage.setItem('azure_subscription_key', this.state.value);
-
-    var temp = store.azureKeyReducer;
-    var astr_str = '';
-    //alert(temp.length);
-    if (temp.length > 5) {
-      temp = temp.substr(temp.length - 4);
-      astr_str = new Array(store.azureKeyReducer.length - 4).join( '*' );
-    }
-
-    document.getElementById("azure_key_value").value = astr_str + temp;
-    this.state.value = astr_str + temp;
+    localStorage.setItem('azure_subscription_key', event.target.value);
   }
-
 
 
 
@@ -72,11 +57,6 @@ class UserInput extends React.Component {
           </div>
 
         </label>
-        <br></br>
-        <br></br>
-        <div className = "keysubmit">
-            <input type="submit" value="Submit"/>
-        </div>
 
       </form>
     );

@@ -36,3 +36,17 @@
 .lock-wrap:hover .hidden-text{
     display: block;
 }
+
+.d-table-cell-tar {
+    transform: scale(1.4);
+    position: absolute;
+    left:92vw;
+  }
+  .hidden-text-download{
+    font-size: 8px;
+    display: none;
+  }
+  .d-table-cell-tar:hover .hidden-text-download{
+      display: block;
+  }
+  

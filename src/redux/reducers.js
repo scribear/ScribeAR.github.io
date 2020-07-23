@@ -1,14 +1,15 @@
 import { combineReducers } from 'redux';
 
-var savedTextSize = localStorage.getItem('text')
-var savedColor = localStorage.getItem('color')
-var savedBox = localStorage.getItem('box')
-var savedMeh = localStorage.getItem('meh')
+var savedTextSize = localStorage.getItem('text');
+var savedColor = localStorage.getItem('color');
+var savedBox = localStorage.getItem('box');
+var savedMeh = localStorage.getItem('meh');
+
 
 var choiceColor = 0//0 = black; 1 = white
 var choiceMeh = 0
 var choiceBox = 40
-var choiceTextSize = 6
+var choiceTextSize = 6;
 if (savedTextSize != null){
      choiceTextSize = savedTextSize
 }
@@ -21,6 +22,10 @@ if (savedBox != null){
 if (savedColor != null){
       choiceColor = savedColor 
 }
+// if (savedMic != null){
+//      console.log("update choiceMic");
+//      choiceMic = savedMic;
+// }
 
 const submenuReducer = (state = 1, action) => {
      switch(action.type) {
@@ -31,9 +36,17 @@ const submenuReducer = (state = 1, action) => {
           case 'SUBMENU_3' :
                return 3;
           case 'NEXT_PAGE':
-               return Math.min(3,state+1);
+               if (state + 1 > 3){
+                    return 1
+               }else{
+                    return state + 1;
+               }
           case 'PREV_PAGE':
-               return Math.max(1,state-1);
+               if (state - 1 < 1){
+                    return 3
+               }else{
+                    return state - 1;
+               }
           default: return state;
      }
 }
@@ -46,6 +59,12 @@ const azureSwitchReducer = (state = 1, action)=>{
                return Math.max(1,state-1);
           default: return state;
      }
+}
+
+const onWebspeechReducer = (state = true, action) =>{
+     if (action.type == 'FLIP_ON_WEBSPEECH')
+          return !state
+     else return state
 }
 
 const textSizeReducer = (state = choiceTextSize, action) => {
@@ -160,43 +179,45 @@ const menuhideReducer = (state = choiceMeh, action) => {
      else return state
 }
 
-const invertStereo = (state = 0, action) =>{
-     if(action.type === 'FLIP_STEREO')
-          return !state;
-     else return state;
-}
-
-const invertStereoVisualReducer = (state = 0, action) =>{
-     switch (action.type) {
-          case 'FORWARD_STEREOVISUAL':
-              return (state + 1)%4;
-          case 'BACKWARD_STEREOVISUAL':
-               state = state -1;
-               if(state < 0){
-                    state = 3
+const audioVisualiser = (state = 0, action) =>{
+     switch(action.type) {
+          case 'AUDIOVIS_FLIP':
+               if(state != 0){
+                    state = 0;
+               }else if (localStorage.getItem('mic') != null && state == 0){
+                    state = localStorage.getItem('mic');
+               }else if (localStorage.getItem('mic') == null){
+                    state = 1;
                }
                return state;
-           default:
-                return state;
-     }
-}
-
-const invertMicVisualReducer = (state = 0, action) => {
-     switch (action.type) {
-          case 'FORWARD_MICVISUAL':
-              return (state + 1)%4;
-          case 'BACKWARD_MICVISUAL':
-               state = state -1;
-               if(state < 0){
-                    state = 3
-               }
+          case 'AUDIOVIS_OFF':
+               state = 0;
                return state;
-           default:
-                return state;
+          case 'MONO_LINE':
+               state = 1;
+               return state;
+          case 'MONO_SPECTRUM':
+               state = 2
+               return state;
+          case 'MONO_CIRCULAR':
+               state = 3;
+               return state;
+          case 'STEREO_CIRCULAR':
+               state = 4;
+               return state;
+          case 'STEREO_RECTANGULAR':
+               state = 5;
+               return state;
+          case 'STEREO_SPECTRUM':
+               state = 6;
+               return state;
+          default:
+               return state;
      }
 }
 
 const allReducers = combineReducers({
+     onWebspeech: onWebspeechReducer,
      switchToAzure: switchToAzureReducer,
      checkAzureKey: checkAzureKeyReducer,
      correctAzureKey: correctAzureKeyReducer,
@@ -208,14 +229,12 @@ const allReducers = combineReducers({
      lockScreen: lockScreenReducer,
      invertColors: invertColorsReducer,
      recording: recordingReducer,
-     mic: invertMicVisualReducer,
+     mic: audioVisualiser,
      switchMenus: switchMenusReducer,
      recordingAzure: recordingAzureReducer,
      ins: instructionsReducer,
      meh: menuhideReducer,
      submenu: submenuReducer,
-     steromic: invertStereoVisualReducer,
-     stereo:invertStereo,
      azuresw:azureSwitchReducer,
 });
 

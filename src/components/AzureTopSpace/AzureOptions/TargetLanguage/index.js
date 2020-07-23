@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import onClickOutside from 'react-onclickoutside';
+import store from '../../../../store/';
+import './index.css'
 
-export default function TargetLanguge(props) {
+export default function TargetLanguage(props) {
 
     return (
-        <div>
+        <div className = "targetLanguageSelect">
             <select id="targetlanguageoptions">
-                        <option value="ar-">Arabic - EG</option>
+                        <option value="ar-">TESTINGTESTSSS</option>
                         <option value="ca">Catalan - ES</option>
                         <option value="da">Danish - DK</option>
                         <option value="da">Danish - DK</option>
@@ -36,7 +38,6 @@ export default function TargetLanguge(props) {
                         <option value="zh">Chinese - CN</option>
                         <option value="zh">Chinese - HK</option>
                         <option value="zh">Chinese - TW</option>
-
                     </select>
         </div>
     )

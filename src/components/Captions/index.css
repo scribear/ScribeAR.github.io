@@ -29,8 +29,15 @@
   margin:0;
 }
 .safeArea{
-  
+
 }
+
+.scroll {
+  position: relative;
+  left: 80vw;
+  top: 25vh;
+}
+
 .captionsSpace::-webkit-scrollbar {
   display: none;
 }
@@ -41,15 +48,15 @@
 
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f1; 
+  background: #f1f1f1;
 }
- 
+
 
 ::-webkit-scrollbar-thumb {
-  background: #888; 
+  background: #888;
 }
 
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #555; 
+  background: #555;
 }  */

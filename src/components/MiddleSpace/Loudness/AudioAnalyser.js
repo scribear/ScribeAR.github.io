@@ -1,4 +1,4 @@
-import React, {Component } from 'react';
+import React, {Component} from 'react';
 import AudioVisualiser from './AudioVisualiser'
 
 
@@ -7,47 +7,46 @@ import AudioVisualiser from './AudioVisualiser'
 
 class AudioAnalyser extends Component {
 
-     constructor(props) {
-          super(props);
-          this.state = {
-                audioData : new Uint8Array(0)
-          };
-          this.tick = this.tick.bind(this);
-     }
+    constructor(props) {
+        super(props);
+        this.state = {
+            audioData: new Uint8Array(0)
+        };
+        this.tick = this.tick.bind(this);
+    }
 
-     componentDidMount() {
-     this.audioContext = new (window.AudioContext ||
-       window.webkitAudioContext)();
-     this.analyser = this.audioContext.createAnalyser();
-     this.dataArray = new Uint8Array(this.analyser.frequencyBinCount);
-     this.source = this.audioContext.createMediaStreamSource(this.props.audio);
-     this.source.connect(this.analyser);
-     this.rafId = requestAnimationFrame(this.tick);
-   }
+    componentDidMount() {
 
-     tick() {
-         if (this.props.mic == 1){
-             //console.log("1");n
-             this.analyser.getByteTimeDomainData(this.dataArray);
-         }else if (this.props.mic == 2){
-             //console.log("2");
-             this.analyser.getByteFrequencyData(this.dataArray);
-         }else if (this.props.mic == 3){
-             this.analyser.getByteFrequencyData(this.dataArray);
-             //this.analyser.getByteTimeDomainData(this.dataArray);
-         }
-     this.setState({ audioData: this.dataArray });
-     this.rafId = requestAnimationFrame(this.tick);
-   }
+        this.audioContext = new (window.AudioContext ||
+            window.webkitAudioContext)();
+        this.analyser = this.audioContext.createAnalyser();
+        this.dataArray = new Uint8Array(this.analyser.frequencyBinCount);
+        this.source = this.audioContext.createMediaStreamSource(this.props.audio);
+        this.source.connect(this.analyser);
+        this.rafId = requestAnimationFrame(this.tick);
+    }
 
-   componentWillUnmount() {
-    cancelAnimationFrame(this.rafId);
-    this.analyser.disconnect();
-    this.source.disconnect();
-  }
+    tick() {
+        if (this.props.mic == 1) {
+            this.analyser.getByteTimeDomainData(this.dataArray);
+        } else if (this.props.mic == 2) {
+            this.analyser.getByteFrequencyData(this.dataArray);
+        } else if (this.props.mic == 3) {
+            this.analyser.getByteFrequencyData(this.dataArray);
+        }
+        this.setState({audioData: this.dataArray});
+        this.rafId = requestAnimationFrame(this.tick);
+    }
 
-  render() {
-      return <AudioVisualiser audioData={this.state.audioData} iscolor = {this.props.iscolor} mic = {this.props.mic}/>;
+    componentWillUnmount() {
+
+        cancelAnimationFrame(this.rafId);
+        this.analyser.disconnect();
+        this.source.disconnect();
+    }
+
+    render() {
+        return <AudioVisualiser audioData={this.state.audioData} iscolor={this.props.iscolor} mic={this.props.mic}/>;
     }
 
 

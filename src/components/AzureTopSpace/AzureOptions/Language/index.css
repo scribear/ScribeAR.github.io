@@ -1,20 +1,19 @@
-  .regionText {
+  .languageText {
     position: static;
     font-size: 115%;
     padding-bottom: 15vh;
-    margin-top: -8vh;
+    margin-top: -17vh;
     padding-left: 1vw;
-
 
   }
 
-  .regionSelect {
+  .languageSelect {
     margin-top: -17vh;
     margin-left: 9vw;
     position: absolute;
   }
 
-  #regionOptions {
+  #languageOptions {
     border-radius: 15%;
     margin-left: 4.3vw;
     height: 5vh;

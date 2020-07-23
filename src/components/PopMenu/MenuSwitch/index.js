@@ -3,19 +3,38 @@ import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import {IconButton} from '@material-ui/core'
 import {useDispatch} from 'react-redux'
-import {prev_page, next_page} from '../../../redux/actions'
+import PopMenu from '../../PopMenu'
+import PropTypes from 'prop-types'
+
+
+MenuSwitch.defaultProps = {
+    isMainMenu: 'false'
+}
 
 export default function MenuSwitch(props){
     const dispatch = useDispatch()
-    return (
-        <div>
+    const isMainMenu = props.submenu
+    if (isMainMenu){
+        return (<div>
             <IconButton color = 'inherit' onClick = {()=>(dispatch(props.left()))}>
-                <ArrowBackIosIcon />
+                    <ArrowBackIosIcon />
             </IconButton>
-            {props.title}
+                <PopMenu title = {props.title} />
             <IconButton color = 'inherit' onClick = {()=>(dispatch(props.right()))}>
-                <ArrowForwardIosIcon />
+                    <ArrowForwardIosIcon />
             </IconButton>
-        </div>
-    )
+        </div>)
+    }else{
+        return (
+            <div>
+                <IconButton color = 'inherit' onClick = {()=>(dispatch(props.left()))}>
+                    <ArrowBackIosIcon />
+                </IconButton>
+                {props.title}
+                <IconButton color = 'inherit' onClick = {()=>(dispatch(props.right()))}>
+                    <ArrowForwardIosIcon />
+                </IconButton>
+            </div>
+        )
+    }
 }

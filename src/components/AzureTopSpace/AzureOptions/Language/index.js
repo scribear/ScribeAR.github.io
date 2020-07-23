@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import onClickOutside from 'react-onclickoutside';
+import store from '../../../../store/';
+import './index.css'
 
 export default function LanguageOptions(props) {
 
     return (
-        <div>
+        <div className = "languageSelect">
             <select id="languageOptions">
                         <option value="ar-EG">Arabic - EG</option>
                         <option value="ca-ES">Catalan - ES</option>

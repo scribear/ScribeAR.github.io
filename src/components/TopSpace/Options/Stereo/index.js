@@ -1,65 +1,81 @@
 import React from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import './index.css'
-import {forward_stereoVisual, backward_stereoVisual} from '../../../../redux/actions'
-import {Button, IconButton} from "@material-ui/core"
-import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
-import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
+import {useSelector, useDispatch} from 'react-redux'
 
+import {
+    stereo_circular,
+    stereo_rectangular,
+    stereo_spectrum,
 
-// This code only works if the initial state is Off. It's surprisingly way harder
-// to get this to work if you want the inital state of the checkbox to be checked.
+} from '../../../../redux/actions'
+import {FormControlLabel, IconButton} from "@material-ui/core"
+import RadioButtonUncheckedOutlinedIcon from '@material-ui/icons/RadioButtonUncheckedOutlined';
+import BarChartSharpIcon from '@material-ui/icons/BarChartSharp';
+import Crop169Icon from '@material-ui/icons/Crop169';
+
 
 export default function Stereovisual(props) {
 
-    const mic = (state) => state.steromic
-    const setting = useSelector(mic) // Get current value of recording.
     // useDispatch returns the state modifying function, invoked below.
     const dispatch = useDispatch()
-    let result = ""
-    let text = ""
+    const setting = useSelector((state) => state.mic)
 
-    // flip recording when space bar is pressed
+    let color = {
+        circularColor: 'inherit',
+        barColor: 'inherit',
+        spectrumColor: 'inheirt',
+    }
 
-     //const setting = useSelector(props.setting)
-     // useDispatch returns the state modifying function, invoked below.
+    if (setting == 0 || setting < 4) {
+        color.circularColor = 'inherit';
+        color.barColor = 'inherit';
+        color.spectrumColor = 'inherit';
+    } else if (setting == 4) {
+        color.circularColor = 'primary';
+        color.barColor = 'inherit';
+        color.spectrumColor = 'inherit';
+    } else if (setting == 5) {
+        color.circularColor = 'inherit';
+        color.barColor = 'primary';
+        color.spectrumColor = 'inherit';
+    } else if (setting == 6) {
+        color.circularColor = 'inherit';
+        color.barColor = 'inherit';
+        color.spectrumColor = 'primary';
+    }
 
-     if (setting == 0){
-         result = "No Visualization"
-         text = "None"
-     }else if (setting == 1){
-         result = "Circular Visualization"
-         text = "Circular"
-     }else if (setting == 2){
-         result = "Rectangular Visualization"
-         text = "Rectangular"
-     }else{
-         result = "Spectrum Visualization"
-         text = "Spectrum"
-     }
+    if(setting != 0 && setting > 3){
+        localStorage.setItem('mic',setting);
+    }
 
-     return (
-         <div className="stereo_result">
-             STEREO
-             <div className="stereo_visual">
-                 <IconButton color = 'inherit' onClick = {()=>(dispatch(backward_stereoVisual()))}>
-                     <ArrowBackIosIcon />
-                 </IconButton>
-                 {text}
-                 <IconButton color = 'inherit' onClick = {()=>(dispatch(forward_stereoVisual()))}>
-                     <ArrowForwardIosIcon />
-                 </IconButton>
-             </div>
+    return (
+        <div>
+            <FormControlLabel
+                value="Circular"
+                control={<IconButton color={color.circularColor} onClick={() => (dispatch(stereo_circular()))}>
+                    <RadioButtonUncheckedOutlinedIcon fontSize="large"/>
+                </IconButton>}
+                label="Circular"
+                labelPlacement="bottom"
+            />
+            <FormControlLabel
+                value="Bar"
+                control={<IconButton color={color.barColor} onClick={() => (dispatch(stereo_rectangular()))}>
+                    <Crop169Icon fontSize="large"/>
+                </IconButton>}
+                label="Bar"
+                labelPlacement="bottom"
+            />
+            <FormControlLabel
+                value="Spectrum"
+                control={<IconButton color={color.spectrumColor} onClick={() => (dispatch(stereo_spectrum()))}>
+                    <BarChartSharpIcon fontSize="large"/>
+                </IconButton>}
+                label="Spectrum"
+                labelPlacement="bottom"
+            />
+
+
         </div>
-          // <div>
-          //     {result}
-          //      <div className="stereo_visual">
-          //           <Button className="stereo_plus" color = "inherit"  variant = "outlined" size = "large"
-          //                onClick={() => dispatch(flip_stereoVisual())} >{text}
-          //           </Button>
-          //
-          //
-          //      </div>
-          // </div>
-     )
+
+    )
 }

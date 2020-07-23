@@ -2,6 +2,7 @@ import React from 'react'
 import { useSelector , useDispatch} from 'react-redux'
 import './index.css'
 import Recognition from './Recognition'
+import { Button } from "@material-ui/core"
 import Extender from './Extender'
 import {
      increment_numLines,
@@ -13,12 +14,21 @@ export default function Captions(props) {
      const lineWidth = useSelector((state) => state.lineWidth)
      const numLines = useSelector((state) => state.numLines)
      const recording = useSelector((state) => state.recording)
+     const correctAzureKey = useSelector((state) => state.correctAzureKey)
+     var isCorrectKey = correctAzureKey ? true : false
      // Sloppy styling. Please change.
+
      var paddingString = (11 - lineWidth) * 3 + 'vw'
      var h = numLines + 'vh'
-     var resH = (51.5 - numLines) + 'vh'
+     var resH = (49 - numLines) + 'vh'
      var sz = props.textSize
-
+     if (props.azureCaptionSuccess == false) {
+       return (
+         <div>
+            <Recognition isRecording={false} />
+         </div>
+        )
+     } else {
      return ( <div>
                     <div style = {{
                          height : resH,
@@ -28,6 +38,7 @@ export default function Captions(props) {
                                         increment={increment_numLines}
                                         decrement={decrement_numLines}  />
                     </div>
+                     <Button className="scroll" position="fixed" variant="outlined"  color = 'inherit' onClick= {new Recognition().scrollBottom} color="secondary">Scroll to Bottom</Button>
                     <div className="captionsSpace" id="captionsSpace"
                     style={{
                     fontSize: sz,
@@ -37,10 +48,11 @@ export default function Captions(props) {
                     paddingLeft: paddingString,
                     paddingRight: paddingString }}>
                          Welcome to ScribeAR<br />
-                         There are some tips for you to start to use ScribeAR,<br /> 
+                         There are some tips for you to start to use ScribeAR,<br />
                          Click button on the upperleft to open the menu.<br />
                          Detailed instructions can be found in option menu.<br />
                          <Recognition isRecording={recording} />
                     </div>
               </div> )
+            }
 }

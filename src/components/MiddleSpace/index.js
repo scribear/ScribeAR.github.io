@@ -34,7 +34,7 @@ export default function MiddleSpace(props) {
 
     if (mic < 4){//mono
         if (props.color == 'black'){
-            return ( <div className="MiddleSpace">
+            return ( <div className="MiddleSpace" style = {{height:h}}>
             <Wrapper>
                   <Droppable className = "d1" id = "dr1" style = {{
                     width:'25vw',
@@ -72,7 +72,7 @@ export default function MiddleSpace(props) {
               </Wrapper>
           </div> )
   }else{
-    return ( <div className="MiddleSpace">
+    return ( <div className="MiddleSpace" style = {{height:h}}>
             <Wrapper>
                   <Droppable className = "d2" id = "dr1" style = {{
                     width:'25vw',
@@ -110,7 +110,7 @@ export default function MiddleSpace(props) {
   }
     }else{
         if (props.color == 'black'){
-      return ( <div className="MiddleSpace">
+      return ( <div className="MiddleSpace" style = {{height:h}}>
             <Wrapper>
                   <Droppable className = "d1" id = "dr1" style = {{
                     width:'25vw',
@@ -148,7 +148,7 @@ export default function MiddleSpace(props) {
               </Wrapper>
           </div> )
   }else{
-    return ( <div className="MiddleSpace">
+    return ( <div className="MiddleSpace" style = {{height:h}}>
             <Wrapper>
                   <Droppable className = "d2" id = "dr1" style = {{
                     width:'25vw',

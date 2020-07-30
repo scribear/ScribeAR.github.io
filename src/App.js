@@ -10,7 +10,8 @@ import { flip_recording, flip_switch_to_azure,
          flip_switchMenus, flip_entered_key,
          flip_correct_azureKey,
          flip_check_azureKey,
-         flip_entered_region } from './redux/actions'
+         flip_entered_region,
+          } from './redux/actions'
 import store from './store'
 import './App.css'
 
@@ -27,13 +28,25 @@ export default function App() {
      const invertColors = useSelector((state) => state.invertColors)
      const switchMenus = useSelector((state)=> state.switchMenus)
      const switchToAzure = useSelector((state) => state.switchToAzure)
+     const bot_mode = useSelector((state)=>state.botsize)
      // Convert variables to CSS-friendly strings.
      var sizeString = textSize + 'vh'
      // Size of bottom space (text area) relative to text size and number of lines.
-     var botHeight = 60+ 'vh'
+     var botHeight = 50 + 'vh'
      var topHeight = 14 + 'vh'
      var placeHeight = 2 + 'vh'
      var midHeight = 34 + 'vh'
+     if (bot_mode === 0){
+       botHeight = 84 + 'vh'
+       midHeight = 0 + 'vh'
+     }else if (bot_mode === 1){
+       botHeight = 50 + 'vh'
+       midHeight = 34 + 'vh'
+     }else if (bot_mode === 2){
+       botHeight = 16 + 'vh'
+       midHeight = 68 + 'vh'
+     }
+     //console.log(bot_mode)
      //----------------------
      // var topHeight = 9 + 'vh'
      // var placeHeight = 5 + 'vh'
@@ -102,7 +115,7 @@ export default function App() {
                   overflow: 'hidden',
                  }}>
                   <TopSpace height={topHeight} />
-                  <PlaceHolder color = {bgColor} textSize = {sizeString}/>
+                  <PlaceHolder height = {placeHeight} color = {bgColor} textSize = {sizeString}/>
                   <MiddleSpace height={midHeight} color = {bgColor}/>
                   <AzureCaptions height={botHeight} textSize={sizeString} />
                   <Captions height={0} textSize={sizeString} />
@@ -128,8 +141,8 @@ export default function App() {
 
                 }}>
                  <TopSpace color = {bgColor} height = {topHeight}/>
-                 <PlaceHolder color = {bgColor} textSize = {sizeString}/>
-                 <MiddleSpace color = {bgColor}/>
+                 <PlaceHolder  height = {placeHeight} color = {bgColor} textSize = {sizeString}/>
+                 <MiddleSpace height = {midHeight} color = {bgColor}/>
                  <Captions height={botHeight} textSize={sizeString} />
 
 
@@ -145,8 +158,8 @@ export default function App() {
 
                 }}>
                  <TopSpace color = {bgColor} height = {topHeight}/>
-                 <PlaceHolder color = {bgColor} textSize = {sizeString}/>
-                 <MiddleSpace color = {bgColor}/>
+                 <PlaceHolder height = {placeHeight} color = {bgColor} textSize = {sizeString}/>
+                 <MiddleSpace height = {midHeight} color = {bgColor}/>
                  <Captions height={botHeight} textSize={sizeString} />
                  {/* <DNDTest /> */}
             </div>

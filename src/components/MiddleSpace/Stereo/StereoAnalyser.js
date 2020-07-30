@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import StereoVisualiser from './StereoVisualiser'
+import {connect} from "react-redux";
 
 
 class StereoAnalyser extends Component {
@@ -63,11 +64,19 @@ class StereoAnalyser extends Component {
             <div>
 
                 <StereoVisualiser audioDataL={this.state.audioDataL} audioDataR={this.state.audioDataR}
-                                  iscolor={this.props.iscolor} mic={this.props.mic}/>
+                                  iscolor={this.props.iscolor} mic={this.props.mic} sens={this.props.sens}/>
             </div>);
     }
 
 
 }
+const mapStateToProps = state => ({
+  sens: state.sens
+});
 
-export default StereoAnalyser;
+
+export default connect(
+  mapStateToProps,
+
+)(StereoAnalyser);
+// export default StereoAnalyser;

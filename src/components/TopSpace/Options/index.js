@@ -1,25 +1,29 @@
 import React from 'react'
-import OnOff from './OnOff'
 import Record from './Record'
 import store from '../../../store'
 import Save from './Save'
 import {useSelector, useDispatch} from "react-redux"
-import Instru from "./Instru"
 import Divider from '@material-ui/core/Divider';
-import AzureTopSpace from '../../AzureTopSpace'
 import './index.css'
-import SwipeableTemporaryDrawer from "../../Drawer"
-import MenuHider from '../../PlaceHolder/MenuHider'
 import PlusMinus from './PlusMinus'
 import {Button, IconButton} from '@material-ui/core';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import SpringModal from './SpringModal'
-import PopMenu from '../../PopMenu'
-import MenuSwitch from '../../PopMenu/MenuSwitch'
-import AzureOption from '../../AzureTopSpace/AzureOptions'
-import AzureSwitch from './AzureSwitch'
 import ColorSpring from './ColorSpring'
+import BoxSpring from './BoxSpring'
 import SwitchAPI from '../../SwitchAPI'
+import MoreHorizIcon from '@material-ui/icons/MoreHoriz';//----------------------------------------------------------
+// import OnOff from './OnOff'
+// import PopMenu from '../../PopMenu'
+// import MenuSwitch from '../../PopMenu/MenuSwitch'
+// import AzureOption from '../../AzureTopSpace/AzureOptions'
+// import AzureSwitch from './AzureSwitch'
+// import SwipeableTemporaryDrawer from "../../Drawer"
+// import MenuHider from '../../PlaceHolder/MenuHider'
+// import AzureTopSpace from '../../AzureTopSpace'
+// import Instru from "./Instru"
+
+
 
 import {
     flip_switchMenus,
@@ -29,6 +33,7 @@ import {
     prev_page,
     next_page,
     submenu3,
+    submenu2,
     audiovis_flip,
 } from '../../../redux/actions'
 
@@ -55,14 +60,15 @@ export default function Options() {
         return (
             <div className="Options" id="options-space">
                 <h2 style={{fontFamily: "Arial"}}>OPTIONS</h2>
-                <h3>Source</h3>
+                <h3>
+                    Source
+                    <IconButton size = 'small' onClick={() => dispatch(submenu2())}>
+                        <MoreHorizIcon />
+                    </IconButton>
+                </h3>
                 <Divider/>
                 <div className='item-wrapper'>
                     <SwitchAPI/>
-                </div>
-
-                <div className='item-wrapper'>
-                    <Save/>
                 </div>
                 <div className='item-wrapper'>
                     <Record/>
@@ -77,7 +83,15 @@ export default function Options() {
                 <div className='item-wrapper'>
                     <ColorSpring/>
                 </div>
-                <h3>Audio Visulization</h3>
+                <div className='item-wrapper'>
+                    <BoxSpring/>
+                </div>
+                <h3>
+                    Audio Visulization
+                     <IconButton size = 'small' onClick={() => dispatch(submenu3())}>
+                        <MoreHorizIcon />
+                    </IconButton>
+                </h3>                
                 <Divider/>
 
                 <div className="item-wrapper-record">
@@ -85,12 +99,6 @@ export default function Options() {
                     <IconButton className="Play" color="inherit" size="large" onClick={() => dispatch(audiovis_flip())}>
                         {audioVis ? <PauseCircleFilledIcon className="pause"/> :
                             <PlayCircleFilledIcon className="start"/>}
-                    </IconButton>
-                </div>
-                <div>
-                    Go to Audio Setting
-                    <IconButton onClick={() => dispatch(submenu3())}>
-                        <ArrowForwardIosIcon/>
                     </IconButton>
                 </div>
                 <h3>Instruction</h3>
@@ -105,16 +113,17 @@ export default function Options() {
         return (
             <div className="Options" id="options-space">
                 <h2 style={{fontFamily: "Arial"}}>OPTIONS</h2>
-                <h3>Source</h3>
+                <h3>
+                    Source
+                    <IconButton size = 'small' onClick={() => dispatch(submenu2())}>
+                        <MoreHorizIcon />
+                    </IconButton>
+                </h3>
+
                 <Divider/>
             
                 <div className='item-wrapper'>
                     <SwitchAPI/>
-                </div>
-           
-
-                <div className='item-wrapper'>
-                    <Save/>
                 </div>
                 
                 <div className='item-wrapper'>
@@ -130,23 +139,21 @@ export default function Options() {
                 <div className='item-wrapper'>
                     <ColorSpring/>
                 </div>
-                <h3>Audio Visulization</h3>
+                <div className='item-wrapper'>
+                    <BoxSpring/>
+                </div>
+                <h3>
+                    Audio Visulization
+                     <IconButton size = 'small' onClick={() => dispatch(submenu3())}>
+                        <MoreHorizIcon />
+                    </IconButton>
+                </h3>
                 <Divider/>
                 <div className="item-wrapper-record">
                     {audioVis ? "On" : "Off"}
                     <IconButton className="Play" color="inherit" size="large" onClick={() => dispatch(audiovis_flip())}>
                         {audioVis ? <PauseCircleFilledIcon className="pause"/> :
                             <PlayCircleFilledIcon className="start"/>}
-                        {/*<PauseCircleFilledIcon className = {stereoSwitch ? "pause" : "start" }/>*/}
-                    </IconButton>
-                </div>
-                <div style={{
-                    marginLeft: '1vw',
-                    marginBottom: '1vh',
-                }}>
-                    Go to Audio Setting
-                    <IconButton onClick={() => dispatch(submenu3())}>
-                        <ArrowForwardIosIcon/>
                     </IconButton>
                 </div>
 

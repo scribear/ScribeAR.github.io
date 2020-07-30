@@ -9,7 +9,7 @@ export default function PlusMinus(props) {
      const setting = useSelector(props.setting) // Get current value of the setting.
      // useDispatch returns the state modifying function, invoked below.
      const dispatch = useDispatch()
-     const textC = props.item + ':' + setting
+     const textC = props.item + ':' + parseFloat(setting).toFixed(1)
      return (
           <div className= "textsize-wrapper">
                {textC}

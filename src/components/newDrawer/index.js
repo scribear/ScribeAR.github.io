@@ -37,7 +37,7 @@ import './index.css'
 import {prev_page, next_page} from '../../redux/actions'
 import AudioOption from '../AudioOption';
 
-const drawerWidth = '21vw';//drawer width
+const drawerWidth = '23vw';//drawer width
 
 const useStyles = makeStyles((theme) => ({
   root: {

@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import AudioVisualiser from './AudioVisualiser'
+import {connect} from "react-redux";
 
 
-/*global Unit8Array*/
 
 
 class AudioAnalyser extends Component {
@@ -46,10 +46,18 @@ class AudioAnalyser extends Component {
     }
 
     render() {
-        return <AudioVisualiser audioData={this.state.audioData} iscolor={this.props.iscolor} mic={this.props.mic}/>;
+        return <AudioVisualiser audioData={this.state.audioData} iscolor={this.props.iscolor} mic={this.props.mic} sens={this.props.sens}/>;
     }
 
 
 }
+const mapStateToProps = state => ({
+  sens: state.sens
+});
 
-export default AudioAnalyser;
+
+export default connect(
+  mapStateToProps,
+
+)(AudioAnalyser);
+// export default AudioAnalyser;

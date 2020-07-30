@@ -23,5 +23,5 @@
     background-color: grey;
 }
 .MiddleSpace{
-    height:34vh;
+    overflow: hidden;
 }

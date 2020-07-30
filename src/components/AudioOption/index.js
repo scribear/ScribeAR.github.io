@@ -7,6 +7,7 @@ import {Button, IconButton} from "@material-ui/core"
 import { useSelector, useDispatch } from 'react-redux'
 import {audiovis_off} from '../../redux/actions'
 import NotInterestedIcon from '@material-ui/icons/NotInterested';
+import AdvanceMicSetting from './AdvanceMicSetting/index.js'
 
 import '../TopSpace/Options/index.css'
 
@@ -33,6 +34,11 @@ export default function AudioOption (props){
             <Divider/>
             <div className="item-wrapper">
             <Stereovisual/>
+            </div>
+            <h3>Setting</h3>
+            <Divider/>
+            <div className="item-wrapper">
+               <AdvanceMicSetting/>
             </div>
             {/*<h3>Setting</h3>*/}
             {/*<Divider/>*/}

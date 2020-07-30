@@ -6,7 +6,7 @@ import { Button } from "@material-ui/core"
 import mytheme from '../newDrawer/theme'
 import Extender from './Extender'
 import {ThemeProvider} from "@material-ui/core/styles";
-import ScrollButton from 'react-scroll-button'
+// import ScrollButton from 'react-scroll-button'
 import {
      increment_numLines,
      decrement_numLines,
@@ -22,8 +22,7 @@ export default function Captions(props) {
      // Sloppy styling. Please change.
 
      var paddingString = (11 - lineWidth) * 3 + 'vw'
-     var h = numLines + 'vh'
-     var resH = (49 - numLines) + 'vh'
+     var h = props.height
      var sz = props.textSize
      if (props.azureCaptionSuccess == false) {
        return (
@@ -31,16 +30,16 @@ export default function Captions(props) {
             <Recognition isRecording={false} />
          </div>
         )
-     } else {
+     } else 
      return ( <div>
-                    <div style = {{
-                         height : resH,
+                    {/* <div style = {{
+                         height : h,
                          margin : '0.5vh',
                     }}>
                     <Extender
                                         increment={increment_numLines}
                                         decrement={decrement_numLines}  />
-                    </div>
+                    </div> */}
 
                      <Button className="scroll" position="fixed" variant="outlined"  color = 'inherit' onClick= {new Recognition().scrollBottom} color="secondary">Scroll to Bottom</Button>
 
@@ -60,4 +59,5 @@ export default function Captions(props) {
                     </div>
               </div> )
             }
-}
+          
+

@@ -150,3 +150,18 @@ export const stereo_spectrum = () => {
 export const audiovis_off = () => {
      return {type: 'AUDIOVIS_OFF'}
 }
+export const bot_1 = () => {
+     return { type: 'BOT_1' }
+}
+export const bot_2 = () =>{
+     return { type: 'BOT_2'} 
+}
+export const bot_3 = () => {
+     return { type: 'BOT_3'}
+}
+export const increase_sensitivity = () => {
+     return {type: 'INCREASE_SENSITIVITY'}
+}
+export const decrease_sensitivity = () => {
+     return {type: 'DECREASE_SENSITIVITY'}
+}

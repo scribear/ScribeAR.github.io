@@ -33,9 +33,9 @@
 }
 
 .scroll {
-  position: relative;
-  left: 80vw;
-  top: 25vh;
+  position: absolute;
+  left: 85vw;
+  top: 10vh;
 }
 
 .captionsSpace::-webkit-scrollbar {

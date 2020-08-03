@@ -50,8 +50,11 @@ export default function Options() {
     const switchMenus = (state) => state.switchMenus
     const ins = (state) => state.ins
     const if_ins = useSelector((state) => state.ins)
+    const if_hide = useSelector((state) => state.botsize)
     const dispatch = useDispatch()
+
     var choice = if_ins ? 'appear' : 'disappear';
+    var play_color = (if_hide === 0) ? 'disabled' : 'inherit';
 
     const stereoSwitch = (state) => state.mic
     const audioVis = useSelector(stereoSwitch)
@@ -150,10 +153,10 @@ export default function Options() {
                 </h3>
                 <Divider/>
                 <div className="item-wrapper-record">
-                    {audioVis ? "On" : "Off"}
-                    <IconButton className="Play" color="inherit" size="large" onClick={() => dispatch(audiovis_flip())}>
-                        {audioVis ? <PauseCircleFilledIcon className="pause"/> :
-                            <PlayCircleFilledIcon className="start"/>}
+                    {audioVis && (if_hide !== 0) ? "On" : "Off"}
+                    <IconButton className="Play" color="inherit" size="large" disabled = {(if_hide === 0)} onClick={() => dispatch(audiovis_flip())}>
+                        {audioVis && (if_hide !== 0) ? <PauseCircleFilledIcon className="pause" color = {play_color} /> :
+                            <PlayCircleFilledIcon className="start" color = {play_color} />}
                     </IconButton>
                 </div>
 

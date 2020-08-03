@@ -4,12 +4,15 @@ var savedTextSize = localStorage.getItem('text');
 var savedColor = localStorage.getItem('color');
 var savedBox = localStorage.getItem('box');
 var savedMeh = localStorage.getItem('meh');
+var savedbsz = localStorage.getItem('botsize')
 
 
 var choiceColor = 0//0 = black; 1 = white
 var choiceMeh = 0
 var choiceBox = 40
 var choiceTextSize = 6;
+var choicebotsize = 1;
+
 if (savedTextSize != null) {
     choiceTextSize = savedTextSize
 }
@@ -22,11 +25,10 @@ if (savedBox != null) {
 if (savedColor != null) {
     choiceColor = savedColor
 }
-// if (savedMic != null){
-//      console.log("update choiceMic");
-//      choiceMic = savedMic;
-// }
-
+if (savedbsz != null){
+    choicebotsize = savedbsz
+}
+console.log(choicebotsize)
 const submenuReducer = (state = 1, action) => {
     switch (action.type) {
         case 'SUBMENU_1':
@@ -231,16 +233,19 @@ const audioVisualiser = (state = 0, action) => {
             return state;
     }
 }
-const buttomSizeReducer = (state = 1, action) => {
+const buttomSizeReducer = (state = choicebotsize, action) => {
     switch (action.type) {
         case 'BOT_1':
             state = 0;
+            localStorage.setItem('botsize',state)
             return state;
         case 'BOT_2':
             state = 1;
+            localStorage.setItem('botsize',state)
             return state;
         case 'BOT_3':
             state = 2;
+            localStorage.setItem('botsize',state)
             return state;
         default:
             return state;

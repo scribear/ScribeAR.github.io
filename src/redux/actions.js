@@ -98,11 +98,22 @@ export const flip_menuhide = () =>{
      return { type: 'FLIP_MENUHIDE'};
 }
 
+export const pick_black = () => {
+     return { type: 'PICK_BLACK'};
+}
+
+export const pick_white = () => {
+     return { type: 'PICK_WHITE'}
+}
+
 export const submenu1 = () =>{
      return { type: 'SUBMENU_1'}
 }
 export const submenu2 = () =>{
      return { type: 'SUBMENU_2'}
+}
+export const submenu3 = () =>{
+     return { type: 'SUBMENU_3'}
 }
 export const next_page = () => {
      return { type: 'NEXT_PAGE'}
@@ -124,4 +135,43 @@ export const forward_micVisual = () => {
 }
 export const backward_micVisual = () => {
      return {type: 'BACKWARD_MICVISUAL'};
+}
+export const audiovis_flip = () => {
+     return {type: 'AUDIOVIS_FLIP'}
+}
+export const mono_line = () => {
+     return {type: 'MONO_LINE'}
+}
+export const mono_spectrum = () => {
+     return {type: 'MONO_SPECTRUM'}
+}
+export const mono_circular = () => {
+     return {type: 'MONO_CIRCULAR'}
+}
+export const stereo_circular = () => {
+     return {type: 'STEREO_CIRCULAR'}
+}
+export const stereo_rectangular = () => {
+     return {type: 'STEREO_RECTANGULAR'}
+}
+export const stereo_spectrum = () => {
+     return {type: 'STEREO_SPECTRUM'}
+}
+export const audiovis_off = () => {
+     return {type: 'AUDIOVIS_OFF'}
+}
+export const bot_1 = () => {
+     return { type: 'BOT_1' }
+}
+export const bot_2 = () =>{
+     return { type: 'BOT_2'}
+}
+export const bot_3 = () => {
+     return { type: 'BOT_3'}
+}
+export const increase_sensitivity = () => {
+     return {type: 'INCREASE_SENSITIVITY'}
+}
+export const decrease_sensitivity = () => {
+     return {type: 'DECREASE_SENSITIVITY'}
 }

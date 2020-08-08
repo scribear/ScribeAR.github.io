@@ -35,7 +35,6 @@ export default function AzureCaptions(props) {
        store.desiredAPI = 'azure';
        return ( <div>
                       <div style = {{
-                          position : 'fixed',
                            height : resH,
                            margin : '0.5vh',
                       }}>

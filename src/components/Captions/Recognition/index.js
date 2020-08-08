@@ -23,6 +23,8 @@ recognition.interimResults = true
 
 export class Recognition extends React.PureComponent {
      constructor() {
+       console.log("Constructor")
+
           super()
           this.state = {
                line: '',
@@ -35,6 +37,8 @@ export class Recognition extends React.PureComponent {
      }
 
      componentDidMount() {
+       console.log("Component did MOUNT")
+
         if (store.desiredAPI == 'azure') {
           this.stop()
         }  else {
@@ -45,6 +49,8 @@ export class Recognition extends React.PureComponent {
      // Global state 'recording' is passed as a prop. componentDidUpdate is invoked
      // when props change, therefore also when 'recording' changes.
      componentDidUpdate(prevProps, prevState) {
+       console.log("Component Did Update")
+
           if (prevProps.isRecording === this.props.isRecording)
                return
           if (this.props.isRecording)
@@ -55,6 +61,7 @@ export class Recognition extends React.PureComponent {
      }
 
      start() {
+          console.log("START")
           recognition.start()
           // Map the complex recognition result object to a string. You can explore
           // the full object with console.log(e).
@@ -95,12 +102,16 @@ export class Recognition extends React.PureComponent {
      }
 
      stop() {
+       console.log("STOP")
+
           recognition.onresult = () => {} // do nothing with results
           recognition.onend = () => {} // don't restart when ending
           recognition.stop()
      }
 
      updateCurrentLine(str) {
+       console.log("Update Current Line")
+
           const capts = document.getElementById('captionsSpace')
           var isScrolledToBottom = capts.scrollHeight - capts.clientHeight <= capts.scrollTop + 1
           this.setState({ line: str })
@@ -109,6 +120,8 @@ export class Recognition extends React.PureComponent {
      }
 
      appendLine(str) {
+       console.log("Append Line")
+
           const capts = document.getElementById('captionsSpace')
           const out = document.getElementById('out')
           var isScrolledToBottom = capts.scrollHeight - capts.clientHeight <= capts.scrollTop + 1

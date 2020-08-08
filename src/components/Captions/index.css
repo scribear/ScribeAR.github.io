@@ -25,17 +25,26 @@
       -ms-overflow-style: none;
    }
 }
+
+
+.scroll {
+  position: relative;
+  left: 50vw;
+  top: 50vh;
+}
+
+.scroll-hidden {
+  visibility: hidden;
+
+}
 .tutorial{
   margin:0;
-}
-.safeArea{
-
 }
 
 .scroll {
   position: relative;
-  left: 80vw;
-  top: 25vh;
+  left: 50vw;
+  top: 50vh;
 }
 
 .captionsSpace::-webkit-scrollbar {

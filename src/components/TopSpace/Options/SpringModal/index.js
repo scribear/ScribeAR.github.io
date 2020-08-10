@@ -48,18 +48,18 @@ export default function TransitionsModal() {
         BackdropProps={{
           timeout: 500,
         }}
-        
+
       >
         <Fade in={open}>
           <div className={classes.paper}>
             <h2 id="transition-modal-title">Tutorial</h2>
             <p id="transition-modal-description">
-                    -The text size button can be used to change size of 
+                    -The text size button can be used to change size of
                     text shown in caption space.<br />
                     -There are 3 different graph can be toggled to help
                     reflex the surrounding voices by clicking forth button<br />
                     -For circular graph, try to drag it around.<br />
-                    -To stop captioning just click switch button for Recording. Also 
+                    -To stop captioning just click switch button for Recording. Also
                     click again to resume captioning.<br />
                     -To memorize textsize option, click save after choosing a proper size of the text.
             </p>

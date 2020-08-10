@@ -1,13 +1,6 @@
-.outter-wrapper{
-    position: absolute;
-    display: inline-block;
-    left: 1vw;
-}
-
 .save-wrapper{
     position: absolute;
-    display: inline-block;
-    /*margin-top:4vh;*/
-    /*margin-left: 1px;*/
-    left:12vw;
+    margin-top:4vh;
+    margin-left: 1px;
+    left:14.5vw;
 }

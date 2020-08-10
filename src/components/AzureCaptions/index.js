@@ -4,7 +4,7 @@ import './index.css'
 import AzureRecognition from './AzureRecognition'
 import Extender from './Extender'
 import { Button } from "@material-ui/core"
-// import ScrollButton from 'react-scroll-button'
+import ScrollButton from 'react-scroll-button'
 import store from '../../store'
 import keys from '../AzureTopSpace/AzureOptions/Key'
 import { increment_numLines,
@@ -35,7 +35,6 @@ export default function AzureCaptions(props) {
        store.desiredAPI = 'azure';
        return ( <div>
                       <div style = {{
-                          position : 'fixed',
                            height : resH,
                            margin : '0.5vh',
                       }}>

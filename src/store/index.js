@@ -22,6 +22,9 @@ const targetLanguage= {
     inputValue: 'English - US'
 }
 
+const desiredAPI= {
+    inputValue: 'webspeech'
+}
 var currentLanguageReducer = (state = initialState, action) =>{
     switch(action.type) {
         case 'INPUT_CURRENT_LANGUAGE':
@@ -53,6 +56,15 @@ var azureKeyReducer = (state = initialState, action) =>{
             return state;
     }
 }
+var desiredAPIReducer = (state = initialState, action) =>{
+
+    switch(action.type) {
+        case 'INPUT_DESIRED_API':
+            return Object.assign({}, state, {inputValue: action.text });
+        default:
+            return state;
+    }
+}
 
 var isSuccessReducer = (state = initialStateSuccess, action) =>{
 
@@ -78,6 +90,7 @@ var azureRegionOptionsReducer = (state = initialStateRegion, action) => {
 
 
 const allReducers = combineReducers({
+    desiredAPI : desiredAPIReducer,
     azureOptions: azureRegionOptionsReducer,
     azureKey: azureKeyReducer,
     isSuccess: isSuccessReducer,

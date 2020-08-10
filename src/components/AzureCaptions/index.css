@@ -3,7 +3,7 @@
       overflow: auto;
       height: 36vh;
       position: relative;
-      width: 20%;
+      width: 15%;
       backface-visibility: hidden;
       will-change: overflow;
       -webkit-overflow-scrolling: touch;
@@ -18,7 +18,7 @@
       overflow: auto;
       height: 36vh;
       position: relative;
-      width: 60vw;
+      width: 45vw;
       backface-visibility: hidden;
       will-change: overflow;
       -webkit-overflow-scrolling: touch;

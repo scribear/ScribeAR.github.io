@@ -1,43 +1,52 @@
-import React from 'react';
+import React, { useState } from 'react';
 import clsx from 'clsx';
-import store from '../../store'
-import './index.css';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-
 import List from '@material-ui/core/List';
-import SaveAltIcon from '@material-ui/icons/SaveAlt';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
 import Options from "../TopSpace/Options";
 import {ThemeProvider} from "@material-ui/core/styles";
-import { Button } from "@material-ui/core"
-import Recognition from "../Captions/Recognition"
-import AzureRecognition from "../AzureCaptions/AzureRecognition"
 import mytheme from './theme'
 import blue from "@material-ui/core/colors/blue"
 import orange from "@material-ui/core/colors/orange"
+import ButtomNavi from '../ButtomNavi'
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
 import {useSelector,useDispatch} from 'react-redux';
+import ShareIcon from '@material-ui/icons/Share';
+import {EmailShareButton} from 'react-share';
+import {EmailIcon} from "react-share";
+import Fade from '@material-ui/core/Fade';
+import SaveIcon from '@material-ui/icons/SaveSharp';
+import LogIn from "../LogIn/LogIn";
+import MailIcon from '@material-ui/icons/Mail';
+import PopMenu from '../PopMenu'
+import store from '../../store'
+import { Button, Tooltip } from "@material-ui/core"
+import SaveAltIcon from '@material-ui/icons/SaveAlt';
+import Recognition from "../Captions/Recognition"
+import AzureRecognition from "../AzureCaptions/AzureRecognition"
 import AzureOption from '../AzureTopSpace/AzureOptions'
 import MenuSwitch from '../PopMenu/MenuSwitch'
 import MenuHider from '../PlaceHolder/MenuHider'
 import './index.css'
 import {prev_page, next_page} from '../../redux/actions'
 import AudioOption from '../AudioOption';
+import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
+import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 
-const drawerWidth = '23vw';//drawer width
+
+
+const drawerWidth = '21vw';
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -110,11 +119,11 @@ const useStyles = makeStyles((theme) => ({
 export default function PersistentDrawerLeft(props) {
   const submenu = (state) => state.submenu;
   const menuhide = (state) => state.meh;
+  const onWebspeech = (state) => state.onWebspeech;
   const dispatch = useDispatch();
   const setting = useSelector(submenu);
   const shouldShow = useSelector(menuhide);
-
-  var hiddenTextDownload = 'Download Text'
+  const wantsWebspeech = useSelector(onWebspeech);
   var hiddenText = ''
   var pick = "detail_wrap"
   if (shouldShow == 0){
@@ -124,7 +133,9 @@ export default function PersistentDrawerLeft(props) {
     pick = 'detail_wrap'
     hiddenText = 'auto-hide'
   }
-  
+
+  var hiddenTextDownload = 'Download Text'
+
 
   const classes = useStyles();
   const theme = useTheme();
@@ -144,7 +155,17 @@ export default function PersistentDrawerLeft(props) {
   const handleDrawerClose = () => {
     setOpen(false);
   };
-  
+
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleClick = (event) => {
+  setAnchorEl(event.currentTarget);
+};
+
+const handleClose = () => {
+  setAnchorEl(null);
+};
+  if (wantsWebspeech) {
   if (setting == 1){
     return (
         <div className={classes.root}>
@@ -155,9 +176,9 @@ export default function PersistentDrawerLeft(props) {
               position="fixed"
               className={clsx(classes.appBar, {
                 [classes.appBarShift]: open,
-              } 
-              )} 
-              color = {choice}  
+              }
+              )}
+              color = {choice}
             >
               <Toolbar >
                 <IconButton
@@ -169,27 +190,52 @@ export default function PersistentDrawerLeft(props) {
                 >
                   <MenuIcon />
                 </IconButton>
+                <div class="border d-table w-100">
+      <h2 class="d-table-cell tar2">ScribeAR</h2>
+          {/* <Welcome
+          isAuthenticated={isAuthenticated}
+          user = {user}
+          /> */}
+      <div class="d-table-cell tar">
+          <Button aria-controls="simple-menu" aria-haspopup="true" variant="contained" variant="text" color="inherit" onClick={handleClick} startIcon={<ShareIcon/>}>Share</Button>
+          <Menu
+            id="simple-menu"
+            anchorEl={anchorEl}
+            keepMounted
+            open={Boolean(anchorEl)}
+            onClose={handleClose}
+          >
+            <Tooltip TransitionComponent={Fade} title="Share through emails" arrow>
+            <MenuItem onClick={handleClose}>
+              <EmailShareButton subject="Transcript History">
+                <Button startIcon={<MailIcon/>}> EMAIL</Button>
+              </EmailShareButton>
+            </MenuItem>
+            </Tooltip>
+            <Tooltip TransitionComponent={Fade} title="Download the transcript as a .txt file" arrow>
+            <MenuItem onClick={handleClose}>
+              <Button variant="contained" variant="text" onClick={new Recognition().downloadTxtFile} startIcon={<SaveIcon fontSize='large'/>}>Download</Button>
+            </MenuItem>
+            </Tooltip>
+            {/* <Tooltip TransitionComponent={Fade} title="Upload the transcript to OneDrive" arrow> */}
+            {/* <MenuItem onClick={handleClose}>
+              <Upload/>
+            </MenuItem> */}
+            {/* <MenuItem onClick={handleClose}>
+              <Folders/>
+            </MenuItem> */}
+            {/* </Tooltip> */}
+          </Menu>
+          <LogIn/>
 
-                <Typography variant="h6" noWrap>
-                  Welcome to ScribeAR
-                </Typography>
-                <div class="d-table-cell-tar">
-                  <Button variant="contained" style={{ color: 'white' }} variant="text" onClick={new Recognition().downloadTxtFile} startIcon={<SaveAltIcon/>}></Button>
-                  <div className = 'hidden-text-download'>
-                    {hiddenTextDownload}
-                  </div>
-                </div>
-                <div className='lock-wrap'>
-                  <MenuHider />
-                  <div className = 'hidden-text'>
-                    {hiddenText}
-                  </div>
-                </div>
-                
-              </Toolbar>
+          </div>
+          <div className='lock-wrap'>
+            <MenuHider />
 
-
-            </AppBar>
+          </div>
+    </div>
+  </Toolbar>
+</AppBar>
           </div>
           <Drawer
             className={classes.drawer}
@@ -199,11 +245,11 @@ export default function PersistentDrawerLeft(props) {
             open={open}
             classes = {{paper:classes.drawerPaper}}
           >
-            <div className={classes.drawerHeader}>
-              <MenuSwitch title = 'MainMenu' left = {prev_page} right={next_page} submenu = 'true'/>
-              <IconButton onClick={handleDrawerClose} color = "inherit">
-                {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-              </IconButton>
+          <div className={classes.drawerHeader}>
+          <MenuSwitch title = 'Main Menu' left = {prev_page} right={next_page} submenu = 'true'/>
+                <IconButton onClick={handleDrawerClose} color = "inherit">
+                  {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+                </IconButton>
 
             </div>
             <Options />
@@ -232,38 +278,61 @@ export default function PersistentDrawerLeft(props) {
             })}
             color = {choice}
           >
-            <Toolbar >
-              <IconButton
-                color="inherit"
-                aria-label="open drawer"
-                onClick={handleDrawerOpen}
-                edge="start"
-                className={clsx(classes.menuButton, open && classes.hide)}
-              >
-                <MenuIcon />
-              </IconButton>
-              <Typography variant="h6" noWrap>
-                Welcome to ScribeAR
-              </Typography>
-              <div class="d-table-cell-tar">
-                  <Button variant="contained" style={{ color: 'white' }} variant="text" onClick={new Recognition().downloadTxtFile} startIcon={<SaveAltIcon/>}></Button>
-                  <div className = 'hidden-text-download'>
-                    {hiddenTextDownload}
-                  </div>
-                </div>
-                <div className='lock-wrap'>
-                  <MenuHider />
-                  <div className = 'hidden-text'>
-                    {hiddenText}
-                  </div>
-                </div>
-              <div className='lock-wrap'>
-                 <MenuHider />
-                <div className = 'hidden-text'>
-                    {hiddenText}
-                </div>
-              </div>
-            </Toolbar>
+          <Toolbar >
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawerOpen}
+              edge="start"
+              className={clsx(classes.menuButton, open && classes.hide)}
+            >
+              <MenuIcon />
+            </IconButton>
+            <div class="border d-table w-100">
+  <h2 class="d-table-cell tar2">Welcome to ScribeAR</h2>
+      {/* <Welcome
+      isAuthenticated={isAuthenticated}
+      user = {user}
+      /> */}
+  <div class="d-table-cell tar">
+      <Button aria-controls="simple-menu" aria-haspopup="true" variant="contained" variant="text" color="inherit" onClick={handleClick} startIcon={<ShareIcon/>}>Share</Button>
+      <Menu
+        id="simple-menu"
+        anchorEl={anchorEl}
+        keepMounted
+        open={Boolean(anchorEl)}
+        onClose={handleClose}
+      >
+        <Tooltip TransitionComponent={Fade} title="Share through emails" arrow>
+        <MenuItem onClick={handleClose}>
+          <EmailShareButton subject="Transcript History">
+            <Button startIcon={<MailIcon/>}> EMAIL</Button>
+          </EmailShareButton>
+        </MenuItem>
+        </Tooltip>
+        <Tooltip TransitionComponent={Fade} title="Download the transcript as a .txt file" arrow>
+        <MenuItem onClick={handleClose}>
+        <Button variant="contained" variant="text" onClick={new Recognition().downloadTxtFile} startIcon={<SaveIcon fontSize='large'/>}>Download</Button>
+        </MenuItem>
+        </Tooltip>
+        {/* <Tooltip TransitionComponent={Fade} title="Upload the transcript to OneDrive" arrow> */}
+        {/* <MenuItem onClick={handleClose}>
+          <Upload/>
+        </MenuItem> */}
+        {/* <MenuItem onClick={handleClose}>
+          <Folders/>
+        </MenuItem> */}
+        {/* </Tooltip> */}
+      </Menu>
+      <LogIn/>
+
+      </div>
+      <div className='lock-wrap'>
+        <MenuHider />
+
+      </div>
+</div>
+</Toolbar>
           </AppBar>
         </div>
 
@@ -275,12 +344,11 @@ export default function PersistentDrawerLeft(props) {
           open={open}
           classes = {{paper:classes.drawerPaper}}
         >
-          <div className={classes.drawerHeader}>
-          <MenuSwitch title = 'Source' left = {prev_page} right={next_page} submenu = 'true'/>
-            <IconButton onClick={handleDrawerClose} color = "inherit">
-              {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-            </IconButton>
-
+        <div className={classes.drawerHeader}>
+        <MenuSwitch title = 'Source' left = {prev_page} right={next_page} submenu = 'true'/>
+                <IconButton onClick={handleDrawerClose} color = "inherit">
+                  {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+                </IconButton>
           </div>
           <AzureOption />
         </Drawer>
@@ -295,19 +363,19 @@ export default function PersistentDrawerLeft(props) {
         </ThemeProvider>
         </div>
     )
-  }else{
-    return(
-      <div className={classes.root}>
-      <CssBaseline />
-      <ThemeProvider theme = {mytheme}>
-      <div className = {pick}>
-        <AppBar
-          position="fixed"
-          className={clsx(classes.appBar, {
-            [classes.appBarShift]: open,
-          })}
-          color = {choice}
-        >
+  } else{
+    return (
+        <div className={classes.root}>
+        <CssBaseline />
+        <ThemeProvider theme = {mytheme}>
+        <div className = {pick}>
+          <AppBar
+            position="fixed"
+            className={clsx(classes.appBar, {
+              [classes.appBarShift]: open,
+            })}
+            color = {choice}
+          >
           <Toolbar >
             <IconButton
               color="inherit"
@@ -318,60 +386,378 @@ export default function PersistentDrawerLeft(props) {
             >
               <MenuIcon />
             </IconButton>
-            <Typography variant="h6" noWrap>
-              Welcome to ScribeAR
-            </Typography>
-            <div class="d-table-cell-tar">
-                  <Button variant="contained" style={{ color: 'white' }} variant="text" onClick={new Recognition().downloadTxtFile} startIcon={<SaveAltIcon/>}></Button>
-                  <div className = 'hidden-text-download'>
-                    {hiddenTextDownload}
-                  </div>
-                </div>
-                <div className='lock-wrap'>
-                  <MenuHider />
-                  <div className = 'hidden-text'>
-                    {hiddenText}
-                  </div>
-            </div>
-            <div className='lock-wrap'>
-               <MenuHider />
-              <div className = 'hidden-text'>
-                  {hiddenText}
-              </div>
-            </div>
-          </Toolbar>
-        </AppBar>
-      </div>
-
-      <Drawer
-        className={classes.drawer}
-        width = "50%"
-        variant="persistent"
-        anchor="left"
-        open={open}
-        classes = {{paper:classes.drawerPaper}}
+            <div class="border d-table w-100">
+  <h2 class="d-table-cell tar2">Welcome to ScribeAR</h2>
+      {/* <Welcome
+      isAuthenticated={isAuthenticated}
+      user = {user}
+      /> */}
+  <div class="d-table-cell tar">
+      <Button aria-controls="simple-menu" aria-haspopup="true" variant="contained" variant="text" color="inherit" onClick={handleClick} startIcon={<ShareIcon/>}>Share</Button>
+      <Menu
+        id="simple-menu"
+        anchorEl={anchorEl}
+        keepMounted
+        open={Boolean(anchorEl)}
+        onClose={handleClose}
       >
-        <div className={classes.drawerHeader}>
-        <MenuSwitch title = 'AudioV' left = {prev_page} right={next_page} submenu = 'true'/>
-          <IconButton onClick={handleDrawerClose} color = "inherit">
-            {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-          </IconButton>
+        <Tooltip TransitionComponent={Fade} title="Share through emails" arrow>
+        <MenuItem onClick={handleClose}>
+          <EmailShareButton subject="Transcript History">
+            <Button startIcon={<MailIcon/>}> EMAIL</Button>
+          </EmailShareButton>
+        </MenuItem>
+        </Tooltip>
+        <Tooltip TransitionComponent={Fade} title="Download the transcript as a .txt file" arrow>
+        <MenuItem onClick={handleClose}>
+        <Button variant="contained" variant="text" onClick={new Recognition().downloadTxtFile} startIcon={<SaveIcon fontSize='large'/>}>Download</Button>
+        </MenuItem>
+        </Tooltip>
+        {/* <Tooltip TransitionComponent={Fade} title="Upload the transcript to OneDrive" arrow> */}
+        {/* <MenuItem onClick={handleClose}>
+          <Upload/>
+        </MenuItem> */}
+        {/* <MenuItem onClick={handleClose}>
+          <Folders/>
+        </MenuItem> */}
+        {/* </Tooltip> */}
+      </Menu>
+      <LogIn/>
 
+      </div>
+      <div className='lock-wrap'>
+        <MenuHider />
+
+      </div>
+</div>
+</Toolbar>
+          </AppBar>
         </div>
-        <AudioOption />
-      </Drawer>
-      <main
-        className={clsx(classes.content, {
-          [classes.contentShift]: open,
-        })}
-      >
-        <div className={classes.drawerHeader} />
 
-      </main>
-      </ThemeProvider>
-      </div>
+        <Drawer
+          className={classes.drawer}
+          width = "50%"
+          variant="persistent"
+          anchor="left"
+          open={open}
+          classes = {{paper:classes.drawerPaper}}
+        >
+        <div className={classes.drawerHeader}>
+        <MenuSwitch title = 'Audio Visuals' left = {prev_page} right={next_page} submenu = 'true'/>
+                <IconButton onClick={handleDrawerClose} color = "inherit">
+                  {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+                </IconButton>
+          </div>
+          <AudioOption />
+        </Drawer>
+        <main
+          className={clsx(classes.content, {
+            [classes.contentShift]: open,
+          })}
+        >
+          <div className={classes.drawerHeader} />
+
+        </main>
+        </ThemeProvider>
+        </div>
     )
-  } 
-
   }
-//}
+} else {
+  if (setting == 1){
+    return (
+        <div className={classes.root}>
+          <CssBaseline />
+          <ThemeProvider theme = {mytheme}>
+          <div className = {pick} >
+            <AppBar
+              position="fixed"
+              className={clsx(classes.appBar, {
+                [classes.appBarShift]: open,
+              }
+              )}
+              color = {choice}
+            >
+              <Toolbar >
+                <IconButton
+                  color="inherit"
+                  aria-label="open drawer"
+                  onClick={handleDrawerOpen}
+                  edge="start"
+                  className={clsx(classes.menuButton, open && classes.hide)}
+                >
+                  <MenuIcon />
+                </IconButton>
+                <div class="border d-table w-100">
+      <h2 class="d-table-cell tar2">ScribeAR</h2>
+          {/* <Welcome
+          isAuthenticated={isAuthenticated}
+          user = {user}
+          /> */}
+      <div class="d-table-cell tar">
+          <Button aria-controls="simple-menu" aria-haspopup="true" variant="contained" variant="text" color="inherit" onClick={handleClick} startIcon={<ShareIcon/>}>Share</Button>
+          <Menu
+            id="simple-menu"
+            anchorEl={anchorEl}
+            keepMounted
+            open={Boolean(anchorEl)}
+            onClose={handleClose}
+          >
+            <Tooltip TransitionComponent={Fade} title="Share through emails" arrow>
+            <MenuItem onClick={handleClose}>
+              <EmailShareButton subject="Transcript History">
+                <Button startIcon={<MailIcon/>}> EMAIL</Button>
+              </EmailShareButton>
+            </MenuItem>
+            </Tooltip>
+            <Tooltip TransitionComponent={Fade} title="Download the transcript as a .txt file" arrow>
+            <MenuItem onClick={handleClose}>
+              <Button variant="contained" variant="text" onClick={new AzureRecognition().downloadTxtFile} startIcon={<SaveIcon fontSize='large'/>}>Download</Button>
+            </MenuItem>
+            </Tooltip>
+            {/* <Tooltip TransitionComponent={Fade} title="Upload the transcript to OneDrive" arrow> */}
+            {/* <MenuItem onClick={handleClose}>
+              <Upload/>
+            </MenuItem> */}
+            {/* <MenuItem onClick={handleClose}>
+              <Folders/>
+            </MenuItem> */}
+            {/* </Tooltip> */}
+          </Menu>
+          <LogIn/>
+
+          </div>
+          <div className='lock-wrap'>
+            <MenuHider />
+
+          </div>
+    </div>
+  </Toolbar>
+</AppBar>
+          </div>
+          <Drawer
+            className={classes.drawer}
+            width = "50%"
+            variant="persistent"
+            anchor="left"
+            open={open}
+            classes = {{paper:classes.drawerPaper}}
+          >
+          <div className={classes.drawerHeader}>
+          <MenuSwitch title = 'MainMenu' left = {prev_page} right={next_page} submenu = 'true'/>
+                <IconButton onClick={handleDrawerClose} color = "inherit">
+                  {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+                </IconButton>
+
+            </div>
+            <Options />
+          </Drawer>
+          <main
+            className={clsx(classes.content, {
+              [classes.contentShift]: open,
+            })}
+          >
+            <div className={classes.drawerHeader} />
+
+          </main>
+          </ThemeProvider>
+        </div>
+    );
+  }else if (setting == 2){
+    return (
+        <div className={classes.root}>
+        <CssBaseline />
+        <ThemeProvider theme = {mytheme}>
+        <div className = {pick}>
+          <AppBar
+            position="fixed"
+            className={clsx(classes.appBar, {
+              [classes.appBarShift]: open,
+            })}
+            color = {choice}
+          >
+          <Toolbar >
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawerOpen}
+              edge="start"
+              className={clsx(classes.menuButton, open && classes.hide)}
+            >
+              <MenuIcon />
+            </IconButton>
+            <div class="border d-table w-100">
+  <h2 class="d-table-cell tar2">ScribeAR</h2>
+      {/* <Welcome
+      isAuthenticated={isAuthenticated}
+      user = {user}
+      /> */}
+  <div class="d-table-cell tar">
+      <Button aria-controls="simple-menu" aria-haspopup="true" variant="contained" variant="text" color="inherit" onClick={handleClick} startIcon={<ShareIcon/>}>Share</Button>
+      <Menu
+        id="simple-menu"
+        anchorEl={anchorEl}
+        keepMounted
+        open={Boolean(anchorEl)}
+        onClose={handleClose}
+      >
+        <Tooltip TransitionComponent={Fade} title="Share through emails" arrow>
+        <MenuItem onClick={handleClose}>
+          <EmailShareButton subject="Transcript History">
+            <Button startIcon={<MailIcon/>}> EMAIL</Button>
+          </EmailShareButton>
+        </MenuItem>
+        </Tooltip>
+        <Tooltip TransitionComponent={Fade} title="Download the transcript as a .txt file" arrow>
+        <MenuItem onClick={handleClose}>
+          <Button variant="contained" variant="text" onClick={new AzureRecognition().downloadTxtFile} startIcon={<SaveIcon fontSize='large'/>}>Download</Button>
+        </MenuItem>
+        </Tooltip>
+        {/* <Tooltip TransitionComponent={Fade} title="Upload the transcript to OneDrive" arrow> */}
+        {/* <MenuItem onClick={handleClose}>
+          <Upload/>
+        </MenuItem> */}
+        {/* <MenuItem onClick={handleClose}>
+          <Folders/>
+        </MenuItem> */}
+        {/* </Tooltip> */}
+      </Menu>
+      <LogIn/>
+
+      </div>
+      <div className='lock-wrap'>
+        <MenuHider />
+
+      </div>
+</div>
+</Toolbar>
+          </AppBar>
+        </div>
+
+        <Drawer
+          className={classes.drawer}
+          width = "50%"
+          variant="persistent"
+          anchor="left"
+          open={open}
+          classes = {{paper:classes.drawerPaper}}
+        >
+        <div className={classes.drawerHeader}>
+        <MenuSwitch title = 'Source' left = {prev_page} right={next_page} submenu = 'true'/>
+                <IconButton onClick={handleDrawerClose} color = "inherit">
+                  {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+                </IconButton>
+          </div>
+          <AzureOption />
+        </Drawer>
+        <main
+          className={clsx(classes.content, {
+            [classes.contentShift]: open,
+          })}
+        >
+          <div className={classes.drawerHeader} />
+
+        </main>
+        </ThemeProvider>
+        </div>
+    )
+  } else{
+    return (
+        <div className={classes.root}>
+        <CssBaseline />
+        <ThemeProvider theme = {mytheme}>
+        <div className = {pick}>
+          <AppBar
+            position="fixed"
+            className={clsx(classes.appBar, {
+              [classes.appBarShift]: open,
+            })}
+            color = {choice}
+          >
+          <Toolbar >
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawerOpen}
+              edge="start"
+              className={clsx(classes.menuButton, open && classes.hide)}
+            >
+              <MenuIcon />
+            </IconButton>
+            <div class="border d-table w-100">
+  <h2 class="d-table-cell tar2">Welcome to ScribeAR</h2>
+      {/* <Welcome
+      isAuthenticated={isAuthenticated}
+      user = {user}
+      /> */}
+  <div class="d-table-cell tar">
+      <Button aria-controls="simple-menu" aria-haspopup="true" variant="contained" variant="text" color="inherit" onClick={handleClick} startIcon={<ShareIcon/>}>Share</Button>
+      <Menu
+        id="simple-menu"
+        anchorEl={anchorEl}
+        keepMounted
+        open={Boolean(anchorEl)}
+        onClose={handleClose}
+      >
+        <Tooltip TransitionComponent={Fade} title="Share through emails" arrow>
+        <MenuItem onClick={handleClose}>
+          <EmailShareButton subject="Transcript History">
+            <Button startIcon={<MailIcon/>}> EMAIL</Button>
+          </EmailShareButton>
+        </MenuItem>
+        </Tooltip>
+        <Tooltip TransitionComponent={Fade} title="Download the transcript as a .txt file" arrow>
+        <MenuItem onClick={handleClose}>
+          <Button variant="contained" variant="text" onClick={new AzureRecognition().downloadTxtFile} startIcon={<SaveIcon fontSize='large'/>}>Download</Button>
+        </MenuItem>
+        </Tooltip>
+        {/* <Tooltip TransitionComponent={Fade} title="Upload the transcript to OneDrive" arrow> */}
+        {/* <MenuItem onClick={handleClose}>
+          <Upload/>
+        </MenuItem> */}
+        {/* <MenuItem onClick={handleClose}>
+          <Folders/>
+        </MenuItem> */}
+        {/* </Tooltip> */}
+      </Menu>
+      <LogIn/>
+
+      </div>
+      <div className='lock-wrap'>
+        <MenuHider />
+
+      </div>
+</div>
+</Toolbar>
+          </AppBar>
+        </div>
+
+        <Drawer
+          className={classes.drawer}
+          width = "50%"
+          variant="persistent"
+          anchor="left"
+          open={open}
+          classes = {{paper:classes.drawerPaper}}
+        >
+        <div className={classes.drawerHeader}>
+        <MenuSwitch title = 'Audio Visuals' left = {prev_page} right={next_page} submenu = 'true'/>
+                <IconButton onClick={handleDrawerClose} color = "inherit">
+                  {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+                </IconButton>
+          </div>
+          <AudioOption />
+        </Drawer>
+        <main
+          className={clsx(classes.content, {
+            [classes.contentShift]: open,
+          })}
+        >
+          <div className={classes.drawerHeader} />
+
+        </main>
+        </ThemeProvider>
+        </div>
+    )
+  }
+}
+}

@@ -20,17 +20,17 @@ export default function Record(props) {
      // hidden/shown CSS.
      if (store.isSuccessReducer == 'inProgress') {
        return(
-            <div className="item-wrapper-record">
+            <div>
                  Listening
                  <IconButton className = "Play" color= "inherit" size = "large"  >
                       <PauseCircleFilledIcon className = "pause"/>
                  </IconButton>
             </div>
        )
-     } else if (store.isSuccessReducer == 'success') {
+     } else if (store.desiredAPI == 'azure') {
        if (settingAzure == true){
           return(
-               <div className="item-wrapper-record">
+               <div>
                     Listening
                     <IconButton className = "Play" color= "inherit" size = "large" onClick={() => dispatch(flip_recording_azure())} >
                          <PauseCircleFilledIcon className = "pause"/>
@@ -39,7 +39,7 @@ export default function Record(props) {
           )
      } else{
           return(
-               <div className="item-wrapper-record">
+               <div>
                     To Start
                     <IconButton className = "Play" color= "inherit" size = "large" onClick={() => dispatch(flip_recording_azure())}>
                          <PlayCircleFilledIcon className = "start"/>
@@ -48,10 +48,9 @@ export default function Record(props) {
           )
      }
      } else {
-       
        if (setting == true){
              return(
-                  <div className="item-wrapper-record">
+                  <div>
                        Listening
                        <IconButton className = "Play" color= "inherit" size = "large" onClick={() => dispatch(flip_recording())} >
                             <PauseCircleFilledIcon className = "pause"/>
@@ -60,7 +59,7 @@ export default function Record(props) {
              )
         } else{
              return(
-                  <div className="item-wrapper-record">
+                  <div>
                        To Start
                        <IconButton className = "Play" color= "inherit" size = "large" onClick={() => dispatch(flip_recording())}>
                             <PlayCircleFilledIcon className = "start"/>

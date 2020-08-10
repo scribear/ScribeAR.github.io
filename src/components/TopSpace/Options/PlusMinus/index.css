@@ -1,22 +1,13 @@
-.textsize-wrapper{
-     position: relative;
-     top: 1vh;
-     left: 1vw;
-     display: inline-flex;
-}
-
 .setting-wrapper {
      display: inline-block;
-
 
 }
 
 
 .minus {
-
-     left:5vw;
+     left:10vw;
 }
 
 .plus {
-     left:5.5vw;
+     left:10.5vw;
 } 

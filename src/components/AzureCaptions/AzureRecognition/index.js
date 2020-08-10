@@ -5,9 +5,9 @@ import AzureKey from '../../AzureTopSpace/AzureOptions/Key';
 import store from '../../../store/';
 import swal from 'sweetalert';
 
-// import $ from 'jquery';
-// import ScrollButton from 'react-scroll-button'
-// import ScrollToBottom from 'react-scroll-to-bottom';
+import $ from 'jquery';
+import ScrollButton from 'react-scroll-button'
+import ScrollToBottom from 'react-scroll-to-bottom';
 
 import {useSelector, connect} from 'react-redux'
 import {bindActionCreators} from "redux"
@@ -79,7 +79,6 @@ export class AzureRecognition extends React.PureComponent {
     start() {
         if (store.isSuccessReducer != 'success') {
           store.isSuccessReducer = 'inProgress';
-        }
         if (store.azureKeyReducer == undefined || store.azureRegionOptionsReducer == undefined || store.azureKeyReducer == '' || store.azureRegionOptionsReducer == '') {
           store.azureKeyReducer = 'empty'
           store.azureRegionOptionsReducer = 'empty'
@@ -87,6 +86,7 @@ export class AzureRecognition extends React.PureComponent {
           key = store.azureKeyReducer;
           regionOption = store.azureRegionOptionsReducer;
         }
+      }
           speechConfig = SpeechSDK.SpeechTranslationConfig.fromSubscription(key, regionOption);
           lang = store.currentLanguageReducer;
           targetLang = store.targetLanguageReducer;
@@ -152,7 +152,7 @@ export class AzureRecognition extends React.PureComponent {
     render() {
         return (
              <div>
-                  <div id='out'></div>
+                  <div contenteditable = "true" id='out'></div>
                     <div id='azureCurr'>{this.props.key}</div>
              </div>
         )

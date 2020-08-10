@@ -5,10 +5,10 @@ import MenuItem from '@material-ui/core/MenuItem';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import {useSelector,useDispatch} from 'react-redux';
-import { submenu1,submenu2,submenu3 } from '../../redux/actions';
+import { submenu1,submenu2 } from '../../redux/actions';
 
 
- 
+
 
 
 export default function SimpleMenu(props) {
@@ -29,10 +29,10 @@ export default function SimpleMenu(props) {
   };
 
   return (
-    <div style = {{display:"inline"}}>
-      <Button  onClick={handleClick} size = "small">
-          {props.title}
-      </Button>
+    <div>
+      <IconButton  onClick={handleClick}>
+        <MenuIcon />
+      </IconButton>
       <Menu
         id="simple-menu"
         anchorEl={anchorEl}
@@ -40,9 +40,10 @@ export default function SimpleMenu(props) {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <MenuItem onClick={() => dispatch(submenu1())}>Main Menu</MenuItem>
-        <MenuItem onClick={() => dispatch(submenu2())}>Source Setting</MenuItem>
-        <MenuItem onClick={() => dispatch(submenu3())}>Audio Visualization</MenuItem>
+        <MenuItem onClick={() => dispatch(submenu1())}>Webspeech</MenuItem>
+        <MenuItem onClick={() => dispatch(submenu2())}>Azure</MenuItem>
+        {/* <MenuItem>{setting}</MenuItem> */}
+        <MenuItem onClick={handleClose}>return</MenuItem>
       </Menu>
     </div>
   );

@@ -57,7 +57,7 @@ export default function BoxSpring() {
               <IconButton onClick = {handleOpen}>
                 <img id="transition-modal-description" src = {full_pic} alt = 'full' height = '30vh' width = '30vw'>
                 </img>
-              </IconButton>          
+              </IconButton>
 
             </div>
 
@@ -72,7 +72,7 @@ export default function BoxSpring() {
               BackdropProps={{
                 timeout: 500,
               }}
-              
+
             >
               <Fade in={open}>
                 <div className={classes.paper}>
@@ -85,7 +85,7 @@ export default function BoxSpring() {
                       <IconButton color = 'inherit' onClick = {()=>dispatch(bot_1())}>
                           <CheckCircleIcon />
                       </IconButton>
-                  </div> 
+                  </div>
                   <div className = 'wrper'>
                       <IconButton disableRipple = {true} onClick = {()=>dispatch(bot_2())}>
                           <img id="transition-modal-description" src = {half_pic} alt = 'half' height = '120vh' width = '200vw'>
@@ -103,7 +103,7 @@ export default function BoxSpring() {
                       <IconButton color = 'inherit' onClick = {()=>dispatch(bot_3())}>
                           <CheckCircleOutlineIcon />
                       </IconButton>
-                  </div>      
+                  </div>
                 </div>
               </Fade>
             </Modal>
@@ -120,7 +120,7 @@ export default function BoxSpring() {
         <IconButton onClick = {handleOpen}>
           <img id="transition-modal-description" src = {half_pic} alt = 'half' height = '30vh' width = '30vw'>
           </img>
-        </IconButton>          
+        </IconButton>
 
       </div>
 
@@ -135,7 +135,7 @@ export default function BoxSpring() {
         BackdropProps={{
           timeout: 500,
         }}
-        
+
       >
         <Fade in={open}>
           <div className={classes.paper}>
@@ -148,7 +148,7 @@ export default function BoxSpring() {
                 <IconButton color = 'inherit' onClick = {()=>dispatch(bot_1())}>
                    <CheckCircleOutlineIcon />
                 </IconButton>
-            </div> 
+            </div>
             <div className = 'wrper'>
                 <IconButton disableRipple = {true} onClick = {()=>dispatch(bot_2())}>
                     <img id="transition-modal-description" src = {half_pic} alt = 'half' height = '120vh' width = '200vw'>
@@ -166,7 +166,7 @@ export default function BoxSpring() {
                 <IconButton color = 'inherit' onClick = {()=>dispatch(bot_3())}>
                     <CheckCircleOutlineIcon />
                 </IconButton>
-            </div>      
+            </div>
           </div>
         </Fade>
       </Modal>
@@ -183,7 +183,7 @@ export default function BoxSpring() {
         <IconButton onClick = {handleOpen}>
           <img id="transition-modal-description" src = {sub_pic} alt = 'sub' height = '30vh' width = '30vw'>
           </img>
-        </IconButton>          
+        </IconButton>
 
       </div>
 
@@ -198,7 +198,7 @@ export default function BoxSpring() {
         BackdropProps={{
           timeout: 500,
         }}
-        
+
       >
         <Fade in={open}>
           <div className={classes.paper}>
@@ -211,7 +211,7 @@ export default function BoxSpring() {
                 <IconButton color = 'inherit' onClick = {()=>dispatch(bot_1())}>
                    <CheckCircleOutlineIcon />
                 </IconButton>
-            </div> 
+            </div>
             <div className = 'wrper'>
                 <IconButton disableRipple = {true} onClick = {()=>dispatch(bot_2())}>
                     <img id="transition-modal-description" src = {half_pic} alt = 'half' height = '120vh' width = '200vw'>
@@ -229,7 +229,7 @@ export default function BoxSpring() {
                 <IconButton color = 'inherit' onClick = {()=>dispatch(bot_3())}>
                     <CheckCircleIcon />
                 </IconButton>
-            </div>      
+            </div>
           </div>
         </Fade>
       </Modal>

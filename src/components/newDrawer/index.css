@@ -9,28 +9,34 @@
     height: 0;
 }
 .download {
-  right: 0;
+  right: 95vw;
 }
 
 
 
 .d-table {
+left: 5vw;
 display:table;
 }
 
 .d-table-cell {
+  left: 5vw;
+
 display:table-cell;
 }
 
 .w-100 {
+  left: 5vw;
+
 width: 100%;
 }
 
 .tar {
- text-align: right;
+ text-align: right
 }
 
 .tar2 {
+  width: 80vw;
   padding: 10px;
   font-size: 32px;
 }
@@ -60,6 +66,5 @@ width: 100%;
 }
 .d-table-cell-tar {
   transform: scale(1.4);
-  position: absolute;
-  left:92vw;
+  left:50vw;
 }

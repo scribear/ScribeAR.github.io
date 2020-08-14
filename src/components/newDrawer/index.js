@@ -226,7 +226,6 @@ const handleClose = () => {
             </MenuItem> */}
             {/* </Tooltip> */}
           </Menu>
-          <LogIn/>
 
           </div>
           <div className='lock-wrap'>
@@ -324,7 +323,6 @@ const handleClose = () => {
         </MenuItem> */}
         {/* </Tooltip> */}
       </Menu>
-      <LogIn/>
 
       </div>
       <div className='lock-wrap'>
@@ -422,8 +420,6 @@ const handleClose = () => {
         </MenuItem> */}
         {/* </Tooltip> */}
       </Menu>
-      <LogIn/>
-
       </div>
       <div className='lock-wrap'>
         <MenuHider />
@@ -523,7 +519,6 @@ const handleClose = () => {
             </MenuItem> */}
             {/* </Tooltip> */}
           </Menu>
-          <LogIn/>
 
           </div>
           <div className='lock-wrap'>
@@ -621,7 +616,6 @@ const handleClose = () => {
         </MenuItem> */}
         {/* </Tooltip> */}
       </Menu>
-      <LogIn/>
 
       </div>
       <div className='lock-wrap'>
@@ -719,7 +713,6 @@ const handleClose = () => {
         </MenuItem> */}
         {/* </Tooltip> */}
       </Menu>
-      <LogIn/>
 
       </div>
       <div className='lock-wrap'>

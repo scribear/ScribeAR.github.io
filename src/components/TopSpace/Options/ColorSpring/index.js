@@ -55,7 +55,7 @@ export default function TransitionsModal() {
             <IconButton onClick = {handleOpen}>
                 <img id="transition-modal-description" src = {black_pic} alt = 'black' height = '30vh' width = '30vw'>
                 </img>
-            </IconButton>          
+            </IconButton>
 
           </div>
 
@@ -70,7 +70,7 @@ export default function TransitionsModal() {
             BackdropProps={{
               timeout: 500,
             }}
-            
+
           >
             <Fade in={open}>
               <div className={classes.paper}>
@@ -83,7 +83,7 @@ export default function TransitionsModal() {
                     <IconButton color = 'inherit' onClick = {()=>dispatch(pick_black())}>
                         <CheckCircleIcon />
                     </IconButton>
-                </div> 
+                </div>
                 <div className = 'wrper'>
                     <IconButton disableRipple = {true} onClick = {()=>dispatch(pick_white())}>
                         <img id="transition-modal-description" src = {white_pic} alt = 'white' height = '120vh' width = '200vw'>
@@ -92,7 +92,7 @@ export default function TransitionsModal() {
                     <IconButton color = 'inherit' onClick = {()=>dispatch(pick_white())}>
                         <CheckCircleOutlineIcon />
                     </IconButton>
-                </div>     
+                </div>
               </div>
             </Fade>
           </Modal>
@@ -104,12 +104,12 @@ export default function TransitionsModal() {
           <Button color = 'inherit' variant = 'text' onClick={handleOpen}>
             Choose Theme
           </Button>
-          
-            <div className = 'abv_pic'>        
+
+            <div className = 'abv_pic'>
                 <IconButton onClick = {handleOpen}>
                     <img id="transition-modal-description" src = {white_pic} alt = 'white' height = '30vh' width = '30vw'>
                     </img>
-                </IconButton>  
+                </IconButton>
             </div>
 
 
@@ -124,7 +124,7 @@ export default function TransitionsModal() {
             BackdropProps={{
               timeout: 500,
             }}
-            
+
           >
             <Fade in={open}>
               <div className={classes.paper}>
@@ -137,7 +137,7 @@ export default function TransitionsModal() {
                     <IconButton color = 'inherit' onClick = {()=>dispatch(pick_black())}>
                         <CheckCircleOutlineIcon />
                     </IconButton>
-                </div> 
+                </div>
                 <div className = 'wrper'>
                     <IconButton disableRipple = {true} onClick = {()=>dispatch(pick_white())}>
                         <img id="transition-modal-description" src = {white_pic} alt = 'white' height = '120vh' width = '200vw'>
@@ -146,7 +146,7 @@ export default function TransitionsModal() {
                     <IconButton color = 'inherit' onClick = {()=>dispatch(pick_white())}>
                         <CheckCircleIcon />
                     </IconButton>
-                </div>     
+                </div>
               </div>
             </Fade>
           </Modal>

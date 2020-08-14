@@ -27,24 +27,45 @@
 }
 
 
-.scroll {
-  position: relative;
-  left: 50vw;
-  top: 50vh;
-}
-
 .scroll-hidden {
   visibility: hidden;
-
 }
 .tutorial{
   margin:0;
 }
 
-.scroll {
+.circle-hidden {
+  visibility: hidden;
+}
+.circle-icon {
   position: relative;
-  left: 50vw;
-  top: 50vh;
+  background: #0d47a1;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 100px;
+  vertical-align: middle;
+}
+.fa-angle-double-down {
+  position: relative;
+  left: 90vw;
+  top: 40vh
+}
+
+.circle-icon-hidden {
+  position: relative;
+  background: #0d47a1;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 100px;
+  vertical-align: middle;
+  visibility: hidden
+}
+.fa-angle-double-down-hidden {
+  visibility: hidden;
 }
 
 .captionsSpace::-webkit-scrollbar {

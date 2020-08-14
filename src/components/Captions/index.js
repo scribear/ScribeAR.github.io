@@ -2,10 +2,12 @@ import React, {useState} from 'react'
 import { useSelector , useDispatch} from 'react-redux'
 import './index.css'
 import Recognition from './Recognition'
-import { Button } from "@material-ui/core"
+
+import { Button, IconButton } from "@material-ui/core"
 import store from '../../store'
 import mytheme from '../newDrawer/theme'
 import Extender from './Extender'
+import DoubleArrowIcon from '@material-ui/icons/DoubleArrow';
 import {ThemeProvider} from "@material-ui/core/styles";
 import {
      increment_numLines,
@@ -51,8 +53,7 @@ export default function Captions(props) {
         return (
           <ThemeProvider theme = {mytheme}>
           <div>
-            <Button className="scroll" variant="contained" onClick= {new Recognition().scrollBottom} color="secondary">Scroll to Bottom
-          </Button>
+          <i class="fa fa-angle-double-down fa-5x circle-icon" color='inherit' variant="outlined" onClick= {new Recognition().scrollBottom}/>
             <div onScroll={DisTop} className="captionsSpace" id="captionsSpace"
              style={{
                fontSize: sz,
@@ -70,8 +71,7 @@ export default function Captions(props) {
         return (
           <ThemeProvider theme = {mytheme}>
           <div>
-            <Button className="scroll-hidden" variant="outlined" onClick= {new Recognition().scrollBottom} color="secondary">Scroll to Bottom
-          </Button>
+          <i class="fa fa-angle-double-down fa-5x circle-icon-hidden" color='inherit' variant="outlined" onClick= {new Recognition().scrollBottom}/>
             <div onScroll={DisTop} className="captionsSpace" id="captionsSpace"
              style={{
                fontSize: sz,

@@ -36,27 +36,26 @@ export default function AzureOptions() {
 
                <br></br> <br></br><br></br><br></br>
                <div>
-                 <div className = "regionText">
-                     Region:
-                 </div>
-                 <Dropdown/>
+                <div className = "regionText">
+                    Region:
+                </div>
+                <Dropdown/>
+              </div>
+             <div>
+               <div className = "languageText">
+                   Source Lang:
                </div>
-              <div className="item-wrapper">
-                   <EnterButton />
-              </div>
-              <div>
-                <div className = "languageText">
-                    Source Lang:
-                </div>
-                <LanguageOptions/>
-              </div>
-              <div>
-                <div className = "transLanguageText">
-                    Translational Lang:
-                </div>
-                <TargetLanguage/>
-              </div>
-
+               <LanguageOptions/>
+             </div>
+             <div>
+               <div className = "transLanguageText">
+                   Translational Lang:
+               </div>
+               <TargetLanguage/>
+             </div>
+             <div className="item-wrapper">
+                  <EnterButton />
+             </div>
          </div>
     );
 }

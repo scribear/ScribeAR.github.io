@@ -1,15 +1,13 @@
 import React from 'react'
 import Index from './Loudness/index'
-import './index.css'
 import { useSelector } from 'react-redux'
 import styled from 'styled-components'
 import Draggable from '../DnD/Draggable'
 import Droppable from '../DnD/Droppable'
-import './index.css'
-
+import styles from './index.module.css'
 import Stereo from "./Stereo/index"
 
-
+//DND componet to 
 const Wrapper = styled.div`
     width:100%;
     padding:2px;
@@ -34,13 +32,13 @@ export default function MiddleSpace(props) {
 
     if (mic < 4){//mono
         if (props.color == 'black'){
-            return ( <div className="MiddleSpace" style = {{height:h}}>
+            return ( <div className={styles.MiddleSpace} style = {{height:h}}>
             <Wrapper>
-                  <Droppable className = "d1" id = "dr1" style = {{
+                  <Droppable className={styles.d1} id = "dr1" style = {{
                     width:'25vw',
                     height: '34vh',
                     margin: '1px'}}>
-                    <div className = "show1">
+                    <div className = {styles.show1}>
                       <Draggable id = "item1" style = {{margin:'0.5px'}}>
                           {/* change Index to Stereo for test purpose*/}
                           <Index ismic = {mic} iscolor = {color} style={{
@@ -50,23 +48,23 @@ export default function MiddleSpace(props) {
                       </Draggable>
                       </div>
                   </Droppable>
-                  <Droppable className = "d1" id = "dr2" style = {{
+                  <Droppable className = {styles.d1} id = "dr2" style = {{
                     width:'25vw',
                     height: '34vh',
                     margin: '1px'}}>
-                      <div className = "show1"></div>
+                      <div className = {styles.show1}></div>
                   </Droppable>
-                  <Droppable className = "d1" id = "dr2" style = {{
+                  <Droppable className = {styles.d1} id = "dr2" style = {{
                     width:'25vw',
                     height: '34vh',
                     margin: '1px'}}>
-                      <div className = "show1"></div>
+                      <div className = {styles.show1}></div>
                   </Droppable>
-                  <Droppable className = "d1" id = "dr2" style = {{
+                  <Droppable className = {styles.d1} id = "dr2" style = {{
                     width:'25vw',
                     height: '34vh',
                     margin: '1px'}}>
-                      <div className = "show1"></div>
+                      <div className = {styles.show1}></div>
                   </Droppable>
 
               </Wrapper>
@@ -74,11 +72,11 @@ export default function MiddleSpace(props) {
   }else{
     return ( <div className="MiddleSpace" style = {{height:h}}>
             <Wrapper>
-                  <Droppable className = "d2" id = "dr1" style = {{
+                  <Droppable className = {styles.d2} id = "dr1" style = {{
                     width:'25vw',
                     height: '34vh',
                     margin: '1px'}}>
-                    <div className = "show1">
+                    <div className = {styles.show1}>
                       {/* change Index to Stereo for test purpose*/}
                       <Draggable id = "item1" style = {{margin:'0.5px'}}><Index ismic = {mic} iscolor = {color} style={{
                         position:"relative",
@@ -86,23 +84,23 @@ export default function MiddleSpace(props) {
                     </Draggable>
                     </div>
                   </Droppable>
-                  <Droppable className = "d2" id = "dr2" style = {{
+                  <Droppable className = {styles.d2} id = "dr2" style = {{
                     width:'25vw',
                     height: '34vh',
                     margin: '1px'}}>
-                      <div className = "show1"></div>
+                      <div className = {styles.show1}></div>
                   </Droppable>
-                  <Droppable className = "d2" id = "dr2" style = {{
+                  <Droppable className = {styles.d2} id = "dr2" style = {{
                     width:'25vw',
                     height: '34vh',
                     margin: '1px'}}>
-                      <div className = "show1"></div>
+                      <div className = {styles.show1}></div>
                   </Droppable>
-                  <Droppable className = "d2" id = "dr2" style = {{
+                  <Droppable className = {styles.d2} id = "dr2" style = {{
                     width:'25vw',
                     height: '34vh',
                     margin: '1px'}}>
-                      <div className = "show1"></div>
+                      <div className = {styles.show1}></div>
                   </Droppable>
 
               </Wrapper>
@@ -112,11 +110,11 @@ export default function MiddleSpace(props) {
         if (props.color == 'black'){
       return ( <div className="MiddleSpace" style = {{height:h}}>
             <Wrapper>
-                  <Droppable className = "d1" id = "dr1" style = {{
+                  <Droppable className = {styles.d1} id = "dr1" style = {{
                     width:'25vw',
                     height: '34vh',
                     margin: '1px'}}>
-                    <div className = "show1">
+                    <div className = {styles.show1}>
                       <Draggable id = "item1" style = {{margin:'0.5px'}}>
                           {/* change Index to Stereo for test purpose*/}
                           < Stereo ismic = {mic} iscolor = {color} style={{
@@ -126,23 +124,23 @@ export default function MiddleSpace(props) {
                       </Draggable>
                       </div>
                   </Droppable>
-                  <Droppable className = "d1" id = "dr2" style = {{
+                  <Droppable className = {styles.d1} id = "dr2" style = {{
                     width:'25vw',
                     height: '34vh',
                     margin: '1px'}}>
-                      <div className = "show1"></div>
+                      <div className = {styles.show1}></div>
                   </Droppable>
-                  <Droppable className = "d1" id = "dr2" style = {{
+                  <Droppable className = {styles.d1} id = "dr2" style = {{
                     width:'25vw',
                     height: '34vh',
                     margin: '1px'}}>
-                      <div className = "show1"></div>
+                      <div className = {styles.show1}></div>
                   </Droppable>
-                  <Droppable className = "d1" id = "dr2" style = {{
+                  <Droppable className = {styles.d1} id = "dr2" style = {{
                     width:'25vw',
                     height: '34vh',
                     margin: '1px'}}>
-                      <div className = "show1"></div>
+                      <div className = {styles.show1}></div>
                   </Droppable>
 
               </Wrapper>
@@ -150,11 +148,11 @@ export default function MiddleSpace(props) {
   }else{
     return ( <div className="MiddleSpace" style = {{height:h}}>
             <Wrapper>
-                  <Droppable className = "d2" id = "dr1" style = {{
+                  <Droppable className = {styles.d2} id = "dr1" style = {{
                     width:'25vw',
                     height: '34vh',
                     margin: '1px'}}>
-                    <div className = "show1">
+                    <div className = {styles.show1}>
                       {/* change Index to Stereo for test purpose*/}
                       <Draggable id = "item1" style = {{margin:'0.5px'}}><Stereo ismic = {mic} iscolor = {color} style={{
                         position:"relative",
@@ -162,23 +160,23 @@ export default function MiddleSpace(props) {
                     </Draggable>
                     </div>
                   </Droppable>
-                  <Droppable className = "d2" id = "dr2" style = {{
+                  <Droppable className = {styles.d2} id = "dr2" style = {{
                     width:'25vw',
                     height: '34vh',
                     margin: '1px'}}>
-                      <div className = "show1"></div>
+                      <div className = {styles.show1}></div>
                   </Droppable>
-                  <Droppable className = "d2" id = "dr2" style = {{
+                  <Droppable className = {styles.d2} id = "dr2" style = {{
                     width:'25vw',
                     height: '34vh',
                     margin: '1px'}}>
-                      <div className = "show1"></div>
+                      <div className = {styles.show1}></div>
                   </Droppable>
-                  <Droppable className = "d2" id = "dr2" style = {{
+                  <Droppable className = {styles.d2} id = "dr2" style = {{
                     width:'25vw',
                     height: '34vh',
                     margin: '1px'}}>
-                      <div className = "show1"></div>
+                      <div className = {styles.show1}></div>
                   </Droppable>
 
               </Wrapper>

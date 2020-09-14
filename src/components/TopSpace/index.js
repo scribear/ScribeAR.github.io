@@ -1,6 +1,5 @@
 import React from 'react'
-import './index.css'
-import '../MiddleSpace/index.css'
+import styles from './index.module.css'
 import PersistentDrawerLeft from '../newDrawer'
 import {useSelector} from 'react-redux'
 
@@ -15,9 +14,9 @@ export default function TopSpace(props){
           const setting = useSelector(meh)
           var choice = setting ? "none" : "block"
           return (
-               <div className="TopSpace" id="outer" style={{ height: h}}>
+               <div className={styles.TopSpace} id="outer" style={{ height: h}}>
                     <div >
-                          <div className="item-wrapper" >
+                          <div className={styles.itemwrapper} >
                               <PersistentDrawerLeft color = {props.color}/>
                          </div>
 

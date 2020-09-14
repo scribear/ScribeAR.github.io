@@ -1,4 +1,4 @@
-.item-wrapper {
+.itemwrapper {
      position: relative;
      height: 10vh;
      padding: 0;
@@ -42,7 +42,7 @@ h2 {
 }
 
 h3{
-     fontFamily:"Arial";
+     font-family:"Arial";
      margin: 1vh;
      padding-top: 2vh;
      padding-bottom: 1vh;

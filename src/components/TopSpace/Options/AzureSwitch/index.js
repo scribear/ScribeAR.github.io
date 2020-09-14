@@ -6,7 +6,6 @@ import {prev_azure,
 import Divider from '@material-ui/core/Divider'
 import Save from '../Save'
 import Record from '../Record'
-import '../../Options/index.css'
 
 export default function AzureSwitch(){
     const sw = (state)=>state.azuresw 

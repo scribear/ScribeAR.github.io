@@ -175,3 +175,6 @@ export const increase_sensitivity = () => {
 export const decrease_sensitivity = () => {
      return {type: 'DECREASE_SENSITIVITY'}
 }
+export const switch_to_streamtext = () => {
+     return {type: 'SWITCH_TO_STREAMTEXT'}
+}

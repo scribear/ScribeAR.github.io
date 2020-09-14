@@ -265,6 +265,16 @@ const visulizationSensitivityController = (state = 1.0, action) => {
 
 }
 
+const streamTextReducer = (state = false,action) => {
+    switch (action.type) {
+        case 'SWITCH_TO_STREAMTEXT':
+            state = true;
+            return state;
+        default:
+            return state;
+    }
+}
+
 
 const allReducers = combineReducers({
     onWebspeech: onWebspeechReducer,
@@ -288,6 +298,7 @@ const allReducers = combineReducers({
     azuresw: azureSwitchReducer,
     botsize: buttomSizeReducer,
     sens: visulizationSensitivityController,
+    streamtext: streamTextReducer,
 });
 
 export default allReducers;

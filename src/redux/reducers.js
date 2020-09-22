@@ -34,7 +34,7 @@ const submenuReducer = (state = 1, action) => {
         case 'SUBMENU_1':
             return 1;
         case 'SUBMENU_2':
-            return 2;
+            return 2; 
         case 'SUBMENU_3' :
             return 3;
         case 'NEXT_PAGE':
@@ -66,7 +66,7 @@ const azureSwitchReducer = (state = 1, action) => {
 }
 
 const onWebspeechReducer = (state = true, action) => {
-    if (action.type == 'FLIP_ON_WEBSPEECH')
+    if (action.type === 'FLIP_ON_WEBSPEECH')
         return !state
     else return state
 }
@@ -147,50 +147,46 @@ const recordingReducer = (state = true, action) => {
 }
 
 const recordingAzureReducer = (state = true, action) => {
-    if (action.type == 'FLIP_RECORDING_AZURE')
+    if (action.type === 'FLIP_RECORDING_AZURE')
         return !state
     else return state
 }
 
 const switchToAzureReducer = (state = false, action) => {
-    if (action.type == 'SWITCH_TO_AZURE_REDUCER')
+    if (action.type === 'SWITCH_TO_AZURE_REDUCER')
         return !state
     else return state
 }
 
 const enteredKeyReducer = (state = false, action) => {
-    if (action.type == 'FLIP_ENTERED_KEY')
+    if (action.type === 'FLIP_ENTERED_KEY')
         return !state
     else return state
 }
 
 const correctAzureKeyReducer = (state = false, action) => {
-    if (action.type == 'FLIP_CORRECT_AZUREKEY')
+    if (action.type === 'FLIP_CORRECT_AZUREKEY')
         return !state
     else return state
 }
 
 const checkAzureKeyReducer = (state = false, action) => {
-    if (action.type == 'FLIP_CHECK_AZUREKEY')
+    if (action.type === 'FLIP_CHECK_AZUREKEY')
         return !state
     else return state
 }
 
 
 const enteredRegionReducer = (state = false, action) => {
-    if (action.type == 'FLIP_ENTERED_REGION')
+    if (action.type === 'FLIP_ENTERED_REGION')
         return !state
     else return state
 }
 
-const instructionsReducer = (state = false, action) => {
-    if (action.type == 'FLIP_INSTRUCTIONS')
-        return !state
-    else return state
-}
+
 
 const menuhideReducer = (state = choiceMeh, action) => {
-    if (action.type == 'FLIP_MENUHIDE') {
+    if (action.type === 'FLIP_MENUHIDE') {
         state = (state + 1) % 2
         localStorage.setItem('meh', state)
         return state
@@ -200,9 +196,9 @@ const menuhideReducer = (state = choiceMeh, action) => {
 const audioVisualiser = (state = 0, action) => {
     switch (action.type) {
         case 'AUDIOVIS_FLIP':
-            if (state != 0) {
+            if (state !== 0) {
                 state = 0;
-            } else if (localStorage.getItem('mic') != null && state == 0) {
+            } else if (localStorage.getItem('mic') != null && state === 0) {
                 state = localStorage.getItem('mic');
             } else if (localStorage.getItem('mic') == null) {
                 state = 1;
@@ -292,7 +288,6 @@ const allReducers = combineReducers({
     mic: audioVisualiser,
     switchMenus: switchMenusReducer,
     recordingAzure: recordingAzureReducer,
-    ins: instructionsReducer,
     meh: menuhideReducer,
     submenu: submenuReducer,
     azuresw: azureSwitchReducer,

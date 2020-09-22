@@ -22,7 +22,7 @@ export default function VisualControl(props) {
      //const setting = useSelector(props.setting)
      // useDispatch returns the state modifying function, invoked below.
 
-     if (setting == 0){
+     if (setting === 0){
          result = "Mono Visualization"
          text = "Mono"
      }else{

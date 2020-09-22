@@ -118,7 +118,6 @@ export default function App() {
                 </div>
             )
         } else {
-            console.log("HIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIii")
             return (
                 <div className={styles.App2} style={{
                     backgroundColor: 'white',

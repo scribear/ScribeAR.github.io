@@ -1,44 +1,26 @@
 import React from 'react';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
-import {IconButton} from '@material-ui/core'
-import {useDispatch} from 'react-redux'
-import styles from './index.module.css'
-
+import {IconButton} from '@material-ui/core';
+import styles from './index.module.css';
+import { useDispatch } from 'react-redux';
 
 const Switch = (props) => {
-    const {pageNum, setPage, page,titleMap} = props;
-    const next = () => {
-        if (page + 1 > pageNum){
-            page = pageNum;
-            setPage(page);
-            return ;
-        }
-        page++;
-        setPage(page)
-        return ;
-    }
-    const prev = () => {
-        if (page - 1 < 1){
-            page = 1;
-            setPage(page);
-            return ;
-        }
-        page--;
-        setPage(page);
-        return ;
-    }
+    const dispatch = useDispatch();
+    const {page,titleMap, prev, next} = props;
     return (
         <div className={styles.switch}>
-            <IconButton color = 'inherit' onClick = {prev()}>
+            <IconButton color = 'inherit' onClick = {() => dispatch(prev())}>
                 <ArrowBackIosIcon />
             </IconButton>
-            {titleMap[page]}
-            <IconButton color = 'inherit' onClick = {next()}>
+            <div className={styles.word}>
+                {titleMap[page - 1]}
+            </div>
+            <IconButton color = 'inherit' onClick = {() => dispatch(next())}>
                 <ArrowForwardIosIcon />
             </IconButton>
         </div>
     )
 }
 
-export default Switch
+export default Switch;

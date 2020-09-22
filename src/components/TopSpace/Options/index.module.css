@@ -1,26 +1,28 @@
 .itemwrapper {
-     position: relative;
-     height: 10vh;
-     padding: 0;
-     margin-left: 5px;
-
+     width: 100%;
+     margin-top: 10px;
+     margin-bottom:  10px;
 }
 .instruction{
-     margin-top: 1.5vh;
+     margin-left: 10px;
+}
+.audioWrapper{
+     display: flex;
+     justify-content: space-between;
+
+}
+.audioContent{
+     display: flex;
+     font-size: medium;
+     margin-left: 10px;
+}
+
+.Adplay{
+     display: flex;
+     margin-right: 5px;
+     transform: scale(2.0);
 }
 /* Button styling from https://fdossena.com/?p=html5cool/buttons/i.frag */
-.mybutton{
-     display:inline-block;
-     width: 14vw;
-     padding:0.3vh 1.2vh;
-     margin:0 0.1em 0.1em 0;
-     border:0.16em solid rgba(255,255,255,0);
-     border-radius:1vh;
-     box-sizing: border-box;
-     text-decoration:none;
-     color:black;
-     text-align:center;
-}
 
 @media all and (max-width:30em){
      .mybutton{
@@ -35,19 +37,14 @@ p {
 }
 
 h2 {
-     margin: 10px;
-     padding-top: 2vh;
-     padding-bottom: 1vh;
-     font-size: 5vh;
+     font-size: x-large;
+     margin-left: 2px;
 }
 
 h3{
      font-family:"Arial";
-     margin: 1vh;
-     padding-top: 2vh;
-     padding-bottom: 1vh;
-     font-size: 2vh;
-
+     margin-left: 5px;
+     font-size: large;
 }
 
 .inLine{

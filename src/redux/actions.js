@@ -90,9 +90,6 @@ export const flip_switch_to_azure = () => {
 export const flip_check_azureKey = () => {
      return { type: 'FLIP_CHECK_AZUREKEY' };
 }
-export const flip_instructions = () =>{
-     return { type: 'FLIP_INSTRUCTIONS'};
-}
 
 export const flip_menuhide = () =>{
      return { type: 'FLIP_MENUHIDE'};

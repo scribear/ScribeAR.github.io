@@ -3,7 +3,7 @@ import { useSelector , useDispatch} from 'react-redux'
 import styles from './index.module.css'
 import Recognition from './Recognition'
 import { Button } from "@material-ui/core"
-import mytheme from '../newDrawer/theme'
+import mytheme from '../Drawer/theme'
 import {ThemeProvider} from "@material-ui/core/styles";
 
 

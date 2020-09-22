@@ -25,9 +25,7 @@ import LogIn from "../LogIn/LogIn";
 import MailIcon from '@material-ui/icons/Mail';
 import { Button, Tooltip } from "@material-ui/core"
 import Recognition from "../Captions/Recognition"
-import AzureRecognition from "../AzureCaptions/AzureRecognition"
 import AzureOption from '../AzureTopSpace/AzureOptions'
-import MenuSwitch from '../PopMenu/MenuSwitch'
 import MenuHider from '../PlaceHolder/MenuHider'
 import './index.css'
 import {prev_page, next_page} from '../../redux/actions'
@@ -35,11 +33,11 @@ import AudioOption from '../AudioOption';
 import Switch from '../Switch';
 
 
-const MenuMap = {
-  1 : 'MainMenu',
-  2 : 'Source',
-  3 : 'Audio Visual'
-};
+const MenuMap = [
+  'MainMenu',
+  'Source',
+  'Audio Visual',
+];
 
 
 const drawerWidth = '21vw';
@@ -113,19 +111,14 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function PersistentDrawerLeft(props) {
-  const submenu = (state) => state.submenu;
-  const menuhide = (state) => state.meh;
-  const onWebspeech = (state) => state.onWebspeech;
-  const dispatch = useDispatch();
-  const shouldShow = useSelector(menuhide);
-  const wantsWebspeech = useSelector(onWebspeech);
+  const page = useSelector((state) => state.submenu);
+  const shouldShow = useSelector((state) => state.meh);
   const classes = useStyles();
   const theme = useTheme();
-  const [page, setPage] = useState(1);
 
   var hiddenText = ''
   var pick = "detail_wrap"
-  if (shouldShow == 0){
+  if (shouldShow === 0){
     pick += '.active'
     hiddenText = 'visible'
   }else{
@@ -133,12 +126,11 @@ export default function PersistentDrawerLeft(props) {
     hiddenText = 'auto-hide'
   }
 
-  var hiddenTextDownload = 'Download Text'
 
 
   var bgColor = props.color;
   var choice = "primary";
-  if (bgColor == "black"){
+  if (bgColor === "black"){
     choice = "primary";
   }else{
     choice = "secondary";
@@ -198,9 +190,9 @@ export default function PersistentDrawerLeft(props) {
                 >
                   <MenuIcon />
                 </IconButton>
-                <div class="border d-table w-100">
-            <h2 class="d-table-cell tar2">ScribeAR</h2>
-            <div class="d-table-cell tar">
+                <div className="border d-table w-100">
+            <h2 className="d-table-cell tar2">ScribeAR</h2>
+            <div className="d-table-cell tar">
                 <Button aria-controls="simple-menu" aria-haspopup="true" variant="contained" variant="text" color="inherit" onClick={handleClick} startIcon={<ShareIcon/>}>Share</Button>
                 <Menu
                   id="simple-menu"
@@ -243,7 +235,7 @@ export default function PersistentDrawerLeft(props) {
             classes = {{paper:classes.drawerPaper}}
           >
           <div className={classes.drawerHeader}>
-          <MenuSwitch page={page} setPage={setPage} pageNum={3} titleMap={MenuMap} />
+          <Switch page={page} prev={prev_page} next={next_page} titleMap={MenuMap} />
                 <IconButton onClick={handleDrawerClose} color = "inherit">
                   {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
                 </IconButton>

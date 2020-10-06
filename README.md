@@ -93,4 +93,4 @@ Sooner than later, we're going to switch to a different speech recognition engin
 
 ## Index
 
-* [RampUpTest](Readme\WalkThroughGuide.md)
+* [RampUpTest](./Readme/WalkThroughGuide.md)

@@ -22,3 +22,9 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 notes.txt
+
+#ramp up test
+/src/components/TopSpace/Options/RampUpTest
+
+#local document
+/localstuff

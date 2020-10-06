@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function TransitionsModal(props) {
-  const { type, state, children, functionMap, imageMap, title, ...rest } = props
+  const { type, state, children, functionMap, imageMap, title,disable=false, ...rest } = props
   const dispatch = useDispatch()
 
   const classes = useStyles();
@@ -41,10 +41,11 @@ export default function TransitionsModal(props) {
     setOpen(false);
   };
 
+
   if (type === 'display'){
       return (
             <>
-                <Button color = 'inherit' variant = 'outlined' onClick={handleOpen}>
+                <Button disabled={disable} color = 'inherit' variant = 'outlined' onClick={handleOpen}>
                     {title}
                 </Button>
                 <Modal
@@ -72,52 +73,52 @@ export default function TransitionsModal(props) {
         </>
       )
   }
-    return (
-        <>
-            <div className={styles.wrapper}>
-                <div className={styles.buttonwrapper}>
-                    <Button color = 'inherit' variant = 'text' onClick={handleOpen}>
-                        {children}
-                    </Button>
-                </div>
-                <div className={styles.preview}>
-                    <IconButton onClick = {handleOpen}>
-                        <img id="transition-modal-description" src = {imageMap[state]} alt='preview' height = '30vh' width = '30vw'>
-                        </img>
-                    </IconButton>          
-                </div>
-            </div>
-            <Modal
-                aria-labelledby="transition-modal-title"
-                aria-describedby="transition-modal-description"
-                className={classes.modal}
-                open={open}
-                onClose={handleClose}
-                closeAfterTransition
-                BackdropComponent={Backdrop}
-                BackdropProps={{
-                timeout: 500,
-                }}
-                
-            >
-            <Fade in={open}>
-            <div className={classes.paper}>
-                <h2 id="transition-modal-title">Theme</h2>
-                    {functionMap.map((func,idx) => (
-                        <>
-                            <IconButton onClick = {()=>dispatch(func())}>
-                            <img id="transition-modal-description" src = {imageMap[idx]} alt = 'view' height = '120vh' width = '200vw'>
-                            </img>
-                            </IconButton>
-                            <IconButton color = 'inherit' onClick = {()=>dispatch(func())}>
-                                {state === (idx) ? <CheckCircleIcon /> : <CheckCircleOutlineIcon />}
-                            </IconButton>
-                        </>
-                    ))} 
-            </div>
-            </Fade>
-          </Modal>
-        </>
-      );
+  return (
+      <>
+          <div className={styles.wrapper}>
+              <div className={styles.buttonwrapper}>
+                  <Button disabled={disable} color = 'inherit' variant = 'text' onClick={handleOpen}>
+                      {children}
+                  </Button>
+              </div>
+              <div className={styles.preview}>
+                  <IconButton onClick = {handleOpen}>
+                      <img id="transition-modal-description" src = {imageMap[state]} alt='preview' height = '30vh' width = '30vw'>
+                      </img>
+                  </IconButton>          
+              </div>
+          </div>
+          <Modal
+              aria-labelledby="transition-modal-title"
+              aria-describedby="transition-modal-description"
+              className={classes.modal}
+              open={open}
+              onClose={handleClose}
+              closeAfterTransition
+              BackdropComponent={Backdrop}
+              BackdropProps={{
+              timeout: 500,
+              }}
+              
+          >
+          <Fade in={open}>
+          <div className={classes.paper}>
+              <h2 id="transition-modal-title">Theme</h2>
+                  {functionMap.map((func,idx) => (
+                      <>
+                          <IconButton onClick = {()=>dispatch(func())}>
+                          <img id="transition-modal-description" src = {imageMap[idx]} alt = 'view' height = '120vh' width = '200vw'>
+                          </img>
+                          </IconButton>
+                          <IconButton color = 'inherit' onClick = {()=>dispatch(func())}>
+                              {state === (idx) ? <CheckCircleIcon /> : <CheckCircleOutlineIcon />}
+                          </IconButton>
+                      </>
+                  ))} 
+          </div>
+          </Fade>
+        </Modal>
+      </>
+    );
  
 }

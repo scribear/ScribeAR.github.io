@@ -1,7 +1,7 @@
 # Web UI Component Guide
 
 ### Currently we have made new component every time we need one, which is not effective. Now there are general components compatible for all sorts of usage. (hopefully)
-### The pdf document contains detailed picture of how these components looks like.
+### The pdf document contains detailed picture of how these components look like.
 
 ### 1.Switch
 

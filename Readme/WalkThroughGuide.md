@@ -1,15 +1,19 @@
-##Walkthrough Taks with UI components
+## Walkthrough Taks with UI components
+
 Create a self-Introduction popup card with component to help you better understand ui components and how to use them properly.
 
-##Before you start:
+## Before you start:
+
 * Install eslint support in VS code if you are using VS code. This help fixing coding style.
+
 * Install nodejs package manager to get start with our project
 
 
-##Step 1:
+## Step 1:
 
-go to src folder, find the options folder in "components/TopSpace/Options" 
-Create a new folder named RampUpTest and a javascript file index.js inside.
+* Go to src folder, find the options folder in "components/TopSpace/Options" 
+
+* Create a new folder named RampUpTest and a javascript file index.js inside.
 
 ```javascript
 import React from 'react'
@@ -27,16 +31,18 @@ const RampUpTest = (props) => {
 
 ```
 Then import <SpringPop> component and use it in your return div
+
 ```javascript
 import SpringPop from "../../../SpringPop"
 
 //.....
+
 <SpringPop title='your name' type='display'>
     your content
 </SpringPop>
 
 ```
-##Step 2:
+## Step 2:
 Create a switch to disable/enable the springpop with <ToggleButton> component
 
 * Usage of hooks:
@@ -104,7 +110,7 @@ const RampUpTest = (props) => {
 
 export default RampUpTest;
 ```
-##Step3:
+## Step3:
 Put the component into option menu 
 
 * Go to Options/index.js
@@ -122,10 +128,11 @@ import Ramp from '../Options/RampUpTest'
 ```
 
 
-##Step4:
+## Step4:
 Create style file for the component with css module.
 
 * Create a index.module.css file inside your rampuptest folder
+
 [CSS module official doc](https://github.com/css-modules/css-modules)
 
 [Flex model](https://www.w3schools.com/css/css3_flexbox.asp)

@@ -1,4 +1,4 @@
-## Walkthrough Taks with UI components
+## Walkthrough Task with UI components
 
 Create a self-Introduction popup card with component to help you better understand ui components and how to use them properly.
 

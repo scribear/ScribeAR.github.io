@@ -9,7 +9,6 @@ import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import styles from './index.module.css'
 import SpringPop from '../../SpringPop'
 import ToggleButton from '../../ToggleButton'
-import Ramp from '../Options/RampUpTest'
 import {
     increment_textSize,
     decrement_textSize,
@@ -204,9 +203,6 @@ export default function Options() {
                     </SpringPop>
                 </div>
 
-                <div className={styles.itemwrapper}>
-                    <Ramp />
-                </div>
             </div>
         );
     }

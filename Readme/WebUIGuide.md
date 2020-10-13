@@ -7,7 +7,7 @@
 
 ./components/Switch
 
-![](./SwitchApp.png)
+![](./image/SwitchApp.png)
 
 * usage code:
 

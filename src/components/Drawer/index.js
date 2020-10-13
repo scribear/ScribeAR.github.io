@@ -16,7 +16,7 @@ import blue from "@material-ui/core/colors/blue"
 import orange from "@material-ui/core/colors/orange"
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
-import {useSelector,} from 'react-redux';
+import { useSelector , } from 'react-redux';
 import ShareIcon from '@material-ui/icons/Share';
 import {EmailShareButton} from 'react-share';
 import Fade from '@material-ui/core/Fade';
@@ -31,6 +31,7 @@ import './index.css'
 import {prev_page, next_page} from '../../redux/actions'
 import AudioOption from '../AudioOption';
 import Switch from '../Switch';
+
 
 
 const MenuMap = [
@@ -116,14 +117,16 @@ export default function PersistentDrawerLeft(props) {
   const classes = useStyles();
   const theme = useTheme();
 
-  var pick = "detail_wrap"
-  if (shouldShow === 0){
-    pick += '.active'
+
+  let pick = "detail_wrap active"
+  if (shouldShow == 1){
+    pick = "detail_wrap"
   }else{
-    pick = 'detail_wrap'
+    pick = "detail_wrap active"
   }
+  //let pick = show === true ? "detail_wrap active" : 'detail_wrap';
 
-
+  console.log(pick);
 
   var bgColor = props.color;
   var choice = "primary";

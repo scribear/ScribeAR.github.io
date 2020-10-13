@@ -82,27 +82,27 @@ export default function App() {
 
     //  var color = invertColors ? 'black' : 'white'
     //  console.log(color)
-    if (store.azureKeyReducer == 'incorrect' && checkAzureKey == true) {
+    if (store.azureKeyReducer === 'incorrect' && checkAzureKey === true) {
         store.azureKeyReducer = 'empty'
         dispatch(flip_entered_key())
         dispatch(flip_entered_region())
         dispatch(flip_check_azureKey())
     }
-    if (store.isSuccessReducer == 'success' && isCorrectKey == false) {
+    if (store.isSuccessReducer === 'success' && isCorrectKey === false) {
         dispatch(flip_correct_azureKey())
     }
 
-    if (checkAzureKey == true || isCorrectKey == true) {
-        if (isRecording == true) {
+    if (checkAzureKey === true || isCorrectKey === true) {
+        if (isRecording === true) {
             dispatch(flip_recording());
         }
-        if (isCorrectKey == false && wantsWebspeech == true) {
+        if (isCorrectKey === false && wantsWebspeech === true) {
             dispatch(flip_on_webspeech())
         }
         setInterval(checkIfStillHere, timerCheck);
 
 
-        if (bgColor == 'black') {
+        if (bgColor === 'black') {
             return (
                 <div className={styles.App1} style={{
                     backgroundColor: 'black',
@@ -137,10 +137,10 @@ export default function App() {
     }
     // cases where azureKey is false but isrecording is not????
 
-    if (bgColor == 'black') {
-        if (isEnteredKey == true || isEnteredRegion == true) {
+    if (bgColor === 'black') {
+        if (isEnteredKey === true || isEnteredRegion === true) {
             dispatch(flip_check_azureKey())
-            if (isRecording == true) {
+            if (isRecording === true) {
                 dispatch(flip_recording())
             }
         }
@@ -161,9 +161,9 @@ export default function App() {
             </div>
         )
     } else {
-        if (isEnteredKey == true || isEnteredRegion == true) {
+        if (isEnteredKey === true || isEnteredRegion === true) {
             dispatch(flip_check_azureKey())
-            if (isRecording == true) {
+            if (isRecording === true) {
                 dispatch(flip_recording())
             }
         }

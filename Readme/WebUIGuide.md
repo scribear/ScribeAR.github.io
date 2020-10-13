@@ -7,6 +7,8 @@
 
 ./components/Switch
 
+![](./SwitchApp.png)
+
 * usage code:
 
 ```javascript
@@ -32,6 +34,8 @@ const testMap = [
 This is a button with changing state function.
 
 Based on materialUI button and Iconbutton.
+
+![](./image/ToggleApp.png)
 
 Example code:
 

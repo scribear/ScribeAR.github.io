@@ -55,6 +55,8 @@ Example code:
 
 The spring pop is a pop-up window on clicked
 
+![](./image/SpringPopAppOne.png)
+
 Example code:
 
 ```javascript

@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function TransitionsModal(props) {
-  const { type, state, children, functionMap, imageMap, title,disable=false, ...rest } = props
+  const { type, state, children, functionMap, imageMap, title,disable=false } = props
   const dispatch = useDispatch()
 
   const classes = useStyles();

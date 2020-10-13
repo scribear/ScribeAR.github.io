@@ -16,7 +16,7 @@ import blue from "@material-ui/core/colors/blue"
 import orange from "@material-ui/core/colors/orange"
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
-import {useSelector,useDispatch} from 'react-redux';
+import {useSelector,} from 'react-redux';
 import ShareIcon from '@material-ui/icons/Share';
 import {EmailShareButton} from 'react-share';
 import Fade from '@material-ui/core/Fade';
@@ -116,14 +116,11 @@ export default function PersistentDrawerLeft(props) {
   const classes = useStyles();
   const theme = useTheme();
 
-  var hiddenText = ''
   var pick = "detail_wrap"
   if (shouldShow === 0){
     pick += '.active'
-    hiddenText = 'visible'
   }else{
     pick = 'detail_wrap'
-    hiddenText = 'auto-hide'
   }
 
 

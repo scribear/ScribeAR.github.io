@@ -26,6 +26,12 @@
    }
 }
 
+.circle-icon {
+    background-color: green;
+    background: #ffc0c0;
+    padding:30px;
+    border-radius: 50%;
+}
 
 .scroll-hidden {
   visibility: hidden;
@@ -34,38 +40,15 @@
   margin:0;
 }
 
-.circle-hidden {
-  visibility: hidden;
-}
-.circle-icon {
-  position: relative;
-  background: #0d47a1;
-  width: 100px;
-  height: 100px;
+.scroll {
+  background-color: green;
   border-radius: 50%;
-  text-align: center;
-  line-height: 100px;
-  vertical-align: middle;
-}
-.fa-angle-double-down {
+  border-color: green;
+  border: solid;
   position: relative;
+  transform: scale(1.2) rotate(90deg);
   left: 90vw;
   top: 40vh
-}
-
-.circle-icon-hidden {
-  position: relative;
-  background: #0d47a1;
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  text-align: center;
-  line-height: 100px;
-  vertical-align: middle;
-  visibility: hidden
-}
-.fa-angle-double-down-hidden {
-  visibility: hidden;
 }
 
 .captionsSpace::-webkit-scrollbar {

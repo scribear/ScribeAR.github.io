@@ -104,7 +104,7 @@ class AudioVisualiser extends Component {
     }
 
     componentDidUpdate() {
-        console.log("update")
+        //console.log("update")
         this.draw();
     }
 

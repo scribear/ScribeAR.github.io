@@ -1,0 +1,11 @@
+.preview {
+    display: inline-block;
+    margin-right: 0;
+}
+.buttonwrapper {
+    display: inline-block;
+}
+.wrapper {
+    display: flex;
+    justify-content: space-between;
+}

@@ -3,10 +3,8 @@ import { useSelector, useDispatch } from 'react-redux'
 import './index.css'
 import AzureRecognition from './AzureRecognition'
 import Extender from './Extender'
-import { Button, IconButton } from "@material-ui/core"
+import { Button } from "@material-ui/core"
 import ScrollButton from 'react-scroll-button'
-import DoubleArrowIcon from '@material-ui/icons/DoubleArrow';
-
 import store from '../../store'
 import keys from '../AzureTopSpace/AzureOptions/Key'
 import { increment_numLines,
@@ -26,7 +24,6 @@ export default function AzureCaptions(props) {
      var h = numLines + 'vh'
      var resH = (43 - numLines) + 'vh'
      var sz = props.textSize
-
      if (props.wantWebspeech == true && store.isSuccessReducer == 'success') {
        store.desiredAPI = 'webspeech';
        return (
@@ -41,9 +38,11 @@ export default function AzureCaptions(props) {
                            height : resH,
                            margin : '0.5vh',
                       }}>
-
+                      <Extender
+                                          increment={increment_numLines}
+                                          decrement={decrement_numLines}  />
                       </div>
-                              <i class="fa fa-angle-double-down fa-5x circle-icon" color='inherit' variant="outlined" onClick= {new AzureRecognition().scrollBottom}/>
+                      <Button className="scroll" position="fixed" variant="outlined" onClick= {new AzureRecognition().scrollBottom} color="secondary">Scroll to Bottom</Button>
                       <div className="captionsSpace" id="captionsSpace"
                       style={{
                       fontSize: sz,

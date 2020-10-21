@@ -1,0 +1,66 @@
+.detail_wrap{
+    -webkit-transition: 0.6s;
+    -moz-transition: 0.6s;
+    -ms-transition: 0.6s;
+    -o-transition: 0.6s;
+    transition: 0.6s;
+    visibility: 0;
+    opacity: 0;
+    height: 0;
+}
+
+.download {
+  right: 0;
+}
+
+
+
+.d-table {
+display:table;
+}
+
+.d-table-cell {
+display:table-cell;
+}
+
+.w-100 {
+width: 100%;
+}
+
+.tar {
+ text-align: right;
+}
+
+.tar2 {
+  padding: 10px;
+  font-size: 32px;
+}
+
+.detail_wrap:hover {
+    opacity: 1;
+    visibility: 1;
+    height: 9vh;
+}
+.active {
+    opacity: 1;
+    visibility: 1;
+    height: 9vh;
+}
+
+.exit{
+    position: absolute;
+    left:90vw;
+    top:8vh;
+}
+
+.hidden-text{
+    display: none;
+}
+.lock-wrap:hover .hidden-text{
+    display: block;
+}
+.d-table-cell-tar {
+  transform: scale(1.4);
+  position: absolute;
+  left:92vw;
+}

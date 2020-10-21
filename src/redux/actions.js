@@ -90,9 +90,6 @@ export const flip_switch_to_azure = () => {
 export const flip_check_azureKey = () => {
      return { type: 'FLIP_CHECK_AZUREKEY' };
 }
-export const flip_instructions = () =>{
-     return { type: 'FLIP_INSTRUCTIONS'};
-}
 
 export const flip_menuhide = () =>{
      return { type: 'FLIP_MENUHIDE'};
@@ -174,4 +171,7 @@ export const increase_sensitivity = () => {
 }
 export const decrease_sensitivity = () => {
      return {type: 'DECREASE_SENSITIVITY'}
+}
+export const switch_to_streamtext = () => {
+     return {type: 'SWITCH_TO_STREAMTEXT'}
 }

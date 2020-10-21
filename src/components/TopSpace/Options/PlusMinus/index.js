@@ -1,9 +1,8 @@
 import React from 'react'
-import './index.css'
+import styles from './index.module.css'
 import { useSelector, useDispatch } from 'react-redux'
-import {Button} from "@material-ui/core"
-import PopMenu from '../../../PopMenu'
-import AddCircleIcon from '@material-ui/icons/AddCircle';
+import ToggleButton from "../../../ToggleButton"
+
 
 export default function PlusMinus(props) {
      const setting = useSelector(props.setting) // Get current value of the setting.
@@ -11,13 +10,15 @@ export default function PlusMinus(props) {
      const dispatch = useDispatch()
      const textC = props.item + ':' + parseFloat(setting).toFixed(1)
      return (
-          <div className= "textsize-wrapper">
-               {textC}
-               <div className = "setting_wrapper">
-                    <Button className = "minus" color = "inherit" variant = "outlined" size = "small"
-                      onClick={() => dispatch(props.decrement())}>-</Button>
-                    <Button  className = "plus" color = "inherit" variant = "outlined" size = "small"
-                      onClick={() => dispatch(props.increment())}>+</Button>
+          <div className= {styles.itemwrapper}>
+               <div className={styles.wordwrapper}>
+                    {textC}
+               </div>
+               <div className = {styles.buttonwrapper}>
+                    <ToggleButton color = "inherit" variant = "outlined" size = "small"
+                      onClick={() => dispatch(props.decrement())}>-</ToggleButton>
+                    <ToggleButton color = "inherit" variant = "outlined" size = "small"
+                      onClick={() => dispatch(props.increment())}>+</ToggleButton>
               </div>
           </div>
      );

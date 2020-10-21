@@ -25,25 +25,25 @@ export default function Stereovisual(props) {
         spectrumColor: 'inheirt',
     }
 
-    if (setting == 0 || setting < 4) {
+    if (setting === 0 || setting < 4) {
         color.circularColor = 'inherit';
         color.barColor = 'inherit';
         color.spectrumColor = 'inherit';
-    } else if (setting == 4) {
+    } else if (setting === 4) {
         color.circularColor = 'primary';
         color.barColor = 'inherit';
         color.spectrumColor = 'inherit';
-    } else if (setting == 5) {
+    } else if (setting === 5) {
         color.circularColor = 'inherit';
         color.barColor = 'primary';
         color.spectrumColor = 'inherit';
-    } else if (setting == 6) {
+    } else if (setting === 6) {
         color.circularColor = 'inherit';
         color.barColor = 'inherit';
         color.spectrumColor = 'primary';
     }
 
-    if(setting != 0 && setting > 3){
+    if(setting !== 0 && setting > 3){
         localStorage.setItem('mic',setting);
     }
 

@@ -20,25 +20,25 @@ export default function Micvisual(props) {
         circularColor: 'inherit',
     }
 
-    if(setting == 0 || setting > 3){
+    if(setting === 0 || setting > 3){
         color.lineColor = 'inherit';
         color.circularColor = 'inherit';
         color.spectrumColor = 'inherit';
-    }else if (setting == 1){
+    }else if (setting === 1){
         color.lineColor = 'primary';
         color.spectrumColor = 'inherit';
         color.circularColor = 'inherit';
-    }else if (setting == 2){
+    }else if (setting === 2){
         color.lineColor = 'inherit';
         color.spectrumColor = 'primary';
         color.circularColor = 'inherit';
-    }else if (setting == 3){
+    }else if (setting === 3){
         color.lineColor = 'inherit';
         color.spectrumColor = 'inherit';
         color.circularColor = 'primary';
     }
 
-    if(setting != 0 && setting < 4){
+    if(setting !== 0 && setting < 4){
         localStorage.setItem('mic',setting);
     }
 

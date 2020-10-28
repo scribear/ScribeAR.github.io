@@ -1,11 +1,11 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux'
-import TopSpace from './components/TopSpace'
-import AzureTopSpace from './components/AzureTopSpace'
-import AzureCaptions from './components/AzureCaptions'
-import Captions from './components/Captions'
-import MiddleSpace from './components/MiddleSpace'
-import PlaceHolder from "./components/PlaceHolder"
+import TopSpace from './components/TopSpace/TopSpace'
+import AzureTopSpace from './components/AzureTopSpace/AzureTopSpace'
+import AzureCaptions from './components/AzureCaptions/AzureCaptions'
+import Captions from './components/Captions/Captions'
+import MiddleSpace from './components/MiddleSpace/MiddleSpace'
+import PlaceHolder from "./components/PlaceHolder/PlaceHolder"
 import { flip_recording, flip_switch_to_azure,
          flip_switchMenus, flip_entered_key,
          flip_correct_azureKey, flip_on_webspeech,
@@ -18,9 +18,9 @@ import { resetWarningCache } from 'prop-types';
 
 
 export default function App() {
-     console.log("hello ur back")
-     const dispatch = useDispatch()
-     const onWebspeech = useSelector((state) => state.onWebspeech)
+  console.log("hello ur back")
+  const dispatch = useDispatch()
+  const onWebspeech = useSelector((state) => state.onWebspeech)
   const enteredKey = useSelector((state) => state.enteredKey)
   const enteredRegion = useSelector((state) => state.enteredRegion)
   const correctAzureKey = useSelector((state) => state.correctAzureKey)

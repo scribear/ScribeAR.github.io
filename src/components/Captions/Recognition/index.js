@@ -54,24 +54,23 @@ export class Recognition extends React.PureComponent {
         this.azureAppendLine = this.azureAppendLine.bind(this)
         this.azureStart = this.azureStart.bind(this)
         this.azureStop = this.azureStop.bind(this)
-        this.appendLine = this.appendLine.bind(this)
-        this.start = this.start.bind(this)
-        this.stop = this.stop.bind(this)
+        this.webspeechAppendLine = this.webspeechAppendLine.bind(this)
+        this.webspeechStart = this.webspeechStart.bind(this)
+        this.webspeechStop = this.webspeechStop.bind(this)
 
     }
 
     componentDidMount() {
-       this.start()
+       this.webspeechStart()
     }
 
     // Global state 'recording' is passed as a prop. componentDidUpdate is invoked
     // when props change, therefore also when 'recording' changes.
     componentDidUpdate(prevProps, prevState) {
-      console.log("HELLLLLLLLOOOOOOOOOOOOo")
          if (this.props.wantsWebspeech === false && store.isSuccessReducer == "success") {
            this.onWebspeech = false;
            if (store.webspeechIsStart === "true") {
-             this.stop()
+             this.webspeechStop()
            }
            if (this.props.isRecording) {
              this.azureStart()
@@ -81,7 +80,7 @@ export class Recognition extends React.PureComponent {
          } else if (this.props.shouldCheck === true && store.isSuccessReducer != "success") {
            this.onWebspeech = false;
            if (store.webspeechIsStart === "true") {
-             this.stop()
+             this.webspeechStop()
            }
            this.azureStart()
          } else {
@@ -92,9 +91,9 @@ export class Recognition extends React.PureComponent {
            if (prevProps.isRecording === this.props.isRecording && prevProps.wantsWebspeech === this.props.wantsWebspeech)
               return
            if (this.props.isRecording)
-              this.start()
+              this.webspeechStart()
            else {
-              this.stop()
+              this.webspeechStop()
          }
        }
     }
@@ -205,7 +204,7 @@ export class Recognition extends React.PureComponent {
     //WEBSPEECH WEBSPEECH WEBSPEECH
 
 
-    start() {
+    webspeechStart() {
       store.webspeechIsStart = "true";
          recognition.start()
          // Map the complex recognition result object to a string. You can explore
@@ -219,11 +218,11 @@ export class Recognition extends React.PureComponent {
                 .join('');
               words = words.charAt(0).toUpperCase() + words.slice(1)
               if (e.results[0].isFinal) // if line is final
-                   this.appendLine(words + '.') // flush buffer
+                   this.webspeechAppendLine(words + '.') // flush buffer
               else this.updateCurrentLine(words) // update state
          }
          // By default, recognition stops when it gets a final result.
-         recognition.onend = recognition.start // override this behavior
+         recognition.onend = recognition.webspeechStart // override this behavior
     }
 
     downloadTxtFile = () => {
@@ -248,7 +247,7 @@ export class Recognition extends React.PureComponent {
       element.click();
     }
 
-    stop() {
+    webspeechStop() {
       store.webspeechIsStart = "false";
          recognition.onresult = () => {} // do nothing with results
          recognition.onend = () => {} // don't restart when ending
@@ -263,7 +262,7 @@ export class Recognition extends React.PureComponent {
               capts.scrollTop = capts.scrollHeight - capts.clientHeight
     }
 
-    appendLine(str) {
+    webspeechAppendLine(str) {
          const capts = document.getElementById('captionsSpace')
          const out = document.getElementById('out')
          var isScrolledToBottom = capts.scrollHeight - capts.clientHeight <= capts.scrollTop + 1

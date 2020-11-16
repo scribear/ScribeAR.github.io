@@ -1,0 +1,15 @@
+{"react-body": {
+    "prefix": "rt-by",
+    "body":[
+        "import React from 'react'; ",
+        "   ",
+        "const MyComponet = () => { ",
+        " ",
+        " return (<div> ",
+        " ",
+        " </div>)",
+        "}",
+        "export default MyComponent;"
+    ],
+    "description": "react-body-template"
+}}

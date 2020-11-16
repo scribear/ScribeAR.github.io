@@ -2,6 +2,8 @@ permalink: /index.html
 # ScribeAR
 
 * For all other documents and references, see our Box folder. If you can't access Box with your Illinois account, go to https://cloud-dashboard.illinois.edu/cbdash/ and turn U of I Box on.
+* [RampUpTest](./Readme/WalkThroughGuide.md)
+* [WebUIGuide](./Readme/WebUIGuide.md)
 * For all communications, see Slack.
 * Replace/update this readme as necessary.
 * Enjoy your break.
@@ -90,3 +92,4 @@ There are two main types of files in the existing project: JavaScript and CSS fi
 ## Speech Recognition
 
 Sooner than later, we're going to switch to a different speech recognition engine so I'll keep this short. We are currently using the [Web Speech API](https://wicg.github.io/speech-api/), which is handled directly through the browser.
+

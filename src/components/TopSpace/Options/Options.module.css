@@ -1,0 +1,52 @@
+.itemwrapper {
+     width: 100%;
+     margin-top: 10px;
+     margin-bottom:  10px;
+}
+.instruction{
+     margin-left: 10px;
+}
+.audioWrapper{
+     display: flex;
+     justify-content: space-between;
+
+}
+.audioContent{
+     display: flex;
+     font-size: medium;
+     margin-left: 10px;
+}
+
+.Adplay{
+     display: flex;
+     margin-right: 5px;
+     transform: scale(2.0);
+}
+/* Button styling from https://fdossena.com/?p=html5cool/buttons/i.frag */
+
+@media all and (max-width:30em){
+     .mybutton{
+          display:block;
+          margin:0.2em auto;
+     }
+}
+
+
+p {
+     text-align: left;
+}
+
+h2 {
+     font-size: x-large;
+     margin-left: 2px;
+}
+
+h3{
+     font-family:"Arial";
+     margin-left: 5px;
+     font-size: large;
+}
+
+.inLine{
+     display: inline;
+}

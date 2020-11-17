@@ -1,10 +1,10 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux'
-import TopSpace from '../components/TopSpace'
+import TopSpace from '../components/TopSpace/TopSpace.js'
 import AzureCaptions from '../components/AzureCaptions'
-import Captions from '../components/Captions'
-import MiddleSpace from '../components/MiddleSpace'
-import PlaceHolder from "../components/PlaceHolder"
+import Captions from '../components/Captions/Captions.js'
+import MiddleSpace from '../components/MiddleSpace/MiddleSpace.js'
+import PlaceHolder from "../components/PlaceHolder/PlaceHolder.js"
 import {
     flip_recording,
     flip_entered_key,

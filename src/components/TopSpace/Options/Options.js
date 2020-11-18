@@ -1,14 +1,14 @@
 import React from 'react'
-import Record from './Record'
+import Record from './Record/Record.js'
 import store from '../../../store'
 import {useSelector, useDispatch} from "react-redux"
 import Divider from '@material-ui/core/Divider';
-import PlusMinus from './PlusMinus'
-import StreamButton from './StreamTextSwitch'
+import PlusMinus from './PlusMinus/PlusMinus.js'
+// import StreamButton from './StreamTextSwitch'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import styles from './Options.module.css'
-import SpringPop from '../../SpringPop'
-import ToggleButton from '../../ToggleButton'
+import SpringPop from '../../SpringPop/SpringPop.js'
+import ToggleButton from '../../ToggleButton/ToggleButton.js'
 import {
     increment_textSize,
     decrement_textSize,
@@ -110,9 +110,9 @@ export default function Options() {
                         Layout
                     </SpringPop>
                 </div>
-                <div className={styles.itemwrapper}>
+                {/* <div className={styles.itemwrapper}>
                     <StreamButton/>
-                </div>
+                </div> */}
                 <h3>
                     Audio Visulization
                      <ToggleButton type='Icon' size = 'small' onClick={() => dispatch(submenu3())}>
@@ -174,9 +174,9 @@ export default function Options() {
                         Layout
                     </SpringPop>
                 </div>
-                <div className={styles.itemwrapper}>
+                {/* <div className={styles.itemwrapper}>
                     <StreamButton/>
-                </div>
+                </div> */}
                 <h3>
                     Audio Visulization
                     <ToggleButton type='Icon' size = 'small' onClick={() => dispatch(submenu2())}>

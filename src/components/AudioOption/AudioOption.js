@@ -9,7 +9,7 @@ import {audiovis_off} from '../../redux/actions'
 import NotInterestedIcon from '@material-ui/icons/NotInterested';
 import AdvanceMicSetting from './AdvanceMicSetting/AdvancedMicSetting.js'
 
-import '../TopSpace/Options/Options.css'
+import '../TopSpace/Options/Options.module.css'
 
 export default function AudioOption (props){
 

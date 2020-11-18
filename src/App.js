@@ -1,11 +1,11 @@
 import React from 'react';
-import Desktop from './Desktop'
+import Desktop from './Desktop/Desktop'
 import {
     BrowserRouter as Router,
     Switch,
     Route,
   } from "react-router-dom";
-  import AR from './AR'
+  import AR from './AR/AR'
 
 export default function App() {
     console.log(window.location.pathname)

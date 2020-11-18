@@ -1,27 +1,15 @@
-import React from 'react'
-import { Button, IconButton} from '@material-ui/core'
-import styles from './index.module.css'
+"use strict";
 
-const ToggleButton = (props) => {
-    const {children,type, ...rest } = props;
-    
-    if (type === 'Icon'){
-        return (
-            <>
-                <IconButton className={styles.icon} {...rest}>
-                    {children}
-                </IconButton>
-            </>
-        )
-    }
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
 
-    return (
-        <>
-            <Button className={styles.button} {...rest}>
-                {children}
-            </Button>
-        </>
-    )
-};
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+Object.defineProperty(exports, "default", {
+  enumerable: true,
+  get: function get() {
+    return _ToggleButton.default;
+  }
+});
 
-export default ToggleButton;
+var _ToggleButton = _interopRequireDefault(require("./ToggleButton"));

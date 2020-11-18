@@ -8,7 +8,7 @@ import {useDispatch} from 'react-redux';
 import {IconButton} from "@material-ui/core"
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
-import styles from './index.module.css'
+import styles from './SpringPop.module.css'
 
 
 const useStyles = makeStyles((theme) => ({

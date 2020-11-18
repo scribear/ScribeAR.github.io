@@ -13,7 +13,7 @@ import {
     flip_entered_region
 } from '../redux/actions'
 import store from '../store'
-import styles from './index.module.css'
+import styles from './AR.module.css'
 import swal from 'sweetalert';
 
 

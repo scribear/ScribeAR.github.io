@@ -1,0 +1,75 @@
+@media screen and (orientation:landscape) {
+  .Captions {
+      overflow: auto;
+      height: 36vh;
+      position: relative;
+      width: 20%;
+      backface-visibility: hidden;
+      will-change: overflow;
+      -webkit-overflow-scrolling: touch;
+      -ms-overflow-style: none;
+   }
+}
+.Captions::-webkit-scrollbar {
+    display: none;
+}
+@media screen and (orientation:portrait) {
+  .Captions {
+      overflow: auto;
+      height: 36vh;
+      position: relative;
+      width: 60vw;
+      backface-visibility: hidden;
+      will-change: overflow;
+      -webkit-overflow-scrolling: touch;
+      -ms-overflow-style: none;
+   }
+}
+
+.circle-icon {
+    background-color: green;
+    background: #ffc0c0;
+    padding:30px;
+    border-radius: 50%;
+}
+
+.scroll-hidden {
+  visibility: hidden;
+}
+.tutorial{
+  margin:0;
+}
+
+.scroll {
+  background-color: green;
+  border-radius: 50%;
+  border-color: green;
+  border: solid;
+  position: relative;
+  transform: scale(1.2) rotate(90deg);
+  left: 90vw;
+  top: 40vh
+}
+
+.captionsSpace::-webkit-scrollbar {
+  display: none;
+}
+
+/* ::-webkit-scrollbar {
+  width: 10px;
+}
+
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}  */

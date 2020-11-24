@@ -4,11 +4,10 @@ import './index.css'
 import AzureRecognition from './AzureRecognition'
 import Extender from './Extender'
 import { Button } from "@material-ui/core"
-import ScrollButton from 'react-scroll-button'
 import store from '../../store'
 import {
   increment_numLines,
-  decrement_numLines, flip_correct_azureKey, flip_check_azureKey
+  decrement_numLines,
 } from '../../redux/actions'
 
 

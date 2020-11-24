@@ -8,4 +8,4 @@ Object.defineProperty(exports, 'default', {
     return _Target.default;
   }
 });
-var _Target = _interopRequireDefault(require('./Switch'));
+var _Target = _interopRequireDefault(require('./SpringPop'));

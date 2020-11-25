@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux'
 import TopSpace from '../components/TopSpace'
 import AzureCaptions from '../components/AzureCaptions'
@@ -19,6 +19,7 @@ import swal from 'sweetalert';
 
 export default function Desktop() {
   const dispatch = useDispatch()
+  const [text, setText] = useState(6)
   // Get global state from Redux. See the React Redux tutorial.
   // webspeech on-off
   const onWebspeech = useSelector((state) => state.onWebspeech)
@@ -40,7 +41,7 @@ export default function Desktop() {
   //stream-text on-off
   const stream_text = useSelector((state) => state.streamtext)
   // Convert variables to CSS-friendly strings.
-  var sizeString = textSize + 'vh'
+  var sizeString = text + 'vh'
   // Size of bottom space (text area) relative to text size and number of lines.
   // Webpage layout
   // please use this layout as the standard for bottom/top/middle/placeholder space
@@ -110,7 +111,7 @@ export default function Desktop() {
           overflow: 'hidden',
           position: 'fixed',
         }}>
-          <TopSpace height={topHeight} color={bgColor} />
+          <TopSpace height={topHeight} color={bgColor} textSize={text} setTextSize={setText} />
           <PlaceHolder height={placeHeight} color={bgColor} textSize={sizeString} />
           <MiddleSpace height={midHeight} color={bgColor} />
           <AzureCaptions textSize={sizeString} wantWebspeech={wantsWebspeech} />
@@ -125,7 +126,7 @@ export default function Desktop() {
           overflow: 'hidden',
           position: 'fixed',
         }}>
-          <TopSpace height={topHeight} color={bgColor} />
+          <TopSpace height={topHeight} color={bgColor} textSize={text} setTextSize={setText} />
           <PlaceHolder height={placeHeight} color={bgColor} textSize={sizeString} />
           <MiddleSpace height={midHeight} color={bgColor} />
           <AzureCaptions textSize={sizeString} wantWebspeech={wantsWebspeech} />
@@ -151,7 +152,7 @@ export default function Desktop() {
         overflow: 'hidden',
         position: 'fixed',
       }}>
-        <TopSpace height={topHeight} color={bgColor} />
+        <TopSpace height={topHeight} color={bgColor} textSize={text} setTextSize={setText} />
         <PlaceHolder height={placeHeight} color={bgColor} textSize={sizeString} />
         <MiddleSpace height={midHeight} color={bgColor} />
         <Captions height={botHeight} textSize={sizeString} azureCaptionSuccess={true} />
@@ -174,7 +175,8 @@ export default function Desktop() {
         overflow: 'hidden',
         position: 'fixed',
       }}>
-        <TopSpace height={topHeight} color={bgColor} />
+        {/* <TopSpace height={topHeight} color={bgColor} /> */}
+        <TopSpace height={topHeight} color={bgColor} textSize={text} setTextSize={setText} />
         <PlaceHolder height={placeHeight} color={bgColor} textSize={sizeString} />
         <MiddleSpace height={midHeight} color={bgColor} />
         <Captions height={botHeight} textSize={sizeString} azureCaptionSuccess={true} />

@@ -1,25 +1,25 @@
 import React from 'react';
-import Desktop from './Desktop/Desktop'
+import Desktop from './Desktop'
 import {
-    BrowserRouter as Router,
-    Switch,
-    Route,
-  } from "react-router-dom";
-  import AR from './AR/AR'
+  BrowserRouter as Router,
+  Switch,
+  Route,
+} from "react-router-dom";
+import AR from './AR'
 
 export default function App() {
-    console.log(window.location.pathname)
-    return (
-        <Router>
-            <Switch>
-                <Route path='/'>
-                    <Desktop />
-                </Route>
-                <Route path='/armode'>
-                    <AR />
-                </Route>
-            </Switch>
-        </Router>
+  console.log(window.location.pathname)
+  return (
+    <Router>
+      <Switch>
+        <Route path='/'>
+          <Desktop />
+        </Route>
+        <Route path='/armode'>
+          <AR />
+        </Route>
+      </Switch>
+    </Router>
 
-    )
+  )
 }

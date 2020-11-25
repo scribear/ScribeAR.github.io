@@ -42,7 +42,7 @@ const MenuMap = [
 ];
 
 
-const drawerWidth = (window.location.pathname === "/") ? '21vw' : '80vw';
+const drawerWidth = (window.location.pathname === "/") ? '24vw' : '80vw';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -183,7 +183,7 @@ export default function PersistentDrawerLeft(props) {
             </IconButton>
 
           </div>
-          <Options />
+          <Options text={props.text} setText={props.setText} />
         </>
       )
     } else if (page === 2) {
@@ -219,13 +219,13 @@ export default function PersistentDrawerLeft(props) {
     if (window.location.pathname === '/armode') {
       return (
         <IconButton onClick={handleDesktop} color='inherit'>
-          <DesktopWindowsIcon />
+          <VisibilityIcon />
         </IconButton>
       )
     }
     return (
       <IconButton onClick={handleAR} color='inherit'>
-        <VisibilityIcon />
+        <DesktopWindowsIcon />
       </IconButton>
     )
   }

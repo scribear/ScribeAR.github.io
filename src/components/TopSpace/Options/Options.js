@@ -54,7 +54,7 @@ const imageMap_bx = [
 
 
 
-export default function Options() {
+export default function Options(props) {
   // These are functions that take an object and return an element of the object.
   // They are passed to useSelector, which feeds the global state object into them.
   const textSize = (state) => state.textSize
@@ -73,7 +73,7 @@ export default function Options() {
         {audioVis && (if_hide !== 0) ? "On" : "Off"}
       </div>
       <ToggleButton type='Icon' className="Play" color="inherit" size="large" disabled={(if_hide === 0)} onClick={() => dispatch(audiovis_flip())}>
-        {audioVis && (if_hide !== 0) ? <PauseCircleFilledIcon className="pause" color={play_color} /> :
+        {audioVis && (if_hide !== 0) ? <PauseCircleFilledIcon className={styles.Adplay} color={play_color} /> :
           <PlayCircleFilledIcon className={styles.Adplay} color={play_color} />}
       </ToggleButton>
     </div>
@@ -85,7 +85,7 @@ export default function Options() {
         <h2 style={{ fontFamily: "Arial" }}>OPTIONS</h2>
         <h3>
           Source
-                    <ToggleButton type='Icon' size='small' onClick={() => dispatch(submenu2())}>
+          <ToggleButton type='Icon' size='small' onClick={() => dispatch(submenu2())}>
             <MoreHorizIcon />
           </ToggleButton>
         </h3>
@@ -98,12 +98,14 @@ export default function Options() {
         <div className={styles.itemwrapper}>
           <PlusMinus item="Text Size" setting={textSize}
             increment={increment_textSize}
-            decrement={decrement_textSize} />
+            decrement={decrement_textSize}
+            text={props.text}
+            setText={props.setText} />
         </div>
         <div className={styles.itemwrapper}>
           <SpringPop type='switch' state={bg_color} functionMap={funcMap_bg} imageMap={imageMap_bg} >
             Theme
-                    </SpringPop>
+          </SpringPop>
         </div>
         <div className={styles.itemwrapper}>
           <SpringPop type='switch' state={bot_size} functionMap={funcMap_bx} imageMap={imageMap_bx} >
@@ -115,7 +117,7 @@ export default function Options() {
                 </div> */}
         <h3>
           Audio Visulization
-                     <ToggleButton type='Icon' size='small' onClick={() => dispatch(submenu3())}>
+          <ToggleButton type='Icon' size='small' onClick={() => dispatch(submenu3())}>
             <MoreHorizIcon />
           </ToggleButton>
         </h3>
@@ -129,14 +131,14 @@ export default function Options() {
         <div className={`${styles.itemwrapper} ${styles.instruction}`}>
           <SpringPop title='Tutorial' type='display'>
             -The text size button can be used to change size of
-                                text shown in caption space.<br />
-                                -There are 3 different graph can be toggled to help
-                                reflex the surrounding voices by clicking forth button<br />
-                                -For circular graph, try to drag it around.<br />
-                                -To stop captioning just click switch button for Recording. Also
-                                click again to resume captioning.<br />
-                                -To memorize textsize option, click save after choosing a proper size of the text.
-                    </SpringPop>
+            text shown in caption space.<br />
+            -There are 3 different graph can be toggled to help
+            reflex the surrounding voices by clicking forth button<br />
+            -For circular graph, try to drag it around.<br />
+            -To stop captioning just click switch button for Recording. Also
+            click again to resume captioning.<br />
+            -To memorize textsize option, click save after choosing a proper size of the text.
+          </SpringPop>
         </div>
 
       </div>
@@ -147,7 +149,7 @@ export default function Options() {
         <h2 style={{ fontFamily: "Arial" }}>OPTIONS</h2>
         <h3>
           Source
-                    <ToggleButton type='Icon' size='small' onClick={() => dispatch(submenu2())}>
+          <ToggleButton type='Icon' size='small' onClick={() => dispatch(submenu2())}>
             <MoreHorizIcon />
           </ToggleButton>
         </h3>
@@ -162,24 +164,26 @@ export default function Options() {
         <div className={styles.itemwrapper}>
           <PlusMinus item="Text Size" setting={textSize}
             increment={increment_textSize}
-            decrement={decrement_textSize} />
+            decrement={decrement_textSize}
+            text={props.text}
+            setText={props.setText} />
         </div>
         <div className={styles.itemwrapper}>
           <SpringPop type='switch' state={bg_color} functionMap={funcMap_bg} imageMap={imageMap_bg} >
             Theme
-                    </SpringPop>
+          </SpringPop>
         </div>
         <div className={styles.itemwrapper}>
           <SpringPop type='switch' state={bot_size} functionMap={funcMap_bx} imageMap={imageMap_bx} >
             Layout
-                    </SpringPop>
+           </SpringPop>
         </div>
         {/* <div className={styles.itemwrapper}>
                     <StreamButton/>
                 </div> */}
         <h3>
           Audio Visulization
-                    <ToggleButton type='Icon' size='small' onClick={() => dispatch(submenu2())}>
+            <ToggleButton type='Icon' size='small' onClick={() => dispatch(submenu2())}>
             <MoreHorizIcon />
           </ToggleButton>
         </h3>
@@ -200,7 +204,7 @@ export default function Options() {
                             -To stop captioning just click switch button for Recording. Also
                             click again to resume captioning.<br />
                             -To memorize textsize option, click save after choosing a proper size of the text.
-                    </SpringPop>
+          </SpringPop>
         </div>
 
       </div>

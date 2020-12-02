@@ -169,7 +169,10 @@ export default function PersistentDrawerLeft(props) {
           <div className={classes.drawerHeader}>
 
           </div>
-          <AROption />
+          <AROption
+            text={props.text}
+            setText={props.setText}
+          />
         </>
       )
     }
@@ -183,7 +186,7 @@ export default function PersistentDrawerLeft(props) {
             </IconButton>
 
           </div>
-          <Options text={props.text} setText={props.setText} />
+          <Options text={props.text} setText={props.setText} color={props.color} />
         </>
       )
     } else if (page === 2) {
@@ -305,10 +308,11 @@ export default function PersistentDrawerLeft(props) {
           <Drawer
             className={classes.drawer}
             width="50%"
-            variant="persistent"
+            variant="temporary"
             anchor="left"
             open={open}
             classes={{ paper: classes.drawerPaper }}
+            onClose={handleDrawerClose}
           >
             {renderOption()}
           </Drawer>}

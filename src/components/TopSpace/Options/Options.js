@@ -96,9 +96,7 @@ export default function Options(props) {
         <h3>Display</h3>
         <Divider />
         <div className={styles.itemwrapper}>
-          <PlusMinus item="Text Size" setting={textSize}
-            increment={increment_textSize}
-            decrement={decrement_textSize}
+          <PlusMinus item="Text Size" color={props.color}
             text={props.text}
             setText={props.setText} />
         </div>
@@ -162,9 +160,8 @@ export default function Options(props) {
         <h3>Display</h3>
         <Divider />
         <div className={styles.itemwrapper}>
-          <PlusMinus item="Text Size" setting={textSize}
-            increment={increment_textSize}
-            decrement={decrement_textSize}
+          <PlusMinus item="Text Size"
+            color={props.color}
             text={props.text}
             setText={props.setText} />
         </div>

@@ -17,9 +17,9 @@ import styles from './Desktop.module.css'
 import swal from 'sweetalert';
 
 
-export default function Desktop() {
+export default function Desktop(props) {
   const dispatch = useDispatch()
-  const [text, setText] = useState(6)
+  const { text, setText } = props
   // Get global state from Redux. See the React Redux tutorial.
   // webspeech on-off
   const onWebspeech = useSelector((state) => state.onWebspeech)

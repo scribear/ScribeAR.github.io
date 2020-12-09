@@ -27,7 +27,7 @@
       "return _Target.default;",
       " }",
       "});",
-      "var _Target = _interopRequireDefault(require('./Target'));",
+      "var _Target = _interopRequireDefault(require('./${1:ComponentFileName}'));",
     ]
   }
 }

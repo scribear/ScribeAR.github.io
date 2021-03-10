@@ -7,8 +7,6 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import Options from "../TopSpace/Options";
 import { ThemeProvider } from "@material-ui/core/styles";
 import mytheme from './theme'
@@ -34,11 +32,12 @@ import Switch from '../Switch';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import DesktopWindowsIcon from '@material-ui/icons/DesktopWindows';
 import AROption from '../AROption'
+import { Component } from 'react';
 
 const MenuMap = [
   'MainMenu',
   'Source',
-  'Audio Visual',
+  'Visual',
 ];
 
 
@@ -89,10 +88,12 @@ const useStyles = makeStyles((theme) => ({
   },
   drawerHeader: {
     display: 'flex',
+    position: 'fixed',
     alignItems: 'center',
-    padding: theme.spacing(0, 1),
     ...theme.mixins.toolbar,
     justifyContent: 'flex-end',
+    background: 'white',
+    marginLeft: '0.1rem'
   },
   content: {
     flexGrow: 1,
@@ -110,6 +111,12 @@ const useStyles = makeStyles((theme) => ({
     }),
     marginLeft: 0,
   },
+  switch: {
+  },
+  mainContent: {
+    marginTop: '3rem',
+
+  }
 }));
 
 export default function PersistentDrawerLeft(props) {
@@ -178,44 +185,27 @@ export default function PersistentDrawerLeft(props) {
     }
     if (page === 1) {
       return (
-        <>
-          <div className={classes.drawerHeader}>
-            <Switch page={page} prev={prev_page} next={next_page} titleMap={MenuMap} />
-            <IconButton onClick={handleDrawerClose} color="inherit">
-              {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-            </IconButton>
-
-          </div>
-          <Options text={props.text} setText={props.setText} color={props.color} />
-        </>
+        displayOption(classes, page, <Options text={props.text} setText={props.setText} color={props.color} />)
       )
     } else if (page === 2) {
       return (
-        <>
-          <div className={classes.drawerHeader}>
-            <Switch page={page} prev={prev_page} next={next_page} titleMap={MenuMap} />
-            <IconButton onClick={handleDrawerClose} color="inherit">
-              {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-            </IconButton>
-
-          </div>
-          <AzureOption />
-        </>
-
+        displayOption(classes, page, <AzureOption />)
       )
     }
     return (
-      <>
-        <div className={classes.drawerHeader}>
-          <Switch page={page} prev={prev_page} next={next_page} titleMap={MenuMap} />
-          <IconButton onClick={handleDrawerClose} color="inherit">
-            {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-          </IconButton>
-
-        </div>
-        <AudioOption />
-      </>
+      displayOption(classes, page, <AudioOption />)
     )
+  }
+
+  function displayOption(classes, page, Component) {
+    return <>
+      <div className={classes.drawerHeader}>
+        <Switch className={classes.switch} page={page} prev={prev_page} next={next_page} titleMap={MenuMap} />
+      </div>
+      <div className={classes.mainContent}>
+        {Component}
+      </div>
+    </>;
   }
 
   const ARswitch = () => {
@@ -328,3 +318,5 @@ export default function PersistentDrawerLeft(props) {
     </div>
   );
 }
+
+

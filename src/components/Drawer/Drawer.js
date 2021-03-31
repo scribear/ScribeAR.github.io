@@ -7,24 +7,13 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import Options from "../TopSpace/Options";
 import { ThemeProvider } from "@material-ui/core/styles";
 import mytheme from './theme'
 import blue from "@material-ui/core/colors/blue"
 import orange from "@material-ui/core/colors/orange"
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
 import { useSelector, } from 'react-redux';
-import ShareIcon from '@material-ui/icons/Share';
-import { EmailShareButton } from 'react-share';
-import Fade from '@material-ui/core/Fade';
-import SaveIcon from '@material-ui/icons/SaveSharp';
 import LogIn from "../LogIn/LogIn";
-import MailIcon from '@material-ui/icons/Mail';
-import { Button, Tooltip } from "@material-ui/core"
-import Recognition from "../Captions/Recognition"
 import AzureOption from '../AzureTopSpace/AzureOptions'
 import MenuHider from '../PlaceHolder/MenuHider'
 import './Drawer.css'
@@ -34,11 +23,13 @@ import Switch from '../Switch';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import DesktopWindowsIcon from '@material-ui/icons/DesktopWindows';
 import AROption from '../AROption'
+import Azure from './BarGadgets/Azure.js'
+import Share from './BarGadgets/Share.js'
 
 const MenuMap = [
   'MainMenu',
   'Source',
-  'Audio Visual',
+  'Visual',
 ];
 
 
@@ -89,10 +80,12 @@ const useStyles = makeStyles((theme) => ({
   },
   drawerHeader: {
     display: 'flex',
+    position: 'fixed',
     alignItems: 'center',
-    padding: theme.spacing(0, 1),
     ...theme.mixins.toolbar,
     justifyContent: 'flex-end',
+    background: 'white',
+    marginLeft: '0.1rem'
   },
   content: {
     flexGrow: 1,
@@ -110,6 +103,12 @@ const useStyles = makeStyles((theme) => ({
     }),
     marginLeft: 0,
   },
+  switch: {
+  },
+  mainContent: {
+    marginTop: '3rem',
+
+  }
 }));
 
 export default function PersistentDrawerLeft(props) {
@@ -154,6 +153,17 @@ export default function PersistentDrawerLeft(props) {
     setAnchorEl(null);
   };
 
+  /**
+   * drop down control for azure
+   */
+  const [dropDown, setDropDown] = useState(null);
+  const handleDrop = (e) => {
+    setDropDown(e.currentTarget);
+  }
+  const handleDropClose = () => {
+    setDropDown(null);
+  }
+
   const handleAR = () => {
     window.location.replace('/armode')
   }
@@ -178,45 +188,29 @@ export default function PersistentDrawerLeft(props) {
     }
     if (page === 1) {
       return (
-        <>
-          <div className={classes.drawerHeader}>
-            <Switch page={page} prev={prev_page} next={next_page} titleMap={MenuMap} />
-            <IconButton onClick={handleDrawerClose} color="inherit">
-              {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-            </IconButton>
-
-          </div>
-          <Options text={props.text} setText={props.setText} color={props.color} />
-        </>
+        displayOption(classes, page, <Options text={props.text} setText={props.setText} color={props.color} />)
       )
     } else if (page === 2) {
       return (
-        <>
-          <div className={classes.drawerHeader}>
-            <Switch page={page} prev={prev_page} next={next_page} titleMap={MenuMap} />
-            <IconButton onClick={handleDrawerClose} color="inherit">
-              {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-            </IconButton>
-
-          </div>
-          <AzureOption />
-        </>
-
+        displayOption(classes, page, <AzureOption />)
       )
     }
     return (
-      <>
-        <div className={classes.drawerHeader}>
-          <Switch page={page} prev={prev_page} next={next_page} titleMap={MenuMap} />
-          <IconButton onClick={handleDrawerClose} color="inherit">
-            {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-          </IconButton>
-
-        </div>
-        <AudioOption />
-      </>
+      displayOption(classes, page, <AudioOption />)
     )
   }
+
+  function displayOption(classes, page, Component) {
+    return <>
+      <div className={classes.drawerHeader}>
+        <Switch className={classes.switch} page={page} prev={prev_page} next={next_page} titleMap={MenuMap} />
+      </div>
+      <div className={classes.mainContent}>
+        {Component}
+      </div>
+    </>;
+  }
+
 
   const ARswitch = () => {
     if (window.location.pathname === '/armode') {
@@ -259,31 +253,10 @@ export default function PersistentDrawerLeft(props) {
               <div className="border d-table w-100">
                 <h2 className="d-table-cell tar2">ScribeAR</h2>
                 <div className="d-table-cell tar">
-                  <Button aria-controls="simple-menu" aria-haspopup="true" variant="contained" variant="text" color="inherit" onClick={handleClick} startIcon={<ShareIcon />}>Share</Button>
-                  <Menu
-                    id="simple-menu"
-                    anchorEl={anchorEl}
-                    keepMounted
-                    open={Boolean(anchorEl)}
-                    onClose={handleClose}
-                  >
-                    <Tooltip TransitionComponent={Fade} title="Share through emails" arrow>
-                      <MenuItem onClick={handleClose}>
-                        <EmailShareButton subject="Transcript History">
-                          <Button startIcon={<MailIcon />}> EMAIL</Button>
-                        </EmailShareButton>
-                      </MenuItem>
-                    </Tooltip>
-                    <Tooltip TransitionComponent={Fade} title="Download the transcript as a .txt file" arrow>
-                      <MenuItem onClick={handleClose}>
-                        <Button variant="contained" variant="text" onClick={new Recognition().downloadTxtFile} startIcon={<SaveIcon fontSize='large' />}>Download</Button>
-                      </MenuItem>
-                    </Tooltip>
-
-                  </Menu>
+                  {page === 2 ? <Azure dropDown={dropDown} handleDropClose={handleDropClose} handleDrop={handleDrop} /> : <></>}
+                  <Share anchorEl={anchorEl} handleClose={handleClose} handleClick={handleClick} />
                   <LogIn />
                   <ARswitch />
-
                 </div>
                 <div className='lock-wrap'>
                   <MenuHider />
@@ -328,3 +301,5 @@ export default function PersistentDrawerLeft(props) {
     </div>
   );
 }
+
+

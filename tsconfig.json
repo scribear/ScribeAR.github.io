@@ -1,0 +1,55 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "noImplicitAny": false,
+    "jsx": "react-jsx"
+  },
+  "include": [
+    "src"
+  ]
+}
+
+// {
+//   "compilerOptions": {
+//     "allowJs": true,
+//     "allowSyntheticDefaultImports": true,
+//     "esModuleInterop": true,
+//     "isolatedModules": true,
+//     "jsx": "react",
+//     "lib": ["es6", "dom"],
+//     "moduleResolution": "node",
+//     "noEmit": true,
+//     "target": "esnext",
+//     "noImplicitAny": false,
+//     "skipLibCheck": true,
+//     "importHelpers": true,
+//     "strict": true
+//   },
+//   "exclude": [
+//     "node_modules",
+//     "babel.config.js",
+//     "metro.config.js",
+//     "jest.config.js",
+//     "__tests__/**/*-test.ts",
+//     ".prettierrc",
+//     ".eslintrc.js"
+//   ]
+// }
+

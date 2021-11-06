@@ -27,7 +27,7 @@ Here are some relevant files worth knowing about. These files are present in any
 * `public` directory holds `index.html`, the home html file. It is automatically connected to `src/App.js` and you will rarely need to touch the html or anything else in `public`. `manifest.json` holds some basic information used by `index.html` and I don’t really know what it does.
      * Any external CSS libraries you want to use should be linked in the `index.html` file. (Right now there aren't any.)
      * All images should be stored in the public directory and referenced in the project as though they are in the same folder, i.e. simply as `./imgname.jpg`.
-* `src` directory is where 99% of the work is done. `App.js`, the top overarching file, lives here. All components are stored in `src/components` and most of the code you write is somewhere in here.
+* `src` directory is where 99% of the work is done. `App.tsx`, the top overarching file, lives here. All components are stored in `src/components` and most of the code you write is somewhere in here.
 
 When you push a commit, if the commit is ready to deploy to Github Pages, also run `npm run deploy` and the site at our URL will be updated within a couple minutes.
 

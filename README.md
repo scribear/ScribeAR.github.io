@@ -7,6 +7,11 @@ permalink: /index.html
 * For all communications, see Slack.
 * Replace/update this readme as necessary.
 
+## Resources
+
+* React: https://reactjs.org/docs/getting-started.html
+* Redux: https://redux.js.org/tutorials/essentials/part-1-overview-concepts, https://daveceddia.com/redux-tutorial/ 
+
 ## Setup
 
 Download Node.js at nodejs.org. Node comes with npm (Node Package Manager), which we will use for running code on your machine and deploying it to Github Pages. Make sure node and npm are in your `PATH` and then run `node -v` and `npm -v`.

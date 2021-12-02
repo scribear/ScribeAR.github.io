@@ -23,6 +23,7 @@ import SpeechLanguage from './STT/speechLanguage'
 import TextLanguage from './STT/textLanguage'
 
 
+
 /* todo:
       create listItem shell so that we can simply run a loop to render all of them
       this should help readability and also make adding ListItems in the future easier
@@ -40,9 +41,18 @@ export default function STT(props) {
       (event: React.KeyboardEvent | React.MouseEvent) => {
         setState({ ...state, [head]: !state[head] })
       }
+  
+  // const textStyle = { 
+  //   text-align: center;
+  // };
+
+  const textStyle = {
+    marginLeft: '85px'
+  }
+
   return (
     <div>
-      <h3>Menu</h3>
+      <h3 style={textStyle}>Menu</h3>
       <List
         sx={{ width: '20vw', bgcolor: 'background.paper' }}
         component="nav"

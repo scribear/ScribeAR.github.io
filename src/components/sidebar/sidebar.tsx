@@ -47,7 +47,7 @@ export default function STT(props) {
   // };
 
   const textStyle = {
-    marginLeft: '85px'
+    marginLeft: '80px'
   }
 
   return (

@@ -41,18 +41,12 @@ export default function STT(props) {
       (event: React.KeyboardEvent | React.MouseEvent) => {
         setState({ ...state, [head]: !state[head] })
       }
-  
-  // const textStyle = { 
-  //   text-align: center;
-  // };
-
-  const textStyle = {
-    marginLeft: '80px'
-  }
 
   return (
     <div>
-      <h3 style={textStyle}>Menu</h3>
+      <div style={{display: 'flex',  justifyContent:'center', alignItems:'center'}}>
+        <h3>Menu</h3>
+      </div>
       <List
         sx={{ width: '20vw', bgcolor: 'background.paper' }}
         component="nav"

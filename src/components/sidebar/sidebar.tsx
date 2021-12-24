@@ -118,7 +118,7 @@ export default function STT(props) {
             </ListItem>
           </List>
         </Collapse>
-        <Divider />
+        {/* <Divider />
 
         <ListItem>
           <ListItemIcon>
@@ -141,7 +141,7 @@ export default function STT(props) {
             </ListItem>
           </List>
         </Collapse>
-        <Divider />
+        <Divider /> */}
       </List>
     </div>
   );

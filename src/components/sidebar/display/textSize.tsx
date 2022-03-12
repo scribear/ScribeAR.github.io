@@ -23,11 +23,14 @@ export default function PlusMinus(props) {
   const textS = useSelector((state: RootState) => {
     return state.DisplayReducer as DisplayStatus;
   });
-
+  
   const handleInputChangeInput = (event) => {
     let copyStatus = Object.assign({}, textS);
     copyStatus.textSize = Number(event.target.value)
-    dispatch({ type: 'SET_TEXT', payload: copyStatus })
+    if (event.nativeEvent.inputType) { 
+    } else {
+      dispatch({ type: 'SET_TEXT', payload: copyStatus })
+    }
   }
   const handleInputChangeSlider = (event) => {
     let copyStatus = Object.assign({}, textS);
@@ -52,10 +55,10 @@ export default function PlusMinus(props) {
           <Grid item xs>
             <Slider
               style={{ color: textS.secondaryColor }}
-              defaultValue={textS.textSize}
               getAriaValueText={valuetext}
               aria-labelledby="discrete-slider"
               valueLabelDisplay="auto"
+              value={textS.textSize}
               onChange={(e, val) => { handleInputChangeSlider(val) }}
               step={1}
               marks
@@ -68,14 +71,13 @@ export default function PlusMinus(props) {
               <Input
                 value={textS.textSize}
                 margin="dense"
-                onChange={handleInputChangeInput}
+                onChange={(e) => {handleInputChangeInput(e) }}
                 onBlur={handleBlur}
                 inputProps={{
                   step: 1,
                   min: 1,
                   max: 15,
-                  type: 'number',
-                  'aria-labelledby': 'input-slider',
+                  type: 'number',                 
                 }}
               />
             </Grid>

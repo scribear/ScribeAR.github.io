@@ -124,7 +124,7 @@ export default function STT(props) {
         </Collapse>
         <Divider />
 
-        <ListItem>
+        {/* <ListItem>
           <ListItemIcon>
             <EqualizerIcon />
           </ListItemIcon>
@@ -132,8 +132,8 @@ export default function STT(props) {
           <IconButton onClick={toggleDrawer("visualization")} >
             {state.visualization ? <ExpandLess /> : <ExpandMore />}
           </IconButton>
-        </ListItem>
-        <Collapse in={state.visualization} timeout="auto" unmountOnExit>
+        </ListItem> */}
+        {/* <Collapse in={state.visualization} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
             <ListItem sx={{ pl: 4 }}>
               <ListItemText primary="Visualizing" />
@@ -144,7 +144,7 @@ export default function STT(props) {
               <ListItemText primary="Design" />
             </ListItem>
           </List>
-        </Collapse>
+        </Collapse> */}
         <Divider />
       </List>
     </div>

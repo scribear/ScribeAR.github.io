@@ -2,7 +2,6 @@ import * as React from 'react';
 import { useCallback, useMemo } from 'react';
 import { ControlStatus, AzureStatus, ApiStatus, PhraseList } from '../../../redux/types';
 import * as speechSDK from 'microsoft-cognitiveservices-speech-sdk'
-import { PhraseListGrammar } from 'microsoft-cognitiveservices-speech-sdk';
 export const GetAzureRecognition = () => {
   const pog = "hi"
   const test = useCallback(
@@ -46,12 +45,15 @@ export const AzureRecognition = () => {
           let azureAudioConfig = speechSDK.AudioConfig.fromDefaultMicrophoneInput();
           let speechRecognition = new speechSDK.TranslationRecognizer(azureSpeech, azureAudioConfig);
           let phraseList = speechSDK.PhraseListGrammar.fromRecognizer(speechRecognition)
+          console.log(azureStatus.current.phrases[0])
           for (let i = 0; i < azureStatus.current.phrases.length; i++) {
             phraseList.addPhrase(azureStatus.current.phrases[i])
+            console.log(azureStatus.current.phrases[i])
+
           }
+          
           let lastRecognized = ""
           speechRecognition.startContinuousRecognitionAsync();
-          
           speechRecognition.recognizing = (s, e) => {
             if (control.current.listening == false || currentAPI.current.currentAPI != 1) {
               speechRecognition.stopContinuousRecognitionAsync()
@@ -89,6 +91,5 @@ export const AzureRecognition = () => {
       }),
     [setTranscripts]
   );
-
   return useMemo(() => ({ azureTranscripts, azureListen }), [azureTranscripts]);
 };

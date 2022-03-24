@@ -1,48 +1,17 @@
 import * as React from 'react';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import Collapse from '@mui/material/Collapse';
-import ListItemButton from '@mui/material/ListItemButton';
-import Swal from 'sweetalert2';
-import Divider from '@mui/material/Divider';
-import ExpandLess from '@mui/icons-material/ExpandLess';
-import ExpandMore from '@mui/icons-material/ExpandMore';
+import TextField from '@mui/material/TextField';
+import Paper from '@mui/material/Paper';
+import InputBase from '@mui/material/InputBase';
+import Menu from '@mui/material/Menu';
+import ClearIcon from '@mui/icons-material/Clear';
+import EditIcon from '@mui/icons-material/Edit';
 import './phrase.css'
 import IconButton from "@mui/material/IconButton";
-import ListItemText from '@mui/material/ListItemText'; import Button from '@mui/material/Button';
-import Theme from '../../theme'
-import { RootState, ControlStatus, PhraseListStatus, PhraseList } from '../../../redux/types';
-import { useDispatch, useSelector } from 'react-redux';
-
-
-
-// export default function TemporaryDrawer(props) {
-//     const [state, setState] = React.useState({
-//         isOpen: false
-//     });
-//     const toggleDrawer =
-//         (open: boolean) =>
-//             (event: React.MouseEvent) => {
-//                 setState({ ...state, isOpen: open });
-//             };
-//     return (
-//         <div>
-//             <IconButton
-//                 onClick={toggleDrawer(true)}
-//             >
-//                 <MenuIcon color="primary" />
-//             </IconButton>
-//             <Drawer
-//                 open={state.isOpen}
-//                 onClose={toggleDrawer(false)}
-//             >
-//                 <Phrase isRecording={props.isRecording} />
-//             </Drawer>
-//         </div>
-//     )
-// }
-
-
+import ListItemText from '@mui/material/ListItemText';
+import { PhraseList } from '../../../redux/types';
+import { useDispatch } from 'react-redux';
 
 /* todo:
   1   Make language bar a fixed height so that it can only display ~8 languages 
@@ -51,16 +20,14 @@ import { useDispatch, useSelector } from 'react-redux';
       and save the shortened title in RootState
 */
 
-export default function CustomizedMenus() {
+export default function PhrasePopUp(props) {
     const dispatch = useDispatch();
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-    const phraseList = useSelector((state: RootState) => {
-        return state.PhraseListReducer.currentPhraseList as PhraseList;
-    });
+
     const open = Boolean(anchorEl);
     const [state, setState] = React.useState({
-        listPhrases: phraseList.phrases,
-        currentList: phraseList.name,
+        phraseList: props.currentPhraseList as PhraseList,
+        currentPhrase: "",
         shouldCollapse: true
     });
 
@@ -68,80 +35,122 @@ export default function CustomizedMenus() {
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
     };
+    const handleClickX = (head: any) => (event: React.MouseEvent<HTMLElement>) => {
+        let listPhrases = state.phraseList.phrases.splice(head, 1);
+        dispatch({ type: "EDIT_PHRASE_LIST", payload: listPhrases })
+    };
+    const handleChange = (event) => {
+        setState({ ...state, currentPhrase: event.target.value})  
+    }
     const handleClose = () => {
         setAnchorEl(null);
     };
-    let initialPhraseList: PhraseList = {
-        phrases: [],
-        name: "empty",
-        availableSpace: 2000
-    }
-    let currentPhrases: string[] = Array();
-    const toggleDrawer =
-        (head: string) =>
-            (event: React.KeyboardEvent | React.MouseEvent) => {
-                setState({ ...state, shouldCollapse: !state.shouldCollapse })
-            }
-    
-    const clickAddList = () => {
-        Swal.fire({
-            customClass: {
-                container: 'swal2-container',
-            },
-            text: "Add phrases",
-            input: 'text',
-            returnFocus: true,
-            showCancelButton: true,
-            confirmButtonText: 'Add Another',
-            cancelButtonText: 'Done',
-        }).then((result) => {
-            if (result.isConfirmed) {
-                phraseList.phrases.push(result.value)
-                setState({ ...state, listPhrases:  phraseList.phrases})
-                dispatch({type: "EDIT_PHRASE_LIST", payload: phraseList})
-                dispatch({type: "CHANGE_LIST", payload: phraseList})
-                clickAddList()
-            } else if (result.isDismissed) {
-                
-            }
-            
-        });
+    const handleClickPhrase = (event: React.MouseEvent<HTMLElement>) => {
+        console.log(event)
     }
 
-    if (phraseList.availableSpace == -1) {
-        return ( null)
+    const handleEnter = (event) =>
+    {
+      if (event.key === 'Enter') {
+          console.log(event)
+          setState({ ...state, currentPhrase: ""})  
+        clickAddList(event)
+       
+        event.preventDefault();
+      }
+    }
+    const clickAddList = (event) => {
+        if (event.target.value) {
+            state.phraseList.phrases.push(event.target.value)
+            dispatch({ type: "EDIT_PHRASE_LIST", payload: state.phraseList })
+            dispatch({ type: "CHANGE_LIST", payload: state.phraseList.phrases })
+        }
+
+        
+    }
+
+    if (state.phraseList.availableSpace == -1) {
+        return (null)
+    }
+    const handleChangePhraseName = (event) => {
+        console.log(event)
+        let copy = Object.assign({}, state.phraseList);
+        copy.name = event.target.value
+        setState({ ...state, phraseList:copy})  
+        dispatch({ type: 'CHANGE_PHRASE_LIST', payload: state.phraseList })
+
     }
     return (
         <div>
-            <List
-                sx={{ width: '20vw', bgcolor: 'background.paper' }}
-                component="nav"
-                aria-labelledby="nested-list-subheader"
+            
+            <ListItem style=
+                {props.currentList == props.currentPhraseList.name ? { backgroundColor: '#03bafc' } : { backgroundColor: 'white' }}>
+                <ListItemText primary={state.phraseList.name} />
+                <IconButton onClick={handleClick}>
+                    <EditIcon />
+                </IconButton>
+            </ListItem>
+
+            <Menu
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleClose}
+                PaperProps={{
+                    elevation: 0,
+                    sx: {
+                        position: 'unset',
+                        ml: '25vw',
+                        width: '50vw',
+                        mt: '25vh',
+                        height: '50vh',
+                        filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+                    },
+                }}
+                transformOrigin={{ horizontal: 'center', vertical: 'top' }}
+                anchorOrigin={{ horizontal: 'center', vertical: 'bottom' }}
             >
-                <ListItem>
-                    <ListItemText primary={"Current List: " + phraseList.name} />
-                    <IconButton onClick={toggleDrawer("stt")} >
-            {state.shouldCollapse ? <ExpandLess /> : <ExpandMore />}
-          </IconButton>
-                </ListItem>
+                <TextField
+                    variant='standard'
+                    onChange={handleChangePhraseName}
+                    value = {state.phraseList.name}
+                    sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', ml: '3vw', mr: '3vw', mt: '2vh', position: 'sticky', textAlign: 'center'}}
+                >
+                
+                </TextField>
+                <Paper
+                    variant='outlined'
+                    component="form"  
+                    sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', ml: '3vw', mr: '3vw', mt: '2vh', position: 'sticky'}}
+                > 
+                    <InputBase
+                        sx={{ ml: 1, flex: 1 }}
+                        placeholder="Input Phrase"
+                        value = {state.currentPhrase}
+                        onKeyDown = {handleEnter}
+                        onChange = {handleChange}
+                    />
+                </Paper>
+                <List
+                    sx={{height: '30vh', mt: '1vh', bgcolor: 'background.paper',  overflow: 'overlay', overflowWrap: 'anywhere' }}
+                    component="nav"
+                    aria-labelledby="nested-list-subheader"
+                    
+                >
+                    {state.phraseList.phrases.map((phrase: string, index) =>
+                        <div>
+                            <ListItem >
+                                <ListItemText primary={phrase} />
+                                <IconButton onClick={handleClickX(index)} >
+                                    <ClearIcon />
+                                </IconButton>
 
-                <Collapse in={state.shouldCollapse} timeout="auto" unmountOnExit>
-                    <List component="div" disablePadding>
-                        {phraseList.phrases.map((phrase: string, index) =>
-                            <div>
-                                <Divider />
-                                <ListItemButton>
-                                    <ListItemText primary={phrase} />
-                                </ListItemButton>
+                            </ListItem>
+                        </div>
+                    )}
+                </List>
+            </Menu>
 
-                            </div>
-                        )}
-                    </List>
-                </Collapse>
-            </List>
-            <Button sx={{ pl: 4 }}>
-                <ListItemText primary="Add Phrases" onClick={clickAddList} />
-            </Button>
+
         </div>
     );
 }

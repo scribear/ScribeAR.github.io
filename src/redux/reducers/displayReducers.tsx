@@ -24,7 +24,7 @@ const getLocalState = (name: string) => {
   }
 };
 
-export const DisplayReducer = (state = getLocalState("displayReducer"), action) => {
+export const DisplayReducer = (state = getLocalState("displayReducer2"), action) => {
   switch (action.type) {
     case 'CHANGE_PRIMARY_THEME':
       
@@ -43,7 +43,7 @@ export const DisplayReducer = (state = getLocalState("displayReducer"), action) 
         textColor: action.payload,
       }
     case 'SET_TEXT':
-      saveLocally("displayReducer", action.payload)
+      saveLocally("displayReducer2", action.payload)
       return { ...state, ...action.payload };
     case 'HIDE_MENU':
       return {

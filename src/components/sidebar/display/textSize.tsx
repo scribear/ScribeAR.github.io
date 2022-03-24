@@ -27,7 +27,8 @@ export default function PlusMinus(props) {
   const handleInputChangeInput = (event) => {
     let copyStatus = Object.assign({}, textS);
     copyStatus.textSize = Number(event.target.value)
-    if (event.nativeEvent.inputType) { 
+    if (event.nativeEvent.inputType) {
+      
     } else {
       dispatch({ type: 'SET_TEXT', payload: copyStatus })
     }

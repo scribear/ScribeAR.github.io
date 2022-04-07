@@ -102,45 +102,45 @@ export default function CustomizedMenus() {
   };
   const handleClickItem = (event) => {
     setState({ ...state, language: event.target.id })
-    dispatch({type: 'SET_SPEECH_LANGUAGE', payload: event.target.id})
+    dispatch({ type: 'SET_SPEECH_LANGUAGE', payload: event.target.id })
     setAnchorEl(null);
   }
 
-  const {myTheme} = Theme()
+  const { myTheme } = Theme()
 
 
   return (
     <div>
-                              <ThemeProvider theme={myTheme}>
+      <ThemeProvider theme={myTheme}>
 
-      <Button
-        id="demo-customized-button"
-        aria-controls="demo-customized-menu"
-        aria-haspopup="true"
-        aria-expanded={open ? 'true' : undefined}
-        variant="contained"
-        disableElevation
-        onClick={handleClick}  
-        sx={{ width: '2vw', height:30, padding: 0}}
-      >
-          
-        <h2 className="tryout" style={{fontSize: '12px'}}>{state.language}</h2> 
+        <Button
+          id="demo-customized-button"
+          aria-controls="demo-customized-menu"
+          aria-haspopup="true"
+          aria-expanded={open ? 'true' : undefined}
+          variant="contained"
+          disableElevation
+          onClick={handleClick}
+          sx={{ width: '2vw', height: 30, padding: 0 }}
+        >
+
+          <h2 className="tryout" style={{ fontSize: '12px' }}>{state.language}</h2>
         </Button>
-      <StyledMenu
-        id="demo-customized-menu"
-        MenuListProps={{
-          'aria-labelledby': 'demo-customized-button',
-        }}
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
-      >
-          {languages.map((language : string, index) =>
-            <MenuItem id = {language} onClick={handleClickItem} disableRipple>
-                {language}
+        <StyledMenu
+          id="demo-customized-menu"
+          MenuListProps={{
+            'aria-labelledby': 'demo-customized-button',
+          }}
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleClose}
+        >
+          {languages.map((language: string, index) =>
+            <MenuItem id={language} onClick={handleClickItem} disableRipple>
+              {language}
             </MenuItem>
-          )}          
-      </StyledMenu>
+          )}
+        </StyledMenu>
       </ThemeProvider>
 
     </div>

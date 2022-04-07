@@ -76,4 +76,3 @@ We currently use 3 API's:
 **Azure:** is another API we use and is slightly more difficult to work with, as it requires a key and region authentication. It is also run asynchronously so we use "React.useRef()" to communicate with it as well. Azure is much more exciting as a lot of its capabilities are pretty cutting edge, a lot of updates we have planned involve implementing Azure features.
 
 **StreamText:** is a website that we actually just render with an Iframe. There is almost no coding involved and because it uses an Iframe, there is also very little communication possible. Anyone looking to help with streamtext would probably need to get comfortable with XML requests.
-

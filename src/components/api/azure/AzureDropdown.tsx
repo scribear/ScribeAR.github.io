@@ -1,7 +1,5 @@
 import * as React from 'react';
 import List from '@mui/material/List';
-import Button from "@mui/material/Button";
-import ListItemText from '@mui/material/ListItemText';
 import swal from 'sweetalert';
 import { GetAzureRecognition } from './azureRecognition';
 import ListItem from '@mui/material/ListItem';
@@ -44,7 +42,13 @@ export default function AzureDropdown(props) {
             dispatch({type: 'CHANGE_AZURE_LOGIN', payload: copyStatus})
             
     } 
-
+    const handleEnter = (event) =>
+    {
+      if (event.key === 'Enter') {
+        toggleEnter()
+        event.preventDefault();
+      }
+    }
     const toggleEnter = async () => {
         dispatch({type: 'FLIP_RECORDING', payload: state.controlStatus})
           const recognizedMessage = await test(state.controlStatus, state.azureStatus).then(response => {  
@@ -107,7 +111,7 @@ export default function AzureDropdown(props) {
                             }}
                             noValidate
                             autoComplete="off"
-                        ><TextField onChange={handleChangeKey} value={state.azureStatus.azureKey} id="azureKey" label="Key" variant="outlined" /></Box>
+                        ><TextField onKeyDown = {handleEnter} onChange={handleChangeKey} value={state.azureStatus.azureKey} id="azureKey" label="Key" variant="outlined" /></Box>
                     </ListItem>
                     <ListItem sx={{ pl: 4 }}>
                         <Box
@@ -117,11 +121,8 @@ export default function AzureDropdown(props) {
                             }}
                             noValidate
                             autoComplete="off"
-                        ><TextField onChange={handleChangeKey} value={state.azureStatus.azureRegion} id="azureRegion" label="Region" variant="outlined" /></Box>
+                        ><TextField onKeyDown = {handleEnter} onChange={handleChangeKey} value={state.azureStatus.azureRegion} id="azureRegion" label="Region" variant="outlined" /></Box>
                     </ListItem>
-                    <Button sx={{ pl: 4 }}>
-                        <ListItemText primary="Enter" onClick={toggleEnter}/>
-                    </Button>
                 </List>
         </div>
     );

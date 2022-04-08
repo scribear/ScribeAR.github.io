@@ -140,7 +140,7 @@ export default function STT(props) {
                 <AzureDropdown apiStatus={state.apiStatus}/>
             </Collapse>
 
-            <ListItemButton onClick={toggleDrawer("streamTextStatus", 2, false)} >
+            {/* <ListItemButton onClick={toggleDrawer("streamTextStatus", 2, false)} >
                 <ListItemIcon>
                     <IconStatus{...{currentAPI: state.apiStatus.streamtextStatus}}/>
                 </ListItemIcon>
@@ -148,7 +148,7 @@ export default function STT(props) {
                 <IconButton>
             {state.streamTextStatus ? <ExpandLess /> : <ExpandMore />}
           </IconButton>
-            </ListItemButton>
+            </ListItemButton> */}
             <Collapse in={state.streamTextStatus} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding>
                     <ListItem sx={{ pl: 4 }}>

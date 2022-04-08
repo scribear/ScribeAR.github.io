@@ -9,13 +9,13 @@ export default function Theme(props) {
     
     let colors: color[][] = [
         [
-            {hex: '#000000', rgb: '#466636', text: 0},
-            {hex: '#000000', rgb: '#995262', text: 0},
+            {hex: '#000000', rgb: '#466636', text: 1},
+            {hex: '#000000', rgb: '#995262', text: 1},
             {hex: '#000000', rgb: '#527399', text: 1},
             {hex: '#000000', rgb: '#705299', text: 1},
         ],
         [    
-            {hex: '#0f0f0f', rgb:  '#292929', text: 0},
+            {hex: '#0f0f0f', rgb:  '#292929', text: 1},
             {hex: '#5c5c5c', rgb: '#1f1f1f', text: 0},
             {hex: '#c2c2c2', rgb: '#5c5c5c', text: 0},
             {hex: '#ebebeb', rgb: '#858585', text: 0},

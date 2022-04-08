@@ -21,7 +21,7 @@ export default function AccountMenu() {
       <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
         <Tooltip title="API choice">
           <IconButton onClick={handleClick} size="small" sx={{ ml: 2 }}>
-            <MicIcon sx={{ width: 32, height: 32, color: 'white'}}>M</MicIcon>
+            <MicIcon sx={{ width: 32, height: 32, color: 'white'}}>ScribeAR</MicIcon>
           </IconButton>
         </Tooltip>
       </Box>

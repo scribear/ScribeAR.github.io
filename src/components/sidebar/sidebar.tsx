@@ -23,12 +23,9 @@ export default function STT(props) {
       (event: React.KeyboardEvent | React.MouseEvent) => {
         setState({ ...state, [head]: !state[head] })
       }
-
   return (
     <div>
-      <div style={{display: 'flex',  justifyContent:'center', alignItems:'center'}}>
-        <h3>Menu</h3>
-      </div>
+    <h2 className="d-table-cell tar2" style={{textAlign: "left", paddingLeft: "20px"}}>Menu</h2>
       <List
         sx={{ width: '20vw', bgcolor: 'background.paper' }}
         component="nav"
@@ -47,6 +44,11 @@ export default function STT(props) {
           icon={DetailsIcon}
         />
         <Divider />
+        {/* <VisualizationMenu
+          icon={EqualizerIcon}
+        />
+        <Divider /> */}
+
       </List>
     </div>
   );

@@ -13,13 +13,16 @@ export const getSpeechRecognition = () => {
 };
 
 export const useRecognition = () => {
+  console.log("HEY HEY HEY HEY")
+
   var transcript=""
   var finalTranscript=""
   const [transcripts, setTranscripts] = React.useState<string[]>([]);
   const listen = useCallback(
+
     async (transcriptsFull: string, control: React.MutableRefObject<ControlStatus>,  currentAPI: React.MutableRefObject<ApiStatus>) =>
       new Promise((resolve, reject) => {
-        
+        console.log("YOYOYOYOYOYYOYO")  
         var lastStartedAt = new Date().getTime();
 
         const speechRecognition = getSpeechRecognition();
@@ -29,9 +32,12 @@ export const useRecognition = () => {
               resolve(transcriptsFull);   
           } else {
           const finalResult = Array.from(event.results)
+
           .map(result => result[0])
           .map(result => result.transcript)
           .join('');
+          console.log(finalResult)
+
           if (finalResult) {
             transcript = finalTranscript + finalResult;
           }    

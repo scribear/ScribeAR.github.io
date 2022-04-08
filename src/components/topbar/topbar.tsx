@@ -4,6 +4,8 @@ import Toolbar from '@material-ui/core/Toolbar';
 import SideBar from '../sidebar/sidebar'
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Drawer from '@mui/material/Drawer';
+import Grid from '@material-ui/core/Grid';
+
 import Fullscreen from './fullScreen'
 import { ApiStatus, RootState, DisplayStatus } from '../../redux/types';
 import { useDispatch, useSelector } from 'react-redux';
@@ -62,25 +64,57 @@ export default function TemporaryDrawer(props) {
                 setState({ ...state, isOpen: open });
             };
     return (
-        <AppBar position="fixed" id="topbar-wrapper" onMouseOut={changeVisibility} onMouseOver={changeVisibilityOver} style={{ transition: '0.6s', height: '10vh'}}>
-            <Toolbar style={{backgroundColor: displayStatus.secondaryColor}}>
-                <div className="d-table-cell tar">
-                    <IconButton
-                        onClick={toggleDrawer(true)}
-                    >
-                        <ThemeProvider theme={myTheme}>
-                            <MenuIcon color="primary" />
-                        </ThemeProvider>
-                    </IconButton>
-                    <Drawer
-                        disableEnforceFocus
-                        open={state.isOpen}
-                        onClose={toggleDrawer(false)}
-                    >
-                        <SideBar isRecording={props.isRecording}/>
-                    </Drawer>
-                </div>
-                <div className="border d-table w-100">
+        <AppBar position="fixed" id="topbar-wrapper" onMouseOut={changeVisibility} onMouseOver={changeVisibilityOver} style={{ transition: '0.6s' }}>
+            <Grid container spacing={2} alignItems="center"  >
+
+                <Toolbar style={{ backgroundColor: displayStatus.secondaryColor, width: '100vw', maxHeight: '10vh', paddingLeft: '20px' }}>
+
+                    <Grid item>
+
+                        <IconButton
+                            onClick={toggleDrawer(true)}
+                        >
+                            <ThemeProvider theme={myTheme}>
+                                <MenuIcon color="primary" />
+                            </ThemeProvider>
+                        </IconButton>
+
+
+                        <Drawer
+                            disableEnforceFocus
+                            open={state.isOpen}
+                            onClose={toggleDrawer(false)}
+                        >
+                            <SideBar isRecording={props.isRecording} />
+                        </Drawer>
+                    </Grid>
+                    <Grid item xs>
+                        <h2 className="d-table-cell tar2" style={{textAlign: "left",  paddingLeft: '20px'}}>ScribeAR</h2>
+                    </Grid>
+                    <Grid item>
+                        <PickApi />
+                    </Grid>
+                    <Grid item>
+                        <h3 > {display} </h3>
+                    </Grid>
+
+
+                    <Grid item>
+
+                        <MenuHider menuVisible={displayStatus.menuVisible} />
+                    </Grid>
+                    
+                    <Grid item>
+
+                        <Fullscreen />
+                    </Grid>
+                </Toolbar>
+
+            </Grid>
+
+
+
+            {/* <div className="border d-table w-100">
                     <h2 className="d-table-cell tar2">ScribeAR</h2>
                 </div>
                 <div  style ={{position: 'relative', left: '62vw'}}>
@@ -94,9 +128,8 @@ export default function TemporaryDrawer(props) {
                 <div  style ={{position: 'absolute', left: '90.5vw', paddingLeft: '2vw'}}>
 
                     <MenuHider menuVisible={displayStatus.menuVisible}/>
-                </div>
+                </div> */}
 
-            </Toolbar>
         </AppBar>
     )
 }

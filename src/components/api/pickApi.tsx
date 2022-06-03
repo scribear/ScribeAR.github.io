@@ -6,6 +6,7 @@ import Button from "@mui/material/Button";
 import ListItemText from '@mui/material/ListItemText';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Collapse from '@mui/material/Collapse';
+import StreamTextDropdown from './streamtext/streamTextDropdown';
 import ListItem from '@mui/material/ListItem';
 import ErrorIcon from '@mui/icons-material/Error';
 import swal from 'sweetalert';
@@ -132,7 +133,7 @@ export default function STT(props) {
                 </ListItemIcon>
                 <ListItemText primary="Microsoft Azure" />
                 <IconButton onClick={toggleDrawer("azureStatus", 1, true)}>
-            {state.streamTextStatus ? <ExpandLess /> : <ExpandMore />}
+            {state.azureStatus ? <ExpandLess /> : <ExpandMore />}
           </IconButton>
             </ListItemButton>
 
@@ -140,31 +141,17 @@ export default function STT(props) {
                 <AzureDropdown apiStatus={state.apiStatus}/>
             </Collapse>
 
-            {/* <ListItemButton onClick={toggleDrawer("streamTextStatus", 2, false)} >
+            <ListItemButton onClick={toggleDrawer("streamTextStatus", 2, false)} >
                 <ListItemIcon>
                     <IconStatus{...{currentAPI: state.apiStatus.streamtextStatus}}/>
                 </ListItemIcon>
                 <ListItemText primary="StreamText" />
-                <IconButton>
+                <IconButton onClick={toggleDrawer("streamTextStatus", 2, true)}>
             {state.streamTextStatus ? <ExpandLess /> : <ExpandMore />}
           </IconButton>
-            </ListItemButton> */}
+            </ListItemButton>
             <Collapse in={state.streamTextStatus} timeout="auto" unmountOnExit>
-                <List component="div" disablePadding>
-                    <ListItem sx={{ pl: 4 }}>
-                        <Box
-                            component="form"
-                            sx={{
-                                '& > :not(style)': { mr: '1vw', width: '15vw' },
-                            }}
-                            noValidate
-                            autoComplete="off"
-                        ><TextField id="outlined-basic" label="Key" variant="outlined" /></Box>
-                    </ListItem>
-                    <Button sx={{ pl: 4 }}>
-                        <ListItemText primary="Enter" />
-                    </Button>
-                </List>
+                <StreamTextDropdown apiStatus={state.apiStatus}/>
             </Collapse>
         </div>
     );

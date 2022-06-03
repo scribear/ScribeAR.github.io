@@ -44,7 +44,10 @@ export const DisplayReducer = (state = getLocalState("displayReducer2"), action)
       }
     case 'SET_TEXT':
       saveLocally("displayReducer2", action.payload)
-      return { ...state, ...action.payload };
+
+      return { 
+        ...state, 
+        textSize: action.payload };
     case 'HIDE_MENU':
       return {
         ...state,

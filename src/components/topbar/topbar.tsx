@@ -5,7 +5,6 @@ import SideBar from '../sidebar/sidebar'
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Drawer from '@mui/material/Drawer';
 import Grid from '@material-ui/core/Grid';
-
 import Fullscreen from './fullScreen'
 import { ApiStatus, RootState, DisplayStatus } from '../../redux/types';
 import { useDispatch, useSelector } from 'react-redux';
@@ -66,11 +65,8 @@ export default function TemporaryDrawer(props) {
     return (
         <AppBar position="fixed" id="topbar-wrapper" onMouseOut={changeVisibility} onMouseOver={changeVisibilityOver} style={{ transition: '0.6s' }}>
             <Grid container spacing={2} alignItems="center"  >
-
                 <Toolbar style={{ backgroundColor: displayStatus.secondaryColor, width: '100vw', maxHeight: '10vh', paddingLeft: '20px' }}>
-
                     <Grid item>
-
                         <IconButton
                             onClick={toggleDrawer(true)}
                         >
@@ -78,8 +74,6 @@ export default function TemporaryDrawer(props) {
                                 <MenuIcon color="primary" />
                             </ThemeProvider>
                         </IconButton>
-
-
                         <Drawer
                             disableEnforceFocus
                             open={state.isOpen}
@@ -97,15 +91,10 @@ export default function TemporaryDrawer(props) {
                     <Grid item>
                         <h3 > {display} </h3>
                     </Grid>
-
-
                     <Grid item>
-
                         <MenuHider menuVisible={displayStatus.menuVisible} />
                     </Grid>
-                    
                     <Grid item>
-
                         <Fullscreen />
                     </Grid>
                 </Toolbar>

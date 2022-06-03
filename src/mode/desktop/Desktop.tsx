@@ -12,16 +12,16 @@ import { store } from '../../store';
 */
 export default function Desktop(props) {
    
-   const isRecording = useSelector((state: RootState) => {
+   const RootState = useSelector((state: RootState) => {
       return state;
    });   
 
 
-   console.log(isRecording)
+   console.log(RootState)
    const dispatch = useDispatch()
    return (
      <div>
-        <AppBar isRecording={isRecording}/>
+        <AppBar rootState = {RootState}/>
         <WebRecognitionExample/>
      </div>
    )

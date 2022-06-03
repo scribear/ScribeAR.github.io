@@ -8,9 +8,7 @@ import TextField from '@mui/material/TextField';
 import { useDispatch, useSelector } from 'react-redux';
 
 export default function AzureDropdown(props) {
-    console.log("AHOIFHOISAHOIFHSAOISHFOIAHSOFIH")
     const dispatch = useDispatch()
-
     const [state, setState] = React.useState({
         phrase: "" 
     });
@@ -21,17 +19,12 @@ export default function AzureDropdown(props) {
             ...state, 
             phrase: event.target.value});
     } 
-
     const toggleEnter = async () => {
         dispatch({type: 'ADD_PHRASE', payload: state.phrase})
         setState({
             ...state, 
             phrase: ""});
         dispatch({type: 'FLIP_RECORDING_PHRASE', payload: true})
-
-
-
-
     }
     
     return (

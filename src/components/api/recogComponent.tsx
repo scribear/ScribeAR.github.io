@@ -4,8 +4,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import Swal from 'sweetalert2';
 import { RootState } from '../../store';
 import { AzureRecognition } from './azure/azureRecognition';
-import { DisplayStatus,  AzureStatus, ControlStatus, ApiStatus } from '../../redux/types'
-
+import { DisplayStatus, AzureStatus, StreamTextStatus, ControlStatus, ApiStatus } from '../../redux/types'
+import { Visualization } from './visualization/visualization'
+import StreamText from './streamtext/streamtextRecognition';
 var transcriptsFull = "testing"
 let desiredAPI = 0;
 
@@ -19,6 +20,9 @@ const textSize = useSelector((state: RootState) => {
 });
 const azureStatus = useSelector((state: RootState) => {
   return state.AzureReducer as AzureStatus
+})
+const streamTextStatus = useSelector((state: RootState) => {
+  return state.StreamTextReducer as StreamTextStatus
 })
 const apiStatus = useSelector((state: RootState) => {
   return state.APIStatusReducer as ApiStatus
@@ -101,13 +105,33 @@ stateCurrentAPI.current = apiStatus
   var isScrolledToBottom = capts.scrollHeight - capts.clientHeight <= capts.scrollTop + 1
   capts.scrollTop = capts.scrollHeight - capts.clientHeight // scroll to bottom
   }
+  if (apiStatus.currentAPI == 2) {
+    return (
+        <StreamText streamTextStatus = {streamTextStatus} displayStatus = {textSize} />
+    )
+  }
+  if (control.visualizing) {
+    return (
+      <div>   
+        <div style={{position: 'fixed', left: '0', top: '0', paddingTop: '5%', paddingLeft: '5%', right: '90'}}>
+          <Visualization></Visualization>
+        </div>
+        <ul >
+          {fullTranscripts.map(transcript => (
+            <h3  id = "captionsSpace" style ={{position: 'fixed', width: '90%', textAlign: 'left', left: '0', fontSize: textSizeA, paddingLeft: '5%', paddingRight: '60%', overflowY: 'scroll', height: '40%', color: textSize.textColor}}>{transcript}</h3>
+          ))}
+        </ul>
+      </div>
+    );
+  }
+
   return (
-    <div>      
-      <ul >
-        {fullTranscripts.map(transcript => (
-          <h3  id = "captionsSpace" style ={{position: 'fixed', width: '90%', textAlign: 'left', left: '0', fontSize: textSizeA, paddingLeft: '5%', paddingRight: '60%', overflowY: 'scroll', height: '40%', color: textSize.textColor}}>{transcript}</h3>
-        ))}
-      </ul>
+    <div>
+        <ul >
+          {fullTranscripts.map(transcript => (
+            <h3  id = "captionsSpace" style ={{position: 'fixed', width: '90%', textAlign: 'left', left: '0', fontSize: textSizeA, paddingLeft: '5%', paddingRight: '60%', overflowY: 'scroll', height: '40%', color: textSize.textColor}}>{transcript}</h3>
+          ))}
+        </ul>
     </div>
   );
 };

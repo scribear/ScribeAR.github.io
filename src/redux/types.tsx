@@ -45,8 +45,8 @@ export type AzureStatus = {
     This should be expanded to include Streamtext specific issues
     @key: users streamtext event key
 */
-export type StreamtextStatus = {
-    key: string
+export type StreamTextStatus = {
+    streamTextKey: string
 }
 /*
     Control interface represents function related aspects the user can change
@@ -54,6 +54,7 @@ export type StreamtextStatus = {
 */
 export type ControlStatus = {
     listening: boolean
+    visualizing: boolean
     speechLanguage: string
     textLanguage: string
 }
@@ -77,7 +78,7 @@ export type RootState = {
     DisplayReducer: DisplayStatus
     APIStatusReducer: ApiStatus
     AzureReducer: AzureStatus
-    StreamTextReducer: StreamtextStatus
+    StreamTextReducer: StreamTextStatus
     ControlReducer: ControlStatus
     PhraseListReducer: PhraseListStatus
 }

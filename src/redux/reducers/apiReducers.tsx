@@ -1,4 +1,4 @@
-import { ApiStatus, AzureStatus, StreamtextStatus, PhraseList, PhraseListStatus } from "../types";
+import { ApiStatus, AzureStatus, StreamTextStatus, PhraseList, PhraseListStatus } from "../types";
 enum APIS {
   "WEBSPEECH",
   "AZURE",
@@ -39,8 +39,8 @@ const initialAzureState: AzureStatus = {
   phrases: [""]
 }
 
-const initialStreamtextState: StreamtextStatus = {
-  key: "Enter"
+const initialStreamtextState: StreamTextStatus = {
+  streamTextKey: "Enter"
 }
 
 const saveLocally = (varName: string, value: any) => {
@@ -87,10 +87,11 @@ export const AzureReducer = (state = getLocalState("azureStatus"), action) => {
       return state;
   }
 }
-export const StreamtextReducer = (state = initialStreamtextState, action) => {
+export const StreamTextReducer = (state = initialStreamtextState, action) => {
   switch (action.type) {
-    case 'FLIP_RECORDING':
-      return !state
+    case 'CHANGE_STREAMTEXT_LOGIN':
+      return { ...state,
+                streamTextKey: action.payload};
     default:
       return state;
   }

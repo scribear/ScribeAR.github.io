@@ -13,8 +13,6 @@ export const getSpeechRecognition = () => {
 };
 
 export const useRecognition = () => {
-  console.log("HEY HEY HEY HEY")
-
   var transcript=""
   var finalTranscript=""
   const [transcripts, setTranscripts] = React.useState<string[]>([]);

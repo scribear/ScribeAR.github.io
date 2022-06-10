@@ -18,7 +18,7 @@ const setSource = async () => {
     await (source.connect(analyser))
 };
 
-export const Visualization: React.FC = () => {
+export function Visualization() {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
     useEffect(() => {

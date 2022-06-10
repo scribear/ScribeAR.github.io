@@ -1,15 +1,6 @@
 import * as React from 'react';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import TextField from '@mui/material/TextField';
-import Paper from '@mui/material/Paper';
-import InputBase from '@mui/material/InputBase';
-import Menu from '@mui/material/Menu';
-import ClearIcon from '@mui/icons-material/Clear';
-import EditIcon from '@mui/icons-material/Edit';
+import { List, ListItem, TextField, Paper, InputBase, Menu, ClearIcon, EditIcon, IconButton, ListItemText } from '../../../muiImports';
 import './phrase.css'
-import IconButton from "@mui/material/IconButton";
-import ListItemText from '@mui/material/ListItemText';
 import { PhraseList } from '../../../redux/types';
 import { useDispatch } from 'react-redux';
 

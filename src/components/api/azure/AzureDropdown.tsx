@@ -1,11 +1,8 @@
 import * as React from 'react';
-import List from '@mui/material/List';
 import swal from 'sweetalert';
+import { Box, TextField, List, ListItem } from '../../../muiImports'
 import { GetAzureRecognition } from './azureRecognition';
-import ListItem from '@mui/material/ListItem';
 import { ApiStatus, AzureStatus, ControlStatus } from '../../../redux/types';
-import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store';
 
@@ -49,6 +46,8 @@ export default function AzureDropdown(props) {
         event.preventDefault();
       }
     }
+    // const isLoggedIn = useSelector(state: RootState => state.user.loggedIn);
+
     const toggleEnter = async () => {
         dispatch({type: 'FLIP_RECORDING', payload: state.controlStatus})
           const recognizedMessage = await test(state.controlStatus, state.azureStatus).then(response => {  

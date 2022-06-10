@@ -1,17 +1,11 @@
 import * as React from 'react';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
 import SideBar from '../sidebar/sidebar'
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import Drawer from '@mui/material/Drawer';
-import Grid from '@material-ui/core/Grid';
 import Fullscreen from './fullScreen'
 import { ApiStatus, RootState, DisplayStatus } from '../../redux/types';
 import { useDispatch, useSelector } from 'react-redux';
 import MenuHider from './menuHider';
-import IconButton from "@mui/material/IconButton";
-import MenuIcon from '@mui/icons-material/Menu';
 import PickApi from './ApiDropdown'
+import {createTheme, ThemeProvider, IconButton, MenuIcon, Drawer, Grid, AppBar, Toolbar } from '../../muiImports'
 const currTheme = createTheme({
     palette: {
         primary: {

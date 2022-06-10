@@ -62,11 +62,14 @@ I prefer to learn through videos so most of the links I'm posting will be videos
      ├─────── FullScreen
      ├─────── MenuHide
      ```
+
 **Redux** is a JavaScript library used to store global state. It is particularly useful alongside React because it solves many of the difficulties created by React’s unidirectional data flow.
 * Without a global state manager, state can only be stored in components and passed down from one component to another (recall React's unidirectional data flow). So in React alone, if you want to pass state up to a parent component, you have to declare a function in the parent component and pass it down to the child as a prop. This can get very tedious and lead to over-rendering when you have multiple levels of components. A common problem with this is prop drilling, which is when you have to pass props through many levels of components when the components in the middle have no need for the data. For example, the buttons are stored in OnOff, PlusMinus, and Record, but most of the data they control is needed across the entire page. Redux is a great tool to store state globally and avoid tedious/inefficient prop drilling.
 * In the site, Redux is only used for the options buttons as described above. You can check out the redux directory to see how it’s set up. OnOff, PlusMinus, and Record set state. App and Captions use this state.
 * Keep in mind that Redux cannot be used directly in React class components. As a workaround, Captions (functional component) gets global state from Redux and passes it down to Recognition (class component) as props.
 * [This video](https://www.youtube.com/watch?v=CVpUuw9XSjY) is a great resource for learning Redux in conjunction with React. Everything I know about Redux came from this video, so obviously I’m still at a beginner level with it. Still, the video covers everything you need to know to understand how the site currently uses Redux for global state. Use the video to try to understand what is going on in Options and its child components. Options does not invoke Redux but it does pass functions to its children to be used by Redux.
+
+     
 ## Speech Recognition
 
 We currently use 3 API's:

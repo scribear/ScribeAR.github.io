@@ -20,7 +20,6 @@ export const useRecognition = () => {
 
     async (transcriptsFull: string, control: React.MutableRefObject<ControlStatus>,  currentAPI: React.MutableRefObject<ApiStatus>) =>
       new Promise((resolve, reject) => {
-        console.log("YOYOYOYOYOYYOYO")  
         var lastStartedAt = new Date().getTime();
 
         const speechRecognition = getSpeechRecognition();
@@ -29,18 +28,18 @@ export const useRecognition = () => {
               speechRecognition.stop()
               resolve(transcriptsFull);   
           } else {
+            console.log(event.results)
           const finalResult = Array.from(event.results)
-
           .map(result => result[0])
           .map(result => result.transcript)
-          .join('');
-          console.log(finalResult)
+          .join('\n');
+          transcript =  finalResult + ".n";
 
-          if (finalResult) {
-            transcript = finalTranscript + finalResult;
+          if (event.results[0].isFinal) {
+            console.log(finalResult)
+
           }    
           setTranscripts([...transcripts, transcript]);
-
           transcriptsFull = transcript
         }
         };
@@ -48,7 +47,6 @@ export const useRecognition = () => {
         speechRecognition.onend = () => { 
           var timeSinceStart = new Date().getTime() - lastStartedAt;
           if (control.current.listening && currentAPI.current.currentAPI === 0) {
-            finalTranscript = transcript + " ";
             if (timeSinceStart > 1000) {
 
             speechRecognition.start()

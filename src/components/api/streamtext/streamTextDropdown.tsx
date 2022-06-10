@@ -1,14 +1,9 @@
 import * as React from 'react';
-import List from '@mui/material/List';
 import swal from 'sweetalert';
-import StreamText from './streamtextRecognition';
-import ListItem from '@mui/material/ListItem';
+import { Box, TextField, List, ListItem } from '../../../muiImports'
 import { ApiStatus, StreamTextStatus, ControlStatus } from '../../../redux/types';
-import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store';
-
 
 enum STATUS {
     "AVAILABLE",

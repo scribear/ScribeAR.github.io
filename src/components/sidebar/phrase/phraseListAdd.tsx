@@ -1,13 +1,8 @@
 import * as React from 'react';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
+import { List, ListItem, Divider, AddIcon, IconButton, ListItemText } from '../../../muiImports'; 
 import Swal from 'sweetalert2';
-import Divider from '@mui/material/Divider';
-import AddIcon from '@mui/icons-material/Add';
 import PhrasePopUp from './phraseList';
 import './phrase.css'
-import IconButton from "@mui/material/IconButton";
-import ListItemText from '@mui/material/ListItemText'; 
 import { RootState, PhraseListStatus, PhraseList } from '../../../redux/types';
 import { useDispatch, useSelector } from 'react-redux';
 

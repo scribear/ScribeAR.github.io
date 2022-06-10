@@ -1,10 +1,5 @@
 import * as React from 'react';
-import List from '@mui/material/List';
-import Button from "@mui/material/Button";
-import ListItemText from '@mui/material/ListItemText';
-import ListItem from '@mui/material/ListItem';
-import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
+import {List, Button, ListItemText, ListItem, Box, TextField } from '../../../muiImports'
 import { useDispatch, useSelector } from 'react-redux';
 
 export default function AzureDropdown(props) {

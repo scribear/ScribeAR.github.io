@@ -1,8 +1,4 @@
-import List from '@mui/material/List';
-import ListItemText from '@mui/material/ListItemText';
-import Collapse from '@mui/material/Collapse';
-import ArchitectureIcon from '@mui/icons-material/Architecture';
-import ListItem from '@mui/material/ListItem';
+import { List, ListItemText, Collapse, ArchitectureIcon, ListItem } from '../../../muiImports'
 import TextSize from './textSize'
 import ThemeDropdown from './themeDropdown'
 

@@ -1,7 +1,5 @@
-import List from '@mui/material/List';
-import Collapse from '@mui/material/Collapse';
+import { List, Collapse, DetailsIcon } from '../../../muiImports'
 import PhraseListAdd from './phraseListAdd'
-import DetailsIcon from '@mui/icons-material/Details';
 
 export default function PhraseMenu(props) {
 

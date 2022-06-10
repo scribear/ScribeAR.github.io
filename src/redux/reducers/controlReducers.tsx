@@ -23,7 +23,7 @@ export function ControlReducer(state = initialControlState, action) {
     case 'SET_TEXT_LANGUAGE':
         return {
           ...state,
-        speechLanguage: action.payload};
+        textLanguage: action.payload};
     default:
       return state;
   }

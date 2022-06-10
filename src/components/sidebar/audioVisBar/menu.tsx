@@ -1,9 +1,5 @@
-import List from '@mui/material/List';
-import ListItemText from '@mui/material/ListItemText';
-import Collapse from '@mui/material/Collapse';
-import ListItem from '@mui/material/ListItem';
+import { List, ListItemText, Collapse, ListItem, EqualizerIcon } from '../../../muiImports'
 import Visualizing from './visualizing'
-import EqualizerIcon from '@mui/icons-material/Equalizer';
 
 export default function VisualizationMenu(props) {
 

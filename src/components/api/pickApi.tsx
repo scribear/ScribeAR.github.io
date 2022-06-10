@@ -1,25 +1,9 @@
 import * as React from 'react';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import List from '@mui/material/List';
-import ListItemButton from '@mui/material/ListItemButton';
-import Button from "@mui/material/Button";
-import ListItemText from '@mui/material/ListItemText';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import Collapse from '@mui/material/Collapse';
-import StreamTextDropdown from './streamtext/streamTextDropdown';
-import ListItem from '@mui/material/ListItem';
-import ErrorIcon from '@mui/icons-material/Error';
 import swal from 'sweetalert';
 import { ApiStatus, RootState} from '../../redux/types';
 import { useDispatch, useSelector } from 'react-redux';
-import ExpandLess from '@mui/icons-material/ExpandLess';
-import ExpandMore from '@mui/icons-material/ExpandMore';
-import CancelIcon from '@mui/icons-material/Cancel';
-import IconButton from "@mui/material/IconButton";
-import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
-import DoNotDisturbOnIcon from '@mui/icons-material/DoNotDisturbOn';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import StreamTextDropdown from './streamtext/streamTextDropdown';
+import { createTheme, ThemeProvider, ListItemButton, ListItemText, ListItemIcon, Collapse, ErrorIcon, ExpandLess, ExpandMore, CancelIcon, IconButton, DoNotDisturbOnIcon, CheckCircleIcon } from '../../muiImports' 
 import AzureDropdown from './azure/AzureDropdown';
 
 enum STATUS {

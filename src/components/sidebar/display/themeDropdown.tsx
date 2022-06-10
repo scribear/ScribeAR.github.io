@@ -1,11 +1,7 @@
 import * as React from 'react';
-import Box from '@mui/material/Box';
-import Menu from '@mui/material/Menu';
-import Button from '@mui/material/Button';
-import PaletteIcon from '@mui/icons-material/Palette';
 import ThemeOption from './themeOption'
-import { ThemeProvider } from '@mui/material/styles';
 import Theme from './../../theme'
+import {Box, Menu, Button, PaletteIcon, ThemeProvider } from '../../../muiImports'
 
 export default function AccountMenu() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);

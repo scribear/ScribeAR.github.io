@@ -1,7 +1,4 @@
-import FullscreenIcon from '@mui/icons-material/Fullscreen';
-import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import IconButton from "@mui/material/IconButton";
+import {FullscreenIcon, FullscreenExitIcon, createTheme, ThemeProvider, IconButton } from "../../muiImports"
 import * as React from 'react';
 
 const currTheme = createTheme({

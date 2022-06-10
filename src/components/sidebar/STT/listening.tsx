@@ -1,12 +1,9 @@
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import { RootState } from '../../../store';
-import PauseIcon from '@mui/icons-material/Pause';
+import { PlayArrowIcon, PauseIcon, createTheme, ThemeProvider, Button } from '../../../muiImports';
 import { useDispatch, useSelector } from 'react-redux';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { RootState } from '../../../store';
 import { ControlStatus } from '../../../redux/types';
 import Theme from '../../theme'
 import * as React from 'react';
-import Button from '@mui/material/Button';
 
    export default function CustomizedMenus(props) {
      const dispatch = useDispatch()

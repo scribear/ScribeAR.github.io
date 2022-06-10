@@ -1,9 +1,5 @@
-import List from '@mui/material/List';
-import ListItemText from '@mui/material/ListItemText';
-import Collapse from '@mui/material/Collapse';
+import { List, ListItemText, Collapse, MessageIcon, ListItem } from '../../../muiImports'
 import Listening from './listening'
-import MessageIcon from '@mui/icons-material/Message';
-import ListItem from '@mui/material/ListItem';
 import SpeechLanguage from './speechLanguage'
 import TextLanguage from './textLanguage'
 

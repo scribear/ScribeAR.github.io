@@ -1,12 +1,9 @@
 import * as React from 'react';
-import { styled, alpha } from '@mui/material/styles';
-import Button from '@mui/material/Button';
-import { RootState, ControlStatus } from '../../../redux/types';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Theme from '../../theme'
 import { useDispatch, useSelector } from 'react-redux';
-import Menu, { MenuProps } from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
+import { RootState, ControlStatus } from '../../../redux/types';
+import { styled, alpha, Button, ThemeProvider, MenuItem, Menu } from '../../../muiImports';
+import { MenuProps } from '@mui/material/Menu';
 /* todo:
   1   Make language bar a fixed height so that it can only display ~8 languages 
       and not take up the whole screen

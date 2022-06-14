@@ -6,14 +6,14 @@ import * as React from 'react';
 import { PauseIcon, Button, PlayArrowIcon, createTheme, ThemeProvider } from '../../../muiImports'
 
 
-    export default function Visualizing() {
+    export default function ShowFrequency() {
         const dispatch = useDispatch()
         let controlStatus = useSelector((state: RootState) => {
             return state.ControlReducer as ControlStatus;
         });
 
         const toggleDrawer = (event: React.KeyboardEvent | React.MouseEvent) => {
-            dispatch({type: 'FLIP_VISUALIZING'})
+            dispatch({type: 'FLIP_SHOWFREQ'})
         }
         const {myTheme} = Theme()
 
@@ -27,7 +27,7 @@ import { PauseIcon, Button, PlayArrowIcon, createTheme, ThemeProvider } from '..
                 onClick={toggleDrawer}
                 sx={{ width: 50, height:30}}
                 >
-                    {controlStatus.visualizing === false ? <PlayArrowIcon /> : <PauseIcon />}
+                    {controlStatus.showFrequency === false ? <PlayArrowIcon /> : <PauseIcon />}
                 </Button>
             </ThemeProvider>
 

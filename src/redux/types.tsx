@@ -97,6 +97,7 @@ export interface StreamTextStatus {
 export interface ControlStatus {
     listening: boolean
     visualizing: boolean
+    showFrequency: boolean
     speechLanguage: string
     textLanguage: string
 }
@@ -108,8 +109,8 @@ export interface ControlStatus {
 */
 export interface DisplayStatus {
     textSize: number
-    primaryColor: string
-    secondaryColor: string
+    primaryColor: string // background
+    secondaryColor: string // header, sidebar
     textColor: string
     menuVisible: boolean
 }

@@ -6,6 +6,9 @@ import { RootState } from '../../store';
 import { AzureRecognition } from './azure/azureRecognition';
 import { DisplayStatus, AzureStatus, StreamTextStatus, ControlStatus, ApiStatus } from '../../redux/types'
 import { Visualization } from './visualization/visualization'
+import { FullVisual } from './visualization/fullVisual'
+import { NoFreqVisual } from './visualization/noFreqVisual'
+import { LoungeVisual } from './visualization/loungeVisual'
 import StreamText from './streamtext/streamtextRecognition';
 var transcriptsFull = "testing"
 let desiredAPI = 0;
@@ -110,11 +113,27 @@ stateCurrentAPI.current = apiStatus
         <StreamText streamTextStatus = {streamTextStatus} displayStatus = {textSize} />
     )
   }
-  if (control.visualizing) {
+  if (stateRefControl.current.listening && stateRefControl.current.visualizing) {
+    if (stateRefControl.current.showFrequency) {
+      return (
+        <div>   
+          <div id='circular_visual' draggable='true' style={{position: 'absolute', left: '0', top: '0', zIndex: 1, paddingTop: '5%', paddingLeft: '5%', right: '90'}}>
+            <LoungeVisual></LoungeVisual>
+          </div>
+          <ul >
+            {fullTranscripts.map(transcript => (
+              <h3  id = "captionsSpace" style ={{position: 'fixed', width: '90%', textAlign: 'left', left: '0', fontSize: textSizeA, paddingLeft: '5%', paddingRight: '60%', overflowY: 'scroll', height: '40%', color: textSize.textColor}}>{transcript}</h3>
+            ))}
+          </ul>
+        </div>
+      );
+    }
+
+    // not showing frequency
     return (
       <div>   
-        <div style={{position: 'fixed', left: '0', top: '0', paddingTop: '5%', paddingLeft: '5%', right: '90'}}>
-          <Visualization></Visualization>
+        <div id='circular_visual' draggable='true' style={{position: 'absolute', left: '0', top: '0', zIndex: 1, paddingTop: '5%', paddingLeft: '5%', right: '90'}}>
+          <NoFreqVisual></NoFreqVisual>
         </div>
         <ul >
           {fullTranscripts.map(transcript => (

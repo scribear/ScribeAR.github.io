@@ -51,16 +51,6 @@ function drop(event) {
     return false;
 } 
 
-function drop_html(event, html_elem) {
-    var offset = event.dataTransfer.getData("text/plain").split(',');
-    // console.log(20, 'drop')
-    if (!html_elem) return
-    html_elem.style.left = (event.clientX + parseInt(offset[0],10)) + 'px';
-    html_elem.style.top = (event.clientY + parseInt(offset[1],10)) + 'px';
-    event.preventDefault();
-    return false;
-} 
-
 const setVisual = () => {
     circular_visual = document.getElementById('circular_visual')
 
@@ -69,7 +59,91 @@ const setVisual = () => {
     document.body.addEventListener('drop', drop, false)
 }
 
-export function Visualization() {
+    /**
+     * @description
+     * Render audio author and title.
+     */
+const renderText = () => {
+    var cx = canvas.width / 2;
+    var cy = canvas.height / 2;
+    var correction = 10;
+
+    var title = ""
+    var author = "Unamed"
+    var font = ['12px', 'Helvetica']
+
+    canvasCtx.fillStyle = color;
+
+    canvasCtx.textBaseline = 'top';
+    canvasCtx.fillText(author, cx + correction, cy);
+    canvasCtx.font = parseInt(font[0], 10) + 8 + 'px ' + font[1];
+    canvasCtx.textBaseline = 'bottom';
+    canvasCtx.fillText(title, cx + correction, cy);
+    canvasCtx.font = font.join(' ');
+};
+
+    /**
+     * @description
+     * Render audio time.
+     */
+const renderTime = () => {
+        // var time = this.minutes + ':' + this.seconds;
+        // canvasCtx.fillText(time, canvas.width / 2 + 10, canvas.height / 2 + 40);
+    };
+
+    /**
+     * @description
+     * Render frame by style type.
+     *
+     * @return {Function}
+     */
+const renderByStyleType = () => {
+        // return this[TYPE[this.style]]();
+        renderLounge();
+    };
+
+    /**
+     * @description
+     * Render lounge style type.
+     */
+const renderLounge = () => {
+    var barWidth = 2;
+    var barHeight = 2;
+    var barSpacing = 7;
+
+    const height = canvas.height;
+    const width = canvas.width;
+    canvasCtx.clearRect(0, 0, width, height);
+
+    var cx = canvas.width / 2;
+    var cy = canvas.height / 2;
+    var radius = 140;
+    var maxBarNum = Math.floor((radius * 2 * Math.PI) / (barWidth + barSpacing));
+    var slicedPercent = Math.floor((maxBarNum * 25) / 100);
+    var barNum = maxBarNum - slicedPercent;
+    var freqJump = Math.floor(dataArray.length / maxBarNum);
+
+    // canvasCtx.strokeStyle = color;
+    canvasCtx.fillStyle = color;
+    for (var i = 0; i < barNum; i++) {
+        var amplitude = dataArray[i * freqJump];
+        var alfa = (i * 2 * Math.PI ) / maxBarNum;
+        var beta = (3 * 45 - barWidth) * Math.PI / 180;
+        var x = 0;
+        var y = 1 - radius - (amplitude / 12 - barHeight); // flipped
+        // var y = radius - (amplitude / 12 - barHeight);
+        var w = barWidth;
+        var h = amplitude / 6 + barHeight;
+
+        canvasCtx.save();
+        canvasCtx.translate(cx + barSpacing, cy + barSpacing);
+        canvasCtx.rotate(alfa - beta);
+        canvasCtx.fillRect(x, y, w, h);
+        canvasCtx.restore();
+    }
+};
+
+export function LoungeVisual() {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
     const theme = useSelector((state: RootState) => {
@@ -80,7 +154,7 @@ export function Visualization() {
         return state.ControlReducer as ControlStatus;
     })
 
-    color = theme.secondaryColor;
+    color = theme.textColor;
 
     useEffect(() => {
         // connect related dragging functions to html element
@@ -114,46 +188,9 @@ export function Visualization() {
         // get data into dataArray
         analyser.getByteFrequencyData(dataArray);
 
-        const height = canvas.height;
-        const width = canvas.width;
-        canvasCtx.clearRect(0, 0, width, height);
-        const RADIUS = 80;
-        const POINTS = 360;
-        let sum = dataArray.reduce((previous, current) => current += previous);
-        let avg = sum / dataArray.length;
-
-        for (let i = 0; i < POINTS; i++) {
-            let rel = ~~(i * (POINTS / dataArray.length));
-            let x = width / 2 + RADIUS * Math.cos((i * 2 * Math.PI) / POINTS);
-            let y = height / 2 + RADIUS * -Math.sin((i * 2 * Math.PI) / POINTS);
-            var x_2 = x + (dataArray[rel] / (8 / 1)) * Math.cos((i * 2 * Math.PI) / POINTS); // 8 takes any positive value
-            let y_2 = y + (dataArray[rel] / (8 / 1)) * -Math.sin((i * 2 * Math.PI) / POINTS);// 8 takes any positive value
-            let x_3 = width / 2 + (1) * avg * Math.cos((i * 2 * Math.PI) / POINTS);// 1 takes any positive value
-            let y_3 = height / 2 + (1) * avg * -Math.sin((i * 2 * Math.PI) / POINTS); // 1 takes any positive value
-            let x_4 = x_3 - 0.5 * avg * Math.cos((i * 2 * Math.PI) / POINTS);
-            let y_4 = y_3 - 0.5 * avg * -Math.sin((i * 2 * Math.PI) / POINTS);
-            let x_5 = x - 0.3 * Math.cos((i * 2 * Math.PI) / POINTS);
-            let y_5 = y - 0.3 * -Math.sin((i * 2 * Math.PI) / POINTS);
-            //draw the circular spectrum
-            canvasCtx.beginPath();
-            canvasCtx.moveTo(x, y);
-            canvasCtx.lineTo(x_2, y_2);
-            canvasCtx.strokeStyle = color;
-            canvasCtx.stroke();
-            //draw the margin circle
-            canvasCtx.beginPath();
-            canvasCtx.moveTo(x, y);
-            canvasCtx.lineTo(x_5, y_5);
-            canvasCtx.stroke();
-            //draw the inner circle
-            canvasCtx.beginPath();
-            canvasCtx.moveTo(x_4, y_4);
-            canvasCtx.lineTo(x_3, y_3);
-            if (y_4 - y_3 > 10) {
-                canvasCtx.strokeStyle = '#ff0000';
-            }
-            canvasCtx.stroke();
-        }
+        // renderTime();
+        renderText();
+        renderByStyleType();
     }
     
     return <canvas width={"400vw"} height="300vh" ref={canvasRef} />

@@ -1,5 +1,6 @@
 import { List, ListItemText, Collapse, ListItem, EqualizerIcon } from '../../../muiImports'
 import Visualizing from './visualizing'
+import ShowFrequency from './showFrequency'
 
 export default function VisualizationMenu(props) {
 
@@ -13,13 +14,10 @@ export default function VisualizationMenu(props) {
                         <ListItemText primary="Visualizing" />
                         <Visualizing />
                     </ListItem>
-                        {/* <PauseCircleFilledIcon />
-                        <PlayCircleFilledIcon />
-                        <MoreHorizIcon />
-                        <RadioButtonUncheckedOutlinedIcon fontSize="large"/> */}
-                    {/* <ListItem sx={{ pl: 4 }}>
-                        <ListItemText primary="Design" />
-                    </ListItem> */}
+                    <ListItem sx={{ pl: 4 }}>
+                        <ListItemText primary="Show Frequency" />
+                        <ShowFrequency />
+                    </ListItem>
                 </List>
             </Collapse>
         </div>

@@ -51,16 +51,6 @@ function drop(event) {
     return false;
 } 
 
-function drop_html(event, html_elem) {
-    var offset = event.dataTransfer.getData("text/plain").split(',');
-    // console.log(20, 'drop')
-    if (!html_elem) return
-    html_elem.style.left = (event.clientX + parseInt(offset[0],10)) + 'px';
-    html_elem.style.top = (event.clientY + parseInt(offset[1],10)) + 'px';
-    event.preventDefault();
-    return false;
-} 
-
 const setVisual = () => {
     circular_visual = document.getElementById('circular_visual')
 
@@ -69,7 +59,7 @@ const setVisual = () => {
     document.body.addEventListener('drop', drop, false)
 }
 
-export function Visualization() {
+export function NoFreqVisual() {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
     const theme = useSelector((state: RootState) => {
@@ -80,7 +70,7 @@ export function Visualization() {
         return state.ControlReducer as ControlStatus;
     })
 
-    color = theme.secondaryColor;
+    color = theme.textColor;
 
     useEffect(() => {
         // connect related dragging functions to html element
@@ -134,6 +124,7 @@ export function Visualization() {
             let y_4 = y_3 - 0.5 * avg * -Math.sin((i * 2 * Math.PI) / POINTS);
             let x_5 = x - 0.3 * Math.cos((i * 2 * Math.PI) / POINTS);
             let y_5 = y - 0.3 * -Math.sin((i * 2 * Math.PI) / POINTS);
+
             //draw the circular spectrum
             canvasCtx.beginPath();
             canvasCtx.moveTo(x, y);
@@ -145,14 +136,15 @@ export function Visualization() {
             canvasCtx.moveTo(x, y);
             canvasCtx.lineTo(x_5, y_5);
             canvasCtx.stroke();
+
             //draw the inner circle
-            canvasCtx.beginPath();
-            canvasCtx.moveTo(x_4, y_4);
-            canvasCtx.lineTo(x_3, y_3);
-            if (y_4 - y_3 > 10) {
-                canvasCtx.strokeStyle = '#ff0000';
-            }
-            canvasCtx.stroke();
+            // canvasCtx.beginPath();
+            // canvasCtx.moveTo(x_4, y_4);
+            // canvasCtx.lineTo(x_3, y_3);
+            // if (y_4 - y_3 > 10) {
+            //     canvasCtx.strokeStyle = '#ff0000';
+            // }
+            // canvasCtx.stroke();
         }
     }
     

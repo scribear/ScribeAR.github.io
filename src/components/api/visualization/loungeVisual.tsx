@@ -26,8 +26,6 @@ const setSource = async () => {
 };
 
 function drag_start(event) {
-    console.log(29, "target: ", event.target);
-    console.log(30, "event: ", event)
     var style = window.getComputedStyle(event.target, null);
     event.dataTransfer.setData("text/plain",
     (parseInt(style.getPropertyValue("left"),10) - event.clientX) + ',' + (parseInt(style.getPropertyValue("top"),10) - event.clientY));
@@ -40,10 +38,8 @@ function drag_over(event) {
 
 function drop(event) {
     var offset = event.dataTransfer.getData("text/plain").split(',');
-    // console.log(20, 'drop')
-    // console.log(44, "currentTarget: ", event.currentTarget);
-    console.log(45, "target: ", event.target);
-    console.log(46, "event: ", event)
+    // console.log(45, "target: ", event.target);
+    // console.log(46, "event: ", event)
     if (!circular_visual) return
     circular_visual.style.left = (event.clientX + parseInt(offset[0],10)) + 'px';
     circular_visual.style.top = (event.clientY + parseInt(offset[1],10)) + 'px';
@@ -82,56 +78,56 @@ const renderText = () => {
     canvasCtx.font = font.join(' ');
 };
 
-    /**
-     * @description
-     * Render audio time.
-     */
+/**
+ * @description
+ * Render audio time.
+ */
 const renderTime = () => {
-        // var time = this.minutes + ':' + this.seconds;
-        // canvasCtx.fillText(time, canvas.width / 2 + 10, canvas.height / 2 + 40);
-    };
+    // var time = this.minutes + ':' + this.seconds;
+    // canvasCtx.fillText(time, canvas.width / 2 + 10, canvas.height / 2 + 40);
+};
 
-    /**
-     * @description
-     * Render frame by style type.
-     *
-     * @return {Function}
-     */
+/**
+ * @description
+ * Render frame by style type.
+ *
+ * @return {Function}
+ */
 const renderByStyleType = () => {
-        // return this[TYPE[this.style]]();
-        renderLounge();
-    };
+    // return this[TYPE[this.style]]();
+    renderLounge();
+};
 
-    /**
-     * @description
-     * Render lounge style type.
-     */
+/**
+ * @description
+ * Render lounge style type.
+ */
 const renderLounge = () => {
     var barWidth = 2;
     var barHeight = 2;
     var barSpacing = 7;
 
-    const height = canvas.height;
-    const width = canvas.width;
-    canvasCtx.clearRect(0, 0, width, height);
+    // const height = canvas.height;
+    // const width = canvas.width;
+    // canvasCtx.clearRect(0, 0, width, height);
 
     var cx = canvas.width / 2;
     var cy = canvas.height / 2;
-    var radius = 140;
-    var maxBarNum = Math.floor((radius * 2 * Math.PI) / (barWidth + barSpacing));
+    var radius = 140; // how large is the circle
+    var maxBarNum = Math.floor((radius * 2 * Math.PI) / (barWidth + barSpacing)); // control max number of bars
     var slicedPercent = Math.floor((maxBarNum * 25) / 100);
     var barNum = maxBarNum - slicedPercent;
-    var freqJump = Math.floor(dataArray.length / maxBarNum);
+    var freqJump = Math.floor(dataArray.length / maxBarNum); // gap (of frequency) for each bar 
 
-    // canvasCtx.strokeStyle = color;
     canvasCtx.fillStyle = color;
     for (var i = 0; i < barNum; i++) {
         var amplitude = dataArray[i * freqJump];
         var alfa = (i * 2 * Math.PI ) / maxBarNum;
         var beta = (3 * 45 - barWidth) * Math.PI / 180;
         var x = 0;
-        var y = 1 - radius - (amplitude / 12 - barHeight); // flipped
-        // var y = radius - (amplitude / 12 - barHeight);
+        // var y = 1 - radius - (amplitude / 12 - barHeight); // flipped
+        // var y = (amplitude / 12 - barHeight) - radius; // inverted
+        var y = 1 - radius - (amplitude / 12 - barHeight);
         var w = barWidth;
         var h = amplitude / 6 + barHeight;
 
@@ -183,13 +179,14 @@ export function LoungeVisual() {
     }, [])
 
     const draw = () => { // the draw function
-        requestAnimationFrame(draw);
+        rafId = requestAnimationFrame(draw);
 
         // get data into dataArray
         analyser.getByteFrequencyData(dataArray);
 
+        canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
         // renderTime();
-        renderText();
+        // renderText();
         renderByStyleType();
     }
     

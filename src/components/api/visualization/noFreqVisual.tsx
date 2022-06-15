@@ -26,8 +26,6 @@ const setSource = async () => {
 };
 
 function drag_start(event) {
-    console.log(29, "target: ", event.target);
-    console.log(30, "event: ", event)
     var style = window.getComputedStyle(event.target, null);
     event.dataTransfer.setData("text/plain",
     (parseInt(style.getPropertyValue("left"),10) - event.clientX) + ',' + (parseInt(style.getPropertyValue("top"),10) - event.clientY));
@@ -40,10 +38,8 @@ function drag_over(event) {
 
 function drop(event) {
     var offset = event.dataTransfer.getData("text/plain").split(',');
-    // console.log(20, 'drop')
-    // console.log(44, "currentTarget: ", event.currentTarget);
-    console.log(45, "target: ", event.target);
-    console.log(46, "event: ", event)
+    // console.log(45, "target: ", event.target);
+    // console.log(46, "event: ", event)
     if (!circular_visual) return
     circular_visual.style.left = (event.clientX + parseInt(offset[0],10)) + 'px';
     circular_visual.style.top = (event.clientY + parseInt(offset[1],10)) + 'px';

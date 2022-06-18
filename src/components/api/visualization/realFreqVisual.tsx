@@ -23,7 +23,7 @@ const setSource = async () => {
     await (source.connect(analyser))
 };
 
-export function NoFreqVisual() {
+export function RealFreqVisual() {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
     const theme = useSelector((state: RootState) => {
@@ -65,49 +65,24 @@ export function NoFreqVisual() {
         // get data into dataArray
         analyser.getByteFrequencyData(dataArray);
 
+        // How much data should we collect
+        analyser.fftSize = 2 ** 8;
+
         const height = canvas.height;
         const width = canvas.width;
+        const barWidth = (width / analyser.frequencyBinCount) * 0.5; // analyser.frequencyBinCount := how many pieces of data are there.
         canvasCtx.clearRect(0, 0, width, height);
-        const RADIUS = 80;
-        const POINTS = 360;
-        let sum = dataArray.reduce((previous, current) => current += previous);
-        let avg = sum / dataArray.length;
 
-        for (let i = 0; i < POINTS; i++) {
-            let rel = ~~(i * (POINTS / dataArray.length));
-            let x = width / 2 + RADIUS * Math.cos((i * 2 * Math.PI) / POINTS);
-            let y = height / 2 + RADIUS * -Math.sin((i * 2 * Math.PI) / POINTS);
-            var x_2 = x + (dataArray[rel] / (8 / 1)) * Math.cos((i * 2 * Math.PI) / POINTS); // 8 takes any positive value
-            let y_2 = y + (dataArray[rel] / (8 / 1)) * -Math.sin((i * 2 * Math.PI) / POINTS);// 8 takes any positive value
-            let x_3 = width / 2 + (1) * avg * Math.cos((i * 2 * Math.PI) / POINTS);// 1 takes any positive value
-            let y_3 = height / 2 + (1) * avg * -Math.sin((i * 2 * Math.PI) / POINTS); // 1 takes any positive value
-            let x_4 = x_3 - 0.5 * avg * Math.cos((i * 2 * Math.PI) / POINTS);
-            let y_4 = y_3 - 0.5 * avg * -Math.sin((i * 2 * Math.PI) / POINTS);
-            let x_5 = x - 0.3 * Math.cos((i * 2 * Math.PI) / POINTS);
-            let y_5 = y - 0.3 * -Math.sin((i * 2 * Math.PI) / POINTS);
-
-            //draw the circular spectrum
-            canvasCtx.beginPath();
-            canvasCtx.moveTo(x, y);
-            canvasCtx.lineTo(x_2, y_2);
-            canvasCtx.strokeStyle = color;
-            canvasCtx.stroke();
-            //draw the margin circle
-            canvasCtx.beginPath();
-            canvasCtx.moveTo(x, y);
-            canvasCtx.lineTo(x_5, y_5);
-            canvasCtx.stroke();
-
-            //draw the inner circle
-            // canvasCtx.beginPath();
-            // canvasCtx.moveTo(x_4, y_4);
-            // canvasCtx.lineTo(x_3, y_3);
-            // if (y_4 - y_3 > 10) {
-            //     canvasCtx.strokeStyle = '#ff0000';
-            // }
-            // canvasCtx.stroke();
-        }
+        var x = 0;
+        dataArray.forEach((datum) => { // datum is from 0 to 255
+            const percent = datum / 255;
+            const barHeight = height * percent;
+            // convert the color to HSL TODO
+            canvasCtx.fillStyle = color;
+            canvasCtx.fillRect(x, height - barHeight, barWidth, barHeight);
+            x += barWidth + 2;
+        });
     }
-    
+
     return <canvas width={"400vw"} height="300vh" ref={canvasRef} />
 }

@@ -13,8 +13,6 @@ var canvasCtx;
 
 var color;
 
-var circular_visual: HTMLElement | null;
-
 const setSource = async () => {
     const newMediaStream = await navigator.mediaDevices.getUserMedia({
         audio: true,
@@ -25,40 +23,10 @@ const setSource = async () => {
     await (source.connect(analyser))
 };
 
-function drag_start(event) {
-    var style = window.getComputedStyle(event.target, null);
-    event.dataTransfer.setData("text/plain",
-    (parseInt(style.getPropertyValue("left"),10) - event.clientX) + ',' + (parseInt(style.getPropertyValue("top"),10) - event.clientY));
-} 
-
-function drag_over(event) {
-    event.preventDefault(); 
-    return false; 
-} 
-
-function drop(event) {
-    var offset = event.dataTransfer.getData("text/plain").split(',');
-    // console.log(45, "target: ", event.target);
-    // console.log(46, "event: ", event)
-    if (!circular_visual) return
-    circular_visual.style.left = (event.clientX + parseInt(offset[0],10)) + 'px';
-    circular_visual.style.top = (event.clientY + parseInt(offset[1],10)) + 'px';
-    event.preventDefault();
-    return false;
-} 
-
-const setVisual = () => {
-    circular_visual = document.getElementById('circular_visual')
-
-    circular_visual?.addEventListener('dragstart', drag_start, false)
-    document.body.addEventListener('dragover', drag_over, false)
-    document.body.addEventListener('drop', drop, false)
-}
-
-    /**
-     * @description
-     * Render audio author and title.
-     */
+/**
+ * @description
+ * Render audio author and title.
+ */
 const renderText = () => {
     var cx = canvas.width / 2;
     var cy = canvas.height / 2;
@@ -153,9 +121,6 @@ export function LoungeVisual() {
     color = theme.textColor;
 
     useEffect(() => {
-        // connect related dragging functions to html element
-        setVisual()
-
         audioContext = new (window.AudioContext || window.webkitAudioContext)();
         analyser = audioContext.createAnalyser();
         dataArray = new Uint8Array(analyser.frequencyBinCount); // data for visualization

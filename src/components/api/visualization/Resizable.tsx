@@ -66,8 +66,8 @@ export function Resizable (props) {
         var resizable = document.getElementsByClassName('resizable');
     
         // Adjust the dimension of the visual element
-        const original_width : number = parseFloat(style.width.substring(0, 3));
-        const original_height : number = parseFloat(style.height.substring(0, 3));
+        const original_width : number = parseFloat(style.width); // 'px' are parsed automatically
+        const original_height : number = parseFloat(style.height); // 'px' are parsed automatically
         const newWidth : string = `${Math.max(original_width + dx, 100)}px`;
         const newHeight : string = `${Math.max(original_height + dy, 100)}px`;
         // console.log( "start: ", [startingX, startingY], "move to: ", [event.clientX, event.clientY], "; d: ", [dx, dy])

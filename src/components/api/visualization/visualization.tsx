@@ -23,7 +23,7 @@ const setSource = async () => {
     await (source.connect(analyser))
 };
 
-export function Visualization() {
+export function Visualization(props) {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
     const theme = useSelector((state: RootState) => {
@@ -65,10 +65,11 @@ export function Visualization() {
         // get data into dataArray
         analyser.getByteFrequencyData(dataArray);
 
-        const height = canvas.height;
         const width = canvas.width;
+        const height = canvas.height;
         canvasCtx.clearRect(0, 0, width, height);
-        const RADIUS = 80;
+        const RADIUS = Math.min(width, height) / 3.5;
+        // const RADIUS = 80;
         const POINTS = 360;
         let sum = dataArray.reduce((previous, current) => current += previous);
         let avg = sum / dataArray.length;
@@ -107,5 +108,6 @@ export function Visualization() {
         }
     }
     
-    return <canvas width={"400vw"} height="300vh" ref={canvasRef} />
+    // return <canvas width={"400vw"} height="300vh" ref={canvasRef} />
+    return <canvas width={props.visualWidth} height={props.visualHeight} ref={canvasRef} />
 }

@@ -13,112 +13,115 @@ var canvasCtx;
 
 var color;
 
-const setSource = async () => {
-    const newMediaStream = await navigator.mediaDevices.getUserMedia({
-        audio: true,
-        video: false
-    })
-
-    await (source = audioContext.createMediaStreamSource(newMediaStream))
-    await (source.connect(analyser))
-};
-
-/**
- * @description
- * Render audio author and title.
- */
-const renderText = () => {
-    var cx = canvas.width / 2;
-    var cy = canvas.height / 2;
-    var correction = 10;
-
-    var title = ""
-    var author = "Unamed"
-    var font = ['12px', 'Helvetica']
-
-    canvasCtx.fillStyle = color;
-
-    canvasCtx.textBaseline = 'top';
-    canvasCtx.fillText(author, cx + correction, cy);
-    canvasCtx.font = parseInt(font[0], 10) + 8 + 'px ' + font[1];
-    canvasCtx.textBaseline = 'bottom';
-    canvasCtx.fillText(title, cx + correction, cy);
-    canvasCtx.font = font.join(' ');
-};
-
-/**
- * @description
- * Render audio time.
- */
-const renderTime = () => {
-    // var time = this.minutes + ':' + this.seconds;
-    // canvasCtx.fillText(time, canvas.width / 2 + 10, canvas.height / 2 + 40);
-};
-
-/**
- * @description
- * Render frame by style type.
- *
- * @return {Function}
- */
-const renderByStyleType = () => {
-    // return this[TYPE[this.style]]();
-    renderLounge();
-};
-
-/**
- * @description
- * Render lounge style type.
- */
-const renderLounge = () => {
-    var barWidth = 2;
-    var barHeight = 2;
-    var barSpacing = 7;
-
-    // const height = canvas.height;
-    // const width = canvas.width;
-    // canvasCtx.clearRect(0, 0, width, height);
-
-    var cx = canvas.width / 2;
-    var cy = canvas.height / 2;
-    var radius = 140; // how large is the circle
-    var maxBarNum = Math.floor((radius * 2 * Math.PI) / (barWidth + barSpacing)); // control max number of bars
-    var slicedPercent = Math.floor((maxBarNum * 25) / 100);
-    var barNum = maxBarNum - slicedPercent;
-    var freqJump = Math.floor(dataArray.length / maxBarNum); // gap (of frequency) for each bar 
-
-    canvasCtx.fillStyle = color;
-    for (var i = 0; i < barNum; i++) {
-        var amplitude = dataArray[i * freqJump];
-        var alfa = (i * 2 * Math.PI ) / maxBarNum;
-        var beta = (3 * 45 - barWidth) * Math.PI / 180;
-        var x = 0;
-        // var y = 1 - radius - (amplitude / 12 - barHeight); // flipped
-        // var y = (amplitude / 12 - barHeight) - radius; // inverted
-        var y = 1 - radius - (amplitude / 12 - barHeight);
-        var w = barWidth;
-        var h = amplitude / 6 + barHeight;
-
-        canvasCtx.save();
-        canvasCtx.translate(cx + barSpacing, cy + barSpacing);
-        canvasCtx.rotate(alfa - beta);
-        canvasCtx.fillRect(x, y, w, h);
-        canvasCtx.restore();
-    }
-};
-
-export function LoungeVisual() {
+export function LoungeVisual(props) {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
     const theme = useSelector((state: RootState) => {
         return state.DisplayReducer as DisplayStatus;
     });
 
-    const control = useSelector((state: RootState) => {
-        return state.ControlReducer as ControlStatus;
-    })
+    // const control = useSelector((state: RootState) => {
+    //     return state.ControlReducer as ControlStatus;
+    // })
 
     color = theme.textColor;
+
+    const setSource = async () => {
+        const newMediaStream = await navigator.mediaDevices.getUserMedia({
+            audio: true,
+            video: false
+        })
+    
+        await (source = audioContext.createMediaStreamSource(newMediaStream))
+        await (source.connect(analyser))
+    };
+    
+    /**
+     * @description
+     * Render audio author and title.
+     */
+    const renderText = () => {
+        var cx = canvas.width / 2;
+        var cy = canvas.height / 2;
+        var correction = 10;
+    
+        var title = ""
+        var author = "Unamed"
+        var font = ['12px', 'Helvetica']
+    
+        canvasCtx.fillStyle = color;
+    
+        canvasCtx.textBaseline = 'top';
+        canvasCtx.fillText(author, cx + correction, cy);
+        canvasCtx.font = parseInt(font[0], 10) + 8 + 'px ' + font[1];
+        canvasCtx.textBaseline = 'bottom';
+        canvasCtx.fillText(title, cx + correction, cy);
+        canvasCtx.font = font.join(' ');
+    };
+    
+    /**
+     * @description
+     * Render audio time.
+     */
+    const renderTime = () => {
+        // var time = this.minutes + ':' + this.seconds;
+        // canvasCtx.fillText(time, canvas.width / 2 + 10, canvas.height / 2 + 40);
+    };
+    
+    /**
+     * @description
+     * Render frame by style type.
+     *
+     * @return {Function}
+     */
+    const renderByStyleType = () => {
+        // return this[TYPE[this.style]]();
+        renderLounge();
+    };
+    
+    /**
+     * @description
+     * Render lounge style type.
+     */
+    const renderLounge = () => {
+        var barWidth = 2;
+        var barHeight = 2;
+        var barSpacing = 7;
+    
+        // const height = canvas.height;
+        // const width = canvas.width;
+        // canvasCtx.clearRect(0, 0, width, height);
+    
+        var cx = canvas.width / 2;
+        var cy = canvas.height / 2;
+        // var radius = 112; // how large is the circle
+        // console.log("canvas: ", canvas.width, canvas.height)
+        // console.log(Math.min(parseInt(props.visualWidth.substring(0, 3), 10), parseInt(props.visualHeight.substring(0, 3), 10)) / 2.5);
+        var radius = Math.min(canvas.width, canvas.height) / 2.5;
+        var maxBarNum = Math.floor((radius * 2 * Math.PI) / (barWidth + barSpacing)); // control max number of bars
+        var slicedPercent = Math.floor((maxBarNum * 25) / 100);
+        var barNum = maxBarNum - slicedPercent;
+        var freqJump = Math.floor(dataArray.length / maxBarNum); // gap (of frequency) for each bar 
+    
+        canvasCtx.fillStyle = color;
+        for (var i = 0; i < barNum; i++) {
+            var amplitude = dataArray[i * freqJump];
+            var alfa = (i * 2 * Math.PI ) / maxBarNum;
+            var beta = (3 * 45 - barWidth) * Math.PI / 180;
+            var x = 0;
+            // var y = 1 - radius - (amplitude / 12 - barHeight); // flipped
+            // var y = (amplitude / 12 - barHeight) - radius; // inverted
+            var y = 1 - radius - (amplitude / 12 - barHeight);
+            var w = barWidth;
+            var h = amplitude / 6 + barHeight;
+    
+            canvasCtx.save();
+            canvasCtx.translate(cx + barSpacing, cy + barSpacing);
+            canvasCtx.rotate(alfa - beta);
+            canvasCtx.fillRect(x, y, w, h);
+            canvasCtx.restore();
+        }
+    };
 
     useEffect(() => {
         audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -155,5 +158,6 @@ export function LoungeVisual() {
         renderByStyleType();
     }
     
-    return <canvas width={"400vw"} height="300vh" ref={canvasRef} />
+    // return <canvas width={"400vw"} height="300vh" ref={canvasRef} />
+    return <canvas width={props.visualWidth} height={props.visualHeight} ref={canvasRef} />
 }

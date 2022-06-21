@@ -23,16 +23,16 @@ const setSource = async () => {
     await (source.connect(analyser))
 };
 
-export function RealFreqVisual() {
+export function RealFreqVisual(props) {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
     const theme = useSelector((state: RootState) => {
         return state.DisplayReducer as DisplayStatus;
     });
 
-    const control = useSelector((state: RootState) => {
-        return state.ControlReducer as ControlStatus;
-    })
+    // const control = useSelector((state: RootState) => {
+    //     return state.ControlReducer as ControlStatus;
+    // })
 
     color = theme.textColor;
 
@@ -68,8 +68,8 @@ export function RealFreqVisual() {
         // How much data should we collect
         analyser.fftSize = 2 ** 8;
 
-        const height = canvas.height;
         const width = canvas.width;
+        const height = canvas.height;
         const barWidth = (width / analyser.frequencyBinCount) * 0.5; // analyser.frequencyBinCount := how many pieces of data are there.
         canvasCtx.clearRect(0, 0, width, height);
 
@@ -84,5 +84,6 @@ export function RealFreqVisual() {
         });
     }
 
-    return <canvas width={"400vw"} height="300vh" ref={canvasRef} />
+    // return <canvas width={"400vw"} height="300vh" ref={canvasRef} />
+    return <canvas width={props.visualWidth} height={props.visualHeight} ref={canvasRef} />
 }

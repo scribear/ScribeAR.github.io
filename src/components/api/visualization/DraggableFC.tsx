@@ -22,7 +22,14 @@ function drop(event) {
     return false;
 } 
 
-const setVisual = (id) => {
+// const addBorder = (event) => {
+//     console.log("mouse over")
+//     var style = getComputedStyle(event.target)
+
+//     style.border = '3px solid #428600'
+// }
+
+const setDraggable = (id) => {
     draggableElem = document.getElementById(id)
     // draggableElem?.addEventListener('dragstart', drag_start, false)
     document.body.addEventListener('dragover', drag_over, false)
@@ -31,7 +38,7 @@ const setVisual = (id) => {
 
 export function Draggable (props) {
     useEffect(() => {
-        setVisual(props.id)
+        setDraggable(props.id)
     }, [])
 
     return (

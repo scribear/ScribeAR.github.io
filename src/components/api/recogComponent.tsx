@@ -11,6 +11,7 @@ import { NoFreqVisual } from './visualization/noFreqVisual'
 import { LoungeVisual } from './visualization/loungeVisual'
 import { RealFreqVisual } from './visualization/realFreqVisual';
 import { Draggable } from './visualization/DraggableFC';
+import { Resizable } from './visualization/Resizable';
 import StreamText from './streamtext/streamtextRecognition';
 var transcriptsFull = "testing"
 let desiredAPI = 0;
@@ -120,7 +121,9 @@ stateCurrentAPI.current = apiStatus
       return (
         <div>
           <Draggable id="fullVisual">
-            <LoungeVisual></LoungeVisual>
+            <Resizable>
+              <LoungeVisual></LoungeVisual>
+            </Resizable>
           </Draggable>
           <ul >
             {fullTranscripts.map(transcript => (
@@ -135,11 +138,10 @@ stateCurrentAPI.current = apiStatus
     return (
       <div>
         <Draggable id="noFreqVisual">
-          <NoFreqVisual></NoFreqVisual>
+          <Resizable>
+            <NoFreqVisual></NoFreqVisual>
+          </Resizable>
         </Draggable>
-        {/* <div id='circular_visual' draggable='true' style={{position: 'absolute', left: '0', top: '0', zIndex: 1, paddingTop: '5%', paddingLeft: '5%', right: '90'}}>
-          <NoFreqVisual></NoFreqVisual>
-        </div> */}
         <ul >
           {fullTranscripts.map(transcript => (
             <h3  id = "captionsSpace" style ={{position: 'fixed', width: '90%', textAlign: 'left', left: '0', fontSize: textSizeA, paddingLeft: '5%', paddingRight: '60%', overflowY: 'scroll', height: '40%', color: textSize.textColor}}>{transcript}</h3>

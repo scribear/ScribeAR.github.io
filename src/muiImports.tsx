@@ -46,7 +46,7 @@ import ErrorIcon from '@mui/icons-material/Error';
 import CancelIcon from '@mui/icons-material/Cancel';
 import DoNotDisturbOnIcon from '@mui/icons-material/DoNotDisturbOn';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-
+import { Switch } from '@mui/material';
 
 export {
     createTheme,
@@ -99,4 +99,5 @@ export {
     FullscreenExitIcon,    
     PaletteIcon,
     ArchitectureIcon,
+    Switch,
 }

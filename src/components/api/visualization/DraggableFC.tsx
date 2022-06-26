@@ -18,62 +18,39 @@ function drop(event) {
     if (!draggableElem) return
 
     const style = getComputedStyle(draggableElem);
-    // console.log("computed: ", [getComputedStyle(draggableElem).getPropertyValue('left'), getComputedStyle(draggableElem).getPropertyValue('right'), getComputedStyle(draggableElem).getPropertyValue('top'), getComputedStyle(draggableElem).getPropertyValue('bottom')])
-    // console.log(window)
-    // corner cases
-    // console.log(window.screen)
+    // console.log(window.screen.availWidth, window.screen.availHeight, window.innerWidth, window.innerHeight);
+    // console.log("Before, computed: ", {left: getComputedStyle(draggableElem).getPropertyValue('left'), right: getComputedStyle(draggableElem).getPropertyValue('right'), top: getComputedStyle(draggableElem).getPropertyValue('top'), bottom: getComputedStyle(draggableElem).getPropertyValue('bottom')});
     var newLeft = (event.clientX + parseInt(offset[0], 10));
-    var newRight = newLeft + parseInt(style.getPropertyValue('width'), 10);
-    // var newRight = newLeft + parseInt(draggableElem.style.width, 10);
     var newTop = (event.clientY + parseInt(offset[1], 10));
-    var newBottom = newTop + parseInt(style.getPropertyValue('height'), 10);
-    // var newBottom = newTop + parseInt(draggableElem.style.height, 10);
-    // console.log('new: ', [newLeft, newRight, newTop, newBottom])
 
-    // const dimension = fitInnerWindow(newLeft, newRight, newTop, newBottom)
-    // // console.log('fit new: ', dimension)
-    // // draggableElem.style.left = newLeft + 'px';
-    // // draggableElem.style.top = newTop + 'px';
-    // draggableElem.style.left = dimension[0];
-    // draggableElem.style.right = dimension[1];
-    // draggableElem.style.top = dimension[2];
-    // draggableElem.style.bottom = dimension[3];
+    // make sure cannot be dragged outside of the inner screen
+    fitInnerWindow(newLeft, style.getPropertyValue('width'), newTop, style.getPropertyValue('height'))
 
-    draggableElem.style.left = `${Math.max(0, newLeft)}px`;
-    draggableElem.style.right = `${Math.min(1440, newRight)}px`;
-    draggableElem.style.top = `${Math.max(0, newTop)}px`
-    draggableElem.style.bottom = `${Math.min(900, newBottom)}px`
-
-
-    // console.log(draggableElem.style)
-
+    // console.log("After, computed: ", {left: getComputedStyle(draggableElem).getPropertyValue('left'), right: getComputedStyle(draggableElem).getPropertyValue('right'), top: getComputedStyle(draggableElem).getPropertyValue('top'), bottom: getComputedStyle(draggableElem).getPropertyValue('bottom')})
     event.preventDefault();
     return false;
 } 
 
-const fitInnerWindow = (newLeft : number, newRight : number, newTop : number, newBottom: number) => {
-    if (newLeft < 0) { // left
-        if (newTop < 0) { // top left corner
-            return ['0px', 'auto', '0px', 'auto']
-        } else if (newTop > window.screen.availHeight) { // bottom left corner
-            return ['0px', 'auto', 'auto', `${window.screen.availWidth}px`]
-        }
+const fitInnerWindow = (newLeft : number, elemWidth : string, newTop : number, elemHeight : string) => {
+    if (!draggableElem) return -1;
 
-        // simply on the left
-        return ['0px', 'auto', `${newTop}px`, 'auto']
-    } else if (newBottom < 0) { // bottom
-        if (newTop < 0) { // top right corner
-            // left: auto; right: availWidth; Top: 0px; bottom: auto
-            return ['auto', `${window.screen.availWidth}px`, '0px', 'auto']
-        } else if (newRight > window.screen.availWidth) { // bottom right corner
-            return ['auto', `${window.screen.availWidth}px`, 'auto', '0px']
-        }
-
-        // simply on the bottom
-        return [`${newLeft}px`, 'auto', 'auto', '0px']
+    if (newLeft < 0) {
+        draggableElem.style.left = "0px";
+    } else if ((newLeft + parseInt(elemWidth, 10)) > window.innerWidth) {
+        draggableElem.style.left = `${window.innerWidth - parseInt(elemWidth, 10)}px`;
+    } else {
+        draggableElem.style.left = `${newLeft}px`;
     }
 
-    return [`${newLeft}px`, 'auto', `${newTop}px`, 'auto']
+    if (newTop < 0) {
+        draggableElem.style.top = "0px";
+    } else if ((newTop + parseInt(elemHeight, 10))> window.innerHeight) {
+        draggableElem.style.top = `${window.innerHeight - parseInt(elemHeight, 10)}px`;
+    } else {
+        draggableElem.style.top = `${newTop}px`;
+    }
+
+    return 0;
 }
 
 const setDraggable = (id) => {
@@ -81,10 +58,10 @@ const setDraggable = (id) => {
     // draggableElem?.addEventListener('dragstart', drag_start, false)
     document.body.addEventListener('dragover', drag_over, false)
     document.body.addEventListener('drop', drop, false)
-    document.body.addEventListener('mousemove', (event) => {
-        console.log('mouse client: ', [event.clientX, event.clientY])
-        console.log('mouse screen : ', [event.screenX, event.screenY])
-    },)
+    // document.body.addEventListener('mousemove', (event) => {
+    //     console.log('mouse client: ', [event.clientX, event.clientY])
+    //     console.log('mouse screen : ', [event.screenX, event.screenY])
+    // },)
 }
 
 export function Draggable (props) {

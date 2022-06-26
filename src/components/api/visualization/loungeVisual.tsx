@@ -98,8 +98,8 @@ export function LoungeVisual(props) {
         // console.log("canvas: ", canvas.width, canvas.height)
         // console.log(Math.min(parseInt(props.visualWidth.substring(0, 3), 10), parseInt(props.visualHeight.substring(0, 3), 10)) / 2.5);
         var radius = Math.min(canvas.width, canvas.height) / 2.5;
-        var maxBarNum = Math.floor((radius * 2 * Math.PI) / (barWidth + barSpacing)); // control max number of bars
-        var slicedPercent = Math.floor((maxBarNum * 25) / 100);
+        var maxBarNum = Math.floor((radius * 2 * Math.PI) / (barWidth + barSpacing)); // control max number of bars: circumference / (width + spacing)
+        var slicedPercent = Math.floor(maxBarNum * 0.25); // only 0.25% of bars will be deleted
         var barNum = maxBarNum - slicedPercent;
         var freqJump = Math.floor(dataArray.length / maxBarNum); // gap (of frequency) for each bar 
     

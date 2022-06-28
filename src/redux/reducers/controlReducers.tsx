@@ -4,6 +4,7 @@ const initialControlState : ControlStatus = {
     listening: true,
     visualizing: true,
     showFrequency: false,
+    showTimeData: false,
     speechLanguage: "en-US",
     textLanguage: "en"
 }
@@ -16,6 +17,8 @@ export function ControlReducer(state = initialControlState, action) {
       return { ...state, visualizing: !state.visualizing};
     case 'FLIP_SHOWFREQ':
       return { ...state, showFrequency: !state.showFrequency};
+    case 'FLIP_SHOWTIMEDATA':
+      return { ...state, showTimeData: !state.showTimeData};
     case 'FLIP_RECORDING_PHRASE':
       return { ...state,
               listening: action.payload};

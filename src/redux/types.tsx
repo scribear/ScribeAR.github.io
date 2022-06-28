@@ -98,6 +98,7 @@ export interface ControlStatus {
     listening: boolean
     visualizing: boolean
     showFrequency: boolean
+    showTimeData: boolean
     speechLanguage: string
     textLanguage: string
 }

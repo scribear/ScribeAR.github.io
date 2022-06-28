@@ -10,6 +10,7 @@ import { FullVisual } from './visualization/fullVisual'
 import { NoFreqVisual } from './visualization/noFreqVisual'
 import { LoungeVisual } from './visualization/loungeVisual'
 import { RealFreqVisual } from './visualization/realFreqVisual';
+import { TimeDataVisual } from './visualization/timeDataVisual';
 import { Draggable } from './visualization/DraggableFC';
 import { Resizable } from './visualization/Resizable';
 import StreamText from './streamtext/streamtextRecognition';
@@ -117,12 +118,28 @@ stateCurrentAPI.current = apiStatus
     )
   }
   if (stateRefControl.current.listening && stateRefControl.current.visualizing) {
+    console.log(stateRefControl.current)
     if (stateRefControl.current.showFrequency) {
       return (
         <div>
           <Draggable id="fullVisual">
             <Resizable size="240px">
               <LoungeVisual></LoungeVisual>
+            </Resizable>
+          </Draggable>
+          <ul >
+            {fullTranscripts.map(transcript => (
+              <h3  id = "captionsSpace" style ={{position: 'fixed', width: '90%', textAlign: 'left', left: '0', fontSize: textSizeA, paddingLeft: '5%', paddingRight: '60%', overflowY: 'scroll', height: '40%', color: textSize.textColor}}>{transcript}</h3>
+            ))}
+          </ul>
+        </div>
+      );
+    } else if (stateRefControl.current.showTimeData) {
+      return (
+        <div>
+          <Draggable id="timeData">
+            <Resizable size="240px">
+              <TimeDataVisual></TimeDataVisual>
             </Resizable>
           </Draggable>
           <ul >

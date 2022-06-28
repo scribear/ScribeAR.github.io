@@ -121,7 +121,7 @@ stateCurrentAPI.current = apiStatus
       return (
         <div>
           <Draggable id="fullVisual">
-            <Resizable>
+            <Resizable size="240px">
               <LoungeVisual></LoungeVisual>
             </Resizable>
           </Draggable>
@@ -138,7 +138,7 @@ stateCurrentAPI.current = apiStatus
     return (
       <div>
         <Draggable id="noFreqVisual">
-          <Resizable>
+          <Resizable size="240px">
             <NoFreqVisual></NoFreqVisual>
           </Resizable>
         </Draggable>

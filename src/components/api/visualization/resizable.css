@@ -4,6 +4,7 @@
     height: 280px;
     border-radius: 50%; */
     border: '';
+    /* box-sizing: content-box; */
 }
 
 .resizable .resizer.top-left {

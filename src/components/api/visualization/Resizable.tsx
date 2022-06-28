@@ -17,15 +17,17 @@ export function Resizable (props) {
         return state.DisplayReducer as DisplayStatus;
     });
 
-    // starting coordinates for mouse down event
+    // starting coordinates for mouse down event; useState does not update immediately
     // const [startingCoord, setStartingCoord] = useState({
     //     x: 0,
     //     y: 0, 
     // })
 
     const [style, setStyle] = useState({
-        width: '280px', // also the width for audio visual
-        height: '280px', // also the height for audio visual
+        // width: '280px', // also the width for audio visual
+        // height: '280px', // also the height for audio visual
+        width: props.size,
+        height: props.size,
         border: '',
     })
 
@@ -39,15 +41,10 @@ export function Resizable (props) {
         event.preventDefault()
 
         // Get/Save the current mouse position
-        // setStartingCoord({x: event.clientX, y: event.clientY})
+        // Cannot use dataTransfer to save starting X, Y: Only for drag-related event
         startingX = event.clientX;
         startingY = event.clientY;
 
-        // dataTransfer is only for drag-related event
-
-        // Get/Calculate the current dimension of element
-        var targetStyle = window.getComputedStyle(event.target, null);
-        setStyle({...style, width: targetStyle.width, height: targetStyle.height})
 
         // Attach the listeners to `document`
         document.addEventListener('mousemove', mouseMoveHandler);
@@ -68,12 +65,12 @@ export function Resizable (props) {
         // Adjust the dimension of the visual element
         const original_width : number = parseFloat(style.width); // 'px' are parsed automatically
         const original_height : number = parseFloat(style.height); // 'px' are parsed automatically
-        const newWidth : string = `${Math.max(original_width + dx, 100)}px`;
-        const newHeight : string = `${Math.max(original_height + dy, 100)}px`;
+        const newWidth : number = Math.max(original_width + dx, 100);
+        const newHeight : number = Math.max(original_height + dy, 100);
         // console.log( "start: ", [startingX, startingY], "move to: ", [event.clientX, event.clientY], "; d: ", [dx, dy])
         // console.log("original: ", [original_width, original_height], "; new: ", [newWidth, newHeight])
-        setStyle({...style, width: newWidth, height: newHeight})
-        // console.log(`width: ${style.width}, height: ${style.height}`)
+        const min : string = `${Math.min(newWidth, newHeight)}px`; // stays a square
+        setStyle({...style, width: min, height: min});
         return false
     };
     

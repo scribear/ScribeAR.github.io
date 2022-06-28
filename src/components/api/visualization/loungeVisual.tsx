@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { DisplayStatus, ControlStatus } from '../../../redux/types';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store';
@@ -88,45 +88,76 @@ export function LoungeVisual(props) {
         var barHeight = 2;
         var barSpacing = 7;
     
-        // const height = canvas.height;
-        // const width = canvas.width;
-        // canvasCtx.clearRect(0, 0, width, height);
-    
         var cx = canvas.width / 2;
         var cy = canvas.height / 2;
-        // var radius = 112; // how large is the circle
         // console.log("canvas: ", canvas.width, canvas.height)
-        // console.log(Math.min(parseInt(props.visualWidth.substring(0, 3), 10), parseInt(props.visualHeight.substring(0, 3), 10)) / 2.5);
-        var radius = Math.min(canvas.width, canvas.height) / 2.5;
-        var maxBarNum = Math.floor((radius * 2 * Math.PI) / (barWidth + barSpacing)); // control max number of bars: circumference / (width + spacing)
-        var slicedPercent = Math.floor(maxBarNum * 0.25); // only 0.25% of bars will be deleted
-        var barNum = maxBarNum - slicedPercent;
-        var freqJump = Math.floor(dataArray.length / maxBarNum); // gap (of frequency) for each bar 
-    
+        var radius = Math.min(canvas.width, canvas.height) / 2.5; // determined by the smaller of width or height
+        var maxBarNum = Math.floor((2 * Math.PI * radius) / (barWidth + barSpacing)); // control max (total possible) number of bars: circumference / (width + spacing)
+        // var slicedPercent = Math.floor(maxBarNum * 0.25); // only 0.25% of bars will be deleted
+        // var barNum = maxBarNum - slicedPercent;
+        var barNum = maxBarNum * 0.75; // controls how much frequency are shown
+        var freqJump = Math.floor(dataArray.length / maxBarNum); // gap of index (of frequency array) for each bar 
+        var eachDataFreq = audioContext.sampleRate / 2 / dataArray.length; // Nyquist Rate Theroem: 2x the range of sampling rate to capture the range.
+        // console.log(eachDataFreq);
+        // console.log("jump: ", freqJump);
+
+        const hypotenuseLength = (canvas.width / 4);
+
         canvasCtx.fillStyle = color;
         for (var i = 0; i < barNum; i++) {
-            var amplitude = dataArray[i * freqJump];
-            var alfa = (i * 2 * Math.PI ) / maxBarNum;
-            var beta = (3 * 45 - barWidth) * Math.PI / 180;
+            var amplitude = dataArray[i * freqJump]
+            var alfa = (2 * Math.PI * i) / maxBarNum; // (2 pi i) / (2 pi r / width) => (i * width) / r
+            var beta = (3 * 45 - barWidth) * Math.PI / 180; // pi * 0.75
+            // var beta = Math.PI * 0.75;
             var x = 0;
             // var y = 1 - radius - (amplitude / 12 - barHeight); // flipped
             // var y = (amplitude / 12 - barHeight) - radius; // inverted
-            var y = 1 - radius - (amplitude / 12 - barHeight);
+            var y = 1 - radius - (amplitude / 6 - barHeight);
             var w = barWidth;
-            var h = amplitude / 6 + barHeight;
+            var h = amplitude / 3 + barHeight;
+            // Maybe Relationship: 2 * 6 = 12
+
     
             canvasCtx.save();
-            canvasCtx.translate(cx + barSpacing, cy + barSpacing);
-            canvasCtx.rotate(alfa - beta);
+            // canvasCtx.translate(cx + barSpacing, cy + barSpacing);
+            canvasCtx.translate(cx, cy); // doesn't need to + barSpacing
+
+            // canvasCtx.fillRect(-hypotenuseLength, 0, 2 * hypotenuseLength, 1);
+            // canvasCtx.fillRect(0, -hypotenuseLength, 1, 2 * hypotenuseLength);
+
+            canvasCtx.save(); // right before rotation
+            const rotate = (alfa - beta) * 1;
+            canvasCtx.rotate(rotate); // controls starting bar (how much to rotate)
             canvasCtx.fillRect(x, y, w, h);
+            // canvasCtx.fillRect(0, 0, w, hypotenuseLength)
+            canvasCtx.restore() // rotate back so that text can be displayed normally
+            if (i % 10 == 0) {
+                const freqText = `${Math.round(eachDataFreq * (i  * freqJump))} hz`;
+                // const freqText = `${20 + eachDataFreq * (i  * freqJump)} hz`;
+                const canvasRotateAngle = rotate;
+                var angle = -1 * canvasRotateAngle;
+                const textX = Math.sin(angle) * hypotenuseLength;
+                const textY = Math.cos(angle) * hypotenuseLength;
+
+                canvasCtx.textAlign = 'center';
+                canvasCtx.fillText(`${freqText}`, -textX, -textY); // the x and y might should be determined by cavnas width and height
+            }
             canvasCtx.restore();
         }
     };
 
     useEffect(() => {
         audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        analyser = audioContext.createAnalyser();
-        dataArray = new Uint8Array(analyser.frequencyBinCount); // data for visualization
+        var analyserOptions : AnalyserOptions = { // visual largely affected by fftSize and minDecibels. Roughly direct relationship 
+            "fftSize": 512, // fftSize / 2 is the length of the dataArray. Less: Data are Crunched: Large: the Opposite
+            "maxDecibels": -30,
+            "minDecibels": -70, // lowest volume to pick up
+            "smoothingTimeConstant": 0.8, // lower: less smooth
+        };
+        // analyser = audioContext.createAnalyser();
+        analyser = new AnalyserNode(audioContext, analyserOptions); // for AnalyserOptions
+
+        dataArray = new Uint8Array(analyser.frequencyBinCount); // get data for visualization. frequencyBinCount = fftSize / 2
 
         // connect the source to be analysed
         setSource();

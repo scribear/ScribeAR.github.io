@@ -48,6 +48,7 @@ import DoNotDisturbOnIcon from '@mui/icons-material/DoNotDisturbOn';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import MicOffIcon from '@mui/icons-material/MicOff'
 import Autocomplete from '@mui/material/Autocomplete';
+import { Switch } from '@mui/material';
 
 export {
     createTheme,
@@ -102,4 +103,5 @@ export {
     PaletteIcon,
     MicOffIcon,
     ArchitectureIcon,
+    Switch,
 }

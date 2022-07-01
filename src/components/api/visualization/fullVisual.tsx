@@ -23,18 +23,18 @@ const setSource = async () => {
     await (source.connect(analyser))
 };
 
-export function Visualization(props) {
+export function FullVisual(props) {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
     const theme = useSelector((state: RootState) => {
         return state.DisplayReducer as DisplayStatus;
     });
 
-    const control = useSelector((state: RootState) => {
-        return state.ControlReducer as ControlStatus;
-    })
+    // const control = useSelector((state: RootState) => {
+    //     return state.ControlReducer as ControlStatus;
+    // })
 
-    color = theme.secondaryColor;
+    color = theme.textColor;
 
     useEffect(() => {
         audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -108,6 +108,6 @@ export function Visualization(props) {
         }
     }
     
-    // return <canvas width={"400vw"} height="300vh" ref={canvasRef} />
+    // return <canvas width={"280vw"} height="280" ref={canvasRef} />
     return <canvas width={props.visualWidth} height={props.visualHeight} ref={canvasRef} />
 }

@@ -103,6 +103,9 @@ export interface ControlStatus {
     visualizing: boolean
     speechLanguage: LanguageList
     textLanguage: LanguageList
+    showFrequency: boolean
+    showTimeData: boolean
+
 }
 /*
     Relating to visual aspects of the website the user can change
@@ -112,8 +115,8 @@ export interface ControlStatus {
 */
 export interface DisplayStatus {
     textSize: number
-    primaryColor: string
-    secondaryColor: string
+    primaryColor: string // background
+    secondaryColor: string // header, sidebar
     textColor: string
     menuVisible: boolean
 }

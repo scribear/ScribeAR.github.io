@@ -23,18 +23,18 @@ const setSource = async () => {
     await (source.connect(analyser))
 };
 
-export function Visualization(props) {
+export function NoFreqVisual(props) {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
     const theme = useSelector((state: RootState) => {
         return state.DisplayReducer as DisplayStatus;
     });
 
-    const control = useSelector((state: RootState) => {
-        return state.ControlReducer as ControlStatus;
-    })
+    // const control = useSelector((state: RootState) => {
+    //     return state.ControlReducer as ControlStatus;
+    // })
 
-    color = theme.secondaryColor;
+    color = theme.textColor;
 
     useEffect(() => {
         audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -86,6 +86,7 @@ export function Visualization(props) {
             let y_4 = y_3 - 0.5 * avg * -Math.sin((i * 2 * Math.PI) / POINTS);
             let x_5 = x - 0.3 * Math.cos((i * 2 * Math.PI) / POINTS);
             let y_5 = y - 0.3 * -Math.sin((i * 2 * Math.PI) / POINTS);
+
             //draw the circular spectrum
             canvasCtx.beginPath();
             canvasCtx.moveTo(x, y);
@@ -97,17 +98,19 @@ export function Visualization(props) {
             canvasCtx.moveTo(x, y);
             canvasCtx.lineTo(x_5, y_5);
             canvasCtx.stroke();
+
             //draw the inner circle
-            canvasCtx.beginPath();
-            canvasCtx.moveTo(x_4, y_4);
-            canvasCtx.lineTo(x_3, y_3);
-            if (y_4 - y_3 > 10) {
-                canvasCtx.strokeStyle = '#ff0000';
-            }
-            canvasCtx.stroke();
+            // canvasCtx.beginPath();
+            // canvasCtx.moveTo(x_4, y_4);
+            // canvasCtx.lineTo(x_3, y_3);
+            // if (y_4 - y_3 > 10) {
+            //     canvasCtx.strokeStyle = '#ff0000';
+            // }
+            // canvasCtx.stroke();
         }
     }
     
     // return <canvas width={"400vw"} height="300vh" ref={canvasRef} />
     return <canvas width={props.visualWidth} height={props.visualHeight} ref={canvasRef} />
+    
 }

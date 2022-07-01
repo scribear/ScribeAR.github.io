@@ -10,6 +10,10 @@ export type Speaker = {
     role: number
 }
 
+export type LanguageList = {
+    label: string
+    CountryCode: string
+}
 
 /*
     // @text: A Map: <timestamp(number), text(string)>
@@ -97,10 +101,11 @@ export interface StreamTextStatus {
 export interface ControlStatus {
     listening: boolean
     visualizing: boolean
+    speechLanguage: LanguageList
+    textLanguage: LanguageList
     showFrequency: boolean
     showTimeData: boolean
-    speechLanguage: string
-    textLanguage: string
+
 }
 /*
     Relating to visual aspects of the website the user can change

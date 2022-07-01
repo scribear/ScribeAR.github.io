@@ -32,8 +32,8 @@ export const useRecognition = () => {
           const finalResult = Array.from(event.results)
           .map(result => result[0])
           .map(result => result.transcript)
-          .join('\n');
-          transcript =  finalResult + ".n";
+          .join('');
+          transcript =  finalResult;
 
           if (event.results[0].isFinal) {
             console.log(finalResult)

@@ -29,6 +29,7 @@ export default function AzureDropdown(props) {
         }),
         apiStatus: props.apiStatus as ApiStatus
     });
+    
     const handleChangeKey = (event) =>
      {
             let copyStatus = Object.assign({}, state.azureStatus);

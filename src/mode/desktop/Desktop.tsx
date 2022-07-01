@@ -4,6 +4,8 @@ import { RootState } from '../../redux/types';
 import { WebRecognitionExample } from '../../components/api/recogComponent';
 import { Provider, useDispatch, useSelector} from 'react-redux';
 import { store } from '../../store';
+import { useCallback, useEffect } from 'react';
+
 
 /* todo:
       mui theme file which has every theme and is sent to every styled function
@@ -13,8 +15,8 @@ export default function Desktop(props) {
    
    const RootState = useSelector((state: RootState) => {
       return state;
-   });   
-
+   });
+   
 
    console.log(RootState)
    const dispatch = useDispatch()

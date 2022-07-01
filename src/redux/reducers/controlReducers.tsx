@@ -3,10 +3,10 @@ import { ControlStatus } from "../types";
 const initialControlState : ControlStatus = {
     listening: true,
     visualizing: true,
+    speechLanguage: {label: "English (United States)",	CountryCode: "en-US"},
+    textLanguage: {label: "English",	CountryCode: "en"},
     showFrequency: false,
     showTimeData: false,
-    speechLanguage: "en-US",
-    textLanguage: "en"
 }
 
 export function ControlReducer(state = initialControlState, action) {

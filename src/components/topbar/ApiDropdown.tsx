@@ -1,23 +1,29 @@
 import * as React from 'react';
-import { Box, Menu, MicIcon, IconButton, Tooltip } from '../../muiImports'
+import { Box, Menu, ExpandLess, ExpandMore, ThemeProvider, IconButton, Tooltip } from '../../muiImports'
 import StreamTextLogin from '../api/pickApi'
+import Theme from '../theme'
 
 
-export default function AccountMenu() {
+export default function AccountMenu(props) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+  const { myTheme } = Theme()
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
   };
+  // Make this a dropdown menu with the current api as the menu title
   return (
     <React.Fragment>
       <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
+        Scribear
         <Tooltip title="API choice">
-          <IconButton onClick={handleClick} size="small" sx={{ ml: 2 }}>
-            <MicIcon sx={{ width: 32, height: 32, color: 'white'}}>ScribeAR</MicIcon>
+          <IconButton onClick={handleClick}>
+            <ThemeProvider theme={props.theme}>
+              {open ? <ExpandLess color="primary" fontSize="large" /> : <ExpandMore color="primary" fontSize="large" />}
+            </ThemeProvider>
           </IconButton>
         </Tooltip>
       </Box>
@@ -43,7 +49,7 @@ export default function AccountMenu() {
               display: 'block',
               position: 'absolute',
               top: 0,
-              right:'48%',
+              right: '48%',
               width: 10,
               height: 10,
               bgcolor: 'background.paper',
@@ -55,7 +61,7 @@ export default function AccountMenu() {
         transformOrigin={{ horizontal: 'center', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'center', vertical: 'bottom' }}
       >
-        <StreamTextLogin/>
+        <StreamTextLogin />
       </Menu>
     </React.Fragment>
   );

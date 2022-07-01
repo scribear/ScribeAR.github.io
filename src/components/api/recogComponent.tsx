@@ -79,10 +79,14 @@ stateCurrentAPI.current = apiStatus
       }
     );
   };
+  React.useEffect(() => {
+    
+  }, [control.textLanguage, control.speechLanguage]);
   const azureHandler = async () => {
     const recognizedMessage = await azureListen(transcriptsFull, stateRefControl, stateRefAzure, stateCurrentAPI).then(response => {  
       if (stateRefControl.current.listening && stateCurrentAPI.current.currentAPI == 1) {
           transcriptsFull = transcriptsFull + response
+          console.log("LISTEn")
           azureHandler()
         }
       }

@@ -1,14 +1,15 @@
 import * as React from 'react';
 import {IconButton,  ListItemText, ListItem, ListItemIcon,  ExpandMore,  ExpandLess,  List,  EqualizerIcon,  DetailsIcon, Divider,} from '../../muiImports'
 import DisplayMenu from './display/menu';
-import STTMenu from './STT/menu';
+import LangMenu from './language/menu';
 import PhraseMenu from './phrase/menu';
 import VisualizationMenu from './audioVisBar/menu';
+
 
 export default function STT(props) {
   const [state, setState] = React.useState({
     display: false,
-    stt: true,
+    lang: true,
     visualization: false,
     phraseRecognition: false,
   });
@@ -22,7 +23,6 @@ export default function STT(props) {
       }
   
   const listItemHeader = (subMenu: string, drawerName: string, Icon) => {
-    console.log(state)
     return (
     <ListItem>
         <ListItemIcon>
@@ -39,14 +39,14 @@ export default function STT(props) {
 
   return (
     <div>
-    <h2 className="d-table-cell tar2" style={{textAlign: "left", paddingLeft: "20px"}}>Menu</h2>
+    <h2 className="d-table-cell tar2" style={{textAlign: "left", paddingLeft: "20px", transition:'.6s'}}>Menu</h2>
       <List
         sx={{ width: '20vw', bgcolor: 'background.paper' }}
         component="nav"
         aria-labelledby="nested-list-subheader"
       >
-        <STTMenu
-          open={state.stt}
+        <LangMenu
+          open={state.lang}
           isRecording={props.isRecording}
           listItemHeader={listItemHeader}
         />

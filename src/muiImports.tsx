@@ -46,10 +46,12 @@ import ErrorIcon from '@mui/icons-material/Error';
 import CancelIcon from '@mui/icons-material/Cancel';
 import DoNotDisturbOnIcon from '@mui/icons-material/DoNotDisturbOn';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-
+import MicOffIcon from '@mui/icons-material/MicOff'
+import Autocomplete from '@mui/material/Autocomplete';
 
 export {
     createTheme,
+    Autocomplete,
     ThemeProvider,
     Drawer,
     Grid,
@@ -98,5 +100,6 @@ export {
     ListItem,
     FullscreenExitIcon,    
     PaletteIcon,
+    MicOffIcon,
     ArchitectureIcon,
 }

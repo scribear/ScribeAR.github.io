@@ -10,7 +10,7 @@ function App() {
  }); 
   return (
     <div className="App">
-      <header className="App-header" style = {{ color: '#ffffff', background: display.primaryColor}}>
+      <header className="App-header" style = {{ color:  display.primaryColor, background: display.primaryColor}}>
         <Desktop/>
       </header>
     </div>

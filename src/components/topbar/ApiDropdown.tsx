@@ -18,7 +18,7 @@ export default function AccountMenu(props) {
   return (
     <React.Fragment>
       <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
-        Scribear
+        {props.display}
         <Tooltip title="API choice">
           <IconButton onClick={handleClick}>
             <ThemeProvider theme={props.theme}>

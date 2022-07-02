@@ -29,7 +29,6 @@ export default function AzureDropdown(props) {
         }),
         apiStatus: props.apiStatus as ApiStatus
     });
-    
     const handleChangeKey = (event) =>
      {
             let copyStatus = Object.assign({}, state.azureStatus);
@@ -111,7 +110,16 @@ export default function AzureDropdown(props) {
                             }}
                             noValidate
                             autoComplete="off"
-                        ><TextField onKeyDown = {handleEnter} onChange={handleChangeKey} value={state.azureStatus.azureKey} id="azureKey" label="Key" variant="outlined" /></Box>
+                        >
+                          <style>
+                            {`
+                              #azureKey {
+                                width: '100%';
+                              }
+                            `}
+                          </style>
+                          <TextField onKeyDown = {handleEnter} onChange={handleChangeKey} value={state.azureStatus.azureKey} id="azureKey" label="Key" variant="outlined" style={{ width: '100%' }}/>
+                          </Box>
                     </ListItem>
                     <ListItem sx={{ pl: 4 }}>
                         <Box
@@ -121,7 +129,7 @@ export default function AzureDropdown(props) {
                             }}
                             noValidate
                             autoComplete="off"
-                        ><TextField onKeyDown = {handleEnter} onChange={handleChangeKey} value={state.azureStatus.azureRegion} id="azureRegion" label="Region" variant="outlined" /></Box>
+                        ><TextField onKeyDown = {handleEnter} onChange={handleChangeKey} value={state.azureStatus.azureRegion} id="azureRegion" label="Region" variant="outlined" style={{ width: '100%' }}/></Box>
                     </ListItem>
                 </List>
         </div>

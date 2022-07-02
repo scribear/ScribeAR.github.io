@@ -9,8 +9,8 @@ function App() {
     return state.DisplayReducer as DisplayStatus;
  }); 
   return (
-    <div className="App">
-      <header className="App-header" style = {{ color:  display.primaryColor, background: display.primaryColor}}>
+    <div className="App" style = {{ color:  display.primaryColor, background: display.primaryColor}}>
+      <header className="App-header" style = {{ color:  display.primaryColor, background: display.primaryColor, minWidth: "360px", height:"100vh", minHeight: "900px"}}>
         <Desktop/>
       </header>
     </div>

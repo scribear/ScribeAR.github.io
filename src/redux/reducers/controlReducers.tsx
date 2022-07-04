@@ -2,10 +2,10 @@ import { ControlStatus } from "../types";
 
 const initialControlState : ControlStatus = {
     listening: true,
-    visualizing: true,
     speechLanguage: {label: "English (United States)",	CountryCode: "en-US"},
     textLanguage: {label: "English",	CountryCode: "en"},
     showFrequency: false,
+    showLabels: true,
     showTimeData: false,
 }
 
@@ -13,10 +13,10 @@ export function ControlReducer(state = initialControlState, action) {
   switch (action.type) {
     case 'FLIP_RECORDING':
       return { ...state, ...action.payload};
-    case 'FLIP_VISUALIZING':
-      return { ...state, visualizing: !state.visualizing};
     case 'FLIP_SHOWFREQ':
       return { ...state, showFrequency: !state.showFrequency};
+    case 'FLIP_SHOWLABELS':
+      return { ...state, showLabels: !state.showLabels};
     case 'FLIP_SHOWTIMEDATA':
       return { ...state, showTimeData: !state.showTimeData};
     case 'FLIP_RECORDING_PHRASE':

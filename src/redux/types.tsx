@@ -100,10 +100,10 @@ export interface StreamTextStatus {
 */
 export interface ControlStatus {
     listening: boolean
-    visualizing: boolean
     speechLanguage: LanguageList
     textLanguage: LanguageList
     showFrequency: boolean
+    showLabels: boolean
     showTimeData: boolean
 
 }

@@ -5,11 +5,7 @@ import Swal from 'sweetalert2';
 import { RootState } from '../../store';
 import { AzureRecognition } from './azure/azureRecognition';
 import { DisplayStatus, AzureStatus, StreamTextStatus, ControlStatus, ApiStatus } from '../../redux/types'
-import { Visualization } from './visualization/visualization'
-import { FullVisual } from './visualization/fullVisual'
-import { NoFreqVisual } from './visualization/noFreqVisual'
 import { LoungeVisual } from './visualization/loungeVisual'
-import { RealFreqVisual } from './visualization/realFreqVisual';
 import { TimeDataVisual } from './visualization/timeDataVisual';
 import { Draggable } from './visualization/DraggableFC';
 import { Resizable } from './visualization/Resizable';
@@ -117,13 +113,15 @@ stateCurrentAPI.current = apiStatus
         <StreamText streamTextStatus = {streamTextStatus} displayStatus = {textSize} />
     )
   }
-  if (stateRefControl.current.listening && stateRefControl.current.visualizing) {
+
+  // console.log(typeof(stateRefControl.current.showLabels));
+  if (stateRefControl.current.listening) {
     if (stateRefControl.current.showFrequency) {
       return (
         <div>
           <Draggable id="fullVisual">
             <Resizable size="290px">
-              <LoungeVisual></LoungeVisual>
+              <LoungeVisual showLabels={stateRefControl.current.showLabels? true : false}></LoungeVisual>
             </Resizable>
           </Draggable>
           <ul >
@@ -150,14 +148,9 @@ stateCurrentAPI.current = apiStatus
       );
     }
 
-    // not showing frequency
+    // not showing any visualization
     return (
       <div>
-        <Draggable id="noFreqVisual">
-          <Resizable size="290px">
-            <NoFreqVisual></NoFreqVisual>
-          </Resizable>
-        </Draggable>
         <ul >
           {fullTranscripts.map(transcript => (
             <h3  id = "captionsSpace" style ={{position: 'fixed', width: '90%', textAlign: 'left', left: '0', fontSize: textSizeA, paddingLeft: '5%', paddingRight: '60%', overflowY: 'scroll', height: '40%', color: textSize.textColor}}>{transcript}</h3>

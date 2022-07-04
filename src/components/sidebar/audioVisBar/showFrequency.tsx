@@ -28,7 +28,7 @@ import { PauseIcon, Button, PlayArrowIcon, createTheme, ThemeProvider, Switch } 
                 sx={{ width: 50, height:30}}
                 > */}
                     {/* {controlStatus.showFrequency === false ? <PlayArrowIcon /> : <PauseIcon />} */}
-                    {controlStatus.visualizing === false ? <Switch onClick={toggleDrawer} defaultChecked /> : <Switch onClick={toggleDrawer}/>}
+                    {controlStatus.showFrequency === true ? <Switch onClick={toggleDrawer} defaultChecked /> : <Switch onClick={toggleDrawer}/>}
                 {/* </Button> */}
             </ThemeProvider>
         </div>

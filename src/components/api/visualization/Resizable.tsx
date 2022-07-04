@@ -83,7 +83,7 @@ export function Resizable (props) {
     const mouseEnter = (event) => {
         setBorderStyle({...borderStyle, border: `3px dotted ${theme.textColor}`});
         setStyle({...style, border: `3px dotted ${theme.textColor}`});
-        event.stopPropagation();
+        // event.stopPropagation();
     }
 
     const mouseLeave = (event) => {

@@ -20,7 +20,7 @@ import { PauseIcon, Button, PlayArrowIcon, createTheme, ThemeProvider, Switch } 
         return (
         <div>
             <ThemeProvider theme={myTheme}>
-                {controlStatus.visualizing === false ? <Switch onClick={toggleDrawer} defaultChecked /> : <Switch onClick={toggleDrawer}/>}
+                {controlStatus.visualizing === true ? <Switch onClick={toggleDrawer} defaultChecked /> : <Switch onClick={toggleDrawer}/>}
             </ThemeProvider>
 
         </div>

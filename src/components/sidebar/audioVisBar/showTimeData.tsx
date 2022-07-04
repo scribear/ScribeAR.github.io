@@ -20,7 +20,7 @@ import { ThemeProvider, Switch } from '../../../muiImports'
         return (
         <div>
             <ThemeProvider theme={myTheme}>
-                {controlStatus.visualizing === false ? <Switch onClick={toggleDrawer} defaultChecked /> : <Switch onClick={toggleDrawer}/>}
+                {controlStatus.showTimeData === true ? <Switch onClick={toggleDrawer} defaultChecked /> : <Switch onClick={toggleDrawer}/>}
             </ThemeProvider>
 
         </div>

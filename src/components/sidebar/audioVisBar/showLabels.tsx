@@ -32,6 +32,7 @@ import { ThemeProvider, Switch } from '../../../muiImports'
         return (
             <div>
                 <ThemeProvider theme={myTheme}>
+                    {/* {controlStatus.showLabels === true ? <Switch onClick={toggleDrawer} checked={true} /> : <Switch onClick={toggleDrawer} checked={false} />} */}
                     {controlStatus.showLabels === true ? <Switch disabled checked={true} /> : <Switch disabled checked={false} />}
                 </ThemeProvider>
             </div>

@@ -121,7 +121,7 @@ stateCurrentAPI.current = apiStatus
         <div>
           <Draggable id="fullVisual">
             <Resizable size="290px">
-              <LoungeVisual showLabels={stateRefControl.current.showLabels? true : false}></LoungeVisual>
+              <LoungeVisual></LoungeVisual>
             </Resizable>
           </Draggable>
           <ul >

@@ -114,7 +114,6 @@ stateCurrentAPI.current = apiStatus
     )
   }
 
-  // console.log(typeof(stateRefControl.current.showLabels));
   if (stateRefControl.current.listening) {
     if (stateRefControl.current.showFrequency) {
       return (
@@ -126,7 +125,7 @@ stateCurrentAPI.current = apiStatus
           </Draggable>
           <ul >
             {fullTranscripts.map(transcript => (
-              <h3  id = "captionsSpace" style ={{position: 'fixed', width: '90%', textAlign: 'left', left: '0', fontSize: textSizeA, paddingLeft: '5%', paddingRight: '60%', overflowY: 'scroll', height: '40%', color: textSize.textColor}}>{transcript}</h3>
+              <h3 id = "captionsSpace" style = {{position: 'fixed', width: '90%', textAlign: 'left', left: '0', fontSize: textSizeA, paddingLeft: '5%', paddingRight: '60%', overflowY: 'scroll', height: '40%', color: textSize.textColor}}>{transcript}</h3>
             ))}
           </ul>
         </div>
@@ -141,7 +140,7 @@ stateCurrentAPI.current = apiStatus
           </Draggable>
           <ul >
             {fullTranscripts.map(transcript => (
-              <h3  id = "captionsSpace" style ={{position: 'fixed', width: '90%', textAlign: 'left', left: '0', fontSize: textSizeA, paddingLeft: '5%', paddingRight: '60%', overflowY: 'scroll', height: '40%', color: textSize.textColor}}>{transcript}</h3>
+              <h3 id = "captionsSpace" style = {{position: 'fixed', width: '90%', textAlign: 'left', left: '0', fontSize: textSizeA, paddingLeft: '5%', paddingRight: '60%', overflowY: 'scroll', height: '40%', color: textSize.textColor}}>{transcript}</h3>
             ))}
           </ul>
         </div>
@@ -153,7 +152,7 @@ stateCurrentAPI.current = apiStatus
       <div>
         <ul >
           {fullTranscripts.map(transcript => (
-            <h3  id = "captionsSpace" style ={{position: 'fixed', width: '90%', textAlign: 'left', left: '0', fontSize: textSizeA, paddingLeft: '5%', paddingRight: '60%', overflowY: 'scroll', height: '40%', color: textSize.textColor}}>{transcript}</h3>
+            <h3 id = "captionsSpace" style = {{position: 'fixed', width: '90%', textAlign: 'left', left: '0', fontSize: textSizeA, paddingLeft: '5%', paddingRight: '60%', overflowY: 'scroll', height: '40%', color: textSize.textColor}}>{transcript}</h3>
           ))}
         </ul>
       </div>
@@ -164,7 +163,7 @@ stateCurrentAPI.current = apiStatus
     <div>
         <ul >
           {fullTranscripts.map(transcript => (
-            <h3  id = "captionsSpace" style ={{position: 'fixed', width: '90%', textAlign: 'left', left: '0', fontSize: textSizeA, paddingLeft: '5%', paddingRight: '60%', overflowY: 'scroll', height: '40%', color: textSize.textColor}}>{transcript}</h3>
+            <h3 id = "captionsSpace" style = {{position: 'fixed', width: '90%', textAlign: 'left', left: '0', fontSize: textSizeA, paddingLeft: '5%', paddingRight: '60%', overflowY: 'scroll', height: '40%', color: textSize.textColor}}>{transcript}</h3>
           ))}
         </ul>
     </div>

@@ -1,20 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Fjalla+One&display=swap'); /* font-family: 'Fjalla One', sans-serif; */
-@import url('https://fonts.googleapis.com/css2?family=Play&display=swap'); /* font-family: 'Play', sans-serif; */
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300&display=swap'); /* font-family: 'Space Grotesk', sans-serif; */
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@900&display=swap'); /* font-family: 'Orbitron', sans-serif; */
-@import url('https://fonts.googleapis.com/css2?family=Quantico&display=swap'); /* font-family: 'Quantico', sans-serif; */
-@import url('https://fonts.googleapis.com/css2?family=Audiowide&display=swap'); /* font-family: 'Audiowide', cursive; */
-@import url('https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@900&display=swap'); /* font-family: 'Big Shoulders Display', cursive; */
-@import url('https://fonts.googleapis.com/css2?family=Big+Shoulders+Stencil+Display:wght@900&display=swap'); /* font-family: 'Big Shoulders Stencil Display', cursive; */
-@import url('https://fonts.googleapis.com/css2?family=Wallpoet&display=swap'); /* font-family: 'Wallpoet', cursive; */
-@import url('https://fonts.googleapis.com/css2?family=ZCOOL+QingKe+HuangYou&display=swap'); /* font-family: 'ZCOOL QingKe HuangYou', cursive; */
-@import url('https://fonts.googleapis.com/css2?family=Rationale&display=swap'); /* font-family: 'Rationale', sans-serif; */
-@import url('https://fonts.googleapis.com/css2?family=Iceberg&display=swap'); /* font-family: 'Iceberg', cursive; */
-@import url('https://fonts.googleapis.com/css2?family=Dorsa&display=swap'); /* font-family: 'Dorsa', sans-serif; */
-@import url('https://fonts.googleapis.com/css2?family=Zen+Dots&display=swap'); /* font-family: 'Zen Dots', cursive; */
-@import url('https://fonts.googleapis.com/css2?family=Revalia&display=swap'); /* font-family: 'Revalia', cursive; */
-@import url('https://fonts.googleapis.com/css?family=Plaster&display=swap'); /* font-family: 'Plaster', cursive; */
+/* fonts come from google */
 
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@900&display=swap'); /* font-family: 'Orbitron', sans-serif; */
 
 /* .canvas {
     @font-face {

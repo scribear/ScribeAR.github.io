@@ -20,9 +20,20 @@ export type LanguageList = {
     @text: A 2D array: [[timestamp, text(string)], [timestamp, text(string)]]
     @lastTime: last time that we append transcript
 */
+
+export type TextNode = {
+    time: number,
+    transcript: string
+}
+
+
+export type LoudnessNode = {
+    time: number,
+    loudness: string
+}
+
 export type Transcript = {
-    text: Array<[number, string]>,
-    lastTime: number
+    text: TextNode[],
 }
 
 
@@ -100,6 +111,7 @@ export interface StreamTextStatus {
 */
 export interface ControlStatus {
     listening: boolean
+    visualizing: boolean
     speechLanguage: LanguageList
     textLanguage: LanguageList
     showFrequency: boolean

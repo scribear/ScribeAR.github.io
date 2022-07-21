@@ -20,22 +20,33 @@ export type LanguageList = {
     @text: A 2D array: [[timestamp, text(string)], [timestamp, text(string)]]
     @lastTime: last time that we append transcript
 */
-
 export type TextNode = {
     time: number,
     transcript: string
 }
 
 
+
+export type SpeechData = {
+    startTime: number,
+    endTime: number,
+    resultVolume: number,
+    transcriptNode: TranscriptData
+}
+
+export type TranscriptData = {
+    transcriptText: string,
+    confidence: number
+}
+
 export type LoudnessNode = {
     time: number,
-    loudness: string
+    loudness: number
 }
 
-export type Transcript = {
-    text: TextNode[],
-}
-
+export type TranscriptMap = {
+    [key: number] : SpeechData[]
+} 
 
 /*
     Represents speakers and their transcripts
@@ -43,17 +54,17 @@ export type Transcript = {
     @maxSpeaker: the maximum amount of speakers, defaults to 2 for the moment
     @speakerTranscript: a Map. <speaker id, transcript text>
 */
-export type AllSpeakerTranscript = {
-    allSpeakers: Speaker[]
-    maxSpeaker: number
-    lastUpdateTime: number
-    // curSpeakerNum: number
+// export type AllSpeakerTranscript = {
+//     allSpeakers: Speaker[]
+//     maxSpeaker: number
+//     lastUpdateTime: number
+//     // curSpeakerNum: number
 
-    speakerTranscript: Map<Speaker["speakerId"], Transcript>
-    // transcript: Transcript
-    // speakerTranscripts: Map<string, Transcript>
+//     speakerTranscript: Map<Speaker["speakerId"], Transcript>
+//     // transcript: Transcript
+//     // speakerTranscripts: Map<string, Transcript>
 
-}
+// }
 
 /*
     Interface for each API's status's

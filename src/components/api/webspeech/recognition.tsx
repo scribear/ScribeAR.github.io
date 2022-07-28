@@ -9,6 +9,7 @@ export const getSpeechRecognition = () => {
   const speechRecognition = new (window as any).webkitSpeechRecognition();
   speechRecognition.continuous = true;
   speechRecognition.interimResults = true;
+  speechRecognition.lang = 'pl-PL';
   return speechRecognition as SpeechRecognition;
 };
 
@@ -26,7 +27,7 @@ export const useRecognition = () => {
         speechRecognition.onresult = (event: SpeechRecognitionEvent) => {
           if (control.current.listening == false || currentAPI.current.currentAPI != 0) {
               speechRecognition.stop()
-              resolve(transcriptsFull);   
+              resolve(transcriptsFull);
           } else {
             console.log(event.results)
           const finalResult = Array.from(event.results)

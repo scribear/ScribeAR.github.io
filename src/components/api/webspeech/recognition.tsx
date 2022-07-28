@@ -9,7 +9,7 @@ export const getSpeechRecognition = () => {
   const speechRecognition = new (window as any).webkitSpeechRecognition();
   speechRecognition.continuous = true;
   speechRecognition.interimResults = true;
-  speechRecognition.lang = 'pl-PL';
+  // speechRecognition.lang = 'pl-PL';
   return speechRecognition as SpeechRecognition;
 };
 

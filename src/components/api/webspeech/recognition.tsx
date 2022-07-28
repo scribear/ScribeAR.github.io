@@ -9,7 +9,7 @@ export const getSpeechRecognition = () => {
   const speechRecognition = new (window as any).webkitSpeechRecognition();
   speechRecognition.continuous = true;
   speechRecognition.interimResults = true;
-  speechRecognition.lang = 'pl-PL';
+  // speechRecognition.lang = 'pl-PL';
   return speechRecognition as SpeechRecognition;
 };
 
@@ -30,19 +30,19 @@ export const useRecognition = () => {
               resolve(transcriptsFull);
           } else {
             console.log(event.results)
-          const finalResult = Array.from(event.results)
-          .map(result => result[0])
-          .map(result => result.transcript)
-          .join('');
-          transcript =  finalResult;
+            const finalResult = Array.from(event.results)
+            .map(result => result[0])
+            .map(result => result.transcript)
+            .join('');
+            transcript =  finalResult;
 
-          if (event.results[0].isFinal) {
-            console.log(finalResult)
+            if (event.results[0].isFinal) {
+              console.log(finalResult)
 
-          }    
-          setTranscripts([...transcripts, transcript]);
-          transcriptsFull = transcript
-        }
+            }    
+            setTranscripts([...transcripts, transcript]);
+            transcriptsFull = transcript
+          }
         };
   
         speechRecognition.onend = () => { 
@@ -55,7 +55,7 @@ export const useRecognition = () => {
           } else {
             resolve(transcriptsFull);   
           }
-        
+
         }
          speechRecognition.start();
       }),

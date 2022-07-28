@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useRecognition, getSpeechRecognition} from './webspeech/recognition';
+import { useRecognition } from './webspeech/recognition';
 import { useSelector, useDispatch } from 'react-redux';
 import Swal from 'sweetalert2';
 import { RootState } from '../../store';

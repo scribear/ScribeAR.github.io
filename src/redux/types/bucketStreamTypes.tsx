@@ -12,33 +12,43 @@ localStorage can be a clientto this stream
 export interface UniversalEventBucket {
     startTime: number,
     endTime: number,
-    eventType: string,
+    eventType: string, // "Audio" | "AzureSTT" | "HTML5STT" | "UserAction"
 }
 
 export interface STTEVENTBucket extends UniversalEventBucket {
-    transcript: string,
-    confidence: number,
-    isFinal: boolean,
+    // transcript: string,
+    // confidence: number,
+    // isFinal: boolean,
 }
 
-export interface HTML5STTEventBucket extends STTEVENTBucket {}
+export type TranscriptConfidence = { 
+    transcript: string, 
+    confidence: number,
+}
 
+export interface HTML5STTEventBucket extends STTEVENTBucket {
+    finalTranscript: Array<TranscriptConfidence>,
+    notFinalTranscript: Array<TranscriptConfidence>,
+}
 export interface AzureSTTEventBucket extends STTEVENTBucket {}
-
 export interface AudioEventBucket extends UniversalEventBucket {
     volume: number,
     dataArray: Array<number>,
     typeOfData: string // frequency or waveform
 }
-
-export interface UserActionsEventBucket extends UniversalEventBucket {
+export interface UserActionEventBucket extends UniversalEventBucket {
     targetElem: HTMLElement,
     action: Event,
 }
 
+export type AudioStream = Array<AudioEventBucket>;
+export type HTML5STTStream = Array<HTML5STTEventBucket>;
+export type AzureSTTStream = Array<AzureSTTEventBucket>;
+export type UserActionStream = Array<UserActionEventBucket>;
+
 export interface Streams {
-    AudioStream?: Array<AudioEventBucket>,
-    HTML5STTStream?: Array<HTML5STTEventBucket>,
-    AzureSTTStream?: Array<AzureSTTEventBucket>,
-    UserActionsStream?: Array<UserActionsEventBucket>,
+    AudioStream?: AudioStream,
+    HTML5STTStream?: HTML5STTStream,
+    AzureSTTStream?: AzureSTTStream,
+    UserActionStream?: UserActionStream,
 }

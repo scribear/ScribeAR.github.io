@@ -10,10 +10,7 @@ import {
     Streams 
 } from "../types/bucketStreamTypes";
 
-/* Save to sessionStorage so that it is cleared when refreshed */
-
 // ============================================== \\
-
 const initialAudioStream : AudioStream = Array<AudioEventBucket>();
 const initialHTML5STTStream : HTML5STTStream = Array<HTML5STTEventBucket>();
 const initialAzureSTTStream : AzureSTTStream = Array<AzureSTTEventBucket>();
@@ -25,8 +22,9 @@ const initialStreams : Streams = {
     AzureSTTStream: initialAzureSTTStream,
     UserActionStream: initialUserActionStream,
 }
-
 // ============================================== \\
+
+/* Save to sessionStorage so that it is cleared when refreshed */
 
 const saveSessionly = (varName: string, value: any) => {
     sessionStorage.setItem(varName, JSON.stringify(value));
@@ -47,19 +45,21 @@ const getSessionState = (varName: string) => {
 export const BucketStreamReducer = (state = getSessionState("streams"), action) => {
     switch (action.type) {
         case 'APPEND_AUDIOSTREAM':
-            // // console.log(action.payload);
-            // // console.log(action.payload == null);
-            // // const newTextNode : TextNode = action.payload ? {time: action.payload.curTime, transcript: action.payload.transcript} : initialTextNode;
-            // const newTextNode : TextNode = (action.payload)? action.payload : initialTextNode;
-            // // console.log(newTextNode);
-            // // console.log(action.payload);
-            // // let copyState : AllText = Object.assign({}, state);
-            // // copyState.push(newTextNode)
+            // make a AudioEventBucket; append it to state.AudioStream
 
-            // // saveSessionly("allText", action.payload)
+            return
+        case 'APPEND_HTML5_STT_STREAM':
+            // make a HTML5STTEventBucket; append it to state.HTML5STTStream
 
-            // return [ ...state, newTextNode ];
-        
+            return
+        case 'APPEND_AZURE_STT_STREAM':
+            // make a AzureTTEventBucket; append it to state.AzureSTTStream
+
+            return
+        case 'APPEND_USER_ACTION_STREAM':
+            // make a UserActionStream; append it to state.UserActionStream
+
+            return
         case 'RESET_STREAMS':
             return { initialStreams };
         default:

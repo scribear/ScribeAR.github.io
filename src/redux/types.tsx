@@ -1,3 +1,5 @@
+import { Streams } from "./types/bucketStreamTypes"
+
 /*
     The data structure for each speaker
     @speakerId: a unique identificaion for the speaker
@@ -129,4 +131,5 @@ export interface RootState {
     StreamTextReducer: StreamTextStatus
     ControlReducer: ControlStatus
     PhraseListReducer: PhraseListStatus
+    initialStreams : Streams
 }

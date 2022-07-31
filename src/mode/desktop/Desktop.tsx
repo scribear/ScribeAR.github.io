@@ -1,3 +1,5 @@
+import React from 'react';
+
 import './Desktop.css';
 import AppBar from '../../components/topbar/topbar'
 import { RootState } from '../../redux/types';
@@ -18,7 +20,7 @@ export default function Desktop(props) {
    });
    
 
-   console.log(RootState)
+   // console.log(RootState)
    const dispatch = useDispatch()
    return (
      <div>

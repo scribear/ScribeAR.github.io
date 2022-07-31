@@ -1,3 +1,5 @@
+import React from 'react';
+
 import Desktop from './mode/desktop/Desktop';
 import { Provider, useDispatch, useSelector} from 'react-redux';
 import { RootState, DisplayStatus } from './redux/types';

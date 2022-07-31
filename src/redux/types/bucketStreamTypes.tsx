@@ -27,8 +27,8 @@ export type TranscriptConfidence = {
 }
 
 export interface HTML5STTEventBucket extends STTEVENTBucket {
-    finalTranscript: Array<TranscriptConfidence>,
-    notFinalTranscript: Array<TranscriptConfidence>,
+    finalTranscript: Array<SpeechRecognitionAlternative>,
+    notFinalTranscript: Array<SpeechRecognitionAlternative>,
 }
 export interface AzureSTTEventBucket extends STTEVENTBucket {}
 export interface AudioEventBucket extends UniversalEventBucket {

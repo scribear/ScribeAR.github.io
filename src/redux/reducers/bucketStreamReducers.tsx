@@ -35,14 +35,15 @@ const getSessionState = (varName: string) => {
     if (checkNull) {
         return JSON.parse(checkNull);
     } else {
-        if (varName == "streams") {
+        if (varName === "streams") {
             saveSessionly("streams", initialStreams);
             return initialStreams;
         }
     }
 };
   
-export const BucketStreamReducer = (state = getSessionState("streams"), action) => {
+// export const BucketStreamReducer = (state = getSessionState("streams"), action) => {
+export const BucketStreamReducer = (state = initialStreams, action) => {
     switch (action.type) {
         case 'APPEND_AUDIOSTREAM':
             // make a AudioEventBucket; append it to state.AudioStream
@@ -50,8 +51,8 @@ export const BucketStreamReducer = (state = getSessionState("streams"), action) 
             return
         case 'APPEND_HTML5_STT_STREAM':
             // make a HTML5STTEventBucket; append it to state.HTML5STTStream
-
-            return
+            // console.log(53, "type: ", typeof action.payload, "; value: ", action.payload)
+            return state;
         case 'APPEND_AZURE_STT_STREAM':
             // make a AzureTTEventBucket; append it to state.AzureSTTStream
 

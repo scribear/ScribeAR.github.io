@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { useCallback, useMemo } from 'react';
 import { ControlStatus, ApiStatus } from '../../../redux/types';
+import { useDispatch } from 'react-redux';
+import { makeEventBucket } from '../../../react-middleware/thunkMiddleware';
 
 export const getSpeechRecognition = () => {
   if (!window || !(window as any).webkitSpeechRecognition) {
@@ -14,22 +16,24 @@ export const getSpeechRecognition = () => {
 };
 
 export const useRecognition = () => {
-  var transcript=""
-  var finalTranscript=""
+  const dispatch = useDispatch();
+  let transcript=""
+  let finalTranscript=""
   const [transcripts, setTranscripts] = React.useState<string[]>([]);
   const listen = useCallback(
-
     async (transcriptsFull: string, control: React.MutableRefObject<ControlStatus>,  currentAPI: React.MutableRefObject<ApiStatus>) =>
       new Promise((resolve, reject) => {
-        var lastStartedAt = new Date().getTime();
-
+        const lastStartedAt = new Date().getTime();
         const speechRecognition = getSpeechRecognition();
+
         speechRecognition.onresult = (event: SpeechRecognitionEvent) => {
           if (control.current.listening == false || currentAPI.current.currentAPI != 0) {
-              speechRecognition.stop()
-              resolve(transcriptsFull);
+            speechRecognition.stop()
+            resolve(transcriptsFull);
           } else {
-            console.log(event.results)
+            console.log(event.results);
+            const makeEventBucketThunk = makeEventBucket({stream: 'html5', value: event.results});
+            dispatch(makeEventBucketThunk);
             const finalResult = Array.from(event.results)
             .map(result => result[0])
             .map(result => result.transcript)
@@ -46,7 +50,7 @@ export const useRecognition = () => {
         };
   
         speechRecognition.onend = () => { 
-          var timeSinceStart = new Date().getTime() - lastStartedAt;
+          const timeSinceStart = new Date().getTime() - lastStartedAt;
           if (control.current.listening && currentAPI.current.currentAPI === 0) {
             if (timeSinceStart > 1000) {
 
@@ -57,7 +61,8 @@ export const useRecognition = () => {
           }
 
         }
-         speechRecognition.start();
+
+        speechRecognition.start();
       }),
     [setTranscripts]
   );

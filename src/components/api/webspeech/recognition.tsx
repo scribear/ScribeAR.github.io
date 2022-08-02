@@ -31,7 +31,7 @@ export const useRecognition = () => {
             speechRecognition.stop()
             resolve(transcriptsFull);
           } else {
-            console.log(event.results);
+            // console.log(event.results);
             const makeEventBucketThunk = makeEventBucket({stream: 'html5', value: event.results});
             dispatch(makeEventBucketThunk);
             const finalResult = Array.from(event.results)

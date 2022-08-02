@@ -20,7 +20,7 @@ export default function Desktop(props) {
    });
    
 
-   // console.log(RootState)
+   console.log(RootState)
    const dispatch = useDispatch()
    return (
      <div>

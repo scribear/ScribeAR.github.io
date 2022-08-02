@@ -12,9 +12,8 @@ import {
 } from "../types/bucketStreamTypes";
 
 // ============================================== \\
-
 /**
- * 
+ * @summary Return a default MainStream that has all streams initialized to an empty array.
  * @returns {mainStream, curTime}
  */
 const defaultMainStream = (curTime? : number) => {
@@ -68,7 +67,6 @@ const defaultMainStream = (curTime? : number) => {
 
     return {mainStream, curTime};
 }
-
 const defaultMainStreamMap = (timeInterval = 1000000) => {
     const mainStreamTime = defaultMainStream();
 
@@ -83,12 +81,11 @@ const defaultMainStreamMap = (timeInterval = 1000000) => {
 // ============================================== \\
 
 /* Save to sessionStorage so that it is cleared when refreshed */
-
 const saveSessionly = (varName: string, value: any) => {
     sessionStorage.setItem(varName, JSON.stringify(value));
     defaultMainStream();
 }
-  
+
 const getSessionState = (varName: string) => {
     let checkNull = sessionStorage.getItem(varName)
     if (checkNull) {
@@ -103,7 +100,7 @@ const getSessionState = (varName: string) => {
 };
   
 // export const BucketStreamReducer = (state = getSessionState("streams"), action) => {
-export const BucketStreamReducer = (state = defaultMainStreamMap(), action) => {
+export const BucketStreamReducer = (state = defaultMainStreamMap(), action : {type: string; payload: any; newMainStream: boolean;}) => {
     switch (action.type) {
         case 'APPEND_AUDIOSTREAM':
             // make a AudioEventBucket; append it to state.AudioStream
@@ -117,9 +114,9 @@ export const BucketStreamReducer = (state = defaultMainStreamMap(), action) => {
 
             // we first complete the last bucket in the current stream
             if (curHTML5Stream.length == 0) {throw "HTML5Stream length 0!"};
-            curHTML5Stream.at(-1)!.endTime = action.payload.curTime;
-            curHTML5Stream.at(-1)!.finalTranscript = action.payload.fArr;
-            curHTML5Stream.at(-1)!.notFinalTranscript = action.payload.nfArr;
+            curHTML5Stream[curHTML5Stream.length - 1]!.endTime = action.payload.curTime;
+            curHTML5Stream[curHTML5Stream.length - 1]!.finalTranscript = action.payload.fArr;
+            curHTML5Stream[curHTML5Stream.length - 1]!.notFinalTranscript = action.payload.nfArr;
 
             if (action.newMainStream) { // add a new MainStream
                 const time = action.payload.curTime;
@@ -149,7 +146,7 @@ export const BucketStreamReducer = (state = defaultMainStreamMap(), action) => {
 
             return
         case 'RESET_STREAMS':
-            return { defaultMainStreamMap() };
+            return defaultMainStreamMap();
         default:
             return state;
     }

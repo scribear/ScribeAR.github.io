@@ -1,3 +1,5 @@
+import { MainStreamMap } from "../redux/types/bucketStreamTypes";
+
 type BucketArgs = {
     stream: string,
     value: any | SpeechRecognitionResultList,
@@ -14,18 +16,16 @@ export function makeEventBucket(object: BucketArgs) {
         if (stream === 'audio') { 
 
         } else if (stream === 'html5') {
-            // console.log("haha, wee?~!", value.length);
-            const streams : any = await getState().BucketStreamReducer;
-
-            let empty : boolean = false;
-            // Unless empty array, we always finish the last eventBucket,
-            // then append a new one 
-            if (streams.HTML5STTStream.length == 0) {
-                empty = true;
-            }
-
-            // console.log(store.getState().BucketStreamReducer);
             const curTime = Date.now();
+
+            // console.log("haha, wee?~!", value.length);
+            const streamMap : MainStreamMap = await getState().BucketStreamReducer;
+
+            let newMainStream : boolean = false;
+            // If elapsed
+            if (streamMap.curMSST + streamMap.timeInterval <= curTime) {
+                newMainStream = true;
+            }
 
             // Array are type <TranscriptConfidence>
             let finalArr = Array<SpeechRecognitionAlternative>();
@@ -42,15 +42,15 @@ export function makeEventBucket(object: BucketArgs) {
                 }
             }
 
-            console.log({
-                type: 'APPEND_HTML5_STT_STREAM', 
-                payload: {curTime: curTime, fArr: finalArr, nfArr: notFinalArr}, 
-                streamEmpty: empty
-            });
+            // console.log({
+            //     type: 'APPEND_HTML5_STT_STREAM', 
+            //     payload: {curTime: curTime, fArr: finalArr, nfArr: notFinalArr}, 
+            //     newMainStream: newMainStream
+            // });
             dispatch({
                 type: 'APPEND_HTML5_STT_STREAM', 
                 payload: {curTime: curTime, fArr: finalArr, nfArr: notFinalArr}, 
-                streamEmpty: empty
+                newMainStream: newMainStream
             });
         } else if (stream === 'azure') {
     

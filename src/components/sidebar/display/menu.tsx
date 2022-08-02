@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { List, ListItemText, Collapse, ArchitectureIcon, ListItem } from '../../../muiImports'
 import TextSize from './textSize'
 import ThemeDropdown from './themeDropdown'

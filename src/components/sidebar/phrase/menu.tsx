@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { List, Collapse, DetailsIcon } from '../../../muiImports'
 import PhraseListAdd from './phraseListAdd'
 

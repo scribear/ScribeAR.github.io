@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { List, ListItemText, Collapse, ListItem, EqualizerIcon } from '../../../muiImports'
 import ShowFrequency from './showFrequency'
 import ShowTimeData from './showTimeData'

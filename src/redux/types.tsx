@@ -1,4 +1,4 @@
-import { Streams } from "./types/bucketStreamTypes"
+import { MainStream } from "./types/bucketStreamTypes"
 
 /*
     The data structure for each speaker
@@ -131,5 +131,5 @@ export interface RootState {
     StreamTextReducer: StreamTextStatus
     ControlReducer: ControlStatus
     PhraseListReducer: PhraseListStatus
-    initialStreams : Streams
+    initialStreams : MainStream
 }

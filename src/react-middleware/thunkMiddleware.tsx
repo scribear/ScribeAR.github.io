@@ -1,5 +1,3 @@
-import { store } from "../store";
-
 type BucketArgs = {
     stream: string,
     value: any | SpeechRecognitionResultList,
@@ -17,15 +15,17 @@ export function makeEventBucket(object: BucketArgs) {
 
         } else if (stream === 'html5') {
             // console.log("haha, wee?~!", value.length);
-            const streams : any = (await store.getState().BucketStreamReducer);
-            // if the last element in the stream is finished; we need to create a new eventBucket
-            if (streams.HTML5STTStream.length == 0 || streams.HTML5STTStream.at(-1).endTime != 0) {
-    
+            const streams : any = await getState().BucketStreamReducer;
+
+            let empty : boolean = false;
+            // Unless empty array, we always finish the last eventBucket,
+            // then append a new one 
+            if (streams.HTML5STTStream.length == 0) {
+                empty = true;
             }
 
-
-            console.log(store.getState().BucketStreamReducer);
-            const curTime = await new Date().getTime();
+            // console.log(store.getState().BucketStreamReducer);
+            const curTime = Date.now();
 
             // Array are type <TranscriptConfidence>
             let finalArr = Array<SpeechRecognitionAlternative>();
@@ -42,8 +42,16 @@ export function makeEventBucket(object: BucketArgs) {
                 }
             }
 
-            // action.payload would be SpeechRecognitionResultList
-            dispatch({type: 'APPEND_HTML5_STT_STREAM', payload: {fArr: finalArr, nfArr: notFinalArr}});
+            console.log({
+                type: 'APPEND_HTML5_STT_STREAM', 
+                payload: {curTime: curTime, fArr: finalArr, nfArr: notFinalArr}, 
+                streamEmpty: empty
+            });
+            dispatch({
+                type: 'APPEND_HTML5_STT_STREAM', 
+                payload: {curTime: curTime, fArr: finalArr, nfArr: notFinalArr}, 
+                streamEmpty: empty
+            });
         } else if (stream === 'azure') {
     
         } else if (stream === 'userAction') {

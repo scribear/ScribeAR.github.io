@@ -12,7 +12,7 @@ localStorage can be a clientto this stream
 export interface UniversalEventBucket {
     startTime: number,
     endTime: number,
-    eventType: string, // "Audio" | "AzureSTT" | "HTML5STT" | "UserAction"
+    eventType?: string, // "Audio" | "AzureSTT" | "HTML5STT" | "UserAction"
 }
 
 export interface STTEVENTBucket extends UniversalEventBucket {
@@ -26,6 +26,7 @@ export type TranscriptConfidence = {
     confidence: number,
 }
 
+// we want html and azure bucket the same.
 export interface HTML5STTEventBucket extends STTEVENTBucket {
     finalTranscript: Array<SpeechRecognitionAlternative>,
     notFinalTranscript: Array<SpeechRecognitionAlternative>,
@@ -33,22 +34,28 @@ export interface HTML5STTEventBucket extends STTEVENTBucket {
 export interface AzureSTTEventBucket extends STTEVENTBucket {}
 export interface AudioEventBucket extends UniversalEventBucket {
     volume: number,
-    dataArray: Array<number>,
-    typeOfData: string // frequency or waveform
+    // dataArray?: Array<number>, // too large: 2KB 
+    typeOfData?: string // frequency or waveform
 }
 export interface UserActionEventBucket extends UniversalEventBucket {
-    targetElem: HTMLElement,
-    action: Event,
+    targetElem?: HTMLElement,
+    action?: Event,
 }
 
 export type AudioStream = Array<AudioEventBucket>;
 export type HTML5STTStream = Array<HTML5STTEventBucket>;
 export type AzureSTTStream = Array<AzureSTTEventBucket>;
 export type UserActionStream = Array<UserActionEventBucket>;
-
-export interface Streams {
+export type MainStream = {
+    startTime: number,
     AudioStream?: AudioStream,
     HTML5STTStream?: HTML5STTStream,
     AzureSTTStream?: AzureSTTStream,
     UserActionStream?: UserActionStream,
-}
+};
+
+export type MainStreamMap = {
+    curMSST: number, // last MainStream startTime
+    timeInterval: number, // time interval of each MainStream
+    map: Map<number, MainStream>
+};

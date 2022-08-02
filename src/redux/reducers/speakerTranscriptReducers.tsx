@@ -31,7 +31,7 @@ initial_speaker_transcript.set(
 // console.log("hs", initial_speaker_transcript)
 
 // function h () {
-//     var cur_time = (new Date()).getTime();
+//     var cur_time = Date.now();
 //     var initial_text = new Map();
 //     initial_text.set(cur_time, "");
 //     const initialTranscript: Transcript = {

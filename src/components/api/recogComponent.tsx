@@ -4,14 +4,21 @@ import { useSelector, useDispatch } from 'react-redux';
 import Swal from 'sweetalert2';
 import { RootState } from '../../store';
 import { AzureRecognition } from './azure/azureRecognition';
-import { DisplayStatus, AzureStatus, StreamTextStatus, ControlStatus, ApiStatus } from '../../redux/types'
+import { DisplayStatus, AzureStatus, StreamTextStatus, ControlStatus, ApiStatus, TextNode } from '../../redux/types'
+import { Visualization } from './visualization/visualization'
+import { FullVisual } from './visualization/fullVisual'
+import { NoFreqVisual } from './visualization/noFreqVisual'
 import { LoungeVisual } from './visualization/loungeVisual'
+import { RealFreqVisual } from './visualization/realFreqVisual';
 import { TimeDataVisual } from './visualization/timeDataVisual';
 import { Draggable } from './visualization/DraggableFC';
 import { Resizable } from './visualization/Resizable';
 import StreamText from './streamtext/streamtextRecognition';
 var transcriptsFull = "testing"
 let desiredAPI = 0;
+
+
+const initialTranscript: TextNode[] = []
 
 export const WebRecognitionExample: React.FC = (props) => {
   const dispatch = useDispatch()
@@ -30,6 +37,11 @@ const streamTextStatus = useSelector((state: RootState) => {
 const apiStatus = useSelector((state: RootState) => {
   return state.APIStatusReducer as ApiStatus
 })
+
+const [state, setState] = React.useState({
+  transcripts: initialTranscript
+});
+
 React.useEffect(() => {
   if (control.listening == true) {
     if (apiStatus.currentAPI == 0) {
@@ -65,7 +77,7 @@ document.addEventListener("DOMContentLoaded", function(){
 });
 const textSizeA = "" + textSize.textSize + "vh"
 const { azureTranscripts, azureListen } = AzureRecognition();
-const { transcripts, listen } = useRecognition();
+const { transcripts, newTranscript, listen } = useRecognition(initialTranscript);
 
 const stateRefControl = React.useRef(control)
 const stateRefAzure = React.useRef(azureStatus)
@@ -113,60 +125,71 @@ stateCurrentAPI.current = apiStatus
         <StreamText streamTextStatus = {streamTextStatus} displayStatus = {textSize} />
     )
   }
-
-  // console.log(typeof(stateRefControl.current.showLabels));
-  if (stateRefControl.current.listening) {
-    if (stateRefControl.current.showFrequency) {
-      return (
-        <div>
-          <Draggable id="fullVisual">
-            <Resizable size="290px">
-              <LoungeVisual></LoungeVisual>
-            </Resizable>
-          </Draggable>
-          <ul >
-            {fullTranscripts.map(transcript => (
-              <h3  id = "captionsSpace" style ={{position: 'fixed', width: '90%', textAlign: 'left', left: '0', fontSize: textSizeA, paddingLeft: '5%', paddingRight: '60%', overflowY: 'scroll', height: '40%', color: textSize.textColor}}>{transcript}</h3>
-            ))}
-          </ul>
-        </div>
-      );
-    } else if (stateRefControl.current.showTimeData) {
-      return (
-        <div>
-          <Draggable id="timeData">
-            <Resizable size="290px">
-              <TimeDataVisual></TimeDataVisual>
-            </Resizable>
-          </Draggable>
-          <ul >
-            {fullTranscripts.map(transcript => (
-              <h3  id = "captionsSpace" style ={{position: 'fixed', width: '90%', textAlign: 'left', left: '0', fontSize: textSizeA, paddingLeft: '5%', paddingRight: '60%', overflowY: 'scroll', height: '40%', color: textSize.textColor}}>{transcript}</h3>
-            ))}
-          </ul>
-        </div>
-      );
-    }
-
-    // not showing any visualization
-    return (
-      <div>
-        <ul >
-          {fullTranscripts.map(transcript => (
-            <h3  id = "captionsSpace" style ={{position: 'fixed', width: '90%', textAlign: 'left', left: '0', fontSize: textSizeA, paddingLeft: '5%', paddingRight: '60%', overflowY: 'scroll', height: '40%', color: textSize.textColor}}>{transcript}</h3>
-          ))}
-        </ul>
-      </div>
-    );
-  }
-
+  let ahhh = transcripts.map(transcripts => transcripts.transcript).join()
+  let test = transcripts.map(transcripts => transcripts.time)
+  console.log(transcripts)
   return (
     <div>
-        <ul >
-          {fullTranscripts.map(transcript => (
-            <h3  id = "captionsSpace" style ={{position: 'fixed', width: '90%', textAlign: 'left', left: '0', fontSize: textSizeA, paddingLeft: '5%', paddingRight: '60%', overflowY: 'scroll', height: '40%', color: textSize.textColor}}>{transcript}</h3>
-          ))}
-        </ul>
+      <Draggable id="fullVisual">
+        <Resizable size="290px">
+          <LoungeVisual></LoungeVisual>
+        </Resizable>
+      </Draggable>
+
+      <div>
+
+        <h3  id = "captionsSpace" style ={{position: 'fixed', width: '90%', textAlign: 'left', left: '0', fontSize: textSizeA, paddingLeft: '5%', paddingRight: '60%', overflowY: 'scroll', height: '40%', color: textSize.textColor}}>{ahhh}</h3>
+      </div>
+      <div>
+        <h4  id = "captionsSpace" style ={{position: 'fixed', width: '90%', textAlign: 'left', left: '0', fontSize: textSizeA, paddingLeft: '5%', paddingRight: '60%', overflowY: 'scroll', height: '50%', color: textSize.textColor}}>{newTranscript}</h4>
+      </div>
     </div>
   );
+  
+  if (stateRefControl.current.listening && stateRefControl.current.visualizing) {
+    if (stateRefControl.current.showFrequency) {
+      
+    } else if (stateRefControl.current.showTimeData) {
+      // return (
+      //   <div>
+      //     <Draggable id="timeData">
+      //       <Resizable size="290px">
+      //         <TimeDataVisual></TimeDataVisual>
+      //       </Resizable>
+      //     </Draggable>
+      //     <ul >
+      //       {fullTranscripts.map(transcript => (
+      //         <h3  id = "captionsSpace" style ={{position: 'fixed', width: '90%', textAlign: 'left', left: '0', fontSize: textSizeA, paddingLeft: '5%', paddingRight: '60%', overflowY: 'scroll', height: '40%', color: textSize.textColor}}>{transcript}</h3>
+      //       ))}
+      //     </ul>
+      //   </div>
+      // );
+    }
+
+    // not showing frequency
+    // return (
+    //   <div>
+    //     <Draggable id="noFreqVisual">
+    //       <Resizable size="290px">
+    //         <NoFreqVisual></NoFreqVisual>
+    //       </Resizable>
+    //     </Draggable>
+    //     <ul >
+    //       {fullTranscripts.map(transcript => (
+    //         <h3  id = "captionsSpace" style ={{position: 'fixed', width: '90%', textAlign: 'left', left: '0', fontSize: textSizeA, paddingLeft: '5%', paddingRight: '60%', overflowY: 'scroll', height: '40%', color: textSize.textColor}}>{transcript}</h3>
+    //       ))}
+    //     </ul>
+    //   </div>
+    // );
+  }
+
+  // return (
+  //   <div>
+  //       <ul >
+  //         {fullTranscripts.map(transcript => (
+  //           <h3  id = "captionsSpace" style ={{position: 'fixed', width: '90%', textAlign: 'left', left: '0', fontSize: textSizeA, paddingLeft: '5%', paddingRight: '60%', overflowY: 'scroll', height: '40%', color: textSize.textColor}}>{transcript}</h3>
+  //         ))}
+  //       </ul>
+  //   </div>
+  // );
 };

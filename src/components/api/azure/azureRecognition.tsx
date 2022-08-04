@@ -43,7 +43,6 @@ export const AzureRecognition = () => {
       new Promise((resolve, reject) => {
         try {
           var STOPAW = false
-          console.log("HELLO")
           var lastStartedAt = new Date().getTime();
           let textLanguage = control.current.textLanguage
           let azureSpeech = speechSDK.SpeechTranslationConfig.fromSubscription(azureStatus.current.azureKey, azureStatus.current.azureRegion)

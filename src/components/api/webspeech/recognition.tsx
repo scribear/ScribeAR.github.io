@@ -2,6 +2,7 @@ import * as React from 'react';
 import { useCallback, useMemo, useEffect } from 'react';
 import { ControlStatus, ApiStatus, TextNode } from '../../../redux/types';
 
+
 export const getSpeechRecognition = () => {
   if (!window || !(window as any).webkitSpeechRecognition) {
     throw new Error('Your browser does not support web speech recognition');
@@ -9,6 +10,7 @@ export const getSpeechRecognition = () => {
   const speechRecognition = new (window as any).webkitSpeechRecognition();
   speechRecognition.continuous = true;
   speechRecognition.interimResults = true;
+  // speechRecognition.lang = 'kn-IN';
   return speechRecognition as SpeechRecognition;
 };
 

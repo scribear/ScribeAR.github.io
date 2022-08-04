@@ -6,6 +6,7 @@ const initialControlState : ControlStatus = {
     speechLanguage: {label: "English (United States)",	CountryCode: "en-US"},
     textLanguage: {label: "English",	CountryCode: "en"},
     showFrequency: false,
+    showLabels: true,
     showTimeData: false,
 }
 

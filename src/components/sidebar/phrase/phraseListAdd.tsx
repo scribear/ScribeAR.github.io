@@ -70,13 +70,19 @@ export default function CustomizedMenus() {
     <div>
 
       <List
-        sx={{ width: '20vw', bgcolor: 'background.paper' }}
+        sx={{ width: '30vw', bgcolor: 'background.paper' }}
         component="div"
         aria-labelledby="nested-list-subheader"
       >
         <ListItem sx={{ pl: 4, mb: 1 }}>
           <ListItemText primary={"My Phrase Lists"} />
-          <IconButton onClick={clickAddList} >
+          <IconButton onClick={clickAddList} sx={{
+            position: 'absolute',
+            left: '30.5vw',
+            '@media (max-width: 600px)': {
+              left: '70vw',
+            }
+          }}>
             <AddIcon />
           </IconButton>
         </ListItem>

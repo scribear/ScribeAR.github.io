@@ -105,6 +105,7 @@ export function LoungeVisual(props) {
         let maxBarNum = Math.floor((2 * Math.PI * radius) / (barWidth + barSpacing)); // control max (total possible) number of bars: circumference / (width + spacing)
         let barNum = maxBarNum * 0.75; // controls how much frequency bars are shown
         // const freqArrIdxJump = 
+
         const freqArrIdxJump = (dataArray.length / maxBarNum); // gap of index (of frequency array) for each bar 
         let eachDataFreq = audioContext.sampleRate / 2 / dataArray.length; // Nyquist Rate Theroem: 2x the range of sampling rate to capture the range.
         // console.log('sampleRate: ', audioContext.sampleRate, '; dataArray.length: ', dataArray.length, '; eachDataFreq: ', eachDataFreq);
@@ -117,6 +118,7 @@ export function LoungeVisual(props) {
         canvasCtx.textBaseline = 'middle';
         canvasCtx.fillText('kHz', cx, cy + hypotenuseLength)
         canvasCtx.fillText(`${fonts[fontsIdx]}`, cx, cy + 1.5 * hypotenuseLength )
+
 
         canvasCtx.fillStyle = color;
         for (let i = 0; i < barNum; i++) {
@@ -170,6 +172,7 @@ export function LoungeVisual(props) {
                 // console.log(font)
                 // console.log(canvasCtx.font)
                 canvasCtx.fillText(freqText, -textX, -textY); // the x and y might should be determined by cavnas width and height
+
             }
             canvasCtx.restore();
         }

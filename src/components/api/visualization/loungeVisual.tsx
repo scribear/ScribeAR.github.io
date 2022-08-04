@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, } from 'react'
+import React, { useEffect, useRef, } from 'react'
 import { RootState } from '../../../store';
 import { DisplayStatus, ControlStatus } from '../../../redux/types';
 import { useSelector } from 'react-redux';
@@ -16,10 +16,15 @@ let canvasCtx;
 let color;
 let showLabels : boolean;
 
-const font = 'Orbitron';
+// const fonts = ['Fjalla One', 'Play', 'Space Grotesk', 'Orbitron', 'Quantico', 'Audiowide',
+//                 'Big Shoulders Display', 'Big Shoulders Stencil Display',
+//                 'Wallpoet', 'ZCOOL QingKe HuangYou', 'Rationale', 'Iceberg',
+//                 'Dorsa', 'Zen Dots', 'Revalia', 'Plaster'];
+// const fonts = ['Big Shoulders Display', 'Big Shoulders Stencil Display'];
+const fonts = ['Orbitron', 'Audiowide', 'Big Shoulders Stencil Display', 'Wallpoet', 'Zen Dots', 'Revalia'];
+var fontsIdx = 0;
 
 export const LoungeVisual = (props) => {
-    const [sLabel, setSLabel] = useState(false);
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
     const theme = useSelector((state: RootState) => {
@@ -31,8 +36,7 @@ export const LoungeVisual = (props) => {
     });
 
     color = theme.textColor;
-    // showLabels = control.showLabels;
-    showLabels = sLabel;
+    showLabels = control.showLabels;
 
     const setSource = async () => {
         const newMediaStream = await navigator.mediaDevices.getUserMedia({
@@ -94,50 +98,36 @@ export const LoungeVisual = (props) => {
      * Render lounge style type.
      */
     const renderLounge = () => {
-        // let barWidth = 2;
-        // let barHeight = 2;
-        // let barSpacing = 4;
+        // fixed frequency range: 0Hz ~ 15kHz; fixed bar barSpacing;
+        // changing barNum, freqArrIdxJump...
+
+        let barWidth = 2;
+        let barHeight = 2;
+        let barSpacing = 4;
     
         let cx = canvas.width / 2;
         let cy = canvas.height / 2;
         let radius = Math.min(canvas.width, canvas.height) / 2.5; // determined by the smaller of width or height
-        // let maxBarNum = Math.floor((2 * Math.PI * radius) / (barWidth + barSpacing)); // control max (total possible) number of bars: circumference / (width + spacing)
-        // let barNum = maxBarNum * 0.75; // controls how much frequency bars are shown
-        // const freqArrIdxJump = (dataArray.length / maxBarNum); // gap of index (of frequency array) for each bar 
-        // let eachDataFreq = audioContext.sampleRate / 2 / dataArray.length; // Nyquist Rate Theroem: 2x the range of sampling rate to capture the range.
-        // // console.log('sampleRate: ', audioContext.sampleRate, '; dataArray.length: ', dataArray.length, '; eachDataFreq: ', eachDataFreq);
-        // // console.log([barNum, barNum * eachDataFreq * freqArrIdxJump], [maxBarNum, maxBarNum * eachDataFreq * freqArrIdxJump], freqArrIdxJump, audioContext.sampleRate / 2);
-
-
-        // changing frequency range: 0Hz ~ 15kHz; fixed bar barSpacing;
-        // fixed barNum, freqArrIdxJump...
-        const barNum = 128;
-        const maxBarNum = 128 / 0.75;
-
-        // const barSpacing = (2 * Math.PI * radius) - barWidth;
-        let barHeight = 2;
-        let barSpacing = 4;
-        const barWidth = (1 / maxBarNum) * (2 * Math.PI * radius) / 2;
-        const freqArrIdxJump = 2;
-        const eachDataFreq = audioContext.sampleRate / 2 / dataArray.length; // Nyquist Rate Theroem: 2x the range of sampling rate to capture the range.
+        let maxBarNum = Math.floor((2 * Math.PI * radius) / (barWidth + barSpacing)); // control max (total possible) number of bars: circumference / (width + spacing)
+        let barNum = maxBarNum * 0.75; // controls how much frequency bars are shown
+        const freqArrIdxJump = (dataArray.length / maxBarNum); // gap of index (of frequency array) for each bar 
+        let eachDataFreq = audioContext.sampleRate / 2 / dataArray.length; // Nyquist Rate Theroem: 2x the range of sampling rate to capture the range.
         // console.log('sampleRate: ', audioContext.sampleRate, '; dataArray.length: ', dataArray.length, '; eachDataFreq: ', eachDataFreq);
         // console.log([barNum, barNum * eachDataFreq * freqArrIdxJump], [maxBarNum, maxBarNum * eachDataFreq * freqArrIdxJump], freqArrIdxJump, audioContext.sampleRate / 2);
-        
-
 
 
         const hypotenuseLength = (canvas.width / 4);
 
-        canvasCtx.font = `${canvas.width / 10}px ${font}`;
+        canvasCtx.font = `${canvas.width / 10}px ${fonts[fontsIdx]}`;
         canvasCtx.textAlign = 'center';
         canvasCtx.textBaseline = 'middle';
         if (showLabels) {
             canvasCtx.fillText('kHz', cx, cy + hypotenuseLength)
-            // canvasCtx.fillText(`${fonts[fontsIdx]}`, cx, cy + 1.5 * hypotenuseLength)
+            canvasCtx.fillText(`${fonts[fontsIdx]}`, cx, cy + 1.5 * hypotenuseLength)
         }
 
         canvasCtx.fillStyle = color;
-        for (let i = 0; i <= barNum; i++) {
+        for (let i = 0; i < barNum; i++) {
             let amplitude = dataArray[Math.floor(i * freqArrIdxJump)]; // Db data for each frequency
             let alfa = (2 * Math.PI * i) / maxBarNum; // (2 pi i) / (2 pi r / width) => (i * width) / r
             let beta = (3 * 45 - barWidth) * Math.PI / 180; // pi * 0.75
@@ -161,11 +151,11 @@ export const LoungeVisual = (props) => {
             const rotate = (alfa - beta) * 1;
             canvasCtx.rotate(rotate); // controls starting bar (how much to rotate)
             canvasCtx.fillRect(x, y, w, h);
-            // console.log(showLabels);
+            console.log(showLabels);
 
             if (showLabels) {
                 // canvasCtx.fillRect(0, 0, w, hypotenuseLength);
-                if (i % 16 == 0) {
+                if (i % 15 == 0) {
                     canvasCtx.fillRect(0, -1.2 * hypotenuseLength, w, -0.2 * hypotenuseLength); // 1.3 comes from (0.25 + (0.4 - 0.25)/2) / 0.25 = (0.25 + 0.075) / 0.25 = 0.325 / 0.25 = 1.3
                     // canvasCtx.fillRect(0, -radius, w, -0.1 * hypotenuseLength); // 1.3 comes from (0.25 + (0.4 - 0.25)/2) / 0.25 = (0.25 + 0.075) / 0.25 = 0.325 / 0.25 = 1.3
                     // canvasCtx.fillRect(0, 0, w, -1 * hypotenuseLength);
@@ -179,7 +169,7 @@ export const LoungeVisual = (props) => {
                     const textX = Math.sin(angle) * hypotenuseLength;
                     const textY = Math.cos(angle) * hypotenuseLength;
 
-                    canvasCtx.font = `${canvas.width / 18}px ${font}`;
+                    canvasCtx.font = `${canvas.width / 18}px ${fonts[fontsIdx]}`;
                     // Maybe: left side should be align left; vice versa
                     canvasCtx.fillText(freqText, -textX, -textY); // the x and y might should be determined by cavnas width and height
                 } else {
@@ -196,10 +186,7 @@ export const LoungeVisual = (props) => {
         // audioContext = new (window.AudioContext || window.webkitAudioContext)();
         audioContext = new (window.AudioContext || window.webkitAudioContext)({
             latencyHint: 'interactive',
-            // sampleRate: 51200 // change to 51200 so that eachDataFreq will be 50
-            // sampleRate: 38400 // 19200 max
-            // sampleRate: 40960 // 20480 max
-            sampleRate: 32000 // 16000 max
+            sampleRate: 51200 // change to 51200 so that eachDataFreq will be 50
         });
         let analyserOptions : AnalyserOptions = { // visual largely affected by fftSize and minDecibels. Roughly direct relationship 
             "fftSize": 512, // fftSize / 2 is the length of the dataArray. Less: Data are Crunched: Large: the Opposite
@@ -236,12 +223,14 @@ export const LoungeVisual = (props) => {
         // get data into dataArray
         analyser.getByteFrequencyData(dataArray);
 
+        // canvasCtx.scale(2, 2);
         canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
         // renderTime();
         // renderText();
         renderByStyleType();
+        // canvasCtx.setTransform(1, 0, 0, 1, 0, 0);
     }
     
-    return <canvas onClick={() => {setSLabel(!sLabel);}} width={props.visualWidth} height={props.visualHeight} ref={canvasRef} />
-    // return <canvas onMouseEnter={() => {fontsIdx = (fontsIdx + 1) % fonts.length}} width={props.visualWidth} height={props.visualHeight} ref={canvasRef} />
+    // return <canvas width={"400vw"} height="300vh" ref={canvasRef} />
+    return <canvas onMouseEnter={() => {fontsIdx = (fontsIdx + 1) % fonts.length}} width={props.visualWidth} height={props.visualHeight} ref={canvasRef} />
 }

@@ -59,10 +59,15 @@ const marks = [{value: 1, label: "1",}, {value: 5, label: "5",}, {value: 10, lab
                         backgroundColor: 'currentColor',
                       },
                       
-                    }
+                    },
+                    '@media (max-width: 600px)': {
+                      width: '70vw',
+                    },
+                    length: '100%',
+                    width: '30vw',
                   }}
         components={{ Thumb: HoverThumb }}
-        style={{ color: textS.secondaryColor }}
+        style={{ color: textS.secondaryColor,  margin: '0', paddingLeft: '10' }} 
         value={textS.textSize}
         onChange={(e, val) => { handleInputChangeSlider(val) }}
         marks={marks}

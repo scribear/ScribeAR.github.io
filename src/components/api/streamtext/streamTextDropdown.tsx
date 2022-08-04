@@ -77,7 +77,12 @@ export default function StreamTextDropdown(props) {
                             }}
                             noValidate
                             autoComplete="off"
-                        ><TextField onKeyDown = {handleEnter} onChange={handleChangeKey} value={state.streamTextStatus.streamTextKey} id="streamTextKey" label="Key" variant="outlined" /></Box>
+                        >
+                          <TextField onKeyDown = {handleEnter} onChange={handleChangeKey} value={state.streamTextStatus.streamTextKey} id="streamTextKey" label="Key" variant="outlined" style={{
+                            width: '100%',
+                            color: 'red',
+                          }}/>
+                          </Box>
                     </ListItem>
                 </List>
         </div>

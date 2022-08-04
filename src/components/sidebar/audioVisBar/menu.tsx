@@ -1,4 +1,5 @@
 import { List, ListItemText, Collapse, ListItem, EqualizerIcon } from '../../../muiImports'
+import ShowLabels from './showLabels'
 import ShowFrequency from './showFrequency'
 import ShowTimeData from './showTimeData'
 
@@ -14,10 +15,10 @@ export default function VisualizationMenu(props) {
                         <ListItemText primary="Show Frequency" />
                         <ShowFrequency />
                     </ListItem>
-                    {/* <ListItem sx={{ pl: 4 }}>
+                    <ListItem sx={{ pl: 4 }}>
                         <ListItemText primary="Show Labels" />
                         <ShowLabels />
-                    </ListItem> */}
+                    </ListItem>
                     <ListItem sx={{ pl: 4 }}>
                         <ListItemText primary="Show Time Data" />
                         <ShowTimeData />

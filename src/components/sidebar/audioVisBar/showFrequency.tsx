@@ -1,8 +1,8 @@
-import React, { } from 'react'
 import { RootState } from '../../../store';
 import { useDispatch, useSelector } from 'react-redux';
 import { ControlStatus } from '../../../redux/types';
 import Theme from '../../theme'
+import * as React from 'react';
 import { PauseIcon, Button, PlayArrowIcon, createTheme, ThemeProvider, Switch } from '../../../muiImports'
 
 
@@ -16,8 +16,7 @@ import { PauseIcon, Button, PlayArrowIcon, createTheme, ThemeProvider, Switch } 
             dispatch({type: 'FLIP_SHOWFREQ'});
             // if (controlStatus.showTimeData) {dispatch({type: 'FLIP_SHOWTIMEDATA'})};
         }
-
-        const {myTheme} = Theme();
+        const {myTheme} = Theme()
 
         return (
             <div>

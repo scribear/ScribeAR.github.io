@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useCallback, useMemo } from 'react';
+import { useStore } from 'react-redux';
 import { ControlStatus, ApiStatus } from '../../../redux/types';
 
 export const getSpeechRecognition = () => {
@@ -9,7 +10,7 @@ export const getSpeechRecognition = () => {
   const speechRecognition = new (window as any).webkitSpeechRecognition();
   speechRecognition.continuous = true;
   speechRecognition.interimResults = true;
-  // speechRecognition.lang = 'pl-PL';
+  // speechRecognition.lang = 'kn-IN';
   return speechRecognition as SpeechRecognition;
 };
 
@@ -27,7 +28,7 @@ export const useRecognition = () => {
         speechRecognition.onresult = (event: SpeechRecognitionEvent) => {
           if (control.current.listening == false || currentAPI.current.currentAPI != 0) {
               speechRecognition.stop()
-              resolve(transcriptsFull);
+              resolve(transcriptsFull);   
           } else {
             console.log(event.results)
           const finalResult = Array.from(event.results)

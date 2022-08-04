@@ -7,7 +7,6 @@ import './resizable.css'
 
 // var resizableElem: HTMLElement | null;
 
-// starting coordinates for mouse down event
 var startingX : number;
 var startingY : number;
 
@@ -18,7 +17,11 @@ export function Resizable (props) {
         return state.DisplayReducer as DisplayStatus;
     });
 
-    // useState does not update immediately
+    // starting coordinates for mouse down event; useState does not update immediately
+    // const [startingCoord, setStartingCoord] = useState({
+    //     x: 0,
+    //     y: 0, 
+    // })
 
     const [style, setStyle] = useState({
         // width: '280px', // also the width for audio visual
@@ -86,10 +89,9 @@ export function Resizable (props) {
     const mouseLeave = (event) => {
         setBorderStyle({...borderStyle, border: ''})
         setStyle({...style, border: ''})
-        // event.stopPropagation();
+        event.stopPropagation();
     }
 
-    // add additional props to the children
     const renderChildren = (additionalProps : Object | null = null) => {
         if (!additionalProps) {
             return props.children;
@@ -104,7 +106,7 @@ export function Resizable (props) {
         <div className='resizable' onMouseEnter={mouseEnter} onMouseLeave={mouseLeave} style={style}>
             <div className='resizer top-left' onMouseEnter={mouseEnter} onMouseLeave={mouseLeave} onMouseDown={mouseDownHandler} style={borderStyle}></div>
             <div className='resizer top-right' onMouseEnter={mouseEnter} onMouseLeave={mouseLeave} onMouseDown={mouseDownHandler} style={borderStyle}></div>
-                {renderChildren({visualWidth: style.width, visualHeight: style.height})}
+            {renderChildren({visualWidth: style.width, visualHeight: style.height})}
             <div className='resizer bottom-left' onMouseEnter={mouseEnter} onMouseLeave={mouseLeave} onMouseDown={mouseDownHandler} style={borderStyle}></div>
             <div className='resizer bottom-right' onMouseEnter={mouseEnter} onMouseLeave={mouseLeave} onMouseDown={mouseDownHandler} style={borderStyle}></div>
         </div>

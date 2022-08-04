@@ -35,21 +35,20 @@ export const AzureRecognition = () => {
   const controlStatus = useSelector((state: RootState) => {
     return state.ControlReducer as ControlStatus;
 })
-  let transcript = ""
+  var transcript = ""
   const [azureTranscripts, setTranscripts] = React.useState<string[]>([]);
-  // const [stopThis] = React.useState<Function>()
+  const [stopThis] = React.useState<Function>()
   const azureListen = useCallback(
     async (transcriptsFull: string, control: React.MutableRefObject<ControlStatus>, azureStatus: React.MutableRefObject<AzureStatus>, currentAPI: React.MutableRefObject<ApiStatus>) =>
       new Promise((resolve, reject) => {
         try {
-          let STOPAW = false
-          // console.log("HELLO")
-          let lastStartedAt = new Date().getTime();
+          var STOPAW = false
+          console.log("HELLO")
+          var lastStartedAt = new Date().getTime();
           let textLanguage = control.current.textLanguage
           let azureSpeech = speechSDK.SpeechTranslationConfig.fromSubscription(azureStatus.current.azureKey, azureStatus.current.azureRegion)
-          azureSpeech.speechRecognitionLanguage = control.current.speechLanguage.CountryCode;
+          azureSpeech.speechRecognitionLanguage= control.current.speechLanguage.CountryCode;
           azureSpeech.addTargetLanguage(control.current.textLanguage.CountryCode)
-          console.log("Speech: ", azureSpeech.speechRecognitionLanguage, "; Text: ", azureSpeech.targetLanguages);
           azureSpeech.setProfanity(2);
           
           let azureAudioConfig = speechSDK.AudioConfig.fromDefaultMicrophoneInput();
@@ -60,10 +59,8 @@ export const AzureRecognition = () => {
 
           }
           if (control.current.listening == false || currentAPI.current.currentAPI != 1) {
-            console.log("STOPPED AZURE RECOG");
-            
-            speechRecognition.stopContinuousRecognitionAsync();
-            STOPAW = true;
+            console.log("STOPPED THIS")
+            speechRecognition.stopContinuousRecognitionAsync()
             resolve(transcriptsFull);
           }
           let lastRecognized = ""
@@ -90,26 +87,23 @@ export const AzureRecognition = () => {
               transcriptsFull = transcript
             }
           };
-          speechRecognition.sessionStarted = (s, e) => {
-            STOPAW = false;
-          }
           speechRecognition.sessionStopped = (s, e) => {
-            const timeSinceStart = new Date().getTime() - lastStartedAt;
+            var timeSinceStart = new Date().getTime() - lastStartedAt;
             if (STOPAW == true || control.current.listening == false || currentAPI.current.currentAPI != 1) {
               resolve(transcriptsFull);
             } else if (timeSinceStart > 1000) {
               speechRecognition.startContinuousRecognitionAsync()
             }
           }
-          // const stopThis = () => {
-          //   speechRecognition.stopContinuousRecognitionAsync()
-          //   STOPAW = true;
-          // }
+          const stopThis = () => {
+            speechRecognition.stopContinuousRecognitionAsync()
+            STOPAW = true;
+          }
         } catch (error) {
           resolve(false)
         }
       }),
-    [setTranscripts]
+    [setTranscripts, stopThis]
   );
   return useMemo(() => ({ azureTranscripts, azureListen }), [azureTranscripts]);
 };

@@ -1,0 +1,13 @@
+.swal2-container {
+    z-index: 1300;
+  }
+
+/* #plus {
+  position: absolute;
+  left: 30.5vw;
+  @media (min-width: 320px) {
+    left: 2100vw;
+  }
+}
+
+id='plus' */

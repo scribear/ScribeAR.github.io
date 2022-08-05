@@ -13,24 +13,16 @@ import { PauseIcon, Button, PlayArrowIcon, createTheme, ThemeProvider, Switch } 
         });
 
         const toggleDrawer = (event: React.KeyboardEvent | React.MouseEvent) => {
-            dispatch({type: 'FLIP_SHOWFREQ'})
+            dispatch({type: 'FLIP_SHOWFREQ'});
+            // if (controlStatus.showTimeData) {dispatch({type: 'FLIP_SHOWTIMEDATA'})};
         }
         const {myTheme} = Theme()
 
         return (
-        <div>
-            <ThemeProvider theme={myTheme}>
-                {/* <Button
-                id="demo-customized-button"
-                variant="contained"
-                disableElevation
-                onClick={toggleDrawer}
-                sx={{ width: 50, height:30}}
-                > */}
-                    {/* {controlStatus.showFrequency === false ? <PlayArrowIcon /> : <PauseIcon />} */}
-                    {controlStatus.showFrequency === true ? <Switch onClick={toggleDrawer} defaultChecked /> : <Switch onClick={toggleDrawer}/>}
-                {/* </Button> */}
-            </ThemeProvider>
-        </div>
+            <div>
+                <ThemeProvider theme={myTheme}>
+                    {controlStatus.showFrequency === true ? <Switch onClick={toggleDrawer} checked={true} /> : <Switch onClick={toggleDrawer} checked={false}/>}
+                </ThemeProvider>
+            </div>
         );
     }

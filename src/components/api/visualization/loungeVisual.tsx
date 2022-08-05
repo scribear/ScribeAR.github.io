@@ -1,9 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, } from 'react'
+import { RootState } from '../../../store';
 import { DisplayStatus, ControlStatus } from '../../../redux/types';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../../store';
 
-import './canvas.css';
+import './canvasFonts.css';
 
 let audioContext; // reusable; only initialize it once
 let analyser; // an AnylyserNode : provide real-time frequency and time-domain analysis information
@@ -14,6 +14,7 @@ let canvas;
 let canvasCtx;
 
 let color;
+let showLabels : boolean;
 
 // const fonts = ['Fjalla One', 'Play', 'Space Grotesk', 'Orbitron', 'Quantico', 'Audiowide',
 //                 'Big Shoulders Display', 'Big Shoulders Stencil Display',
@@ -23,14 +24,19 @@ let color;
 const fonts = ['Orbitron', 'Audiowide', 'Big Shoulders Stencil Display', 'Wallpoet', 'Zen Dots', 'Revalia'];
 var fontsIdx = 0;
 
-export function LoungeVisual(props) {
+export const LoungeVisual = (props) => {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
     const theme = useSelector((state: RootState) => {
         return state.DisplayReducer as DisplayStatus;
     });
 
+    const control = useSelector((state: RootState) => {
+        return state.ControlReducer as ControlStatus;
+    });
+
     color = theme.textColor;
+    showLabels = control.showLabels;
 
     const setSource = async () => {
         const newMediaStream = await navigator.mediaDevices.getUserMedia({
@@ -83,6 +89,7 @@ export function LoungeVisual(props) {
     const renderByStyleType = () => {
 
         // return this[TYPE[this.style]]();
+
         renderLounge();
     };
     
@@ -100,25 +107,24 @@ export function LoungeVisual(props) {
     
         let cx = canvas.width / 2;
         let cy = canvas.height / 2;
-        // console.log("canvas: ", canvas.width, canvas.height)
         let radius = Math.min(canvas.width, canvas.height) / 2.5; // determined by the smaller of width or height
         let maxBarNum = Math.floor((2 * Math.PI * radius) / (barWidth + barSpacing)); // control max (total possible) number of bars: circumference / (width + spacing)
         let barNum = maxBarNum * 0.75; // controls how much frequency bars are shown
-        // const freqArrIdxJump = 
-
         const freqArrIdxJump = (dataArray.length / maxBarNum); // gap of index (of frequency array) for each bar 
         let eachDataFreq = audioContext.sampleRate / 2 / dataArray.length; // Nyquist Rate Theroem: 2x the range of sampling rate to capture the range.
         // console.log('sampleRate: ', audioContext.sampleRate, '; dataArray.length: ', dataArray.length, '; eachDataFreq: ', eachDataFreq);
         // console.log([barNum, barNum * eachDataFreq * freqArrIdxJump], [maxBarNum, maxBarNum * eachDataFreq * freqArrIdxJump], freqArrIdxJump, audioContext.sampleRate / 2);
+
 
         const hypotenuseLength = (canvas.width / 4);
 
         canvasCtx.font = `${canvas.width / 10}px ${fonts[fontsIdx]}`;
         canvasCtx.textAlign = 'center';
         canvasCtx.textBaseline = 'middle';
-        canvasCtx.fillText('kHz', cx, cy + hypotenuseLength)
-        canvasCtx.fillText(`${fonts[fontsIdx]}`, cx, cy + 1.5 * hypotenuseLength )
-
+        if (showLabels) {
+            canvasCtx.fillText('kHz', cx, cy + hypotenuseLength)
+            canvasCtx.fillText(`${fonts[fontsIdx]}`, cx, cy + 1.5 * hypotenuseLength)
+        }
 
         canvasCtx.fillStyle = color;
         for (let i = 0; i < barNum; i++) {
@@ -136,7 +142,6 @@ export function LoungeVisual(props) {
 
     
             canvasCtx.save();
-            // canvasCtx.translate(cx + barSpacing, cy + barSpacing);
             canvasCtx.translate(cx, cy); // doesn't need to + barSpacing
 
             // canvasCtx.fillRect(-hypotenuseLength, 0, 2 * hypotenuseLength, 1);
@@ -146,33 +151,32 @@ export function LoungeVisual(props) {
             const rotate = (alfa - beta) * 1;
             canvasCtx.rotate(rotate); // controls starting bar (how much to rotate)
             canvasCtx.fillRect(x, y, w, h);
-            // canvasCtx.fillRect(0, 0, w, hypotenuseLength);
-            if (i % 15 == 0) {
-                canvasCtx.fillRect(0, -1.2 * hypotenuseLength, w, -0.2 * hypotenuseLength); // 1.3 comes from (0.25 + (0.4 - 0.25)/2) / 0.25 = (0.25 + 0.075) / 0.25 = 0.325 / 0.25 = 1.3
-                // canvasCtx.fillRect(0, -radius, w, -0.1 * hypotenuseLength); // 1.3 comes from (0.25 + (0.4 - 0.25)/2) / 0.25 = (0.25 + 0.075) / 0.25 = 0.325 / 0.25 = 1.3
-                // canvasCtx.fillRect(0, 0, w, -1 * hypotenuseLength);
-            }
-            canvasCtx.restore() // rotate back so that text can be displayed normally
+            console.log(showLabels);
 
-            if (i % 15 == 0) {
-                const roundFreq = Math.round(eachDataFreq * Math.floor(i  * freqArrIdxJump) / 100) * 100; // round to nearest 100
-                const freqText = `${roundFreq >= 1000 ? `${roundFreq/1000}` : roundFreq}`;
-                const canvasRotateAngle = rotate;
-                let angle = -1 * canvasRotateAngle;
-                const textX = Math.sin(angle) * hypotenuseLength;
-                const textY = Math.cos(angle) * hypotenuseLength;
+            if (showLabels) {
+                // canvasCtx.fillRect(0, 0, w, hypotenuseLength);
+                if (i % 15 == 0) {
+                    canvasCtx.fillRect(0, -1.2 * hypotenuseLength, w, -0.2 * hypotenuseLength); // 1.3 comes from (0.25 + (0.4 - 0.25)/2) / 0.25 = (0.25 + 0.075) / 0.25 = 0.325 / 0.25 = 1.3
+                    // canvasCtx.fillRect(0, -radius, w, -0.1 * hypotenuseLength); // 1.3 comes from (0.25 + (0.4 - 0.25)/2) / 0.25 = (0.25 + 0.075) / 0.25 = 0.325 / 0.25 = 1.3
+                    // canvasCtx.fillRect(0, 0, w, -1 * hypotenuseLength);
 
-                canvasCtx.font = `${canvas.width / 18}px ${fonts[fontsIdx]}`;
-                // if (canvasRotateAngle < 0) {
-                //     canvasCtx.textAlign = 'left';
-                // } else if (canvasRotateAngle > 0) {
-                //     canvasCtx.textAlign = 'right';
-                // }
-                // canvasCtx.textAlign = 'center'; // left side should be align left; vice versa
-                // console.log(font)
-                // console.log(canvasCtx.font)
-                canvasCtx.fillText(freqText, -textX, -textY); // the x and y might should be determined by cavnas width and height
+                    canvasCtx.restore(); // rotate back so that text can be displayed normally
 
+                    const roundFreq = Math.round(eachDataFreq * Math.floor(i  * freqArrIdxJump) / 100) * 100; // round to nearest 100
+                    const freqText = `${roundFreq >= 1000 ? `${roundFreq/1000}` : roundFreq}`;
+                    const canvasRotateAngle = rotate;
+                    let angle = -1 * canvasRotateAngle;
+                    const textX = Math.sin(angle) * hypotenuseLength;
+                    const textY = Math.cos(angle) * hypotenuseLength;
+
+                    canvasCtx.font = `${canvas.width / 18}px ${fonts[fontsIdx]}`;
+                    // Maybe: left side should be align left; vice versa
+                    canvasCtx.fillText(freqText, -textX, -textY); // the x and y might should be determined by cavnas width and height
+                } else {
+                    canvasCtx.restore();
+                }
+            } else {
+                canvasCtx.restore();
             }
             canvasCtx.restore();
         }
@@ -205,9 +209,6 @@ export function LoungeVisual(props) {
             return;
         }
         canvasCtx = canvas.getContext('2d')
-
-        // load fonts
-        // loadFonts();
 
         return () => { // clean up funciton
             cancelAnimationFrame(rafId);

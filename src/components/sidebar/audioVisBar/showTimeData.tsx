@@ -13,16 +13,17 @@ import { ThemeProvider, Switch } from '../../../muiImports'
         });
 
         const toggleDrawer = (event: React.KeyboardEvent | React.MouseEvent) => {
-            dispatch({type: 'FLIP_SHOWTIMEDATA'})
+            dispatch({type: 'FLIP_SHOWTIMEDATA'});
+            // if (controlStatus.showFrequency) {dispatch({type: 'FLIP_SHOWFREQ'})};
         }
         const {myTheme} = Theme()
 
         return (
-        <div>
-            <ThemeProvider theme={myTheme}>
-                {controlStatus.showTimeData === true ? <Switch onClick={toggleDrawer} defaultChecked /> : <Switch onClick={toggleDrawer}/>}
-            </ThemeProvider>
+            <div>
+                <ThemeProvider theme={myTheme}>
+                    {controlStatus.showTimeData === true ? <Switch onClick={toggleDrawer} checked={true} /> : <Switch onClick={toggleDrawer} checked={false} />}
+                </ThemeProvider>
 
-        </div>
+            </div>
         );
     }

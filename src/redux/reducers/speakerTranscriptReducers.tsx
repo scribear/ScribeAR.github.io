@@ -1,4 +1,4 @@
-import { Speaker, Transcript, AllSpeakerTranscript, TextNode } from "../types";
+import { Speaker, Transcript, AllSpeakerTranscript } from "../types";
 
 enum S_STATUS {
     "NORMAL", // or "N", // normal
@@ -20,7 +20,8 @@ const initialSpeaker: Speaker = {
 
 const initialTranscript: Transcript = {
     // text: new Map<number, string>([[Number(0), ""]]),
-    text: [],
+    text: Array([0, ""]),
+    lastTime: -1
 }
 
 const initial_speaker_transcript = new Map<string, Transcript>();

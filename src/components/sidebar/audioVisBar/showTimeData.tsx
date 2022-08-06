@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { } from 'react'
 import { RootState } from '../../../store';
 import { useDispatch, useSelector } from 'react-redux';
 import { ControlStatus } from '../../../redux/types';

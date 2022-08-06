@@ -41,12 +41,11 @@ export default function AzureDropdown(props) {
     } 
     const handleEnter = (event) =>
     {
-      if (event.key === 'Enter') {
+      if (event.key === 'Enter') { // if pressed the "return" key
         toggleEnter()
         event.preventDefault();
       }
     }
-    // const isLoggedIn = useSelector(state: RootState => state.user.loggedIn);
 
     const toggleEnter = async () => {
         dispatch({type: 'FLIP_RECORDING', payload: state.controlStatus})

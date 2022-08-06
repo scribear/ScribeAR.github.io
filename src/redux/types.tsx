@@ -103,7 +103,6 @@ export interface ControlStatus {
     speechLanguage: LanguageList
     textLanguage: LanguageList
     showFrequency: boolean
-    showLabels: boolean
     showTimeData: boolean
 
 }

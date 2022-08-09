@@ -67,7 +67,7 @@ const defaultMainStream = (curTime? : number) => {
 
     return {mainStream, curTime};
 }
-const defaultMainStreamMap = (timeInterval = 1000000) => {
+const defaultMainStreamMap = (timeInterval = 100000) => {
     const mainStreamTime = defaultMainStream();
 
     const mainStreamMap : MainStreamMap = {
@@ -83,7 +83,7 @@ const defaultMainStreamMap = (timeInterval = 1000000) => {
 /* Save to sessionStorage so that it is cleared when refreshed */
 const saveSessionly = (varName: string, value: any) => {
     sessionStorage.setItem(varName, JSON.stringify(value));
-    defaultMainStream();
+    // defaultMainStream();
 }
 
 const getSessionState = (varName: string) => {
@@ -101,15 +101,39 @@ const getSessionState = (varName: string) => {
   
 // export const BucketStreamReducer = (state = getSessionState("streams"), action) => {
 export const BucketStreamReducer = (state = defaultMainStreamMap(), action : {type: string; payload: any; newMainStream: boolean;}) => {
+    let copyState : MainStreamMap = Object.assign({}, state);
+    
     switch (action.type) {
         case 'APPEND_AUDIOSTREAM':
             // make a AudioEventBucket; append it to state.AudioStream
+            let curAudioStream : AudioStream = copyState.map.get(state.curMSST)!.AudioStream!;
 
-            return
+            if (curAudioStream.length == 0) {throw "AudioStream length 0!"};
+            curAudioStream[curAudioStream.length - 1]!.endTime = action.payload.curTime;
+            curAudioStream[curAudioStream.length - 1]!.volume = action.payload.volume;
+            curAudioStream[curAudioStream.length - 1]!.typeOfData = action.payload.typeOfData;
+            
+            if (action.newMainStream) { // add a new MainStream
+                const time = action.payload.curTime;
+                copyState.curMSST = time;
+                copyState.map.set(time, defaultMainStream(time).mainStream);
+                return copyState;
+            } else if (!action.newMainStream) { // just add a bucket at the end
+                // return [{
+                //     ...state,
+                // }]
+                curAudioStream.push({
+                    startTime: action.payload.curTime,
+                    endTime: 0,
+                    volume: -1,
+                    typeOfData: '',
+                });
+
+                return copyState;
+            }
+            return state;
         case 'APPEND_HTML5_STT_STREAM':
             // console.log(53, "type: ", typeof action.payload, "; value: ", action.payload)
-
-            let copyState = Object.assign({}, state);
             let curHTML5Stream : HTML5STTStream = copyState.map.get(state.curMSST)!.HTML5STTStream!;
 
             // we first complete the last bucket in the current stream

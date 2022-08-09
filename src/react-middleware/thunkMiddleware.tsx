@@ -1,5 +1,31 @@
 import { MainStreamMap } from "../redux/types/bucketStreamTypes";
 
+/* Save to sessionStorage so that it is cleared when refreshed */
+const saveSessionly = (varName: string, value: any) => {
+    sessionStorage.setItem(varName, JSON.stringify(value));
+    // if (varName === 'audio') {
+
+    // } else if (varName === 'html5STT') {
+
+    // } else if (varName === 'AzureSTT') {
+
+    // } else if (varName === 'UserAction') {
+
+    // }
+}
+
+const getSessionState = (varName: string) => {
+    let checkNull = sessionStorage.getItem(varName)
+    if (checkNull) {
+        return JSON.parse(checkNull);
+    } else {
+        // if (varName === "streams") {
+        //     const mainStreamMap = defaultMainStreamMap();
+        //     saveSessionly("streams", mainStreamMap);
+        //     return mainStreamMap;
+        // }
+    }
+};
 type BucketArgs = {
     stream: string,
     value: any | SpeechRecognitionResultList,
@@ -14,18 +40,11 @@ export function makeEventBucket(object: BucketArgs) {
     return async function makeEventBucketThunk(dispatch, getState) {
         // ✅ Now we can use the stream value
         if (stream === 'audio') { 
-
-        } else if (stream === 'html5') {
             const curTime = Date.now();
 
+        } else if (stream === 'html5') {
             // console.log("haha, wee?~!", value.length);
-            const streamMap : MainStreamMap = await getState().BucketStreamReducer;
-
-            let newMainStream : boolean = false;
-            // If elapsed
-            if (streamMap.curMSST + streamMap.timeInterval <= curTime) {
-                newMainStream = true;
-            }
+            const curTime = Date.now();
 
             // Array are type <TranscriptConfidence>
             let finalArr = Array<SpeechRecognitionAlternative>();
@@ -40,6 +59,21 @@ export function makeEventBucket(object: BucketArgs) {
                 } else {
                     notFinalArr.push(speechResult[0]);
                 }
+            }
+
+            const streamMap : MainStreamMap = await getState().BucketStreamReducer;
+
+            let newMainStream : boolean = false;
+            // If elapsed
+            if (streamMap.curMSST + streamMap.timeInterval <= curTime) {
+                newMainStream = true;
+
+                // Also append final transcripts to sessionStorage
+
+                const curSessionSpeech = getSessionState('html5STT');
+                const finalSpeech = finalArr.map(fSpeech => fSpeech.transcript).join('');
+                saveSessionly('html5STT', curSessionSpeech + finalSpeech);
+                console.log("New html5 stream created; sessionStorage updated!");
             }
 
             // console.log({

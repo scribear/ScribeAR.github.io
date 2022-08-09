@@ -1,4 +1,4 @@
-
+import * as React from 'react';
 import Slider, { SliderThumb } from '@mui/material/Slider';
 import { Grid, makeStyles, Typography } from '../../../muiImports'
 import { RootState, DisplayStatus } from '../../../redux/types';

@@ -7,6 +7,7 @@ import { AzureRecognition } from './azure/azureRecognition';
 import { DisplayStatus, AzureStatus, StreamTextStatus, ControlStatus, ApiStatus } from '../../redux/types'
 import { LoungeVisual } from './visualization/loungeVisual'
 import { TimeDataVisual } from './visualization/timeDataVisual';
+import { ReturnAPI } from './returnAPI';
 import { Draggable } from './visualization/DraggableFC';
 import { Resizable } from './visualization/Resizable';
 import StreamText from './streamtext/streamtextRecognition';
@@ -34,7 +35,7 @@ export const WebRecognitionExample: React.FC = (props) => {
     if (control.listening == true) {
       if (apiStatus.currentAPI == 0) {
         desiredAPI = 0
-        webspeechHandler()
+        webspeechHandler2()
       } else if (apiStatus.currentAPI == 1) {
         desiredAPI = 1
         azureHandler()
@@ -58,14 +59,16 @@ export const WebRecognitionExample: React.FC = (props) => {
         let copyStatus = Object.assign({}, apiStatus);
         copyStatus.currentAPI = 0
         dispatch({type: 'CHANGE_API_STATUS', payload: copyStatus})
-        webspeechHandler()
+        webspeechHandler2()
       }
     })
     } 
   });
+  
   const textSizeA = "" + textSize.textSize + "vh"
   const { azureTranscripts, azureListen } = AzureRecognition();
-  const { transcripts, listen } = useRecognition();
+  const { handler,  recognition, recognitionBuff } = ReturnAPI("Po");
+  const { transcripts, listen } = recognitionBuff(recognition);
 
   const stateRefControl = React.useRef(control)
   const stateRefAzure = React.useRef(azureStatus)
@@ -73,11 +76,29 @@ export const WebRecognitionExample: React.FC = (props) => {
   stateRefControl.current = control
   stateRefAzure.current = azureStatus
   stateCurrentAPI.current = apiStatus
-  const webspeechHandler = async () => {
+  React.useEffect(() => {
+
+    if (handler) { 
+    if (textSize.textSize == 4) {
+      handler({type: "START"})
+    } 
+    if (textSize.textSize == 5) {
+      handler( {type: "STOP"})
+    } 
+    if (textSize.textSize == 10) {
+    }
+    if (textSize.textSize == 8) {
+      handler({type: "START"})
+    } 
+    }
+  }, [textSize.textSize]);
+  const webspeechHandler2 = async () => {
     const recognizedMessage = await listen(transcriptsFull, stateRefControl, stateCurrentAPI).then(response => {  
       if (stateRefControl.current.listening && stateCurrentAPI.current.currentAPI == 0) {
           transcriptsFull = transcriptsFull + response
-          webspeechHandler()
+          // console.log("???PAISDIHSAIDH")
+          // reco.start()
+          // webspeechHandler2()
         }
       }
     );

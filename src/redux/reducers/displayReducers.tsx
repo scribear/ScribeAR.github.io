@@ -43,8 +43,6 @@ export const DisplayReducer = (state = getLocalState("displayReducer2"), action)
         textColor: action.payload,
       }
     case 'SET_TEXT':
-      saveLocally("displayReducer2", action.payload)
-
       return { 
         ...state, 
         textSize: action.payload };

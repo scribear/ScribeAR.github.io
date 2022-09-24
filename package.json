@@ -31,7 +31,6 @@
     "react-redux": "^7.2.4",
     "react-scripts": "^5.0.1",
     "react-speech-recognition": "^3.9.0",
-    "react-web-voice": "^1.0.0",
     "redux": "^4.1.1",
     "sweetalert": "^2.1.2",
     "sweetalert2": "^11.1.9",

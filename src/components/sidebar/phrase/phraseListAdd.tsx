@@ -38,7 +38,7 @@ export default function CustomizedMenus() {
   
   const handleClickItem = (event) => {
     dispatch({ type: 'CHANGE_PHRASE_LIST', payload: phraseListStatus.phraseListMap.get(event.target.innerText) })
-    dispatch({ type: 'CHANGE_LIST', payload: phraseListStatus.phraseListMap.get(event.target.innerText)?.phrases })
+    dispatch({ type: 'CHANGE_LIST', payload: phraseListStatus.phraseListMap.get(event.target.innerText)!.phrases })
     setState({ ...state, currentList: event.target.innerText})  
     setAnchorEl(null);
   }

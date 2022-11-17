@@ -1,6 +1,6 @@
 import React, { useMemo, useCallback } from 'react';
 import { useSelector } from 'react-redux';
-import { DisplayStatus, AzureStatus, StreamTextStatus, ControlStatus, ApiStatus } from '../../redux/types';
+import { DisplayStatus, AzureStatus, StreamTextStatus, ControlStatus, ApiStatus } from '../../react-redux&middleware/redux/types';
 import { RootState } from '../../store';
 
 import { getAzure, azureRecognition } from './azure/azureRecognition';

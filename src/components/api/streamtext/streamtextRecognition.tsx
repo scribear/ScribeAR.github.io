@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { DisplayStatus, StreamTextStatus, ControlStatus } from '../../../redux/types'
+import { DisplayStatus, StreamTextStatus, ControlStatus } from '../../../react-redux&middleware/redux/types'
 
 
 //   \"IHaveADream\" is the demo

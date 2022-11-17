@@ -1,7 +1,7 @@
 import { PlayArrowIcon, PauseIcon, MicIcon, MicOffIcon, ThemeProvider, IconButton, Tooltip  } from '../../../muiImports';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store';
-import { ControlStatus } from '../../../redux/types';
+import { ControlStatus } from '../../../react-redux&middleware/redux/types';
 import Theme from '../../theme'
 import * as React from 'react';
 

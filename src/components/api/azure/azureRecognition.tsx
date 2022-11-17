@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store';
-import { ControlStatus, AzureStatus, ApiStatus, PhraseList } from '../../../redux/types';
+import { ControlStatus, AzureStatus, ApiStatus, PhraseList } from '../../../react-redux&middleware/redux/types';
 
 import * as speechSDK from 'microsoft-cognitiveservices-speech-sdk';
 

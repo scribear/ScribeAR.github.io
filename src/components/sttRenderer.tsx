@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../store';
-import { DisplayStatus, AzureStatus, ControlStatus, ApiStatus } from '../redux/types'
+import { DisplayStatus, AzureStatus, ControlStatus, ApiStatus } from '../react-redux&middleware/redux/types'
 
 import Swal from 'sweetalert2';
 

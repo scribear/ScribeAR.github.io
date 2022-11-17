@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { useCallback, useMemo } from 'react';
-import { ControlStatus, ApiStatus } from '../../../redux/types';
+import { ControlStatus, ApiStatus } from '../../../react-redux&middleware/redux/types';
 import { useDispatch } from 'react-redux';
-import { makeEventBucket } from '../../../react-middleware/thunkMiddleware';
+import { makeEventBucket } from '../../../react-redux&middleware/react-middleware/thunkMiddleware';
 
 export const getWebSpeechRecognition = () => {
   if (!window || !(window as any).webkitSpeechRecognition) {

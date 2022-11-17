@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState, } from 'react'
 import { RootState } from '../../../store';
-import { DisplayStatus, ControlStatus } from '../../../redux/types';
+import { DisplayStatus, ControlStatus } from '../../../react-redux&middleware/redux/types';
 import { useSelector } from 'react-redux';
 
 import './canvasFonts.css';

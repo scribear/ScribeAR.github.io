@@ -3,7 +3,7 @@ import { List, ListItem, Divider, AddIcon, IconButton, ListItemText } from '../.
 import Swal from 'sweetalert2';
 import PhrasePopUp from './phraseList';
 import './phrase.css'
-import { RootState, PhraseListStatus, PhraseList } from '../../../../redux/types';
+import { RootState, PhraseListStatus, PhraseList } from '../../../../react-redux&middleware/redux/types';
 import { useDispatch, useSelector } from 'react-redux';
 
 /* todo:

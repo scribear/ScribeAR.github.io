@@ -1,5 +1,5 @@
 import { createTheme } from '@mui/material/styles';
-import { RootState, DisplayStatus } from '../redux/types';
+import { RootState, DisplayStatus } from '../react-redux&middleware/redux/types';
 import { useSelector } from 'react-redux';
 
 // our global theme provider

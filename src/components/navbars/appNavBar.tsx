@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useSelector } from 'react-redux';
-import { ApiStatus, RootState, DisplayStatus, ControlStatus } from '../../redux/types';
+import { ApiStatus, RootState, DisplayStatus, ControlStatus } from '../../react-redux&middleware/redux/types';
 import { createTheme, ThemeProvider, IconButton, MenuIcon, Drawer, Grid, AppBar, Toolbar } from '../../muiImports'
 
 import SideBar from './sidebar/sidebar'

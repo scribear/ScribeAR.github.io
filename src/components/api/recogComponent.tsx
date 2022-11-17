@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import Swal from 'sweetalert2';
 import { RootState } from '../../store';
 import { azureRecognition } from './azure/azureRecognition';
-import { DisplayStatus, AzureStatus, StreamTextStatus, ControlStatus, ApiStatus } from '../../redux/types'
+import { DisplayStatus, AzureStatus, StreamTextStatus, ControlStatus, ApiStatus } from '../../react-redux&middleware/redux/types'
 import { LoungeVisual } from './visualization/loungeVisual'
 import { TimeDataVisual } from './visualization/timeDataVisual';
 import { Draggable } from './visualization/DraggableFC';

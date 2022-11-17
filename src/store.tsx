@@ -1,7 +1,7 @@
-import { DisplayReducer } from './redux/reducers/displayReducers'
-import { APIStatusReducer, AzureReducer, StreamTextReducer, PhraseListReducer } from './redux/reducers/apiReducers'
-import { ControlReducer } from './redux/reducers/controlReducers'
-import { BucketStreamReducer } from './redux/reducers/bucketStreamReducers'
+import { DisplayReducer } from './react-redux&middleware/redux/reducers/displayReducers'
+import { APIStatusReducer, AzureReducer, StreamTextReducer, PhraseListReducer } from './react-redux&middleware/redux/reducers/apiReducers'
+import { ControlReducer } from './react-redux&middleware/redux/reducers/controlReducers'
+import { BucketStreamReducer } from './react-redux&middleware/redux/reducers/bucketStreamReducers'
 
 import { combineReducers, createStore } from 'redux'
 import { configureStore } from '@reduxjs/toolkit'

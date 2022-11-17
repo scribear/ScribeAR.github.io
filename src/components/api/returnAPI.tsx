@@ -1,12 +1,11 @@
-import * as React from 'react';
-import * as speechSDK from 'microsoft-cognitiveservices-speech-sdk'
-import { getWebSpeechRecognition, useRecognition } from './web-speech/webSpeechRecognition';
+import React, { useMemo, useCallback } from 'react';
+import { useSelector } from 'react-redux';
+import { DisplayStatus, AzureStatus, StreamTextStatus, ControlStatus, ApiStatus } from '../../redux/types';
+import { RootState } from '../../store';
 
 import { getAzure, azureRecognition } from './azure/azureRecognition';
-import { DisplayStatus, AzureStatus, StreamTextStatus, ControlStatus, ApiStatus } from '../../redux/types'
-import { RootState } from '../../store';
-import { useMemo, useCallback } from 'react';
-import { useSelector } from 'react-redux';
+import * as speechSDK from 'microsoft-cognitiveservices-speech-sdk'
+import { getWebSpeechRecognition, useRecognition } from './web-speech/webSpeechRecognition';
 
 // controls what api to send and what to do when error handling.
 
@@ -25,13 +24,13 @@ export const ReturnAPI = (props) => {
     })
     const recognition = getRecognition(apiStatus.currentAPI, azureStatus, control)
     const handler = Handler(apiStatus.currentAPI, recognition) 
-    const recognitionBuff = RecognitionBuff(apiStatus.currentAPI)
+    const recognitionBuff = makeRecognition(apiStatus.currentAPI)
 
 
-    return ({handler, recognition, recognitionBuff})
+    return ({ handler, recognition, recognitionBuff })
 }
 
-//Functions for controlling each API as they will be saved to this file.
+// Functions for controlling each API as they will be saved to this file.
 export const Handler = (currentApi: number, speechRecognition: any) => {
     if (currentApi == 0) { // webspeech
         return useCallback((action) => {
@@ -51,7 +50,7 @@ export const Handler = (currentApi: number, speechRecognition: any) => {
             default:
                 return "poggers";
             }
-        },[])
+        }, [])
     } else if (currentApi == 1) { // azure
         return useCallback((action) => {
             switch (action.type) {
@@ -70,10 +69,10 @@ export const Handler = (currentApi: number, speechRecognition: any) => {
             default:
                 return "poggers";
             }    
-        },[])
+        }, [])
     } else {
         const streamtextHandler = () => {
-        //nothing so far
+            // nothing so far
         }
     }
 }
@@ -88,7 +87,7 @@ export const getRecognition = (currentApi: number, azure: AzureStatus, control: 
     }
 }
 
-export const RecognitionBuff = (currentApi: number) => {
+export const makeRecognition = (currentApi: number) => {
     if (currentApi === 0) { // webspeech recognition event controller
         return { useRecognition }
     } else if (currentApi === 1) { // azure recognition event controller

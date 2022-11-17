@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { Box, Menu, ExpandLess, ExpandMore, ThemeProvider, IconButton, Tooltip } from '../../../muiImports'
+import { Box, Menu, ExpandLess, ExpandMore, ThemeProvider, IconButton, Tooltip } from '../../../muiImports';
 
-import PickApi from '../../api/pickApi'
-import Theme from '../../theme'
+import PickApi from './api/pickApi';
+import Theme from '../../theme';
 
 
 export default function ApiDropdown(props) {

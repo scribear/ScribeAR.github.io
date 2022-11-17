@@ -41,26 +41,26 @@ export const WebRecognitionExample: React.FC = (props) => {
       }
     } 
   }, [control.listening, apiStatus.currentAPI]);
-  document.addEventListener("DOMContentLoaded", function(){
+  document.addEventListener("DOMContentLoaded", function() {
     if (apiStatus.currentAPI == 1) {
-    Swal.fire({
-      title: 'It appears you have a valid Microsoft Azure key, would you like to use Microsoft Azure?',
-      icon: 'info',
-      allowOutsideClick: false,
-      showDenyButton: true,
-      confirmButtonText: 'Yes!',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        Swal.fire('Switching to Azure', '', 'success')
-        desiredAPI = 1
-        azureHandler()
-      } else {
-        let copyStatus = Object.assign({}, apiStatus);
-        copyStatus.currentAPI = 0
-        dispatch({type: 'CHANGE_API_STATUS', payload: copyStatus})
-        webspeechHandler()
-      }
-    })
+      Swal.fire({
+        title: 'It appears you have a valid Microsoft Azure key, would you like to use Microsoft Azure?',
+        icon: 'info',
+        allowOutsideClick: false,
+        showDenyButton: true,
+        confirmButtonText: 'Yes!',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire('Switching to Azure', '', 'success')
+          desiredAPI = 1
+          azureHandler()
+        } else {
+          let copyStatus = Object.assign({}, apiStatus);
+          copyStatus.currentAPI = 0
+          dispatch({type: 'CHANGE_API_STATUS', payload: copyStatus})
+          webspeechHandler()
+        }
+      })
     } 
   });
   const textSizeA = "" + textSize.textSize + "vh"

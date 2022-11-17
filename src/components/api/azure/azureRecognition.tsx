@@ -1,10 +1,10 @@
-import * as React from 'react';
-import { RootState } from '../../../store';
+import React, { useCallback, useMemo, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-
-import { useCallback, useMemo, useEffect } from 'react';
+import { RootState } from '../../../store';
 import { ControlStatus, AzureStatus, ApiStatus, PhraseList } from '../../../redux/types';
-import * as speechSDK from 'microsoft-cognitiveservices-speech-sdk'
+
+import * as speechSDK from 'microsoft-cognitiveservices-speech-sdk';
+
 export const GetAzureRecognition = () => {
   const pog = "hi"
   const test = useCallback(

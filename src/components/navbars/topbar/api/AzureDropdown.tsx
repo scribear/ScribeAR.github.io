@@ -1,10 +1,10 @@
 import * as React from 'react';
 import swal from 'sweetalert';
-import { Box, TextField, List, ListItem } from '../../../muiImports'
-import { GetAzureRecognition } from './azureRecognition';
-import { ApiStatus, AzureStatus, ControlStatus } from '../../../redux/types';
+import { Box, TextField, List, ListItem } from '../../../../muiImports'
+import { GetAzureRecognition } from '../../../api/azure/azureRecognition';
+import { ApiStatus, AzureStatus, ControlStatus } from '../../../../redux/types';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../../store';
+import { RootState } from '../../../../store';
 
 
 enum STATUS {

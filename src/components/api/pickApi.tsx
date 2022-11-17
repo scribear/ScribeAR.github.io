@@ -1,9 +1,10 @@
 import * as React from 'react';
-import swal from 'sweetalert';
 import { ApiStatus, RootState} from '../../redux/types';
 import { useDispatch, useSelector } from 'react-redux';
-import StreamTextDropdown from './streamtext/streamTextDropdown';
+import swal from 'sweetalert';
 import { createTheme, ThemeProvider, ListItemButton, ListItemText, ListItemIcon, Collapse, ErrorIcon, ExpandLess, ExpandMore, CancelIcon, IconButton, DoNotDisturbOnIcon, CheckCircleIcon } from '../../muiImports' 
+
+// import StreamTextDropdown from './streamtext/streamTextDropdown';
 import AzureDropdown from './azure/AzureDropdown';
 
 enum STATUS {
@@ -30,18 +31,19 @@ const currTheme = createTheme({
         }
     }
 });
+
 const IconStatus = (currentAPI: any) => {
     const myTheme = currTheme;
     switch (currentAPI.currentAPI) {
         case STATUS.NULL:
-            return(
+            return (
                 <ThemeProvider theme={myTheme}>
                     <DoNotDisturbOnIcon/>
                 </ThemeProvider>
             )
         
         case STATUS.AVAILABLE:
-            return(
+            return (
                 <ThemeProvider theme={myTheme}>
                     <CheckCircleIcon color="success" />
                 </ThemeProvider>
@@ -52,16 +54,17 @@ const IconStatus = (currentAPI: any) => {
                     <CancelIcon color="warning"/>
                 </ThemeProvider>
             )
-        }
-        return (
-            <ThemeProvider theme={myTheme}>
-                <ErrorIcon color="error"/>
-            </ThemeProvider>
-        )
+    }
+    return (
+        <ThemeProvider theme={myTheme}>
+            <ErrorIcon color="error"/>
+        </ThemeProvider>
+    )
 }
-export default function STT(props) {
-    const dispatch = useDispatch()
-    const myTheme = currTheme
+
+export default function PickApi(props) {
+    const dispatch = useDispatch();
+    const myTheme = currTheme;
 
     const [state, setState] = React.useState({
         azureStatus: false,
@@ -112,31 +115,32 @@ export default function STT(props) {
             </ListItemButton>
 
             <ListItemButton onClick={toggleDrawer("azureStatus", 1, false)} >
-            <ListItemIcon>
+                <ListItemIcon>
                     <IconStatus{...{currentAPI: state.apiStatus.azureStatus}}/>
                 </ListItemIcon>
                 <ListItemText primary="Microsoft Azure" />
                 <IconButton onClick={toggleDrawer("azureStatus", 1, true)}>
-            {state.azureStatus ? <ExpandLess /> : <ExpandMore />}
-          </IconButton>
+                    {state.azureStatus ? <ExpandLess /> : <ExpandMore />}
+                </IconButton>
             </ListItemButton>
 
             <Collapse in={state.azureStatus} timeout="auto" unmountOnExit>
                 <AzureDropdown apiStatus={state.apiStatus}/>
             </Collapse>
 
-            <ListItemButton onClick={toggleDrawer("streamTextStatus", 2, false)} >
+            {/* <ListItemButton onClick={toggleDrawer("streamTextStatus", 2, false)} >
                 <ListItemIcon>
                     <IconStatus{...{currentAPI: state.apiStatus.streamtextStatus}}/>
                 </ListItemIcon>
                 <ListItemText primary="StreamText" />
                 <IconButton onClick={toggleDrawer("streamTextStatus", 2, true)}>
-            {state.streamTextStatus ? <ExpandLess /> : <ExpandMore />}
-          </IconButton>
+                    {state.streamTextStatus ? <ExpandLess /> : <ExpandMore />}
+                </IconButton>
             </ListItemButton>
+
             <Collapse in={state.streamTextStatus} timeout="auto" unmountOnExit>
                 <StreamTextDropdown apiStatus={state.apiStatus}/>
-            </Collapse>
+            </Collapse> */}
         </div>
     );
 }

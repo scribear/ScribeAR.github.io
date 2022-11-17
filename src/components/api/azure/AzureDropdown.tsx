@@ -20,7 +20,6 @@ export default function AzureDropdown(props) {
     const { pog, test } = GetAzureRecognition();
 
     const [state, setState] = React.useState({
-        openAzure: false,
         azureStatus: useSelector((state: RootState) => {
             return state.AzureReducer as AzureStatus;
         }),
@@ -29,108 +28,100 @@ export default function AzureDropdown(props) {
         }),
         apiStatus: props.apiStatus as ApiStatus
     });
-    const handleChangeKey = (event) =>
-     {
-            let copyStatus = Object.assign({}, state.azureStatus);
-            copyStatus[event.target.id] = event.target.value;
-            setState({
-                ...state, 
-                azureStatus: copyStatus});
-            dispatch({type: 'CHANGE_AZURE_LOGIN', payload: copyStatus})
-            
+
+    const handleChangeKey = (event) => {
+        console.log("key change")
+        let copyStatus = Object.assign({}, state.azureStatus);
+        copyStatus[event.target.id] = event.target.value;
+
+        setState({ ...state, azureStatus: copyStatus });
+        dispatch({ type: 'CHANGE_AZURE_LOGIN', payload: copyStatus });
     } 
-    const handleEnter = (event) =>
-    {
-      if (event.key === 'Enter') { // if pressed the "return" key
-        toggleEnter()
-        event.preventDefault();
-      }
+
+    const handleEnter = (event) => {
+        if (event.key === 'Enter') { // if pressed the "return" key
+            toggleEnter()
+            event.preventDefault();
+        }
     }
 
     const toggleEnter = async () => {
         dispatch({type: 'FLIP_RECORDING', payload: state.controlStatus})
-          const recognizedMessage = await test(state.controlStatus, state.azureStatus).then(response => {  
-            let copyStatus = Object.assign({}, state.apiStatus);
-            if (response === true) {
-              copyStatus.azureStatus = 0;
-              localStorage.setItem("azureStatus", JSON.stringify(state.azureStatus))
-              swal({
-                title: "Success!",
-                text: "Switching to Microsoft Azure",
-                icon: "success", 
-                timer: 1500,
-                buttons: {
-                  no: {
-                    text: "Cancel",
-                    value: "no",
-                  },    
-                },
-              })
-              .then((value) => {
-                switch (value) {
-                  case "no":
-                    setState({ ...state, openAzure: false })
-                    break;
-                  default:
-                    copyStatus.currentAPI = 1;
-                    dispatch({type: 'CHANGE_API_STATUS', payload: copyStatus})
-                }
-              });
-              setState({
-                ...state, 
-                apiStatus: copyStatus});
-            } else {
-              copyStatus.azureStatus = 2;   
-              swal({
-                title: "Warning!",
-                text: "Wrong key or region!",
-                icon: "warning",
-              })
-              setState({
-                ...state, 
-                apiStatus: copyStatus});     
-            }
+            const recognizedMessage = await test(state.controlStatus, state.azureStatus).then(response => {  
+                let copyStatus = Object.assign({}, state.apiStatus);
+                if (response === true) {
+                    copyStatus.azureStatus = 0;
+                    localStorage.setItem("azureStatus", JSON.stringify(state.azureStatus))
 
-            dispatch({type: 'CHANGE_API_STATUS', payload: copyStatus})
-    
-          }
+                    swal({
+                        title: "Success!",
+                        text: "Switching to Microsoft Azure",
+                        icon: "success", 
+                        timer: 1500,
+                        buttons: {
+                            no: { text: "Cancel", value: "no" },    
+                        },
+                    }).then((value) => {
+                        switch (value) {
+                            case "no":
+                                setState({ ...state })
+                                break;
+                            default:
+                                copyStatus.currentAPI = 1;
+                                dispatch({type: 'CHANGE_API_STATUS', payload: copyStatus})
+                        }
+                    });
+                    
+                    setState({ ...state, apiStatus: copyStatus});
+                } else {
+                    copyStatus.azureStatus = 2;   
+                    swal({
+                        title: "Warning!",
+                        text: "Wrong key or region!",
+                        icon: "warning",
+                    })
+
+                    setState({ ...state, apiStatus: copyStatus });     
+                }
+
+                dispatch({type: 'CHANGE_API_STATUS', payload: copyStatus})
+            }
         );  
         dispatch({type: 'FLIP_RECORDING', payload: state.controlStatus})
     }
     
     return (
         <div>
-                <List component="div" disablePadding>
-                    <ListItem sx={{ pl: 4 }}>
-                        <Box
-                            component="form"
-                            sx={{
-                                '& > :not(style)': { pr: '1vw', width: '15vw' },
-                            }}
-                            noValidate
-                            autoComplete="off"
-                        >
-                          <style>
+            <List component="div" disablePadding>
+                <ListItem sx={{ pl: 4 }}>
+                    <Box
+                        component="form"
+                        sx={{
+                            '& > :not(style)': { pr: '1vw', width: '15vw' },
+                        }}
+                        noValidate
+                        autoComplete="off">
+                        <style>
                             {`
-                              #azureKey {
+                                #azureKey {
                                 width: '100%';
-                              }
+                                }
                             `}
-                          </style>
-                          <TextField onKeyDown = {handleEnter} onChange={handleChangeKey} value={state.azureStatus.azureKey} id="azureKey" label="Key" variant="outlined" style={{ width: '100%' }}/>
-                          </Box>
-                    </ListItem>
-                    <ListItem sx={{ pl: 4 }}>
-                        <Box
-                            component="form"
-                            sx={{
-                                '& > :not(style)': { mr: '1vw', width: '15vw' },
-                            }}
-                            noValidate
-                            autoComplete="off"
-                        ><TextField onKeyDown = {handleEnter} onChange={handleChangeKey} value={state.azureStatus.azureRegion} id="azureRegion" label="Region" variant="outlined" style={{ width: '100%' }}/></Box>
-                    </ListItem>
-                </List>
+                        </style>
+                        <TextField onKeyDown={handleEnter} onChange={handleChangeKey} value={state.azureStatus.azureKey} id="azureKey" label="Key" variant="outlined" style={{ width: '100%' }}/>
+                    </Box>
+                </ListItem>
+                <ListItem sx={{ pl: 4 }}>
+                    <Box
+                        component="form"
+                        sx={{
+                            '& > :not(style)': { mr: '1vw', width: '15vw' },
+                        }}
+                        noValidate
+                        autoComplete="off">
+                        <TextField onKeyDown={handleEnter} onChange={handleChangeKey} value={state.azureStatus.azureRegion} id="azureRegion" label="Region" variant="outlined" style={{ width: '100%' }}/></Box>
+                </ListItem>
+            </List>
         </div>
     );
 }

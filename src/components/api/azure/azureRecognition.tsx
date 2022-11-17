@@ -31,7 +31,22 @@ export const GetAzureRecognition = () => {
   return useMemo(() => ({ pog, test }), [pog]);
 };
 
-export const AzureRecognition = () => {
+export const getAzure = async (control: ControlStatus, azureStatus: AzureStatus) => new Promise((resolve, reject) => {
+  let azureSpeech = speechSDK.SpeechTranslationConfig.fromSubscription(azureStatus.azureKey, azureStatus.azureRegion)
+  azureSpeech.speechRecognitionLanguage = control.speechLanguage.CountryCode;
+  azureSpeech.addTargetLanguage(control.textLanguage.CountryCode)
+  let azureAudioConfig = speechSDK.AudioConfig.fromDefaultMicrophoneInput();
+  let reco = new speechSDK.TranslationRecognizer(azureSpeech, azureAudioConfig);
+  reco.canceled = () => {
+    resolve(false);
+  }
+  reco.sessionStarted = () => {
+    resolve(reco);
+  }
+  reco.recognizeOnceAsync();
+})
+
+export const azureRecognition = () => {
   const controlStatus = useSelector((state: RootState) => {
     return state.ControlReducer as ControlStatus;
 })

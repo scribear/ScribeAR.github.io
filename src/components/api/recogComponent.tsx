@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { useRecognition } from './webspeech/recognition';
+import { useRecognition } from './web-speech/webSpeechRecognition';
 import { useSelector, useDispatch } from 'react-redux';
 import Swal from 'sweetalert2';
 import { RootState } from '../../store';
-import { AzureRecognition } from './azure/azureRecognition';
+import { azureRecognition } from './azure/azureRecognition';
 import { DisplayStatus, AzureStatus, StreamTextStatus, ControlStatus, ApiStatus } from '../../redux/types'
 import { LoungeVisual } from './visualization/loungeVisual'
 import { TimeDataVisual } from './visualization/timeDataVisual';
@@ -64,7 +64,7 @@ export const WebRecognitionExample: React.FC = (props) => {
     } 
   });
   const textSizeA = "" + textSize.textSize + "vh"
-  const { azureTranscripts, azureListen } = AzureRecognition();
+  const { azureTranscripts, azureListen } = azureRecognition();
   const { transcripts, listen } = useRecognition();
 
   const stateRefControl = React.useRef(control)

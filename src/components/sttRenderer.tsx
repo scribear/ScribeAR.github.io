@@ -14,6 +14,7 @@ import { Resizable } from './api/visualization/Resizable';
 
 export default function STTRenderer() {
     const dispatch = useDispatch();
+    // use createSelector to memoize the selector
     const controlStatus = useSelector((state: RootState) => {
         return state.ControlReducer as ControlStatus;
     });
@@ -27,14 +28,33 @@ export default function STTRenderer() {
         return state.APIStatusReducer as ApiStatus
     })
 
-    useEffect
+    // whenever api changes, we test first
+    useEffect(() => {
+        if (apiStatus.currentAPI == 1) { // test Azure
+            
+
+            // get recognition
+            // start recognition
+        } else if (apiStatus.currentAPI == 0) { // test WebSpeech
+            
+
+            // get recognition
+            // start recognition
+        }
+    }, [apiStatus.currentAPI]);
+
+
+
+
+
+    // get transcripts from localStorage or sessionStorage or redux
 
 
 
 
 
 
-
+    // according to controlStatus, display visualization or not
 
     return (
         <div>

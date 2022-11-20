@@ -104,7 +104,7 @@ export interface ControlStatus {
     textLanguage: LanguageList
     showFrequency: boolean
     showTimeData: boolean
-
+    showMFCC: boolean
 }
 /*
     Relating to visual aspects of the website the user can change

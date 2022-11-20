@@ -7,6 +7,7 @@ import { AzureRecognition } from './azure/azureRecognition';
 import { DisplayStatus, AzureStatus, StreamTextStatus, ControlStatus, ApiStatus } from '../../redux/types'
 import { LoungeVisual } from './visualization/loungeVisual'
 import { TimeDataVisual } from './visualization/timeDataVisual';
+import { MFCCVisual } from './visualization/mfccVisual';
 import { Draggable } from './visualization/DraggableFC';
 import { Resizable } from './visualization/Resizable';
 import StreamText from './streamtext/streamtextRecognition';
@@ -145,18 +146,33 @@ export const WebRecognitionExample: React.FC = (props) => {
           </ul>
         </div>
       );
+    } else if (stateRefControl.current.showMFCC) {
+      return (
+          <div>
+              <Draggable id="MFCC">
+		  <Resizable size="290px">
+		      <MFCCVisual></MFCCVisual>
+		  </Resizable>
+              </Draggable>
+              <ul >
+		  {fullTranscripts.map(transcript => (
+		      <h3 id = "captionsSpace" style = {{position: 'fixed', width: '90%', textAlign: 'left', left: '0', fontSize: textSizeA, paddingLeft: '5%', paddingRight: '60%', overflowY: 'scroll', height: '40%', color: textSize.textColor}}>{transcript}</h3>
+		  ))}
+              </ul>
+          </div>
+      );
     }
 
-    // not showing any visualization
-    return (
-      <div>
-        <ul >
-          {fullTranscripts.map(transcript => (
-            <h3 id = "captionsSpace" style = {{position: 'fixed', width: '90%', textAlign: 'left', left: '0', fontSize: textSizeA, paddingLeft: '5%', paddingRight: '60%', overflowY: 'scroll', height: '40%', color: textSize.textColor}}>{transcript}</h3>
-          ))}
-        </ul>
-      </div>
-    );
+      // not showing any visualization
+      return (
+	  <div>
+              <ul >
+		  {fullTranscripts.map(transcript => (
+		      <h3 id = "captionsSpace" style = {{position: 'fixed', width: '90%', textAlign: 'left', left: '0', fontSize: textSizeA, paddingLeft: '5%', paddingRight: '60%', overflowY: 'scroll', height: '40%', color: textSize.textColor}}>{transcript}</h3>
+		  ))}
+              </ul>
+	  </div>
+      );
   }
 
   return (

@@ -5,14 +5,14 @@ import { DisplayStatus, AzureStatus, ControlStatus, ApiStatus } from '../react-r
 
 import Swal from 'sweetalert2';
 
-import { useRecognition } from './api/web-speech/webSpeechRecognition';
-import { azureRecognition } from './api/azure/azureRecognition';
 import { LoungeVisual } from './api/visualization/loungeVisual'
 import { TimeDataVisual } from './api/visualization/timeDataVisual';
 import { Draggable } from './api/visualization/DraggableFC';
 import { Resizable } from './api/visualization/Resizable';
+import { returnRecogAPI } from './api/returnAPI';
 
-export default function STTRenderer() {
+// export default function STTRenderer() {
+export const STTRenderer : React.FC = (props) => {
     const dispatch = useDispatch();
     // use createSelector to memoize the selector
     const controlStatus = useSelector((state: RootState) => {
@@ -28,13 +28,21 @@ export default function STTRenderer() {
         return state.APIStatusReducer as ApiStatus
     })
 
-    // whenever api changes, we test first
-    useEffect(() => {
-        if (apiStatus.currentAPI == 1) { // test Azure
-            
+    const { useRecognition, recognition, recogHandler } = returnRecogAPI(apiStatus, controlStatus, azureStatus);
+    // const { transcripts, listen } = useRecognition(recognition);
 
+    // whenever api changes, we test first
+    // maybe we don't need to test it.
+    // only allowing one service to be active at a time
+    useEffect(() => {
+        // get recognition
+
+        if (apiStatus.currentAPI == 1) { // Azure
+            // test
             // get recognition
+            
             // start recognition
+            // useRecognition();
         } else if (apiStatus.currentAPI == 0) { // test WebSpeech
             
 
@@ -56,9 +64,11 @@ export default function STTRenderer() {
 
     // according to controlStatus, display visualization or not
 
+
+
+
     return (
         <div>
         </div>
     )
-
 }

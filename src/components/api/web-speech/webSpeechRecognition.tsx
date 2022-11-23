@@ -4,7 +4,7 @@ import { ControlStatus, ApiStatus } from '../../../react-redux&middleware/redux/
 import { useDispatch } from 'react-redux';
 import { makeEventBucket } from '../../../react-redux&middleware/react-middleware/thunkMiddleware';
 
-export const getWebSpeechRecognition = () => {
+export const getWebSpeechRecog = () => {
   if (!window || !(window as any).webkitSpeechRecognition) {
     throw new Error('Your browser does not support web speech recognition');
   }
@@ -15,16 +15,16 @@ export const getWebSpeechRecognition = () => {
   return speechRecognition as SpeechRecognition;
 };
 
-export const useRecognition = () => {
+export const useWebSpeechRecog = () => {
   const dispatch = useDispatch();
-  let transcript=""
-  let finalTranscript=""
+  let transcript="";
+  let finalTranscript="";
   const [transcripts, setTranscripts] = React.useState<string[]>([]);
   const listen = useCallback(
     async (transcriptsFull: string, control: React.MutableRefObject<ControlStatus>,  currentAPI: React.MutableRefObject<ApiStatus>) =>
       new Promise((resolve, reject) => {
         const lastStartedAt = new Date().getTime();
-        const speechRecognition = getWebSpeechRecognition();
+        const speechRecognition = getWebSpeechRecog();
 
         speechRecognition.onresult = (event: SpeechRecognitionEvent) => {
           if (control.current.listening == false || currentAPI.current.currentAPI != 0) {

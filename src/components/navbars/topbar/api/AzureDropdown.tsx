@@ -1,10 +1,15 @@
 import * as React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { ApiStatus, AzureStatus, ControlStatus } from '../../../../react-redux&middleware/redux/types';
+import { RootState } from '../../../../store';
+
 import swal from 'sweetalert';
 import { Box, TextField, List, ListItem } from '../../../../muiImports'
-import { GetAzureRecognition } from '../../../api/azure/azureRecognition';
-import { ApiStatus, AzureStatus, ControlStatus } from '../../../../react-redux&middleware/redux/types';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../../../store';
+
+import { GetuseAzureTranslRecog } from '../../../api/azure/azureRecognition';
+import { testAzureTranslRecog } from '../../../api/azure/azureTranslRecog';
+
+// import '../../swal.css';
 
 
 enum STATUS {
@@ -17,8 +22,15 @@ enum STATUS {
 
 export default function AzureDropdown(props) {
     const dispatch = useDispatch()
-    const { pog, test } = GetAzureRecognition();
+    // const { pog, test } = GetuseAzureTranslRecog();
 
+    // const azureStatus : AzureStatus = useSelector((state: RootState) => {
+    //     return state.AzureReducer as AzureStatus;
+    // });
+    // const controlStatus : ControlStatus = useSelector((state: RootState) => {
+    //     return state.ControlReducer as ControlStatus;
+    // });
+    // const apiStatus : ApiStatus = props.apiStatus;
     const [state, setState] = React.useState({
         azureStatus: useSelector((state: RootState) => {
             return state.AzureReducer as AzureStatus;
@@ -30,7 +42,7 @@ export default function AzureDropdown(props) {
     });
 
     const handleChangeKey = (event) => {
-        console.log("key change")
+        console.log("key change", event.target.id);
         let copyStatus = Object.assign({}, state.azureStatus);
         copyStatus[event.target.id] = event.target.value;
 
@@ -46,47 +58,43 @@ export default function AzureDropdown(props) {
     }
 
     const toggleEnter = async () => {
-        dispatch({type: 'FLIP_RECORDING', payload: state.controlStatus})
-            const recognizedMessage = await test(state.controlStatus, state.azureStatus).then(response => {  
-                let copyStatus = Object.assign({}, state.apiStatus);
-                if (response === true) {
-                    copyStatus.azureStatus = 0;
-                    localStorage.setItem("azureStatus", JSON.stringify(state.azureStatus))
-
-                    swal({
-                        title: "Success!",
-                        text: "Switching to Microsoft Azure",
-                        icon: "success", 
-                        timer: 1500,
-                        buttons: {
-                            no: { text: "Cancel", value: "no" },    
-                        },
-                    }).then((value) => {
-                        switch (value) {
-                            case "no":
-                                setState({ ...state })
-                                break;
-                            default:
-                                copyStatus.currentAPI = 1;
-                                dispatch({type: 'CHANGE_API_STATUS', payload: copyStatus})
-                        }
-                    });
-                    
-                    setState({ ...state, apiStatus: copyStatus});
-                } else {
-                    copyStatus.azureStatus = 2;   
-                    swal({
-                        title: "Warning!",
-                        text: "Wrong key or region!",
-                        icon: "warning",
-                    })
-
-                    setState({ ...state, apiStatus: copyStatus });     
+        dispatch({type: 'FLIP_RECORDING', payload: state.controlStatus});
+        let copyStatus = Object.assign({}, state.apiStatus);
+        testAzureTranslRecog(state.controlStatus, state.azureStatus).then(recognizer => { 
+            copyStatus.azureStatus = 0;
+            localStorage.setItem("azureStatus", JSON.stringify(state.azureStatus));
+            
+            swal({
+                title: "Success!",
+                text: "Switching to Microsoft Azure",
+                icon: "success", 
+                timer: 1500,
+                buttons: {
+                    no: { text: "Cancel", value: "no" },    
+                },
+            }).then((value) => {
+                switch (value) {
+                    case "no":
+                        // setState({ ...state }); // is it necessary?
+                        break;
+                    default:
+                        copyStatus.currentAPI = 1;
+                        dispatch({type: 'CHANGE_API_STATUS', payload: copyStatus});
                 }
+            });
+            
+            setState({ ...state, apiStatus: copyStatus});
+        }, (error)=> {
+            copyStatus.azureStatus = 2;   
+                swal({
+                    title: "Warning!",
+                    text: `${error}`,
+                    icon: "warning",
+                })
 
-                dispatch({type: 'CHANGE_API_STATUS', payload: copyStatus})
-            }
-        );  
+                setState({ ...state, apiStatus: copyStatus });  
+        });
+        dispatch({type: 'CHANGE_API_STATUS', payload: copyStatus});
         dispatch({type: 'FLIP_RECORDING', payload: state.controlStatus})
     }
     

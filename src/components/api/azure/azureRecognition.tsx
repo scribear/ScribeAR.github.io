@@ -5,7 +5,50 @@ import { ControlStatus, AzureStatus, ApiStatus, PhraseList } from '../../../reac
 
 import * as speechSDK from 'microsoft-cognitiveservices-speech-sdk';
 
-export const GetAzureRecognition = () => {
+export const testAzure = (azure : AzureStatus, control : ControlStatus, mic : number = 0) => new Promise((resolve, reject) => {
+  try {
+    const speechConfig = speechSDK.SpeechTranslationConfig.fromSubscription(azure.azureKey, azure.azureRegion);
+    speechConfig.speechRecognitionLanguage = control.speechLanguage.CountryCode;
+    speechConfig.addTargetLanguage(control.textLanguage.CountryCode);
+    let audioConfig : speechSDK.AudioConfig;
+    if (mic === 0) {
+      audioConfig = speechSDK.AudioConfig.fromDefaultMicrophoneInput();
+    } else {
+      throw("Custom Mic Not Implemented!");
+    }
+    const recognizer = new speechSDK.TranslationRecognizer(speechConfig, audioConfig);
+    recognizer.recognized = () => {
+      // if (e.result.reason === speechSDK.ResultReason.RecognizedSpeech) {
+      //   console.log(`RECOGNIZED: Text=${e.result.text}`);
+      // } else if (e.result.reason === speechSDK.ResultReason.NoMatch) {
+      //   console.log('NOMATCH: Speech could not be recognized.');
+      // }
+      resolve(true);
+    };
+    recognizer.canceled = () => {
+      // console.log(`CANCELED: Reason=${e.reason}`);
+      // if (e.reason === speechSDK.CancellationReason.Error) {
+      //   console.log(`"CANCELED: ErrorCode=${e.errorCode}`);
+      //   console.log(`"CANCELED: ErrorDetails=${e.errorDetails}`);
+      //   console.log('CANCELED: Did you update the subscription info?');
+      // }
+      resolve(false);
+    };
+    // recognizer.sessionStopped = (s, e) => {
+    //   console.log('\n    Session stopped event.');
+    //   resolve(false);
+    // };
+    recognizer.sessionStarted = () => {
+      resolve(true);
+    };
+    recognizer.recognizeOnceAsync();
+  } catch (e) {
+    console.log(e);
+    reject(e);
+  }
+});
+
+export const GetuseAzureTranslRecog = () => {
   const pog = "hi"
   const test = useCallback(
     async (control: ControlStatus, azureStatus: AzureStatus) => new Promise((resolve, reject) => {
@@ -31,12 +74,12 @@ export const GetAzureRecognition = () => {
   return useMemo(() => ({ pog, test }), [pog]);
 };
 
-export const getAzure = async (control: ControlStatus, azureStatus: AzureStatus) => new Promise((resolve, reject) => {
-  let azureSpeech = speechSDK.SpeechTranslationConfig.fromSubscription(azureStatus.azureKey, azureStatus.azureRegion)
-  azureSpeech.speechRecognitionLanguage = control.speechLanguage.CountryCode;
-  azureSpeech.addTargetLanguage(control.textLanguage.CountryCode)
-  let azureAudioConfig = speechSDK.AudioConfig.fromDefaultMicrophoneInput();
-  let reco = new speechSDK.TranslationRecognizer(azureSpeech, azureAudioConfig);
+export const getAzureTranslRecog = async (control: ControlStatus, azureStatus: AzureStatus) => new Promise((resolve, reject) => {
+  let speechConfig = speechSDK.SpeechTranslationConfig.fromSubscription(azureStatus.azureKey, azureStatus.azureRegion)
+  speechConfig.speechRecognitionLanguage = control.speechLanguage.CountryCode;
+  speechConfig.addTargetLanguage(control.textLanguage.CountryCode)
+  let audioConfig = speechSDK.AudioConfig.fromDefaultMicrophoneInput();
+  let reco = new speechSDK.TranslationRecognizer(speechConfig, audioConfig);
   reco.canceled = () => {
     resolve(false);
   }
@@ -46,10 +89,10 @@ export const getAzure = async (control: ControlStatus, azureStatus: AzureStatus)
   reco.recognizeOnceAsync();
 })
 
-export const azureRecognition = () => {
-  const controlStatus = useSelector((state: RootState) => {
-    return state.ControlReducer as ControlStatus;
-})
+export const useAzureTranslRecog = () => {
+  // const controlStatus = useSelector((state: RootState) => {
+  //   return state.ControlReducer as ControlStatus;
+  // })
   let transcript = ""
   const [azureTranscripts, setTranscripts] = React.useState<string[]>([]);
   // const [stopThis] = React.useState<Function>()
@@ -57,8 +100,7 @@ export const azureRecognition = () => {
     async (transcriptsFull: string, control: React.MutableRefObject<ControlStatus>, azureStatus: React.MutableRefObject<AzureStatus>, currentAPI: React.MutableRefObject<ApiStatus>) =>
       new Promise((resolve, reject) => {
         try {
-          let STOPAW = false
-          // console.log("HELLO")
+          let STOPAW = false;
           let lastStartedAt = new Date().getTime();
           let textLanguage = control.current.textLanguage
           let azureSpeech = speechSDK.SpeechTranslationConfig.fromSubscription(azureStatus.current.azureKey, azureStatus.current.azureRegion)

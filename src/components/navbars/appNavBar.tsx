@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useSelector } from 'react-redux';
-import { ApiStatus, RootState, DisplayStatus, ControlStatus } from '../../react-redux&middleware/redux/types';
+import { ApiStatus, RootState, DisplayStatus, ControlStatus } from '../../react-redux&middleware/redux/typesImports';
 import { createTheme, ThemeProvider, IconButton, MenuIcon, Drawer, Grid, AppBar, Toolbar } from '../../muiImports'
 
 import SideBar from './sidebar/sidebar'
@@ -28,12 +28,10 @@ export default function AppNavBar(props) {
 
 
     let display = "Webspeech"
-    if (apiStatus.currentAPI == 1) {
-        display = "Azure"
-    } else if (apiStatus.currentAPI == 2) {
-        display = "StreamText"
-    } else {
-        display = "Webspeech"
+    if (apiStatus.currentApi == 1) {
+        display = "Azure";
+    } else if (apiStatus.currentApi == 0) {
+        display = "Webspeech";
     }
     const myTheme = currTheme
 

@@ -1,7 +1,7 @@
 import React, { } from 'react'
 import { RootState } from '../../../../store';
 import { useDispatch, useSelector } from 'react-redux';
-import { ControlStatus } from '../../../../react-redux&middleware/redux/types';
+import { ControlStatus } from '../../../../react-redux&middleware/redux/typesImports';
 import Theme from '../../../theme'
 import { ThemeProvider, Switch } from '../../../../muiImports'
 

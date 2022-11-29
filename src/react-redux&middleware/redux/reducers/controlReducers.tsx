@@ -1,4 +1,4 @@
-import { ControlStatus } from "../types";
+import { ControlStatus } from "../typesImports";
 
 const initialControlState : ControlStatus = {
     listening: true,

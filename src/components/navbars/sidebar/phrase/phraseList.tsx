@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { List, ListItem, TextField, Paper, InputBase, Menu, ClearIcon, EditIcon, IconButton, ListItemText } from '../../../../muiImports';
 import './phrase.css'
-import { PhraseList } from '../../../../react-redux&middleware/redux/types';
+import { PhraseList } from '../../../../react-redux&middleware/redux/typesImports';
 import { useDispatch } from 'react-redux';
 
 /* todo:

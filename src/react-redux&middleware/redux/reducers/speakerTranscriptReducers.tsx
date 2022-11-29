@@ -1,4 +1,4 @@
-import { Speaker, Transcript, AllSpeakerTranscript } from "../types";
+import { Speaker, OldTranscript, AllSpeakerTranscript } from "../types/TranscriptTypes";
 
 enum S_STATUS {
     "NORMAL", // or "N", // normal
@@ -18,13 +18,13 @@ const initialSpeaker: Speaker = {
     role: S_ROLE.HOST
 }
 
-const initialTranscript: Transcript = {
+const initialTranscript: OldTranscript = {
     // text: new Map<number, string>([[Number(0), ""]]),
     text: Array([0, ""]),
     lastTime: -1
 }
 
-const initial_speaker_transcript = new Map<string, Transcript>();
+const initial_speaker_transcript = new Map<string, OldTranscript>();
 initial_speaker_transcript.set(
     initialSpeaker.speakerId, initialTranscript
 )
@@ -141,7 +141,7 @@ export const SpeakerTranscriptReducer = (state = getLocalState("speakerTranscrip
         case 'NEW_APPEND':
             let cur_speaker_id = action.payload.speakerId
             var new_state = {...state, lastUpdateTime: action.payload.curTime}
-            if (new_state.speakerTranscript.get(cur_speaker_id).text[0] == [0, ""]) {
+            if (new_state.speakerTranscript.get(cur_speaker_id).text[0] === Array<[number, string]>([0, ""])) {
                 new_state.speakerTranscript.get(cur_speaker_id).text = [action.payload.curTime, action.payload.final]
             } else {
                 new_state.speakerTranscript.get(cur_speaker_id).text.push([action.payload.curTime, action.payload.final])

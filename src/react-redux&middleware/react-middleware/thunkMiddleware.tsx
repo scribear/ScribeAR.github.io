@@ -1,4 +1,7 @@
+import { batch } from "react-redux";
+
 import { MainStreamMap } from "../redux/types/bucketStreamTypes";
+
 
 /* Save to sessionStorage so that it is cleared when refreshed */
 const saveSessionly = (varName: string, value: any) => {
@@ -52,11 +55,9 @@ export function makeEventBucket(object: BucketArgs) {
 
             for (let i = 0; i < value.length; i++) {
                 const speechResult = value[i];
-                if (speechResult.isFinal) {
-                    // console.log("is final");
-                    // finalArr.push({transcript: value, confidence: number,})
+                if (speechResult.isFinal) { // final
                     finalArr.push(speechResult[0]);
-                } else {
+                } else { // not final
                     notFinalArr.push(speechResult[0]);
                 }
             }
@@ -70,9 +71,9 @@ export function makeEventBucket(object: BucketArgs) {
 
                 // Also append final transcripts to sessionStorage
 
-                const curSessionSpeech = getSessionState('html5STT');
-                const finalSpeech = finalArr.map(fSpeech => fSpeech.transcript).join('');
-                saveSessionly('html5STT', curSessionSpeech + finalSpeech);
+                // const curSessionSpeech = getSessionState('html5STT');
+                // const finalSpeech = finalArr.map(fSpeech => fSpeech.transcript).join('');
+                // saveSessionly('html5STT', curSessionSpeech + finalSpeech);
                 console.log("New html5 stream created; sessionStorage updated!");
             }
 
@@ -81,10 +82,16 @@ export function makeEventBucket(object: BucketArgs) {
             //     payload: {curTime: curTime, fArr: finalArr, nfArr: notFinalArr}, 
             //     newMainStream: newMainStream
             // });
-            dispatch({
-                type: 'APPEND_HTML5_STT_STREAM', 
-                payload: {curTime: curTime, fArr: finalArr, nfArr: notFinalArr}, 
-                newMainStream: newMainStream
+            batch(() => {
+                dispatch({
+                    type: 'APPEND_HTML5_STT_STREAM', 
+                    payload: {curTime: curTime, fArr: finalArr, nfArr: notFinalArr}, 
+                    newMainStream: newMainStream
+                });
+                dispatch({
+                    type: 'RECOGNIZED',
+                    payload: {fArr: finalArr, nfArr: notFinalArr},
+                });
             });
         } else if (stream === 'azure') {
     

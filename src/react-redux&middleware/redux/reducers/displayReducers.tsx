@@ -1,4 +1,4 @@
-import { DisplayStatus } from "../types";
+import { DisplayStatus } from "../typesImports";
 enum COLOR {
   "BLACK",
   "WHITE",

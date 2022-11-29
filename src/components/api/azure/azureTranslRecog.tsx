@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store';
-import { ControlStatus, AzureStatus, ApiStatus, PhraseList, Transcript } from '../../../react-redux&middleware/redux/types';
+import { ControlStatus, AzureStatus, ApiStatus, PhraseList } from '../../../react-redux&middleware/redux/typesImports';
 
 import * as speechSDK from 'microsoft-cognitiveservices-speech-sdk';
 
@@ -61,14 +61,14 @@ export const testAzureTranslRecog = async (control: ControlStatus, azure: AzureS
 });
 
 /**
- * @param recognizer : speechSDK.TranslationRecognizer
+ * @param recognizer speechSDK.TranslationRecognizer
  * @returns [string[], recognizer, start function]
  */
 export const useAzureTranslRecog = (recognizer : speechSDK.TranslationRecognizer) => {
   let transcript = "";
   const [azureTranscripts, setTranscripts] = React.useState<string[]>([]);
   const azureListen = useCallback(
-    async (transcriptsFull: string, control: React.MutableRefObject<ControlStatus>, azureStatus: React.MutableRefObject<AzureStatus>, currentAPI: React.MutableRefObject<ApiStatus>) =>
+    async (transcriptsFull: string, control: React.MutableRefObject<ControlStatus>, azureStatus: React.MutableRefObject<AzureStatus>, currentApi: React.MutableRefObject<ApiStatus>) =>
       new Promise<string>((resolve, reject) => {
         try {
           // add phrase list to recognizer
@@ -76,10 +76,10 @@ export const useAzureTranslRecog = (recognizer : speechSDK.TranslationRecognizer
           for (let i = 0; i < azureStatus.current.phrases.length; i++) {
             phraseList.addPhrase(azureStatus.current.phrases[i]);
           }
-
+          
           const lastStartedAt = new Date().getTime();
           const textLanguage = control.current.textLanguage;
-          if (control.current.listening == false || currentAPI.current.currentAPI != 1) {
+          if (control.current.listening == false || currentApi.current.currentApi != 1) {
             console.log("STOPPED AZURE RECOG");
             recognizer.stopContinuousRecognitionAsync();
             resolve(transcriptsFull);
@@ -87,8 +87,8 @@ export const useAzureTranslRecog = (recognizer : speechSDK.TranslationRecognizer
           let lastRecognized = "";
           recognizer.startContinuousRecognitionAsync();
           recognizer.recognizing = (s, e) => {
-            if (control.current.listening == false || currentAPI.current.currentAPI != 1) {
-              console.log("STOPPED")
+            if (control.current.listening == false || currentApi.current.currentApi != 1) {
+              console.log("STOPPED");
               recognizer.stopContinuousRecognitionAsync();
               resolve(transcriptsFull);
             } else {
@@ -98,7 +98,7 @@ export const useAzureTranslRecog = (recognizer : speechSDK.TranslationRecognizer
             }
           };
           recognizer.recognized = (s, e) => {
-            if (control.current.listening == false || currentAPI.current.currentAPI != 1) {
+            if (control.current.listening == false || currentApi.current.currentApi != 1) {
               recognizer.stopContinuousRecognitionAsync();
               resolve(transcriptsFull);
             } else {
@@ -112,7 +112,7 @@ export const useAzureTranslRecog = (recognizer : speechSDK.TranslationRecognizer
           }
           recognizer.sessionStopped = (s, e) => {
             const timeSinceStart = new Date().getTime() - lastStartedAt;
-            if (control.current.listening == false || currentAPI.current.currentAPI != 1) {
+            if (control.current.listening == false || currentApi.current.currentApi != 1) {
               resolve(transcriptsFull);
             } else {
               if (timeSinceStart > 1000) {

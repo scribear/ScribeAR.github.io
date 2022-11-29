@@ -1,7 +1,7 @@
 import React from 'react';
 
 import AppNavBar from '../components/navbars/appNavBar';
-import { RootState } from '../react-redux&middleware/redux/types';
+import { RootState } from '../react-redux&middleware/redux/typesImports';
 import { WebRecognitionExample } from '../components/api/recogComponent';
 import { Provider, useDispatch, useSelector} from 'react-redux';
 import { store } from '../store';

@@ -1,32 +1,19 @@
-import { ApiStatus, AzureStatus, StreamTextStatus, PhraseList, PhraseListStatus } from "../types";
-enum APIS {
-  "WEBSPEECH",
-  "AZURE",
-  "STREAMTEXT"
-}
-enum STATUS {
-  "AVAILABLE",
-  "NULL",
-  "UNAVAILABLE",
-  "INPROGRESS",
-  "ERROR"
-}
+import { ApiStatus, AzureStatus, PhraseList, PhraseListStatus } from "../typesImports";
+import { API, STATUS } from '../types/apiEnums';
 
 
 const initialAPIStatusState: ApiStatus = {
-  currentAPI: APIS.WEBSPEECH,
+  currentApi: API.WEBSPEECH,
   webspeechStatus: STATUS.AVAILABLE,
-  azureStatus: STATUS.NULL,
-  streamtextStatus: STATUS.NULL,
+  azureTranslStatus: STATUS.NULL,
+  azureConvoStatus: STATUS.NULL,
 }
-
 
 const initialPhraseList: PhraseList = {
   phrases: [],
   name: "None",
   availableSpace: -1
 }
-
 
 const initialPhraseListState: PhraseListStatus = {
   currentPhraseList: initialPhraseList,
@@ -37,10 +24,6 @@ const initialAzureState: AzureStatus = {
   azureKey: "Enter",
   azureRegion: "Enter",
   phrases: [""]
-}
-
-const initialStreamtextState: StreamTextStatus = {
-  streamTextKey: "Enter"
 }
 
 const saveLocally = (varName: string, value: any) => {
@@ -62,11 +45,11 @@ const getLocalState = (name: string) => {
 
 export const APIStatusReducer = (state = getLocalState("apiStatus"), action) => {
   switch (action.type) {
-    case 'CHANGE_CURRENT_API':
+    case 'CHANGE_CURRENT_API': // never called
       return { ...state, ...action.payload };
     case 'CHANGE_API_STATUS':
-      if (action.payload.azureStatus == 0 || action.payload.currentAPI !== state.currentAPI) {
-        saveLocally("apiStatus", action.payload)
+      if (action.payload.azureTranslStatus == STATUS.AVAILABLE || action.payload.currentApi !== state.currentApi) {
+        saveLocally("apiStatus", action.payload);
       }
       return { ...state, ...action.payload };
     default:
@@ -83,15 +66,6 @@ export const AzureReducer = (state = getLocalState("azureStatus"), action) => {
     case 'CHANGE_LIST':
       return { ...state, 
                phrases: action.payload }
-    default:
-      return state;
-  }
-}
-export const StreamTextReducer = (state = initialStreamtextState, action) => {
-  switch (action.type) {
-    case 'CHANGE_STREAMTEXT_LOGIN':
-      return { ...state,
-                streamTextKey: action.payload};
     default:
       return state;
   }

@@ -55,6 +55,7 @@ export type MainStream = {
 };
 
 export type MainStreamMap = {
+    transcripts : string[], // each index is a different user
     curMSST: number, // last MainStream startTime
     timeInterval: number, // time interval of each MainStream
     map: Map<number, MainStream>

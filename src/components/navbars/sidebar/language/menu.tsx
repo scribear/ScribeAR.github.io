@@ -2,7 +2,7 @@ import React from 'react';
 
 import { List, ListItemText, Collapse, MessageIcon, ListItem } from '../../../../muiImports'
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState, ControlStatus, LanguageList } from '../../../../react-redux&middleware/redux/types';
+import { RootState, ControlStatus, LanguageList } from '../../../../react-redux&middleware/redux/typesImports';
 import ChooseLanguage from './chooseLanguage'
 
 const speechLanguages = [

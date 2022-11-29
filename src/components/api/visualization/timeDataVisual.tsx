@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react'
-import { DisplayStatus, ControlStatus } from '../../../react-redux&middleware/redux/types';
+import { DisplayStatus, ControlStatus } from '../../../react-redux&middleware/redux/typesImports';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store';
 

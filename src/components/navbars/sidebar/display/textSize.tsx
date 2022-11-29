@@ -1,7 +1,7 @@
 
 import Slider, { SliderThumb } from '@mui/material/Slider';
 import { Grid, makeStyles, Typography } from '../../../../muiImports'
-import { RootState, DisplayStatus } from '../../../../react-redux&middleware/redux/types';
+import { RootState, DisplayStatus } from '../../../../react-redux&middleware/redux/typesImports';
 import { useDispatch, useSelector } from 'react-redux';
 const useStyles = makeStyles({
   slider: {

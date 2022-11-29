@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store';
-import { ControlStatus, AzureStatus, ApiStatus, PhraseList } from '../../../react-redux&middleware/redux/types';
+import { ControlStatus, AzureStatus, ApiStatus, PhraseList } from '../../../react-redux&middleware/redux/typesImports';
 
 import * as speechSDK from 'microsoft-cognitiveservices-speech-sdk';
 
@@ -97,7 +97,7 @@ export const useAzureTranslRecog = () => {
   const [azureTranscripts, setTranscripts] = React.useState<string[]>([]);
   // const [stopThis] = React.useState<Function>()
   const azureListen = useCallback(
-    async (transcriptsFull: string, control: React.MutableRefObject<ControlStatus>, azureStatus: React.MutableRefObject<AzureStatus>, currentAPI: React.MutableRefObject<ApiStatus>) =>
+    async (transcriptsFull: string, control: React.MutableRefObject<ControlStatus>, azureStatus: React.MutableRefObject<AzureStatus>, currentApi: React.MutableRefObject<ApiStatus>) =>
       new Promise((resolve, reject) => {
         try {
           let STOPAW = false;
@@ -116,7 +116,7 @@ export const useAzureTranslRecog = () => {
             phraseList.addPhrase(azureStatus.current.phrases[i])
 
           }
-          if (control.current.listening == false || currentAPI.current.currentAPI != 1) {
+          if (control.current.listening == false || currentApi.current.currentApi != 1) {
             console.log("STOPPED AZURE RECOG");
             
             speechRecognition.stopContinuousRecognitionAsync();
@@ -126,7 +126,7 @@ export const useAzureTranslRecog = () => {
           let lastRecognized = ""
           speechRecognition.startContinuousRecognitionAsync();
           speechRecognition.recognizing = (s, e) => {
-            if (control.current.listening == false || currentAPI.current.currentAPI != 1) {
+            if (control.current.listening == false || currentApi.current.currentApi != 1) {
               console.log("STOPPED")
               speechRecognition.stopContinuousRecognitionAsync()
               resolve(transcriptsFull);
@@ -137,7 +137,7 @@ export const useAzureTranslRecog = () => {
             }
           };
           speechRecognition.recognized = (s, e) => {
-            if (control.current.listening == false || currentAPI.current.currentAPI != 1) {
+            if (control.current.listening == false || currentApi.current.currentApi != 1) {
               speechRecognition.stopContinuousRecognitionAsync()
               resolve(transcriptsFull);
             } else {
@@ -152,7 +152,7 @@ export const useAzureTranslRecog = () => {
           }
           speechRecognition.sessionStopped = (s, e) => {
             const timeSinceStart = new Date().getTime() - lastStartedAt;
-            if (STOPAW == true || control.current.listening == false || currentAPI.current.currentAPI != 1) {
+            if (STOPAW == true || control.current.listening == false || currentApi.current.currentApi != 1) {
               resolve(transcriptsFull);
             } else if (timeSinceStart > 1000) {
               speechRecognition.startContinuousRecognitionAsync()

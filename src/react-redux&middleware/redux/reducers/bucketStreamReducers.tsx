@@ -71,6 +71,7 @@ const defaultMainStreamMap = (timeInterval = 100000) => {
     const mainStreamTime = defaultMainStream();
 
     const mainStreamMap : MainStreamMap = {
+        transcripts: [],
         curMSST: mainStreamTime.curTime,
         timeInterval: timeInterval, // 1000 seconds
         map: new Map([[mainStreamTime.curTime, mainStreamTime.mainStream]]),
@@ -80,25 +81,25 @@ const defaultMainStreamMap = (timeInterval = 100000) => {
 }
 // ============================================== \\
 
-/* Save to sessionStorage so that it is cleared when refreshed */
-const saveSessionly = (varName: string, value: any) => {
-    sessionStorage.setItem(varName, JSON.stringify(value));
-    // defaultMainStream();
-}
+// /* Save to sessionStorage so that it is cleared when refreshed */
+// const saveSessionly = (varName: string, value: any) => {
+//     sessionStorage.setItem(varName, JSON.stringify(value));
+//     // defaultMainStream();
+// }
 
-const getSessionState = (varName: string) => {
-    let checkNull = sessionStorage.getItem(varName)
-    if (checkNull) {
-        return JSON.parse(checkNull);
-    } else {
-        if (varName === "streams") {
-            const mainStreamMap = defaultMainStreamMap();
-            saveSessionly("streams", mainStreamMap);
-            return mainStreamMap;
-        }
-    }
-};
-  
+// const getSessionState = (varName: string) => {
+//     let checkNull = sessionStorage.getItem(varName)
+//     if (checkNull) {
+//         return JSON.parse(checkNull);
+//     } else {
+//         if (varName === "streams") {
+//             const mainStreamMap = defaultMainStreamMap();
+//             saveSessionly("streams", mainStreamMap);
+//             return mainStreamMap;
+//         }
+//     }
+// };
+
 // export const BucketStreamReducer = (state = getSessionState("streams"), action) => {
 export const BucketStreamReducer = (state = defaultMainStreamMap(), action : {type: string; payload: any; newMainStream: boolean;}) => {
     let copyState : MainStreamMap = Object.assign({}, state);
@@ -137,20 +138,19 @@ export const BucketStreamReducer = (state = defaultMainStreamMap(), action : {ty
             let curHTML5Stream : HTML5STTStream = copyState.map.get(state.curMSST)!.HTML5STTStream!;
 
             // we first complete the last bucket in the current stream
-            if (curHTML5Stream.length == 0) {throw "HTML5Stream length 0!"};
+            if (curHTML5Stream.length == 0) { throw("HTML5Stream length 0!"); };
             curHTML5Stream[curHTML5Stream.length - 1]!.endTime = action.payload.curTime;
             curHTML5Stream[curHTML5Stream.length - 1]!.finalTranscript = action.payload.fArr;
             curHTML5Stream[curHTML5Stream.length - 1]!.notFinalTranscript = action.payload.nfArr;
 
+            // check if need to add a new MainStream
             if (action.newMainStream) { // add a new MainStream
                 const time = action.payload.curTime;
                 copyState.curMSST = time;
                 copyState.map.set(time, defaultMainStream(time).mainStream);
                 return copyState;
             } else if (!action.newMainStream) { // just add a bucket at the end
-                // return [{
-                //     ...state,
-                // }]
+                // return [{ ...state, }];
                 curHTML5Stream.push({
                     startTime: action.payload.curTime,
                     endTime: 0,

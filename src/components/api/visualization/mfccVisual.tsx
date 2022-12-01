@@ -13,16 +13,14 @@ var rafId: number;
 var canvas: HTMLCanvasElement;
 var canvasCtx: CanvasRenderingContext2D;
 
-var color: string | CanvasGradient | CanvasPattern;
+var theme: DisplayStatus;
 
 export function MFCCVisual(props: any) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
-  const theme = useSelector((state: RootState) => {
+  theme = useSelector((state: RootState) => {
     return state.DisplayReducer as DisplayStatus;
   });
-
-  color = theme.textColor;
 
   useEffect(() => {
     audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -70,9 +68,9 @@ export function MFCCVisual(props: any) {
     const sliceWidth = canvas.width / dataArray.length;
     dataArray.forEach((data, i) => {
       if (data > 0) {
-	canvasCtx.fillStyle = 'ForestGreen';
+	canvasCtx.fillStyle = theme.textColor;
       } else {
-	canvasCtx.fillStyle = 'Maroon';
+	canvasCtx.fillStyle = theme.secondaryColor;
       }
       canvasCtx.fillRect(i * sliceWidth, canvas.height / 2, sliceWidth, -data);
     });

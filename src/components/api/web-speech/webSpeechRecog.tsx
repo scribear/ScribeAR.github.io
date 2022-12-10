@@ -12,7 +12,7 @@ export const getWebSpeechRecog = (control : ControlStatus) => new Promise<Speech
          throw new Error('Your browser does not support web speech recognition');
       }
       const speechRecognition : SpeechRecognition = new (window as any).webkitSpeechRecognition();
-      console.log(typeof speechRecognition);
+      // console.log(typeof speechRecognition);
       speechRecognition.continuous = true;
       speechRecognition.interimResults = true;
       speechRecognition.lang = control.speechLanguage.CountryCode;

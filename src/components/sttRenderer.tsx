@@ -14,16 +14,17 @@ import { Resizable } from './api/visualization/Resizable';
 import { returnRecogAPI, useRecognition } from './api/returnAPI';
 
 // export default function STTRenderer() {
-export const STTRenderer : React.FC = (props) => {
-    const dispatch = useDispatch();
+// export const STTRenderer : React.FC = (props) => {
+export const STTRenderer = async () => {
+    // const dispatch = useDispatch();
     // use createSelector to memoize the selector
     // rerender if any subscribed state changes
     const controlStatus = useSelector((state: RootState) => {
         return state.ControlReducer as ControlStatus;
     });
-    const displayStatus = useSelector((state: RootState) => {
-        return state.DisplayReducer as DisplayStatus;
-    });
+    // const displayStatus = useSelector((state: RootState) => {
+    //     return state.DisplayReducer as DisplayStatus;
+    // });
     const azureStatus = useSelector((state: RootState) => {
         return state.AzureReducer as AzureStatus;
     })
@@ -35,26 +36,35 @@ export const STTRenderer : React.FC = (props) => {
     })
 
 
-    const { transcript, resetTranscript, recogHandler } = useRecognition(sRecog, apiStatus, controlStatus, azureStatus);
-
-    // whenever api changes, we test first
-    // maybe we don't need to test it.
-    // only allowing one service to be active at a time
-    useEffect(() => {
-        // recogHandler(action={type: 'START'});
+    
 
 
 
-        // if (apiStatus.currentApi == 0) { // WebSpeech
+
+
+    const { transcript } = await useRecognition(sRecog, apiStatus, controlStatus, azureStatus);
+    console.log('40', transcript);
+
+    return transcript;
+
+    // // whenevers api changes, we test first
+    // // maybe we don't need to test it.
+    // // only allowing one service to be active at a time
+    // useEffect(() => {
+    //     // recogHandler(action={type: 'START'});
+
+
+
+    //     // if (apiStatus.currentApi == 0) { // WebSpeech
             
-        //     // start recognition
-        //     // useRecognition();
-        // } else if (apiStatus.currentApi == 1) { // Azure TranslationRecognizer
-        //     // start recognition
-        // }
+    //     //     // start recognition
+    //     //     // useRecognition();
+    //     // } else if (apiStatus.currentApi == 1) { // Azure TranslationRecognizer
+    //     //     // start recognition
+    //     // }
 
         
-    }, [apiStatus.currentApi, controlStatus.listening]);
+    // }, [apiStatus.currentApi, controlStatus.listening]);
 
 
 
@@ -72,8 +82,8 @@ export const STTRenderer : React.FC = (props) => {
 
 
 
-    return (
-        <div>
-        </div>
-    )
+    // return (
+    //     <div>
+    //     </div>
+    // )
 }

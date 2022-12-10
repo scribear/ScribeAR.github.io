@@ -80,7 +80,8 @@ export const TranscriptReducer = (state = defaultTranscript(), action : {type: s
       case 'REMOVE_SPEAKER':
          throw new Error('REMOVE_SPEAKER Not implemented');
       default:
-         throw new Error('Default Not implemented');
+         return state;
+         // throw new Error('Default Not implemented');
          break;
 
 

@@ -1,6 +1,6 @@
-import * as React from 'react';
-import { useWebSpeechRecog } from './web-speech/webSpeechRecognition';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useWebSpeechRecog } from './web-speech/webSpeechRecognition';
 import Swal from 'sweetalert2';
 import { RootState } from '../../store';
 import { useAzureTranslRecog } from './azure/azureRecognition';
@@ -9,6 +9,8 @@ import { LoungeVisual } from './visualization/loungeVisual'
 import { TimeDataVisual } from './visualization/timeDataVisual';
 import { Draggable } from './visualization/DraggableFC';
 import { Resizable } from './visualization/Resizable';
+
+import { STTRenderer } from '../sttRenderer';
 var transcriptsFull = "testing"
 let desiredAPI = 0;
 
@@ -26,7 +28,9 @@ export const WebRecognitionExample: React.FC = (props) => {
   const apiStatus = useSelector((state: RootState) => {
     return state.APIStatusReducer as ApiStatus
   })
-  React.useEffect(() => {
+  const ad = STTRenderer();
+  // useEffect(() => STTRenderer(), [])
+  useEffect(() => {
     if (control.listening == true) {
       if (apiStatus.currentApi == 0) {
         desiredAPI = 0

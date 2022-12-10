@@ -3,7 +3,7 @@ import { APIStatusReducer, AzureReducer, PhraseListReducer } from './react-redux
 import { ControlReducer } from './react-redux&middleware/redux/reducers/controlReducers'
 import { BucketStreamReducer } from './react-redux&middleware/redux/reducers/bucketStreamReducers'
 import { TranscriptReducer } from './react-redux&middleware/redux/reducers/transcriptReducers'
-import { SRecognitionReducer } from './react-redux&middleware/redux/reducers/recogReducers'
+import { SRecognitionReducer } from './react-redux&middleware/redux/reducers/sRecognitionReducers'
 
 import { combineReducers, createStore } from 'redux'
 import { configureStore } from '@reduxjs/toolkit'

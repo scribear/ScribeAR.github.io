@@ -7,15 +7,12 @@ import {
 
 import Swal from 'sweetalert2';
 
-import { LoungeVisual } from './api/visualization/loungeVisual'
-import { TimeDataVisual } from './api/visualization/timeDataVisual';
-import { Draggable } from './api/visualization/DraggableFC';
-import { Resizable } from './api/visualization/Resizable';
 import { returnRecogAPI, useRecognition } from './api/returnAPI';
+import { AudioVis } from './api/visualization/audioVis';
 
 // export default function STTRenderer() {
 // export const STTRenderer : React.FC = (props) => {
-export const STTRenderer = async () => {
+export const STTRenderer = () : JSX.Element => {
     // const dispatch = useDispatch();
     // use createSelector to memoize the selector
     // rerender if any subscribed state changes
@@ -40,50 +37,20 @@ export const STTRenderer = async () => {
 
 
 
+    const { transcript } = useRecognition(sRecog, apiStatus, controlStatus, azureStatus);
+    console.log('40', transcript);
 
-
-    const { transcript } = await useRecognition(sRecog, apiStatus, controlStatus, azureStatus);
-    // console.log('40', transcript);
-
-    return transcript;
-
-    // // whenevers api changes, we test first
-    // // maybe we don't need to test it.
-    // // only allowing one service to be active at a time
-    // useEffect(() => {
-    //     // recogHandler(action={type: 'START'});
-
-
-
-    //     // if (apiStatus.currentApi == 0) { // WebSpeech
-            
-    //     //     // start recognition
-    //     //     // useRecognition();
-    //     // } else if (apiStatus.currentApi == 1) { // Azure TranslationRecognizer
-    //     //     // start recognition
-    //     // }
-
-        
-    // }, [apiStatus.currentApi, controlStatus.listening]);
+    // return transcript;
 
 
 
 
-
-    // get transcripts from localStorage or sessionStorage or redux
-
-
-
-
-
-
-    // according to controlStatus, display visualization or not
-
-
-
-
-    // return (
-    //     <div>
-    //     </div>
-    // )
+    return (
+        <div>
+            <AudioVis></AudioVis>
+          <ul >
+            {transcript}
+          </ul>
+        </div>
+    );
 }

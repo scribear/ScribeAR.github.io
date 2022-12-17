@@ -236,7 +236,7 @@ export const makeRecognition = (currentApi: number) => {
  * 
  * @return transcripts, resetTranscript, recogHandler
  */
-export const useRecognition = async (sRecog : SRecognition, api : ApiStatus, control : ControlStatus, azure : AzureStatus) => {
+export const useRecognition = (sRecog : SRecognition, api : ApiStatus, control : ControlStatus, azure : AzureStatus) => {
 
 
    let recognizer : ScribeRecognizer = sRecog.recognizer;

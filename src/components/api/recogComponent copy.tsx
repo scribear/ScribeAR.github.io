@@ -15,7 +15,7 @@ import { useRecognition } from './returnAPI';
 var transcriptsFull = "testing"
 let desiredAPI = 0;
 
-export const WebRecognitionExample: React.FC = (props) => {
+export const WebRecognitionExampleeeeee: React.FC = (props) => {
   const dispatch = useDispatch()
   const control = useSelector((state: RootState) => {
     return state.ControlReducer as ControlStatus;
@@ -103,6 +103,7 @@ export const WebRecognitionExample: React.FC = (props) => {
   } else {
     fullTranscripts = azureTranscripts
   }
+  fullTranscripts = STTRenderer();
   const capts = document.getElementById('captionsSpace')
   if (capts != null) {
   var isScrolledToBottom = capts.scrollHeight - capts.clientHeight <= capts.scrollTop + 1
@@ -119,9 +120,7 @@ export const WebRecognitionExample: React.FC = (props) => {
             </Resizable>
           </Draggable>
           <ul >
-            {fullTranscripts.map(transcript => (
-              <h3 id = "captionsSpace" style = {{position: 'fixed', width: '90%', textAlign: 'left', left: '0', fontSize: textSizeA, paddingLeft: '5%', paddingRight: '60%', overflowY: 'scroll', height: '40%', color: textSize.textColor}}>{transcript}</h3>
-            ))}
+            {fullTranscripts}
           </ul>
         </div>
       );
@@ -146,9 +145,7 @@ export const WebRecognitionExample: React.FC = (props) => {
     return (
       <div>
         <ul >
-          {fullTranscripts.map(transcript => (
-            <h3 id = "captionsSpace" style = {{position: 'fixed', width: '90%', textAlign: 'left', left: '0', fontSize: textSizeA, paddingLeft: '5%', paddingRight: '60%', overflowY: 'scroll', height: '40%', color: textSize.textColor}}>{transcript}</h3>
-          ))}
+          {fullTranscripts}
         </ul>
       </div>
     );
@@ -157,9 +154,7 @@ export const WebRecognitionExample: React.FC = (props) => {
   return (
     <div>
         <ul >
-          {fullTranscripts.map(transcript => (
-            <h3 id = "captionsSpace" style = {{position: 'fixed', width: '90%', textAlign: 'left', left: '0', fontSize: textSizeA, paddingLeft: '5%', paddingRight: '60%', overflowY: 'scroll', height: '40%', color: textSize.textColor}}>{transcript}</h3>
-          ))}
+          {fullTranscripts}
         </ul>
     </div>
   );

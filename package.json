@@ -24,7 +24,6 @@
     "@types/react-redux": "^7.1.24",
     "@types/react-speech-recognition": "^3.6.1",
     "@types/webaudioapi": "^0.0.27",
-    "canvas": "^2.9.1",
     "dom": "^0.0.3",
     "microsoft-cognitiveservices-speech-sdk": "^1.18.1",
     "react": "^17.0.2",

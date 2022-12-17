@@ -35,6 +35,20 @@ export const TranscriptReducer = (state = defaultTranscript(), action : {type: s
    let copyState : Transcript = Object.assign({}, state);
    
    switch (action.type) {
+      case 'transcript/recognized':
+         // console.log(action.payload);
+         const fTranscript = action.payload.fArr.map((result : SpeechRecognitionAlternative) => result.transcript).join('');
+         const nfTranscript = action.payload.nfArr.map((result : SpeechRecognitionAlternative) => result.transcript).join('');
+         copyState.currentTranscript[0] = nfTranscript + ' ' + fTranscript;
+         return copyState;
+      case 'transcript/end':
+         // append current to previos
+         for (let i = 0; i < state.speakerNum; i++) {
+            copyState.previousTranscript[i] += ' ' + copyState.currentTranscript[i];
+            copyState.currentTranscript[i] = '';
+         }
+
+         return copyState;
       case 'API_END': // API ended
          // append current to previos
          for (let i = 0; i < state.speakerNum; i++) {

@@ -12,8 +12,8 @@ export type ScribeHandler = null | ((action: any) => "poggers" | undefined);
  */
 export type SRecognition = {
    recognizer: ScribeRecognizer;
-   handler: ScribeHandler;
-   resetTranscript: () => string;
+   // handler: ScribeHandler;
+   // resetTranscript: () => string;
    status: STATUS;
    api : API;
 }

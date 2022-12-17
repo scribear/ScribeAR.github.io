@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback } from 'react';
+import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { 
    DisplayStatus, AzureStatus, ControlStatus, 
@@ -170,13 +170,16 @@ export const returnRecogAPI = (api : ApiStatus, control : ControlStatus, azure :
 // }
 
 export const getRecognition = (currentApi: number, control: ControlStatus, azure: AzureStatus) => {
+
    // https://reactjs.org/docs/hooks-reference.html#usecallback
    // quote: "useCallback(fn, deps) is equivalent to useMemo(() => fn, deps)."
 
    if (currentApi === API.WEBSPEECH) { // webspeech recognition
-      return useMemo(() => getWebSpeechRecog(control), []);
+      return getWebSpeechRecog(control);
+      // return useMemo(() => getWebSpeechRecog(control), []);
    } else if (currentApi === API.AZURE_TRANSLATION) { // azure TranslationRecognizer
-      return useMemo(() => getAzureTranslRecog(control, azure), []);
+      return getAzureTranslRecog(control, azure);
+      // return useMemo(() => getAzureTranslRecog(control, azure), []);
    } else if (currentApi === API.AZURE_CONVERSATION) { // azure ConversationTranscriber
       throw new Error("Not implemented");
    } else {
@@ -236,158 +239,53 @@ export const makeRecognition = (currentApi: number) => {
 export const useRecognition = async (sRecog : SRecognition, api : ApiStatus, control : ControlStatus, azure : AzureStatus) => {
 
 
-   console.log(239, 'useRecognition()', sRecog);
-   const dispatch = useDispatch();
-   
    let recognizer : ScribeRecognizer = sRecog.recognizer;
-   let recogHandler : ScribeHandler = sRecog.handler;
-   console.log(244, recognizer); 
+   const [recogHandler, setRecogHandler] = useState<ScribeHandler>(() => getHandler(api.currentApi, recognizer));
+   const [reseatTranscript, setResetTranscript] = useState<() => string>(() => () => dispatch('RESET_TRANSCRIPT'));
+   const dispatch = useDispatch();
+
+
+   useEffect(() => {
+      setRecogHandler(() => getHandler(api.currentApi, recognizer));
+   }, [api.currentApi]);
+
+   useEffect(() => {
+
+   }, [control.listening]);
+
+   useEffect(() => {
+
+   }, [sRecog]);
+
 
    let copy_sRecog : SRecognition = Object.assign({}, sRecog);
 
-   // if resetTranscript of the handler is null (uninitialized), then initialize it.
-   if (sRecog.resetTranscript === null) { // shouldn't be reachable
-      console.log(247, 'resetTranscript is null');
-      const resetTranscript : () => string = () => dispatch('RESET_TRANSCRIPT');
-      dispatch({ type: 'SET_RESET_TRANSCRIPT', payload: {resetTranscript: resetTranscript} });
-   }
+
    if (sRecog.status === STATUS.NULL) { // initialize recognizer
       if (recognizer !== null) throw new Error("recognizer is not null");
       console.log('recognizer null, initialize it');
 
       getRecognition(api.currentApi, control, azure).then((result : ScribeRecognizer) => {
          recognizer = result;
-         recogHandler = getHandler(api.currentApi, recognizer);
          copy_sRecog.recognizer = recognizer;
-         copy_sRecog.handler = recogHandler;
          copy_sRecog.status = STATUS.AVAILABLE;
          copy_sRecog.api = api.currentApi;
-         console.log(267, 'copy_sRecog: ', copy_sRecog);
          dispatch({ type: 'SET_RECOG', payload: copy_sRecog }); // only dispatch if it is fullfilled
       }, (error_str : string) => {
          console.log(error_str);
       });
    }
 
-   console.log(280, `sRecog: `, sRecog);
+
    const transcript : string = useSelector((state: RootState) => {
       const fullTranscript : string = state.TranscriptReducer.previousTranscript[0] 
                                        + ' ' + state.TranscriptReducer.currentTranscript[0];
       return fullTranscript;
    });
 
-//    if (sRecog.status === STATUS.INPROGRESS && control.listening === true) {
-//       const transcript : string = useSelector((state: RootState) => {
-//          const fullTranscript : string = state.TranscriptReducer.previousTranscript[0] 
-//                                           + ' ' + state.TranscriptReducer.currentTranscript[0];
-//          return fullTranscript;
-//       });
-//       let recogHandler : ScribeHandler = sRecog.handler;
-//       const resetTranscript : () => string = sRecog.resetTranscript;
-      
-//       return { transcript, resetTranscript, recogHandler };
-//    }
-
-
-//    if (api.currentApi !== API.WEBSPEECH) {
-//       throw new Error("Not implemented");
-//    }
-
-//    // (setup) recognizer and recogHandler
-//    // handle uses the recognizer; so, if recognizer is null, handler is null.
-//    // let recognizer : ScribeRecognizer = sRecog.recognizer;
-//    // let recogHandler : ScribeHandler = sRecog.handler;
-
-//    if (recogHandler !== null) {
-//       if (control.listening === false) {
-//          recogHandler({type: 'STOP'});
-//       }
-//    }
-   
-//    // reseatTranscript and recogHandler
-//    /***  ===**===  ^_^  ===**===  ~~!~~  ===**===  ^_^  ===*===  ***/
-//    if (recognizer === null) {
-//       if (recognizer !== null) {throw new Error("recognizer is not null");}
-//       getRecognition(api.currentApi, control, azure).then((result : ScribeRecognizer) => {
-//          recognizer = result;
-//          recogHandler = getHandler(api.currentApi, recognizer);
-//       }, (error_str : string) => {
-//          console.log(error_str);
-//       });
-
-//       copy_sRecog.recognizer = recognizer;
-//       copy_sRecog.handler = recogHandler;
-//       copy_sRecog.status = STATUS.AVAILABLE;
-//       copy_sRecog.api = api.currentApi;
-//       // dispatch({
-//       //    type: 'SET_RECOG', 
-//       //    payload: { recog: recognizer, handler: recogHandler, status: STATUS.AVAILABLE, api: api.currentApi },
-//       // });
-//    }
-//    /***  ===**===  ^_^  ===**===  ~~!~~  ===**===  ^_^  ===*===  ***/
 
 
 
-
-   // do nothing if the recognizer has already started successfully
-   // if (sRecog.status !== STATUS.INPROGRESS) { // hasn't started yet
-   //    // const listening : boolean = control.listening;
-   //    if (control.listening) {
-   //       if (sRecog.status === STATUS.AVAILABLE && control.listening) { // start recognizer
-   //          if (api.currentApi === API.WEBSPEECH) {
-   //             // if successful, change copy_sRecog 
-   //             useWebSpeechRecog(recognizer as SpeechRecognition).then((result : boolean) => {
-   //                // copy_sRecog.status = STATUS.INPROGRESS;
-   //                dispatch({ type: 'SET_RECOG_STATUS', payload: {status: STATUS.INPROGRESS} });
-   //             }, (error_str : string) => {
-   //                console.log(error_str);
-   //                // copy_sRecog.status = STATUS.ERROR;
-   //                dispatch({ type: 'SET_RECOG_STATUS', payload: {status: STATUS.ERROR} });
-   //             });
-   //          } else if (api.currentApi === API.AZURE_TRANSLATION) {
-   //             throw new Error("Not implemented");
-   //          } else if (api.currentApi === API.AZURE_CONVERSATION) {
-   //             throw new Error("Not implemented");
-   //          } else {
-   //             throw new Error(`Unexpcted API_CODE: ${api.currentApi}`);
-   //          }
-   //       }
-   //    } else if (!control.listening) {
-         
-   //    }
-   // }
-
-
-
-
-
-
-
-//    // if (sRecog.recognizer === null || sRecog.status === STATUS.NULL) {
-//    //    // first time call
-//    //    if (control.listening) {
-//    //       if (api.currentApi === API.WEBSPEECH) {
-//    //          // initialize the recognizer
-//    //          huseWebSpeechRecog(control, api).then((result : boolean) => {
-//    //             assert(result === true);
-//    //          }, (error_str) => { console.log(error_str) });
-//    //       }
-//    //    }
-//    // }
-
-//    // resetTranscript() is always initialized in the reducer
-//    // no need to memoize it
-//    // const dispatch = useDispatch();
-//    const resetTranscript : () => string = sRecog.resetTranscript;
-   // dispatch({ type: 'SET_RECOG', payload: copy_sRecog });
-
-   
-//    // get transcript with useSelector from TranscriptReducer
-//    const transcript : string = useSelector((state: RootState) => {
-//       const fullTranscript : string = state.TranscriptReducer.previousTranscript[0] 
-//                                        + ' ' + state.TranscriptReducer.currentTranscript[0];
-//       return fullTranscript;
-//    });
 
 
    return {transcript};

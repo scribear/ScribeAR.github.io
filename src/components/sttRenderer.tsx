@@ -43,7 +43,7 @@ export const STTRenderer = async () => {
 
 
     const { transcript } = await useRecognition(sRecog, apiStatus, controlStatus, azureStatus);
-    console.log('40', transcript);
+    // console.log('40', transcript);
 
     return transcript;
 

@@ -47,6 +47,7 @@ export const useWebSpeechRecog = (recognizer : SpeechRecognition) => new Promise
       const lastStartedAt = new Date().getTime();
       recognizer.onresult = (event: SpeechRecognitionEvent) => {
          const makeEventBucketThunk = makeEventBucket({stream: 'html5', value: event.results});
+         // console.log(50, 'ahaha');
          dispatch(makeEventBucketThunk);
       };
       recognizer.onend = (event: any) => { 
@@ -55,6 +56,8 @@ export const useWebSpeechRecog = (recognizer : SpeechRecognition) => new Promise
          if (timeSinceStart > 1000) {
             recognizer.start();
          }
+
+         dispatch('transcript/end');
       }
       recognizer.start();
       resolve(true);

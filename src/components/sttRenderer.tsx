@@ -19,9 +19,9 @@ export const STTRenderer = () : JSX.Element => {
     const controlStatus = useSelector((state: RootState) => {
         return state.ControlReducer as ControlStatus;
     });
-    // const displayStatus = useSelector((state: RootState) => {
-    //     return state.DisplayReducer as DisplayStatus;
-    // });
+    const displayStatus = useSelector((state: RootState) => {
+        return state.DisplayReducer as DisplayStatus;
+    });
     const azureStatus = useSelector((state: RootState) => {
         return state.AzureReducer as AzureStatus;
     })
@@ -34,23 +34,26 @@ export const STTRenderer = () : JSX.Element => {
 
 
     
-
-
-
     const { transcript } = useRecognition(sRecog, apiStatus, controlStatus, azureStatus);
-    console.log('40', transcript);
+    // console.log('40', transcript);
 
     // return transcript;
-
-
 
 
     return (
         <div>
             <AudioVis></AudioVis>
-          <ul >
-            {transcript}
-          </ul>
+            <ul >
+                <h3 id = "captionsSpace" 
+                    style = {{
+                        position: 'fixed', width: '90%', 
+                        textAlign: 'left', left: '0', fontSize: displayStatus.textSize + "vh", 
+                        paddingLeft: '5%', paddingRight: '60%', 
+                        overflowY: 'scroll', height: '40%', 
+                        color: displayStatus.textColor
+                    }}>{transcript}
+                </h3>
+            </ul>
         </div>
     );
 }

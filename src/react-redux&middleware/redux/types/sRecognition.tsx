@@ -2,7 +2,7 @@ import { API, STATUS } from './apiEnums';
 import sdk from 'microsoft-cognitiveservices-speech-sdk';
 
 export type ScribeRecognizer = null | SpeechRecognition | sdk.TranslationRecognizer | sdk.ConversationTranscriber;
-export type ScribeHandler = null | ((action: any) => "poggers" | undefined);
+export type ScribeHandler = ((action: any) => "poggers" | undefined);
 
 /**
  * For ease of new development, it is mostly a duplicate of the ApiStatus. 

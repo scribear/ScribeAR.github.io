@@ -63,6 +63,7 @@ export const useWebSpeechRecog = () => {
 
         }
 
+        console.log(66, 'start');
         speechRecognition.start();
       }),
     [setTranscripts]

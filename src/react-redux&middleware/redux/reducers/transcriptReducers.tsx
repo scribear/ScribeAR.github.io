@@ -39,7 +39,7 @@ export const TranscriptReducer = (state = defaultTranscript(), action : {type: s
          // console.log(action.payload);
          const fTranscript = action.payload.fArr.map((result : SpeechRecognitionAlternative) => result.transcript).join('');
          const nfTranscript = action.payload.nfArr.map((result : SpeechRecognitionAlternative) => result.transcript).join('');
-         copyState.currentTranscript[0] = nfTranscript + ' ' + fTranscript;
+         copyState.currentTranscript[0] = fTranscript + ' ' + nfTranscript;
          return copyState;
       case 'transcript/end':
          // append current to previos

@@ -22,7 +22,7 @@ export const AudioVis: React.FC = (props) => {
         return (
             <Draggable id="fullVisual">
                 <Resizable size="290px">
-                    <LoungeVisual></LoungeVisual>
+                    <TimeDataVisual></TimeDataVisual>
                 </Resizable>
             </Draggable>
         )

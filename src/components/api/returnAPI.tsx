@@ -100,6 +100,7 @@ export const returnRecogAPI = (api : ApiStatus, control : ControlStatus, azure :
  export const getHandler = (currentApi : number, recognizer : ScribeRecognizer) : ScribeHandler => {
    if (currentApi === API.WEBSPEECH) { // webspeech
       return (action) => {
+         console.log(103, recognizer, action);
          recognizer = recognizer as SpeechRecognition;
          switch (action.type) {
          case 'STOP':
@@ -240,22 +241,45 @@ export const useRecognition = (sRecog : SRecognition, api : ApiStatus, control :
 
 
    let recognizer : ScribeRecognizer = sRecog.recognizer;
+   const [sRecognizer, setSRecognizer] = useState<ScribeRecognizer>();
    const [recogHandler, setRecogHandler] = useState<ScribeHandler>(() => getHandler(api.currentApi, recognizer));
    const [reseatTranscript, setResetTranscript] = useState<() => string>(() => () => dispatch('RESET_TRANSCRIPT'));
    const dispatch = useDispatch();
 
 
    useEffect(() => {
-      setRecogHandler(() => getHandler(api.currentApi, recognizer));
+      getRecognition(api.currentApi, control, azure).then((result : ScribeRecognizer) => {
+         setSRecognizer(result);
+         setRecogHandler(() => getHandler(api.currentApi, result));
+         copy_sRecog.recognizer = result;
+         copy_sRecog.status = STATUS.AVAILABLE;
+         copy_sRecog.api = api.currentApi;
+         dispatch({ type: 'SET_RECOG', payload: copy_sRecog }); // only dispatch if it is fullfilled
+      }, (error_str : string) => {
+         console.log(error_str);
+      });
+      // setRecogHandler(() => getHandler(api.currentApi, recognizer));
    }, [api.currentApi]);
 
    useEffect(() => {
-
+      if (control.listening) {
+         recogHandler('START');
+      } else if (!control.listening) {
+         recogHandler('STOP');
+      }
    }, [control.listening]);
 
    useEffect(() => {
+      // change handler
+      setRecogHandler(() => getHandler(api.currentApi, sRecognizer!));
 
-   }, [sRecog]);
+      console.log('recog changed', (sRecog.status === STATUS.NULL), (sRecog.status === STATUS.AVAILABLE), (control.listening));
+      if (sRecog.status === STATUS.AVAILABLE && control.listening) {
+         console.log(259, 'start recognition');
+         recogHandler('START');
+         dispatch({ type: 'sRecog/set_status', payload: STATUS.INPROGRESS });
+      }
+   }, [sRecognizer]);
 
 
    let copy_sRecog : SRecognition = Object.assign({}, sRecog);
@@ -263,11 +287,12 @@ export const useRecognition = (sRecog : SRecognition, api : ApiStatus, control :
 
    if (sRecog.status === STATUS.NULL) { // initialize recognizer
       if (recognizer !== null) throw new Error("recognizer is not null");
-      console.log('recognizer null, initialize it');
+      // console.log('recognizer null, initialize it');
 
       getRecognition(api.currentApi, control, azure).then((result : ScribeRecognizer) => {
-         recognizer = result;
-         copy_sRecog.recognizer = recognizer;
+         setSRecognizer(result);
+         // recognizer = result;
+         copy_sRecog.recognizer = result;
          copy_sRecog.status = STATUS.AVAILABLE;
          copy_sRecog.api = api.currentApi;
          dispatch({ type: 'SET_RECOG', payload: copy_sRecog }); // only dispatch if it is fullfilled
@@ -275,6 +300,7 @@ export const useRecognition = (sRecog : SRecognition, api : ApiStatus, control :
          console.log(error_str);
       });
    }
+
 
 
    const transcript : string = useSelector((state: RootState) => {

@@ -26,10 +26,10 @@ export default function Desktop(props) {
 
    return (
      <div>
-        <AppNavBar rootState = {RootState}/>
-        {/* <WebRecognitionExample/> */}
-        {/* <WebRecognitionExampleeeeee/> */}
-         <STTRenderer/>
+         <AppNavBar rootState = {RootState}/>
+         {/* <WebRecognitionExample/> */}
+         <WebRecognitionExampleeeeee/>
+         {/* <STTRenderer/> */}
      </div>
    )
   }

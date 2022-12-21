@@ -7,11 +7,14 @@ import { MeydaAnalyzer } from 'meyda/dist/esm/meyda-wa';
 
 var audioContext: AudioContext;
 var analyser: MeydaAnalyzer;
-var dataArray: number[];
 var source: MediaStreamAudioSourceNode;
 var rafId: number;
 var canvas: HTMLCanvasElement;
 var canvasCtx: CanvasRenderingContext2D;
+
+const HISTORY_LENGTH = 30;
+var history_write_index = 0;
+var history: number[][] = [];
 
 var theme: DisplayStatus;
 
@@ -32,14 +35,19 @@ export function MFCCVisual(props: any) {
       source = audioContext.createMediaStreamSource(newMediaStream);
 
       analyser = Meyda.createMeydaAnalyzer({
-	audioContext: audioContext,
-	source: source,
-	bufferSize: 512,
-	numberOfMFCCCoefficients: 40,
-	featureExtractors: ['mfcc'],
-	callback: (features: { mfcc: number[]; }) => {
-	  dataArray = features.mfcc;
-	}
+        audioContext: audioContext,
+        source: source,
+        bufferSize: 512,
+        numberOfMFCCCoefficients: 40,
+        featureExtractors: ['mfcc'],
+        callback: (features: { mfcc: number[]; }) => {
+          if (history.length === HISTORY_LENGTH) {
+            history[history_write_index] = features.mfcc;
+            history_write_index = (history_write_index + 1) % HISTORY_LENGTH;
+          } else {
+            history.push(features.mfcc);
+          }
+        }
       });
 
       analyser.start();
@@ -63,18 +71,25 @@ export function MFCCVisual(props: any) {
 
     canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
 
-    if (dataArray.length == 0) return;
+    if (history.length === 0) return;
 
-    const sliceWidth = canvas.width / dataArray.length;
-    dataArray.forEach((data, i) => {
-      if (data > 0) {
-	canvasCtx.fillStyle = theme.textColor;
-      } else {
-	canvasCtx.fillStyle = theme.secondaryColor;
-      }
-      canvasCtx.fillRect(i * sliceWidth, canvas.height / 2, sliceWidth, -data);
+    const sliceWidth = canvas.width / history[0].length;
+    const sliceHeight = canvas.height / HISTORY_LENGTH;
+    history.forEach((mfccArray, row) => {
+      const actual_row = (HISTORY_LENGTH - history_write_index + row) % HISTORY_LENGTH;
+      mfccArray.forEach((data, col) => {
+        canvasCtx.fillStyle = `rgba(255, 255, 255, ${data})`;
+        canvasCtx.fillRect(
+          col * sliceWidth,
+          actual_row * sliceHeight,
+          sliceWidth,
+          sliceHeight
+        );
+      });
     });
   }
 
-  return <canvas width={props.visualWidth} height={props.visualHeight} ref={canvasRef} />
+  return <canvas width={props.visualWidth}
+                 height={props.visualHeight}
+                 ref={canvasRef} />
 }

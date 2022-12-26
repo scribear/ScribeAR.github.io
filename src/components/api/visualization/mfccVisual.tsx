@@ -12,9 +12,11 @@ var rafId: number;
 var canvas: HTMLCanvasElement;
 var canvasCtx: CanvasRenderingContext2D;
 
-const HISTORY_LENGTH = 30;
+const LOUDNESS_THRESHOLD = 15;
+const HISTORY_LENGTH = 40;
+const MFCC_COEFFICIENTS = 40;
 var history_write_index = 0;
-var history: number[][] = [];
+var history: Float64Array = new Float64Array(HISTORY_LENGTH * MFCC_COEFFICIENTS);
 
 var theme: DisplayStatus;
 
@@ -38,14 +40,14 @@ export function MFCCVisual(props: any) {
         audioContext: audioContext,
         source: source,
         bufferSize: 512,
-        numberOfMFCCCoefficients: 40,
-        featureExtractors: ['mfcc'],
-        callback: (features: { mfcc: number[]; }) => {
-          if (history.length === HISTORY_LENGTH) {
-            history[history_write_index] = features.mfcc;
+        numberOfMFCCCoefficients: MFCC_COEFFICIENTS,
+        featureExtractors: ['loudness', 'mfcc'],
+        callback: (features: { loudness: any, mfcc: number[]; }) => {
+          if (features.loudness.total >= LOUDNESS_THRESHOLD) {
+            const begin = history_write_index * MFCC_COEFFICIENTS;
+            const end = begin + MFCC_COEFFICIENTS;
+            history.subarray(begin, end).set(features.mfcc);
             history_write_index = (history_write_index + 1) % HISTORY_LENGTH;
-          } else {
-            history.push(features.mfcc);
           }
         }
       });
@@ -73,20 +75,22 @@ export function MFCCVisual(props: any) {
 
     if (history.length === 0) return;
 
-    const sliceWidth = canvas.width / history[0].length;
+    const sliceWidth = canvas.width / MFCC_COEFFICIENTS;
     const sliceHeight = canvas.height / HISTORY_LENGTH;
-    history.forEach((mfccArray, row) => {
-      const actual_row = (HISTORY_LENGTH - history_write_index + row) % HISTORY_LENGTH;
-      mfccArray.forEach((data, col) => {
+    for (var row = 0; row < HISTORY_LENGTH; row ++) {
+      const display_row = (HISTORY_LENGTH - history_write_index + row) % HISTORY_LENGTH;
+      const begin = row * MFCC_COEFFICIENTS;
+      const end = begin + MFCC_COEFFICIENTS;
+      history.subarray(begin, end).forEach((data, col) => {
         canvasCtx.fillStyle = `rgba(255, 255, 255, ${data})`;
         canvasCtx.fillRect(
           col * sliceWidth,
-          actual_row * sliceHeight,
+          display_row * sliceHeight,
           sliceWidth,
           sliceHeight
         );
       });
-    });
+    }
   }
 
   return <canvas width={props.visualWidth}

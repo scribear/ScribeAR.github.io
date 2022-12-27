@@ -13,10 +13,25 @@ var canvas: HTMLCanvasElement;
 var canvasCtx: CanvasRenderingContext2D;
 
 const LOUDNESS_THRESHOLD = 15;
-const HISTORY_LENGTH = 40;
-const MFCC_COEFFICIENTS = 40;
+const HISTORY_LENGTH = 80;
+const MFCC_COEFFICIENTS = 25;
+const FFT_SIZE = 512;
 var history_write_index = 0;
-var history: Float64Array = new Float64Array(HISTORY_LENGTH * MFCC_COEFFICIENTS);
+
+class Moment {
+  mfcc: Float32Array;
+  centroid: number;
+
+  constructor() {
+    this.mfcc = new Float32Array(MFCC_COEFFICIENTS);
+    this.centroid = 0;
+  }
+}
+
+var history: Moment[] = new Array(HISTORY_LENGTH);
+for (var i = 0; i < HISTORY_LENGTH; i++) {
+  history[i] = new Moment();
+}
 
 var theme: DisplayStatus;
 
@@ -39,14 +54,21 @@ export function MFCCVisual(props: any) {
       analyser = Meyda.createMeydaAnalyzer({
         audioContext: audioContext,
         source: source,
-        bufferSize: 512,
+        bufferSize: FFT_SIZE,
         numberOfMFCCCoefficients: MFCC_COEFFICIENTS,
-        featureExtractors: ['loudness', 'mfcc'],
-        callback: (features: { loudness: any, mfcc: number[]; }) => {
+        featureExtractors: [
+          'loudness',
+          'spectralCentroid',
+          'mfcc',
+        ],
+        callback: (features: {
+          loudness: { specific: Float32Array, total: number },
+          spectralCentroid: number,
+          mfcc: Float32Array,
+        }) => {
           if (features.loudness.total >= LOUDNESS_THRESHOLD) {
-            const begin = history_write_index * MFCC_COEFFICIENTS;
-            const end = begin + MFCC_COEFFICIENTS;
-            history.subarray(begin, end).set(features.mfcc);
+            history[history_write_index].mfcc.set(features.mfcc);
+            history[history_write_index].centroid = features.spectralCentroid;
             history_write_index = (history_write_index + 1) % HISTORY_LENGTH;
           }
         }
@@ -73,27 +95,25 @@ export function MFCCVisual(props: any) {
 
     canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
 
-    if (history.length === 0) return;
-
     const sliceWidth = canvas.width / MFCC_COEFFICIENTS;
     const sliceHeight = canvas.height / HISTORY_LENGTH;
-    for (var row = 0; row < HISTORY_LENGTH; row ++) {
-      const display_row = (HISTORY_LENGTH - history_write_index + row) % HISTORY_LENGTH;
-      const begin = row * MFCC_COEFFICIENTS;
-      const end = begin + MFCC_COEFFICIENTS;
-      history.subarray(begin, end).forEach((data, col) => {
-        canvasCtx.fillStyle = `rgba(255, 255, 255, ${data})`;
+    history.forEach((moment, index) => {
+      const row = (HISTORY_LENGTH - history_write_index + index) % HISTORY_LENGTH;
+      const centroid = Math.round(720 * moment.centroid / FFT_SIZE);
+      moment.mfcc.forEach((data, col) => {
+        const intensity = data / 255;
+        canvasCtx.fillStyle = `hsl(${centroid}deg 100% 50% / ${intensity})`;
         canvasCtx.fillRect(
           col * sliceWidth,
-          display_row * sliceHeight,
+          row * sliceHeight,
           sliceWidth,
           sliceHeight
         );
       });
-    }
+    });
   }
 
   return <canvas width={props.visualWidth}
-                 height={props.visualHeight}
-                 ref={canvasRef} />
+    height={props.visualHeight}
+    ref={canvasRef} />
 }

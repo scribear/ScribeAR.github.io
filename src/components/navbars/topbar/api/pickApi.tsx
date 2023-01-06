@@ -1,6 +1,8 @@
 import * as React from 'react';
-import { ApiStatus, RootState} from '../../../../react-redux&middleware/redux/typesImports';
-import { STATUS } from '../../../../react-redux&middleware/redux/types/apiEnums';
+import { 
+   ApiStatus, RootState,
+   API, ApiType, STATUS, StatusType
+} from '../../../../react-redux&middleware/redux/typesImports';
 import { useDispatch, useSelector } from 'react-redux';
 import swal from 'sweetalert';
 import { createTheme, ThemeProvider, ListItemButton, ListItemText, ListItemIcon, Collapse, ErrorIcon, ExpandLess, ExpandMore, CancelIcon, IconButton, DoNotDisturbOnIcon, CheckCircleIcon } from '../../../../muiImports' 
@@ -68,7 +70,7 @@ export default function PickApi(props) {
       })
    });
    const toggleDrawer =
-      (apiStat: string, api:number, isArrow:boolean) =>
+      (apiStat: string, api:ApiType, isArrow:boolean) =>
          (event: React.KeyboardEvent | React.MouseEvent) => {
                if (state.apiStatus.currentApi !== api) {
                   if (!isArrow && state.apiStatus[apiStat] === 0) {

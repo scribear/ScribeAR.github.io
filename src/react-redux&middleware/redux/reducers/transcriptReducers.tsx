@@ -43,6 +43,7 @@ export const TranscriptReducer = (state = defaultTranscript(), action : {type: s
          return copyState;
       case 'transcript/end':
          // append current to previos
+         console.log('in transcript/end');
          for (let i = 0; i < state.speakerNum; i++) {
             copyState.previousTranscript[i] += ' ' + copyState.currentTranscript[i];
             copyState.currentTranscript[i] = '';

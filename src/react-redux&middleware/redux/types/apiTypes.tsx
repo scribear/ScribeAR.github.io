@@ -1,4 +1,4 @@
-import { API, STATUS } from './apiEnums';
+import { ApiType, StatusType } from './apiEnums';
 import sdk from 'microsoft-cognitiveservices-speech-sdk';
 
 
@@ -13,10 +13,10 @@ import sdk from 'microsoft-cognitiveservices-speech-sdk';
  * @field azureConvoStatus,
  */
 export type ApiStatus = {
-   currentApi: API;
-   webspeechStatus: STATUS;
-   azureTranslStatus: STATUS;
-   azureConvoStatus: STATUS;
+   currentApi: ApiType;
+   webspeechStatus: StatusType;
+   azureTranslStatus: StatusType;
+   azureConvoStatus: StatusType;
 }
 /**
  * AzureStatus currently has only the login information.

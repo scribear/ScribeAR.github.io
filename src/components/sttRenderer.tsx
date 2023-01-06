@@ -7,7 +7,7 @@ import {
 
 import Swal from 'sweetalert2';
 
-import { returnRecogAPI, useRecognition } from './api/returnAPI';
+import { useRecognition } from './api/returnAPI';
 import { AudioVis } from './api/visualization/audioVis';
 
 // export default function STTRenderer() {
@@ -34,7 +34,8 @@ export const STTRenderer = () : JSX.Element => {
 
 
     
-    const { transcript } = useRecognition(sRecog, apiStatus, controlStatus, azureStatus);
+    const { transcript, recogHandler } = useRecognition(sRecog, apiStatus, controlStatus, azureStatus);
+    // if (recogHandler) recogHandler({type: 'STOP'});
     // console.log('40', transcript);
 
     // return transcript;

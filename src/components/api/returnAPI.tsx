@@ -4,13 +4,14 @@ import {
    DisplayStatus, AzureStatus, ControlStatus, 
    ApiStatus, SRecognition, Transcript,
    ScribeRecognizer, ScribeHandler, } from '../../react-redux&middleware/redux/typesImports';
-import { API, STATUS } from '../../react-redux&middleware/redux/enumsImports';
+import { API, ApiType, STATUS, StatusType } from '../../react-redux&middleware/redux/typesImports';
 import { RootState } from '../../store';
 
 import * as sdk from 'microsoft-cognitiveservices-speech-sdk'
 import  { getWebSpeechRecog, useWebSpeechRecog } from './web-speech/webSpeechRecog';
 import { getAzureTranslRecog, testAzureTranslRecog, useAzureTranslRecog } from './azure/azureTranslRecog';
 import { ControlPointOutlined } from '@material-ui/icons';
+import { resolve } from 'path';
 
 
 // controls what api to send and what to do when error handling.
@@ -18,6 +19,10 @@ import { ControlPointOutlined } from '@material-ui/icons';
 // NOTES: this needs to do everything I think. Handler should be returned which allows
 //        event call like stop and the event should be returned... (maybe the recognition? idk.)
 
+/*
+* === * === *   DO NOT DELETE IN ANY CIRCUMSTANCE   * === * === *
+* === * TRIBUTE TO THE ORIGINAL AUTHOR OF THIS CODE: Will * === *
+DO NOT DELETE IN ANY CIRCUMSTANCE
 export const returnRecogAPI = (api : ApiStatus, control : ControlStatus, azure : AzureStatus) => {
    // const apiStatus = useSelector((state: RootState) => {
    //    return state.APIStatusReducer as ApiStatus;
@@ -35,120 +40,65 @@ export const returnRecogAPI = (api : ApiStatus, control : ControlStatus, azure :
 
    return ({ useRecognition, recognition });
 }
-
-// /**
-//  * Functions for controlling each API as they will be saved to this file.
-//  * 
-//  * @param currentApi 
-//  * @returns a handler function for the recognizer
-//  */
-// export const getHandler = (currentApi : number, recognizer : ScribeRecognizer) : ScribeHandler => {
-//    if (currentApi === API.WEBSPEECH) { // webspeech
-//       return useCallback((action) => {
-//          recognizer = recognizer as SpeechRecognition;
-//          switch (action.type) {
-//          case 'STOP':
-//             recognizer!.stop()
-//             break
-//          case 'START':
-//             recognizer!.start()
-//             break
-//          case 'ABORT':
-//             recognizer!.abort()
-//             break
-//          case 'CHANGE_LANGUAGE':
-//             recognizer.lang = action.payload
-//             break
-//          default:
-//             return "poggers";
-//          }
-//       }, [])
-//    } else if (currentApi === API.AZURE_TRANSLATION) { // azure TranslationRecognizer
-//       return useCallback((action) => {
-//          recognizer = recognizer as sdk.TranslationRecognizer;
-//          switch (action.type) {
-//          case 'STOP':
-//             recognizer!.stopContinuousRecognitionAsync()
-//             break
-//          case 'START':
-//             recognizer!.startContinuousRecognitionAsync()
-//             break
-//          case 'ABORT':
-//             recognizer!.close()
-//             break
-//          case 'CHANGE_LANGUAGE':
-//             recognizer!.addTargetLanguage(action.payload)
-//             break
-//          default:
-//                return "poggers";
-//          }    
-//       }, [])
-//    } else if (currentApi === API.AZURE_CONVERSATION) { // azure ConversationRecognizer
-//       throw new Error("Handler for ConversationTranscriber Not implemented");
-//    }
-//    else {
-//       throw new Error(`Unexpcted API: ${currentApi}`);
-//    }
-// }
+* === * === *   DO NOT DELETE IN ANY CIRCUMSTANCE   * === * === *
+* === * TRIBUTE TO THE ORIGINAL AUTHOR OF THIS CODE: Will * === *
+*/
 
 /**
- * Functions for controlling each API as they will be saved to this file.
  * 
- * @param currentApi 
- * @returns a handler function for the recognizer
+ * @param recognition 
+ * @returns 
  */
- export const getHandler = (currentApi : number, recognizer : ScribeRecognizer) : ScribeHandler => {
-   if (currentApi === API.WEBSPEECH) { // webspeech
-      return (action) => {
-         console.log(103, recognizer, action);
-         recognizer = recognizer as SpeechRecognition;
-         switch (action.type) {
+const makeWebSpeechHandler = (recognition : ScribeRecognizer) : ScribeHandler => {
+   const handler : ScribeHandler = (action) => {
+      // console.log(103, recognition, action);
+      recognition = recognition as SpeechRecognition;
+      switch (action.type) {
          case 'STOP':
-            recognizer!.stop()
+            recognition!.stop();
             break
          case 'START':
-            recognizer!.start()
+            recognition!.start();
             break
          case 'ABORT':
-            recognizer!.abort()
+            recognition!.abort();
             break
          case 'CHANGE_LANGUAGE':
-            recognizer.lang = action.payload
+            recognition.lang = action.payload!;
             break
          default:
             return "poggers";
-         }
       }
-   } else if (currentApi === API.AZURE_TRANSLATION) { // azure TranslationRecognizer
-      return (action) => {
-         recognizer = recognizer as sdk.TranslationRecognizer;
-         switch (action.type) {
+   }
+   return handler;
+}
+/**
+ * 
+ * @param recognition 
+ * @returns 
+ */
+const makeAzureTranslHandler = (recognition : ScribeRecognizer) : ScribeHandler => {
+   const handler : ScribeHandler = (action) => {
+      recognition = recognition as sdk.TranslationRecognizer;
+      switch (action.type) {
          case 'STOP':
-            recognizer!.stopContinuousRecognitionAsync()
+            recognition!.stopContinuousRecognitionAsync()
             break
          case 'START':
-            recognizer!.startContinuousRecognitionAsync()
+            recognition!.startContinuousRecognitionAsync()
             break
          case 'ABORT':
-            recognizer!.close()
+            recognition!.close()
             break
          case 'CHANGE_LANGUAGE':
-            recognizer!.addTargetLanguage(action.payload)
+            recognition!.addTargetLanguage(action.payload!)
             break
          default:
-               return "poggers";
-         }    
+            return "poggers";
       }
-   } else if (currentApi === API.AZURE_CONVERSATION) { // azure ConversationRecognizer
-      throw new Error("Handler for ConversationTranscriber Not implemented");
    }
-   else {
-      throw new Error(`Unexpcted API: ${currentApi}`);
-   }
+   return handler;
 }
-
-
-
 
 
 // export const testRecognition = (control: ControlStatus, azure: AzureStatus, currentApi: number) => {
@@ -170,8 +120,7 @@ export const returnRecogAPI = (api : ApiStatus, control : ControlStatus, azure :
 //     }
 // }
 
-export const getRecognition = (currentApi: number, control: ControlStatus, azure: AzureStatus) => {
-
+const getRecognition = (currentApi: number, control: ControlStatus, azure: AzureStatus) => {
    // https://reactjs.org/docs/hooks-reference.html#usecallback
    // quote: "useCallback(fn, deps) is equivalent to useMemo(() => fn, deps)."
 
@@ -189,15 +138,26 @@ export const getRecognition = (currentApi: number, control: ControlStatus, azure
    }
 }
 
-export const makeRecognition = (currentApi: number) => {
+/**
+ * Connect the recognizer to the event handler
+ * @param currentApi 
+ * @param recognizer 
+ * @returns Promsie<ScribeHandler>
+ */
+const runRecognition = (currentApi: number, recognizer : ScribeRecognizer, dispatch : React.Dispatch<any>) => new Promise<ScribeHandler>((resolve, reject) => {
    if (currentApi === 0) { // webspeech recognition event controller
-      return { useWebSpeechRecog };
+      useWebSpeechRecog(recognizer as SpeechRecognition, dispatch).then(
+         () => {
+            resolve(makeWebSpeechHandler(recognizer));            
+         }, (error_str : string) => { reject(error_str); }
+      );
+
    } else if (currentApi === 1) { // azure recognition event controller
-      return { useAzureTranslRecog };
+      reject("Azure Not implemented yet");
    } else {
-      throw new Error(`Unexpcted API_CODE: ${currentApi}`);
+      reject(`Unexpcted API_CODE: ${currentApi}`);
    }
-}
+});
 
 // /**
 //  * 
@@ -242,19 +202,38 @@ export const useRecognition = (sRecog : SRecognition, api : ApiStatus, control :
 
    let recognizer : ScribeRecognizer = sRecog.recognizer;
    const [sRecognizer, setSRecognizer] = useState<ScribeRecognizer>();
-   const [recogHandler, setRecogHandler] = useState<ScribeHandler>(() => getHandler(api.currentApi, recognizer));
+   // const [recogHandler, setRecogHandler] = useState<ScribeHandler>(() => getHandler(api.currentApi, recognizer));
+   const [recogHandler, setRecogHandler] = useState<ScribeHandler>();
    const [reseatTranscript, setResetTranscript] = useState<() => string>(() => () => dispatch('RESET_TRANSCRIPT'));
+   const [lastChangeApiTime, setLastChangeApiTime] = useState<number>(new Date().getTime());
    const dispatch = useDispatch();
 
 
    useEffect(() => {
       getRecognition(api.currentApi, control, azure).then((result : ScribeRecognizer) => {
          setSRecognizer(result);
-         setRecogHandler(() => getHandler(api.currentApi, result));
-         copy_sRecog.recognizer = result;
-         copy_sRecog.status = STATUS.AVAILABLE;
-         copy_sRecog.api = api.currentApi;
-         dispatch({ type: 'SET_RECOG', payload: copy_sRecog }); // only dispatch if it is fullfilled
+         // (result as SpeechRecognition)!.start();
+         runRecognition(api.currentApi, result, dispatch).then((handler : ScribeHandler) => {
+            setRecogHandler(() => handler);
+
+            let copy_sRecog = Object.assign({}, sRecog);
+            copy_sRecog.recognizer = result;
+            copy_sRecog.status = STATUS.AVAILABLE;
+            copy_sRecog.api = api.currentApi;
+
+            // // change handler
+            // console.log('recog changed', (sRecog.status === STATUS.NULL), (sRecog.status === STATUS.AVAILABLE), (control.listening));
+            if (control.listening) {
+               console.log(259, 'start recognition');
+               handler({type: 'START'}); // start recognition
+               // if (recogHandler) recogHandler({type: 'START'});
+               copy_sRecog.status = STATUS.INPROGRESS;
+            }
+            
+            dispatch({ type: 'sRecog/set_recog', payload: copy_sRecog }); // only dispatch if it is fullfilled
+         }, (error_str : string) => {
+            console.log(error_str);
+         });
       }, (error_str : string) => {
          console.log(error_str);
       });
@@ -262,24 +241,38 @@ export const useRecognition = (sRecog : SRecognition, api : ApiStatus, control :
    }, [api.currentApi]);
 
    useEffect(() => {
+      if (!recogHandler) {
+         return;
+      }
       if (control.listening) {
-         recogHandler('START');
+         recogHandler({type: 'START'});
       } else if (!control.listening) {
-         recogHandler('STOP');
+         recogHandler({type: 'STOP'});
       }
    }, [control.listening]);
 
    useEffect(() => {
-      // change handler
-      setRecogHandler(() => getHandler(api.currentApi, sRecognizer!));
-
-      console.log('recog changed', (sRecog.status === STATUS.NULL), (sRecog.status === STATUS.AVAILABLE), (control.listening));
-      if (sRecog.status === STATUS.AVAILABLE && control.listening) {
-         console.log(259, 'start recognition');
-         recogHandler('START');
-         dispatch({ type: 'sRecog/set_status', payload: STATUS.INPROGRESS });
+      if (sRecog.status === STATUS.ENDED) {
+         const curTime = new Date().getTime();
+         const timeSinceStart = curTime - lastChangeApiTime;
+         if (timeSinceStart > 1000) {
+            if (recogHandler) recogHandler({type: 'START'});
+            setLastChangeApiTime(curTime);
+         }
       }
-   }, [sRecognizer]);
+   }, [sRecog.status]);
+
+   // useEffect(() => {
+   //    // // change handler
+   //    // setRecogHandler(() => getHandler(api.currentApi, sRecognizer!));
+
+   //    // console.log('recog changed', (sRecog.status === STATUS.NULL), (sRecog.status === STATUS.AVAILABLE), (control.listening));
+   //    // if (sRecog.status === STATUS.AVAILABLE && control.listening) {
+   //    //    console.log(259, 'start recognition');
+   //    //    if (recogHandler) recogHandler({type: 'START'});
+   //    //    dispatch({ type: 'sRecog/set_status', payload: STATUS.INPROGRESS });
+   //    // }
+   // }, [sRecognizer]);
 
 
    let copy_sRecog : SRecognition = Object.assign({}, sRecog);
@@ -295,7 +288,7 @@ export const useRecognition = (sRecog : SRecognition, api : ApiStatus, control :
          copy_sRecog.recognizer = result;
          copy_sRecog.status = STATUS.AVAILABLE;
          copy_sRecog.api = api.currentApi;
-         dispatch({ type: 'SET_RECOG', payload: copy_sRecog }); // only dispatch if it is fullfilled
+         dispatch({ type: 'sRecog/set_recog', payload: copy_sRecog }); // only dispatch if it is fullfilled
       }, (error_str : string) => {
          console.log(error_str);
       });
@@ -314,5 +307,5 @@ export const useRecognition = (sRecog : SRecognition, api : ApiStatus, control :
 
 
 
-   return {transcript};
+   return {transcript, recogHandler};
 }

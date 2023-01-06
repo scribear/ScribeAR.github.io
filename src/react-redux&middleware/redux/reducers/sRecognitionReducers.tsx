@@ -16,18 +16,12 @@ export const SRecognitionReducer = (state = defaultSRecognition(), action : {typ
    // let copyStatus : SRecognition = {...state}; // Object.assign({}, state);
 
    switch (action.type) {
-      case 'SET_RECOG': // Change the entire recogStatus
+      case 'sRecog/set_recog': // Change the entire recogStatus
          return action.payload;
       case 'sRecog/set_status':
          return {...state, status: action.payload.status};
-      // case 'SET_RECOG_STATUS':
-      //    return {...state, status: action.payload.status};
-      case 'SET_RECOG_API':
+      case 'sRecog/set_api':
          return {...state, api: action.payload.api};
-      // case 'SET_HANDLER':
-      //    return {...state, handler: action.payload.handler};
-      // case 'SET_RESET_TRANSCRIPT':
-      //    return {...state, resetTranscript: action.payload.resetTranscript};
       default:
          return state;
    }

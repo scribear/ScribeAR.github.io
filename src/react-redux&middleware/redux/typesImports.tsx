@@ -5,7 +5,7 @@ import { DisplayStatus } from "./types/displayStatus";
 import { SRecognition, ScribeRecognizer, ScribeHandler } from "./types/sRecognition";
 import { Transcript } from "./types/TranscriptTypes";
 
-import { API, STATUS } from './types/apiEnums';
+import { API, ApiType, STATUS, StatusType } from './types/apiEnums';
 
 export type {
    ApiStatus,
@@ -22,9 +22,13 @@ export type {
    // alias
    ScribeRecognizer,
    ScribeHandler,
+
+   // javascript enums
+   ApiType,
+   StatusType,
 }
 
-export { API, STATUS}
+export { API, STATUS }
 
 /*
    All above reducer interfaces together

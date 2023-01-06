@@ -1,6 +1,7 @@
 import { batch } from "react-redux";
 
 import { MainStreamMap } from "../redux/types/bucketStreamTypes";
+import { ControlStatus, STATUS } from "../redux/typesImports";
 
 
 /* Save to sessionStorage so that it is cleared when refreshed */
@@ -34,13 +35,17 @@ type BucketArgs = {
    value: any | SpeechRecognitionResultList,
 }
 
-// Write a synchronous outer function that receives the `text` parameter:
+/**
+ * Write a synchronous outer function that receives the `text` parameter:
+ * @param object 
+ * @returns 
+ */
 export function makeEventBucket(object: BucketArgs) {
    const stream = object.stream;
    const value = object.value;
 
    // And then creates and returns the async thunk function:
-   return async function makeEventBucketThunk(dispatch, getState) {
+   return async function makeEventBucketThunk(dispatch : React.Dispatch<any>, getState) {
       // ✅ Now we can use the stream value
       if (stream === 'audio') { 
          const curTime = Date.now();
@@ -100,5 +105,20 @@ export function makeEventBucket(object: BucketArgs) {
       }
 
       // dispatch({ type: 'todos/todoAdded', payload: response.todo })
+   }
+}
+
+
+/**
+ * For onend() event
+ * @returns 
+ */
+export function makeTranscriptEnd(stream : string) {
+
+   return async function makeTranscriptEndThunk(dispatch : React.Dispatch<any>, getState) {
+      batch(() => {
+         dispatch({ type: 'transcript/end' });
+         dispatch({ type: 'sRecog/set_status', payload: STATUS.ENDED})
+      });
    }
 }

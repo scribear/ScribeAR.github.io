@@ -1,9 +1,12 @@
 import React, { useCallback, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { makeEventBucket } from '../../../react-redux&middleware/react-middleware/thunkMiddleware';
-import { ControlStatus, ApiStatus, SRecognition } from '../../../react-redux&middleware/redux/typesImports';
-import { API, STATUS } from '../../../react-redux&middleware/redux/enumsImports';
+import { makeEventBucket, makeTranscriptEnd } from '../../../react-redux&middleware/react-middleware/thunkMiddleware';
+import { 
+   ControlStatus, ApiStatus, SRecognition,
+   API, ApiType, STATUS, StatusType,
+} from '../../../react-redux&middleware/redux/typesImports';
+
 
 
 export const getWebSpeechRecog = (control : ControlStatus) => new Promise<SpeechRecognition>((resolve, reject) => {
@@ -39,29 +42,34 @@ export const getWebSpeechRecog = (control : ControlStatus) => new Promise<Speech
  * @param control 
  * @param api 
  * 
- * @return Promise<boolean>
+ * @return Promise<void>
  */
-export const useWebSpeechRecog = (recognizer : SpeechRecognition) => new Promise<boolean>((resolve, reject) => {
-   const dispatch = useDispatch();
+export const useWebSpeechRecog = (recognizer : SpeechRecognition, dispatch : React.Dispatch<any>) => new Promise<void>((resolve, reject) => {
+   console.log('in use');
    try {
       const lastStartedAt = new Date().getTime();
       recognizer.onresult = (event: SpeechRecognitionEvent) => {
-         const makeEventBucketThunk = makeEventBucket({stream: 'html5', value: event.results});
-         // console.log(50, 'ahaha');
-         dispatch(makeEventBucketThunk);
+         const eventBucketThunk = makeEventBucket({ stream: 'html5', value: event.results });
+         console.log(50, 'ahaha');
+         dispatch(eventBucketThunk);
       };
       recognizer.onend = (event: any) => { 
          console.log('onend, event: ', event);
-         const timeSinceStart = new Date().getTime() - lastStartedAt;
-         if (timeSinceStart > 1000) {
-            recognizer.start();
-         }
+         const transcriptEndThunk = makeTranscriptEnd('html5');
+         // const timeSinceStart = new Date().getTime() - lastStartedAt;
+         // if (listening) {
+         //    recognizer.start();
+         // }
 
-         dispatch('transcript/end');
+         dispatch(transcriptEndThunk);
       }
-      console.log(62, 'start');
-      recognizer.start();
-      resolve(true);
+      recognizer.onstart = (event: any) => {
+         console.log('onstart, event: ', event);
+      }
+      recognizer.onerror = (event: any) => {
+         
+      // recognizer.start();
+      resolve();
    } catch (e) {
       const error_str : string = `Failed to Add Callbacks to WebSpeech SpeechRecognition, error: ${e}`;
       reject(error_str);

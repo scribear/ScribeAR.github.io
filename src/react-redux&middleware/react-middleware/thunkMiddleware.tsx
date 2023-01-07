@@ -1,7 +1,7 @@
 import { batch } from "react-redux";
 
 import { MainStreamMap } from "../redux/types/bucketStreamTypes";
-import { ControlStatus, STATUS } from "../redux/typesImports";
+import { ControlStatus, STATUS, StatusType } from "../redux/typesImports";
 
 
 /* Save to sessionStorage so that it is cleared when refreshed */
@@ -122,3 +122,38 @@ export function makeTranscriptEnd(stream : string) {
       });
    }
 }
+
+/**
+ * for end and error events of both webspeech and azure
+ * 
+ * @rationale when an error occurs, both end and error event are fired
+ * and I am not sure which one is fired first.
+ * However, for end event,
+ * as long as we check the status was not error,
+ * then we can make sure an error stays as an error.
+ * @param type 
+ * @returns 
+ */
+export function makeEndErrorHanlder(type : string) {
+
+   if (type === 'end') {
+      return async function recogEndThunk(dispatch : React.Dispatch<any>, getState) {
+         const recogStatus : StatusType = await getState().sRecogReducer.status;
+         if (recogStatus === STATUS.ERROR) {
+            dispatch({ type: 'transcript/end' });
+         } else { // not error
+            batch(() => {
+               dispatch({ type: 'transcript/end' });
+               dispatch({ type: 'sRecog/set_status', payload: STATUS.ENDED });
+            });
+         }
+      }
+   } else if (type === 'error') {
+      return async function recogErrorThunk(dispatch : React.Dispatch<any>, getState) {
+         batch(() => {
+            dispatch({ type: 'transcript/end' });
+            dispatch({ type: 'sRecog/set_status', payload: STATUS.ERROR });
+         });
+      }
+   }
+} 

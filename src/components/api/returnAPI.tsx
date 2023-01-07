@@ -251,14 +251,18 @@ export const useRecognition = (sRecog : SRecognition, api : ApiStatus, control :
       }
    }, [control.listening]);
 
+   // restart if not error
    useEffect(() => {
       if (sRecog.status === STATUS.ENDED) {
          const curTime = new Date().getTime();
          const timeSinceStart = curTime - lastChangeApiTime;
-         if (timeSinceStart > 1000) {
+         if (timeSinceStart > 1000 && control.listening) {
             if (recogHandler) recogHandler({type: 'START'});
             setLastChangeApiTime(curTime);
          }
+      }
+      if (sRecog.status === STATUS.ERROR) {
+         if (recogHandler) recogHandler({type: 'STOP'});
       }
    }, [sRecog.status]);
 

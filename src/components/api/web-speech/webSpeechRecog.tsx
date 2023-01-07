@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { makeEventBucket, makeTranscriptEnd } from '../../../react-redux&middleware/react-middleware/thunkMiddleware';
+import { makeEventBucket, makeTranscriptEnd, makeEndErrorHanlder } from '../../../react-redux&middleware/react-middleware/thunkMiddleware';
 import { 
    ControlStatus, ApiStatus, SRecognition,
    API, ApiType, STATUS, StatusType,
@@ -55,18 +55,17 @@ export const useWebSpeechRecog = (recognizer : SpeechRecognition, dispatch : Rea
       };
       recognizer.onend = (event: any) => { 
          console.log('onend, event: ', event);
-         const transcriptEndThunk = makeTranscriptEnd('html5');
-         // const timeSinceStart = new Date().getTime() - lastStartedAt;
-         // if (listening) {
-         //    recognizer.start();
-         // }
-
-         dispatch(transcriptEndThunk);
+         const recogEndThunk = makeEndErrorHanlder('html5');
+         dispatch(recogEndThunk);
       }
       recognizer.onstart = (event: any) => {
          console.log('onstart, event: ', event);
       }
       recognizer.onerror = (event: any) => {
+         console.log('onerror, event: ', event);
+         const recogEndThunk = makeEndErrorHanlder('html5');
+         dispatch(recogEndThunk);
+      }
          
       // recognizer.start();
       resolve();

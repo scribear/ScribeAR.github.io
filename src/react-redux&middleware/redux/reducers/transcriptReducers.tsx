@@ -45,21 +45,11 @@ export const TranscriptReducer = (state = defaultTranscript(), action : {type: s
          // append current to previos
          console.log('in transcript/end');
          for (let i = 0; i < state.speakerNum; i++) {
-            copyState.previousTranscript[i] += ' ' + copyState.currentTranscript[i];
-            copyState.currentTranscript[i] = '';
-         }
-
-         return copyState;
-      case 'API_END': // API ended
-         // append current to previos
-         for (let i = 0; i < state.speakerNum; i++) {
-            copyState.previousTranscript[i] += ' ' + copyState.currentTranscript[i];
-         }
-
-         // clear currentTranscript
-         copyState.currentTranscript = [];
-         for (let i = 0; i < copyState.speakerNum; i++) {
-            copyState.currentTranscript.push('');
+            const curTranscript : string  = copyState.currentTranscript[i];
+            if (curTranscript !== '') {
+               copyState.previousTranscript[i] += ' ' + curTranscript;
+               copyState.currentTranscript[i] = '';
+            }
          }
 
          return copyState;

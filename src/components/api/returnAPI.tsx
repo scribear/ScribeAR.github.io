@@ -205,7 +205,7 @@ export const useRecognition = (sRecog : SRecognition, api : ApiStatus, control :
    // const [recogHandler, setRecogHandler] = useState<ScribeHandler>(() => getHandler(api.currentApi, recognizer));
    const [recogHandler, setRecogHandler] = useState<ScribeHandler>();
    const [reseatTranscript, setResetTranscript] = useState<() => string>(() => () => dispatch('RESET_TRANSCRIPT'));
-   const [lastChangeApiTime, setLastChangeApiTime] = useState<number>(new Date().getTime());
+   const [lastChangeApiTime, setLastChangeApiTime] = useState<number>(Date.now());
    const dispatch = useDispatch();
 
 
@@ -226,7 +226,6 @@ export const useRecognition = (sRecog : SRecognition, api : ApiStatus, control :
             if (control.listening) {
                console.log(259, 'start recognition');
                handler({type: 'START'}); // start recognition
-               // if (recogHandler) recogHandler({type: 'START'});
                copy_sRecog.status = STATUS.INPROGRESS;
             }
             
@@ -237,7 +236,6 @@ export const useRecognition = (sRecog : SRecognition, api : ApiStatus, control :
       }, (error_str : string) => {
          console.log(error_str);
       });
-      // setRecogHandler(() => getHandler(api.currentApi, recognizer));
    }, [api.currentApi]);
 
    useEffect(() => {
@@ -253,10 +251,13 @@ export const useRecognition = (sRecog : SRecognition, api : ApiStatus, control :
 
    // restart if not error
    useEffect(() => {
+      // console.log('change recog status: ', sRecog.status);
       if (sRecog.status === STATUS.ENDED) {
-         const curTime = new Date().getTime();
+         const curTime = Date.now();
          const timeSinceStart = curTime - lastChangeApiTime;
+         // console.log(curTime, timeSinceStart);
          if (timeSinceStart > 1000 && control.listening) {
+            // console.log(timeSinceStart, control.listening);
             if (recogHandler) recogHandler({type: 'START'});
             setLastChangeApiTime(curTime);
          }
@@ -266,29 +267,14 @@ export const useRecognition = (sRecog : SRecognition, api : ApiStatus, control :
       }
    }, [sRecog.status]);
 
-   // useEffect(() => {
-   //    // // change handler
-   //    // setRecogHandler(() => getHandler(api.currentApi, sRecognizer!));
-
-   //    // console.log('recog changed', (sRecog.status === STATUS.NULL), (sRecog.status === STATUS.AVAILABLE), (control.listening));
-   //    // if (sRecog.status === STATUS.AVAILABLE && control.listening) {
-   //    //    console.log(259, 'start recognition');
-   //    //    if (recogHandler) recogHandler({type: 'START'});
-   //    //    dispatch({ type: 'sRecog/set_status', payload: STATUS.INPROGRESS });
-   //    // }
-   // }, [sRecognizer]);
-
 
    let copy_sRecog : SRecognition = Object.assign({}, sRecog);
 
-
    if (sRecog.status === STATUS.NULL) { // initialize recognizer
       if (recognizer !== null) throw new Error("recognizer is not null");
-      // console.log('recognizer null, initialize it');
 
       getRecognition(api.currentApi, control, azure).then((result : ScribeRecognizer) => {
          setSRecognizer(result);
-         // recognizer = result;
          copy_sRecog.recognizer = result;
          copy_sRecog.status = STATUS.AVAILABLE;
          copy_sRecog.api = api.currentApi;

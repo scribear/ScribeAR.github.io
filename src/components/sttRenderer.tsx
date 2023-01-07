@@ -35,7 +35,6 @@ export const STTRenderer = () : JSX.Element => {
 
     
     const { transcript, recogHandler } = useRecognition(sRecog, apiStatus, controlStatus, azureStatus);
-    // if (recogHandler) recogHandler({type: 'STOP'});
     // console.log('40', transcript);
 
     // return transcript;

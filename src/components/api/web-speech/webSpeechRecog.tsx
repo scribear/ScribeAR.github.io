@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { makeEventBucket, makeTranscriptEnd, makeEndErrorHanlder } from '../../../react-redux&middleware/react-middleware/thunkMiddleware';
+import { makeEventBucket } from '../../../react-redux&middleware/react-middleware/thunkMiddleware';
 import { 
    ControlStatus, ApiStatus, SRecognition,
    API, ApiType, STATUS, StatusType,
@@ -45,29 +45,34 @@ export const getWebSpeechRecog = (control : ControlStatus) => new Promise<Speech
  * @return Promise<void>
  */
 export const useWebSpeechRecog = (recognizer : SpeechRecognition, dispatch : React.Dispatch<any>) => new Promise<void>((resolve, reject) => {
-   console.log('in use');
    try {
       const lastStartedAt = new Date().getTime();
       recognizer.onresult = (event: SpeechRecognitionEvent) => {
          const eventBucketThunk = makeEventBucket({ stream: 'html5', value: event.results });
-         console.log(50, 'ahaha');
          dispatch(eventBucketThunk);
       };
       recognizer.onend = (event: any) => { 
-         console.log('onend, event: ', event);
-         const recogEndThunk = makeEndErrorHanlder('html5');
-         dispatch(recogEndThunk);
+         // console.log('onend, event: ', event);
+         // console.log(58, 'ws end', Date.now());
+         dispatch({ type: 'transcript/end' });
+         dispatch({ type: 'sRecog/set_status', payload: {status: STATUS.ENDED} });
       }
       recognizer.onstart = (event: any) => {
-         console.log('onstart, event: ', event);
+         // console.log(63, 'ws start', Date.now());
+         // console.log('onstart, event: ', event);
+         dispatch({ type: 'sRecog/set_status', payload: {status: STATUS.INPROGRESS} });
       }
-      recognizer.onerror = (event: any) => {
+      recognizer.onerror = (event: SpeechRecognitionErrorEvent) => {
          console.log('onerror, event: ', event);
-         const recogEndThunk = makeEndErrorHanlder('html5');
-         dispatch(recogEndThunk);
+         console.log(68, 'ws error', Date.now());
+         if (event.error !== 'no-speech') {
+            console.log('error not no-speech');
+            dispatch({ type: 'transcript/end' });
+            dispatch({ type: 'sRecog/set_status', payload: {status: STATUS.ERROR} });
+         }
+         // console.log('no-speech');
       }
          
-      // recognizer.start();
       resolve();
    } catch (e) {
       const error_str : string = `Failed to Add Callbacks to WebSpeech SpeechRecognition, error: ${e}`;

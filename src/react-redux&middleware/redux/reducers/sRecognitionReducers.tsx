@@ -19,7 +19,11 @@ export const SRecognitionReducer = (state = defaultSRecognition(), action : {typ
       case 'sRecog/set_recog': // Change the entire recogStatus
          return action.payload;
       case 'sRecog/set_status':
-         return {...state, status: action.payload.status};
+         // console.log('in set_stats: ', state.status, action.payload.status);
+         if (state.status !== STATUS.ERROR) {
+            return {...state, status: action.payload.status};
+         }
+         return state;
       case 'sRecog/set_api':
          return {...state, api: action.payload.api};
       default:

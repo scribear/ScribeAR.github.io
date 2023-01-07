@@ -10,7 +10,7 @@ import { LoungeVisual } from './loungeVisual'
 import { TimeDataVisual } from './timeDataVisual';
 import { Draggable } from './DraggableFC';
 import { Resizable } from './Resizable';
-
+import { MFCCVisual } from './mfccVisual';
 
 
 export const AudioVis: React.FC = (props) => {
@@ -31,6 +31,14 @@ export const AudioVis: React.FC = (props) => {
             <Draggable id="fullVisual">
                 <Resizable size="290px">
                     <LoungeVisual></LoungeVisual>
+                </Resizable>
+            </Draggable>
+        )
+    } else if (controlStatus.showMFCC === true) {
+        return (
+            <Draggable id="fullVisual">
+                <Resizable size="290px">
+                    <MFCCVisual></MFCCVisual>
                 </Resizable>
             </Draggable>
         )

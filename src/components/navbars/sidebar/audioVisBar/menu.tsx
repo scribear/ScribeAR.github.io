@@ -3,6 +3,8 @@ import React from 'react';
 import { List, ListItemText, Collapse, ListItem, EqualizerIcon } from '../../../../muiImports'
 import ShowFrequency from './showFrequency'
 import ShowTimeData from './showTimeData'
+import ShowMFCC from './showMFCC'
+
 
 export default function VisualizationMenu(props) {
 
@@ -23,6 +25,10 @@ export default function VisualizationMenu(props) {
                     <ListItem sx={{ pl: 4 }}>
                         <ListItemText primary="Show Time Data" />
                         <ShowTimeData />
+                    </ListItem>
+                    <ListItem sx={{ pl: 4 }}>
+                        <ListItemText primary="Show MFCC" />
+                        <ShowMFCC />
                     </ListItem>
                 </List>
             </Collapse>

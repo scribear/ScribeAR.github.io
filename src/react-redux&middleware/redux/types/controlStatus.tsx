@@ -13,5 +13,5 @@ export type ControlStatus = {
    textLanguage: LanguageList
    showFrequency: boolean
    showTimeData: boolean
-
+   showMFCC: boolean
 }

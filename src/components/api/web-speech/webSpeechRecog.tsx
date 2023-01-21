@@ -8,14 +8,17 @@ import {
 } from '../../../react-redux&middleware/redux/typesImports';
 
 
-
+/**
+ * 
+ * @param {ControlStatus} control 
+ * @returns {Promise<SpeechRecognition>}
+ */
 export const getWebSpeechRecog = (control : ControlStatus) => new Promise<SpeechRecognition>((resolve, reject) => {
    try {
       if (!window || !(window as any).webkitSpeechRecognition) {
-         throw new Error('Your browser does not support web speech recognition');
+         reject('Your browser does not support web speech recognition');
       }
       const speechRecognition : SpeechRecognition = new (window as any).webkitSpeechRecognition();
-      // console.log(typeof speechRecognition);
       speechRecognition.continuous = true;
       speechRecognition.interimResults = true;
       speechRecognition.lang = control.speechLanguage.CountryCode;
@@ -27,52 +30,38 @@ export const getWebSpeechRecog = (control : ControlStatus) => new Promise<Speech
    }
 });
 
-// type useArgs = {
-//    recognizer : SpeechRecognition,
-//    control : ControlStatus,
-//    apiStatus : ApiStatus,
-// }
-
 /**
- * Setup the recognizer for WebSpeech
+ * Setup the WebSpeech recognizer; add callbacks
  * 
  * Assume control.listening=true and api=API.WEBSPEECH.
  * 
- * @param recognizer 
- * @param control 
- * @param api 
- * 
- * @return Promise<void>
+ * @param {SpeechRecognition} recognizer 
+ * @param {React.Dispatch} dispatch 
+ * @return {Promise<void>}
  */
 export const useWebSpeechRecog = (recognizer : SpeechRecognition, dispatch : React.Dispatch<any>) => new Promise<void>((resolve, reject) => {
    try {
-      const lastStartedAt = new Date().getTime();
       recognizer.onresult = (event: SpeechRecognitionEvent) => {
          const eventBucketThunk = makeEventBucket({ stream: 'html5', value: event.results });
          dispatch(eventBucketThunk);
       };
       recognizer.onend = (event: any) => { 
-         // console.log('onend, event: ', event);
-         // console.log(58, 'ws end', Date.now());
+         console.log(`WebSpeech, onend, event: ${event}`);
          dispatch({ type: 'transcript/end' });
          dispatch({ type: 'sRecog/set_status', payload: {status: STATUS.ENDED} });
       }
       recognizer.onstart = (event: any) => {
-         // console.log(63, 'ws start', Date.now());
-         // console.log('onstart, event: ', event);
-         dispatch({ type: 'sRecog/set_status', payload: {status: STATUS.INPROGRESS} });
+         console.log(`WebSpeech, onstart, event: ${event}`);
+         dispatch({ type: 'sRecog/set_status', payload: {status: STATUS.TRANSCRIBING} });
       }
       recognizer.onerror = (event: SpeechRecognitionErrorEvent) => {
-         console.log('onerror, event: ', event);
-         console.log(68, 'ws error', Date.now());
+         console.log(`WebSpeech, onerror, event: ${event}`);
          if (event.error !== 'no-speech') {
             console.log('error not no-speech');
             dispatch({ type: 'transcript/end' });
             dispatch({ type: 'sRecog/set_status', payload: {status: STATUS.ERROR} });
          }
-         // console.log('no-speech');
       }
-         
       resolve();
    } catch (e) {
       const error_str : string = `Failed to Add Callbacks to WebSpeech SpeechRecognition, error: ${e}`;

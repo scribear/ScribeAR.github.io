@@ -98,6 +98,6 @@ export const WebRecognitionExampleeeeee: React.FC = (props) => {
       capts.scrollTop = capts.scrollHeight - capts.clientHeight // scroll to bottom
    }
 
-
+   
    return sttElem;
 };

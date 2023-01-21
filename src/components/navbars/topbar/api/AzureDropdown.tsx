@@ -73,7 +73,7 @@ export default function AzureDropdown(props) {
                      break;
                   default:
                      copyStatus.currentApi = API.AZURE_TRANSLATION;
-                     copyStatus.azureTranslStatus = STATUS.INPROGRESS;
+                     copyStatus.azureTranslStatus = STATUS.TRANSCRIBING;
                }
          });
 

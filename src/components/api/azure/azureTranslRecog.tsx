@@ -6,22 +6,28 @@ import { ControlStatus, AzureStatus, ApiStatus, PhraseList } from '../../../reac
 import * as speechSDK from 'microsoft-cognitiveservices-speech-sdk';
 
 
+/**
+ * 
+ * @param control 
+ * @param azureStatus 
+ * @param mic 
+ * @returns 
+ */
 export const getAzureTranslRecog = async (control: ControlStatus, azureStatus: AzureStatus, mic : number = 0) => new Promise<speechSDK.TranslationRecognizer>((resolve, reject) => {  
   try {
     const speechConfig = speechSDK.SpeechTranslationConfig.fromSubscription(azureStatus.azureKey, azureStatus.azureRegion)
     speechConfig.speechRecognitionLanguage = control.speechLanguage.CountryCode;
     speechConfig.addTargetLanguage(control.textLanguage.CountryCode);
-    console.log("Speech: ", speechConfig.speechRecognitionLanguage, "; Text: ", speechConfig.targetLanguages);
+    // console.log("Speech: ", speechConfig.speechRecognitionLanguage, "; Text: ", speechConfig.targetLanguages);
     speechConfig.setProfanity(2);
-    let audioConfig : speechSDK.AudioConfig;
+    let recognizer
     if (mic === 0) {
-      audioConfig = speechSDK.AudioConfig.fromDefaultMicrophoneInput();
+      const audioConfig = speechSDK.AudioConfig.fromDefaultMicrophoneInput();
+      const recognizer : speechSDK.TranslationRecognizer = new speechSDK.TranslationRecognizer(speechConfig, audioConfig);
+      resolve(recognizer);
     } else {
-      throw new Error(`Custom Mic (${mic}) Not Implemented!`);
+      reject(`Custom Mic (${mic}) Not Implemented!`);
     }
-    let recognizer = new speechSDK.TranslationRecognizer(speechConfig, audioConfig);
-
-    resolve(recognizer);
   } catch (e : any) {
     const error_str : string = `Failed to Make Azure TranslationRecognizer, error: ${e}`;
     reject(error_str);

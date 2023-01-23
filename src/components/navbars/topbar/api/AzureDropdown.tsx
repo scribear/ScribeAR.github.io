@@ -53,6 +53,7 @@ export default function AzureDropdown(props) {
    const toggleEnter = async () => {
       dispatch({type: 'FLIP_RECORDING', payload: state.controlStatus});
       let copyStatus = Object.assign({}, state.apiStatus);
+      // TODO: calls returnAPI.tsx to test and setup
       testAzureTranslRecog(state.controlStatus, state.azureStatus).then(recognizer => { 
          // fullfill (test good)
          copyStatus.azureTranslStatus = STATUS.AVAILABLE;

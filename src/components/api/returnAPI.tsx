@@ -99,8 +99,6 @@ const makeAzureTranslHandler = (recognition : ScribeRecognizer) : ScribeHandler 
    }
    return handler;
 }
-
-
 // export const testRecognition = (control: ControlStatus, azure: AzureStatus, currentApi: number) => {
 //     if (currentApi == 0) { // webspeech
 //         // return getWebSpeechRecognition();
@@ -187,7 +185,8 @@ export const useRecognition = (sRecog : SRecognition, api : ApiStatus, control :
 
 
    const [recogHandler, setRecogHandler] = useState<ScribeHandler>();
-   const [reseatTranscript, setResetTranscript] = useState<() => string>(() => () => dispatch('RESET_TRANSCRIPT'));
+   // TODO: Add a reset button to utitlize resetTranscript
+   const [resetTranscript, setResetTranscript] = useState<() => string>(() => () => dispatch('RESET_TRANSCRIPT'));
    const [lastChangeApiTime, setLastChangeApiTime] = useState<number>(Date.now());
    const dispatch = useDispatch();
 

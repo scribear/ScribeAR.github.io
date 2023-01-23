@@ -3,7 +3,7 @@ import { ApiStatus, AzureStatus, PhraseList, PhraseListStatus } from './types/ap
 import { ControlStatus, LanguageList } from "./types/controlStatus";
 import { DisplayStatus } from "./types/displayStatus";
 import { SRecognition, ScribeRecognizer, ScribeHandler } from "./types/sRecognition";
-import { Transcript } from "./types/TranscriptTypes";
+import { Word, Sentence, Transcript } from "./types/TranscriptTypes";
 
 import { API, ApiType, STATUS, StatusType } from './types/apiEnums';
 
@@ -16,8 +16,9 @@ export type {
    LanguageList,
    DisplayStatus,
    SRecognition,
+   Word,
+   Sentence,
    Transcript,
-
 
    // alias
    ScribeRecognizer,

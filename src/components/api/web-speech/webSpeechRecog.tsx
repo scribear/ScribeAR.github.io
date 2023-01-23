@@ -50,8 +50,14 @@ export const useWebSpeechRecog = (recognizer : SpeechRecognition, dispatch : Rea
          dispatch({ type: 'transcript/end' });
          dispatch({ type: 'sRecog/set_status', payload: {status: STATUS.ENDED} });
       }
+      recognizer.onspeechstart = (event: any) => {
+         console.log(`WebSpeech, onspeechstart, event: ${JSON.stringify(event)}`);
+      }
+      recognizer.onspeechend = (event: any) => {
+         console.log(`WebSpeech, onspeechend, event: ${JSON.stringify(event)}`);
+      }
       recognizer.onstart = (event: any) => {
-         console.log(`WebSpeech, onstart, event: ${event}`);
+         console.log(`WebSpeech, onstart, event: ${JSON.stringify(event)}`);
          dispatch({ type: 'sRecog/set_status', payload: {status: STATUS.TRANSCRIBING} });
       }
       recognizer.onerror = (event: SpeechRecognitionErrorEvent) => {

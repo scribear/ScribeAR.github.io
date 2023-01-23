@@ -49,26 +49,22 @@ export function makeEventBucket(object: BucketArgs) {
       // ✅ Now we can use the stream value
       if (stream === 'audio') { 
          const curTime = Date.now();
-
       } else if (stream === 'html5') {
          // console.log("haha, wee?~!", value.length);
          const curTime = Date.now();
 
-         // Array are type <TranscriptConfidence>
          let finalArr = Array<SpeechRecognitionAlternative>();
          let notFinalArr = Array<SpeechRecognitionAlternative>();
-
-         for (let i = 0; i < value.length; i++) {
-               const speechResult = value[i];
-               if (speechResult.isFinal) { // final
-                  finalArr.push(speechResult[0]);
-               } else { // not final
-                  notFinalArr.push(speechResult[0]);
-               }
+         for (let i = 0; i < (value as SpeechRecognitionResultList).length; i++) {
+            const speechResult : SpeechRecognitionResult = value[i];
+            if (speechResult.isFinal) {
+               finalArr.push(speechResult[0]);
+            } else {
+               notFinalArr.push(speechResult[0]);
+            }
          }
 
          const streamMap : MainStreamMap = await getState().BucketStreamReducer;
-
          let newMainStream : boolean = false;
          // If elapsed
          if (streamMap.curMSST + streamMap.timeInterval <= curTime) {

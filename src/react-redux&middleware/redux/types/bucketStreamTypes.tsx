@@ -21,11 +21,6 @@ export interface STTEVENTBucket extends UniversalEventBucket {
     // isFinal: boolean,
 }
 
-export type TranscriptConfidence = { 
-    transcript: string, 
-    confidence: number,
-}
-
 // we want html and azure bucket the same.
 export interface HTML5STTEventBucket extends STTEVENTBucket {
     finalTranscript: Array<SpeechRecognitionAlternative>,

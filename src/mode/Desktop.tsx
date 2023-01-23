@@ -7,9 +7,6 @@ import { Provider, useDispatch, useSelector} from 'react-redux';
 import { store } from '../store';
 import { useCallback, useEffect } from 'react';
 
-import { STTRenderer } from '../components/sttRenderer';
-import { WebRecognitionExampleeeeee } from '../components/api/recogComponent copy';
-
 
 /* todo:
       mui theme file which has every theme and is sent to every styled function
@@ -27,9 +24,7 @@ export default function Desktop(props) {
    return (
      <div>
          <AppNavBar rootState = {RootState}/>
-         {/* <WebRecognitionExample/> */}
-         <WebRecognitionExampleeeeee/>
-         {/* <STTRenderer/> */}
+         <WebRecognitionExample/>
      </div>
    )
   }

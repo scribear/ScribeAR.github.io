@@ -11,7 +11,7 @@ import {
    MainStreamMap, 
 } from "../types/bucketStreamTypes";
 
-import { Transcript } from "../typesImports";
+import { Word, Sentence, Transcript } from "../typesImports";
 
 
 // type TranscriptPayLoad = {
@@ -19,6 +19,24 @@ import { Transcript } from "../typesImports";
 //    nfArr : string[],
 //    transcript : SpeechRecognitionResultList,
 // } | {}
+
+const defaultWord = () : Word => {
+   return {
+      value: '',
+      pitch: -1,
+      volume: -1,
+   }
+}
+
+const defaultSentence = () : Sentence => {
+   return {
+      text: [defaultWord()],
+      intent: '',
+      avgVolume: -1,
+      avgPitch: -1,
+      confidence: -1,
+   }
+}
 
 const defaultTranscript = () : Transcript => {
    // const num : number = 4;
@@ -36,14 +54,14 @@ export const TranscriptReducer = (state = defaultTranscript(), action : {type: s
    
    switch (action.type) {
       case 'transcript/recognized':
-         // console.log(action.payload);
+         // console.log(`line ${39} transcript/recognized reducer`);
          const fTranscript = action.payload.fArr.map((result : SpeechRecognitionAlternative) => result.transcript).join('');
          const nfTranscript = action.payload.nfArr.map((result : SpeechRecognitionAlternative) => result.transcript).join('');
          copyState.currentTranscript[0] = fTranscript + ' ' + nfTranscript;
          return copyState;
       case 'transcript/end':
          // append current to previos
-         console.log('in transcript/end');
+         console.log(`line ${46} transcript/end reducer`);
          for (let i = 0; i < state.speakerNum; i++) {
             const curTranscript : string  = copyState.currentTranscript[i];
             if (curTranscript !== '') {

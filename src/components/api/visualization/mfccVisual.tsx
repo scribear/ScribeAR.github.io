@@ -1,9 +1,10 @@
 import React, { useEffect, useRef } from 'react'
-import { DisplayStatus } from '../../../redux/types';
 import { useSelector } from 'react-redux';
+import { DisplayStatus } from '../../../react-redux&middleware/redux/typesImports';
 import { RootState } from '../../../store';
 import Meyda from 'meyda';
 import { MeydaAnalyzer } from 'meyda/dist/esm/meyda-wa';
+
 
 var audioContext: AudioContext;
 var analyser: MeydaAnalyzer;
@@ -99,6 +100,7 @@ export function MFCCVisual(props: any) {
     const sliceHeight = canvas.height / HISTORY_LENGTH;
     history.forEach((moment, index) => {
       const row = (HISTORY_LENGTH - history_write_index + index) % HISTORY_LENGTH;
+      console.log(moment.centroid);
       const centroid = Math.round(720 * moment.centroid / FFT_SIZE);
       moment.mfcc.forEach((data, col) => {
         const intensity = data / 255;

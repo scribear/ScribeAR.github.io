@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState, } from 'react'
 import { RootState } from '../../../store';
-import { DisplayStatus, ControlStatus } from '../../../redux/types';
+import { DisplayStatus, ControlStatus } from '../../../react-redux&middleware/redux/typesImports';
 import { useSelector } from 'react-redux';
 
 import './canvasFonts.css';
@@ -235,6 +235,11 @@ export const LoungeVisual = (props) => {
 
         // get data into dataArray
         analyser.getByteFrequencyData(dataArray);
+        // if (flag == true) {
+        //     dispatch(volume)
+        //     flag false
+        //     restart timer
+        // }
 
         canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
         // renderTime();

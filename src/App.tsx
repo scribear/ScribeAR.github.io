@@ -1,6 +1,8 @@
-import Desktop from './mode/desktop/Desktop';
+import React from 'react';
+
+import Desktop from './mode/Desktop';
 import { Provider, useDispatch, useSelector} from 'react-redux';
-import { RootState, DisplayStatus } from './redux/types';
+import { RootState, DisplayStatus } from './react-redux&middleware/redux/typesImports';
 
 import './App.css';
 

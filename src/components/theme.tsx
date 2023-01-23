@@ -1,5 +1,5 @@
 import { createTheme } from '@mui/material/styles';
-import { RootState, DisplayStatus } from '../redux/types';
+import { RootState, DisplayStatus } from '../react-redux&middleware/redux/typesImports';
 import { useSelector } from 'react-redux';
 
 // our global theme provider
@@ -12,6 +12,9 @@ const displayStatus = useSelector((state: RootState) => {
     return state.DisplayReducer as DisplayStatus;
 })
 
+// console.log(displayStatus.secondaryColor);
+// console.log(displayStatus.primaryColor);
+// console.log(displayStatus.textColor);
 const myTheme = createTheme
     ({
         palette: {

@@ -2,6 +2,10 @@ import { batch } from "react-redux";
 
 import { MainStreamMap } from "../redux/types/bucketStreamTypes";
 import { ControlStatus, STATUS, StatusType } from "../redux/typesImports";
+import { loadTokenizer } from '../../ml/bert_tokenizer';
+import { intent_inference } from '../../ml/inference';
+
+const ort = require('onnxruntime-web');
 
 
 /* Save to sessionStorage so that it is cleared when refreshed */
@@ -53,14 +57,18 @@ export function makeEventBucket(object: BucketArgs) {
          // console.log("haha, wee?~!", value.length);
          const curTime = Date.now();
 
-         let finalArr = Array<SpeechRecognitionAlternative>();
-         let notFinalArr = Array<SpeechRecognitionAlternative>();
+         // let finalArr = Array<SpeechRecognitionAlternative>();
+         // let notFinalArr = Array<SpeechRecognitionAlternative>();
+         let finalArr = Array<{ confidence : number, transcript : string }>();
+         let notFinalArr = Array<{ confidence : number, transcript : string }>();
          for (let i = 0; i < (value as SpeechRecognitionResultList).length; i++) {
             const speechResult : SpeechRecognitionResult = value[i];
+            const intent : string = (await intent_inference(speechResult[0].transcript))[1][1][0];
+            const result = { confidence: speechResult[0].confidence, transcript: speechResult[0].transcript + ' (' + intent.split(' ')[1] + ')'};
             if (speechResult.isFinal) {
-               finalArr.push(speechResult[0]);
+               finalArr.push(result);
             } else {
-               notFinalArr.push(speechResult[0]);
+               notFinalArr.push(result);
             }
          }
 

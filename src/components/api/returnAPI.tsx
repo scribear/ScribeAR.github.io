@@ -6,12 +6,14 @@ import {
    ScribeRecognizer, ScribeHandler, } from '../../react-redux&middleware/redux/typesImports';
 import { API, ApiType, STATUS, StatusType } from '../../react-redux&middleware/redux/typesImports';
 import { RootState } from '../../store';
-
 import * as sdk from 'microsoft-cognitiveservices-speech-sdk'
+
 import  { getWebSpeechRecog, useWebSpeechRecog } from './web-speech/webSpeechRecog';
 import { getAzureTranslRecog, testAzureTranslRecog, useAzureTranslRecog } from './azure/azureTranslRecog';
-import { ControlPointOutlined } from '@material-ui/icons';
-import { resolve } from 'path';
+import { loadTokenizer } from '../../ml/bert_tokenizer';
+
+import { intent_inference } from '../../ml/inference';
+const ort = require('onnxruntime-web');
 
 
 // controls what api to send and what to do when error handling.
@@ -251,12 +253,41 @@ export const useRecognition = (sRecog : SRecognition, api : ApiStatus, control :
    }, [sRecog.status]);
 
 
-   const transcript : string = useSelector((state: RootState) => {
+   let transcript : string = useSelector((state: RootState) => {
       const fullTranscript : string = state.TranscriptReducer.previousTranscript[0] 
                                        + ' ' + state.TranscriptReducer.currentTranscript[0];
       return fullTranscript;
    });
 
-
+   
+   // let sentences : string[] = transcript.split('. ');
+   // let intents : string[] = [];
+   // sentences.forEach((sentence : string) => {
+   //    if (sentence === '' || sentence === ' ') return;
+   //    let intent : string = '';
+   //    intent_inference(sentence).then(result => {
+   //       intents.push(result[1][1][0]);
+   //    });
+   // });
+   // console.log('intents: ', intents);
+   // let intentTranscript : string = transcript.split('. ')
+   //    .reduce((sumSentence : string, curSentence : string) => {
+   //       if (curSentence === '' || curSentence === ' ') return sumSentence;
+   //       let intent : string = '';
+   //       const infer = 
+   //          () : string => {
+   //             intent_inference(curSentence).then(result => {
+   //                console.log(result[1][1][0]);
+   //                intent = result[1][1][0];
+   //                console.log(intent);
+   //                return sumSentence + curSentence + intent + '.';
+   //             }
+   //          );
+   //       }
+   //       return infer();
+   //    }, '');
+   
+   // console.log('intentTranscript: ', intentTranscript);
+   // transcript = intentTranscript;
    return {transcript, recogHandler};
 }

@@ -33,6 +33,7 @@
     "react-async": "^10.0.1",
     "react-color": "^2.19.3",
     "react-dom": "^17.0.2",
+    "react-load-script": "^0.0.6",
     "react-redux": "^7.2.4",
     "react-scripts": "^5.0.1",
     "react-speech-recognition": "^3.9.0",
@@ -45,6 +46,8 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -66,5 +69,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "gh-pages": "^5.0.0"
   }
 }

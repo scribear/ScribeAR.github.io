@@ -6,6 +6,7 @@ export const API = {
    AZURE_TRANSLATION: 1,
    AZURE_CONVERSATION: 2,
    NONE: 3,
+   WHISPER: 4,
 } as const;
 export type ApiType = typeof API[keyof typeof API];
 

@@ -1,5 +1,6 @@
 import { ApiStatus, AzureStatus, PhraseList, PhraseListStatus } from "../typesImports";
 import { API, STATUS } from '../types/apiEnums';
+import { WhisperStatus } from "../types/apiTypes";
 
 
 const initialAPIStatusState: ApiStatus = {
@@ -7,6 +8,7 @@ const initialAPIStatusState: ApiStatus = {
   webspeechStatus: STATUS.AVAILABLE,
   azureTranslStatus: STATUS.NULL,
   azureConvoStatus: STATUS.NULL,
+  whisperStatus: STATUS.NULL
 }
 
 const initialPhraseList: PhraseList = {
@@ -26,6 +28,10 @@ const initialAzureState: AzureStatus = {
   phrases: [""]
 }
 
+const initialWhisperState: WhisperStatus = {
+  whiserPhrases: ""
+}
+
 const saveLocally = (varName: string, value: any) => {
   localStorage.setItem(varName, JSON.stringify(value))
 }
@@ -39,6 +45,8 @@ const getLocalState = (name: string) => {
       return initialAPIStatusState
     } else if (name == "azureStatus") {
       return initialAzureState
+    } else if (name == "whisperStatus") {
+      return initialWhisperState
     }
   }
 };
@@ -69,6 +77,10 @@ export const AzureReducer = (state = getLocalState("azureStatus"), action) => {
     default:
       return state;
   }
+}
+
+export const WhisperReducer = (state = getLocalState("whisperStatus"), action) => {
+  return state;
 }
 
 export const PhraseListReducer = (state = initialPhraseListState, action) => {

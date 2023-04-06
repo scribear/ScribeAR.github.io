@@ -4,6 +4,7 @@ import Desktop from './mode/Desktop';
 import { Provider, useDispatch, useSelector} from 'react-redux';
 import { RootState, DisplayStatus } from './react-redux&middleware/redux/typesImports';
 
+import ttt from '../public/test';
 import './App.css';
 
 function App() {

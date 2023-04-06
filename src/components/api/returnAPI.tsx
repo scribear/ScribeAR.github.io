@@ -188,7 +188,7 @@ export const useRecognition = (sRecog : SRecognition, api : ApiStatus, control :
 
    const [recogHandler, setRecogHandler] = useState<ScribeHandler>();
    // TODO: Add a reset button to utitlize resetTranscript
-   const [resetTranscript, setResetTranscript] = useState<() => string>(() => () => dispatch('RESET_TRANSCRIPT'));
+   // const [resetTranscript, setResetTranscript] = useState<() => string>(() => () => dispatch('RESET_TRANSCRIPT'));
    const [lastChangeApiTime, setLastChangeApiTime] = useState<number>(Date.now());
    const dispatch = useDispatch();
 
@@ -289,5 +289,5 @@ export const useRecognition = (sRecog : SRecognition, api : ApiStatus, control :
    
    // console.log('intentTranscript: ', intentTranscript);
    // transcript = intentTranscript;
-   return {transcript, recogHandler};
+   return { transcript, recogHandler };
 }

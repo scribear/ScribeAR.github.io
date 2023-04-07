@@ -4,9 +4,21 @@ import { MainStreamMap } from "../redux/types/bucketStreamTypes";
 import { ControlStatus, STATUS, StatusType } from "../redux/typesImports";
 import { loadTokenizer } from '../../ml/bert_tokenizer';
 import { intent_inference } from '../../ml/inference';
+import { Configuration, OpenAIApi } from 'openai';
 
 const ort = require('onnxruntime-web');
 
+
+const SentimentToEmojis : { [index: string]: string } = {
+   "admiration": "👏", "amusement": "😂", "anger": "😡", "annoyance": "😒",
+   "approval": "👍", "caring": "🤗", "confusion": "😕", "curiosity": "🤔",
+   "desire": "😍", "disappointment": "😞", "disapproval": "👎", "disgust": "🤮",
+   "embarrassment": "😳", "excitement": "🤩", "fear": "😨", "gratitude": "🙏",
+   "grief": "😢", "joy": "😃", "love": "❤️", "nervousness": "😬",
+   "optimism": "🤞", "pride": "😌", "realization": "💡", "relief": "😅",
+   "remorse": "😞",  "sadness": "😞", "surprise": "😲", "neutral": "😐",
+};
+const sentimentPrompt = "Decide whether the sentence is admiration amusement anger annoyance approval caring confusion curiosity desire disappointment disapproval disgust embarrassment excitement fear gratitude grief joy love nervousness optimism pride realization relief remorse sadness surprise, or neutral:";
 
 /* Save to sessionStorage so that it is cleared when refreshed */
 const saveSessionly = (varName: string, value: any) => {
@@ -39,6 +51,39 @@ type BucketArgs = {
    value: any | SpeechRecognitionResultList,
 }
 
+const getSentiment = async (sentence: string) : Promise<string> => {
+   const openaiApiKey = process.env.REACT_APP_OPENAI_API_KEY;
+   const url = 'https://api.openai.com/v1/completions';
+
+   const res = await fetch(url, {
+      method: 'POST',
+      headers: {
+         'Content-Type': 'application/json',
+         'Authorization': `Bearer ${openaiApiKey}`
+      },
+      body: JSON.stringify({
+         model: 'text-davinci-003',
+         prompt: sentimentPrompt + sentence,
+         temperature: 0.0,
+         max_tokens: 10,
+         top_p: 1.0,
+         n: 1,
+         echo: false,
+         frequency_penalty: 0.0,
+         presence_penalty: 0.0,
+         logit_bias: {"198": -100}, // Only for GPT-3: '\n' and <|endoftext|>
+      })
+   })
+   const completion = await res.json();
+   let interim = ((completion.choices[0].text).trim()).split('\n');
+   let interim2 = interim[interim.length - 1].split(' ');
+   const sentiment = interim2[interim2.length - 1].toLowerCase();
+   // console.log(101, sentiment);
+
+   const emoji = sentiment ? SentimentToEmojis[sentiment] : SentimentToEmojis["neutral"];
+   return emoji;
+}
+
 /**
  * Write a synchronous outer function that receives the `text` parameter:
  * @param object 
@@ -63,11 +108,17 @@ export function makeEventBucket(object: BucketArgs) {
          let notFinalArr = Array<{ confidence : number, transcript : string }>();
          for (let i = 0; i < (value as SpeechRecognitionResultList).length; i++) {
             const speechResult : SpeechRecognitionResult = value[i];
-            const intent : string = (await intent_inference(speechResult[0].transcript))[1][1][0];
-            const result = { confidence: speechResult[0].confidence, transcript: speechResult[0].transcript + ' (' + intent.split(' ')[1] + ')'};
+            // const intent : string = (await intent_inference(speechResult[0].transcript))[1][1][0];
+            // const intent : string = await getSentiment(speechResult[0].transcript);
+            // console.log(intent);
+            // const result = { confidence: speechResult[0].confidence, transcript: speechResult[0].transcript + ' (' + intent + ')' };
             if (speechResult.isFinal) {
+               const intent : string = await getSentiment(speechResult[0].transcript);
+               console.log(intent);
+               const result = { confidence: speechResult[0].confidence, transcript: speechResult[0].transcript + ' (' + intent + ')' };
                finalArr.push(result);
             } else {
+               const result = { confidence: speechResult[0].confidence, transcript: speechResult[0].transcript };
                notFinalArr.push(result);
             }
          }
@@ -76,14 +127,14 @@ export function makeEventBucket(object: BucketArgs) {
          let newMainStream : boolean = false;
          // If elapsed
          if (streamMap.curMSST + streamMap.timeInterval <= curTime) {
-               newMainStream = true;
+            newMainStream = true;
 
-               // Also append final transcripts to sessionStorage
+            // Also append final transcripts to sessionStorage
 
-               // const curSessionSpeech = getSessionState('html5STT');
-               // const finalSpeech = finalArr.map(fSpeech => fSpeech.transcript).join('');
-               // saveSessionly('html5STT', curSessionSpeech + finalSpeech);
-               console.log("New html5 stream created; sessionStorage updated!");
+            // const curSessionSpeech = getSessionState('html5STT');
+            // const finalSpeech = finalArr.map(fSpeech => fSpeech.transcript).join('');
+            // saveSessionly('html5STT', curSessionSpeech + finalSpeech);
+            console.log("New html5 stream created; sessionStorage updated!");
          }
 
          // console.log({
@@ -107,57 +158,5 @@ export function makeEventBucket(object: BucketArgs) {
       } else if (stream === 'userAction') {
    
       }
-
-      // dispatch({ type: 'todos/todoAdded', payload: response.todo })
    }
 }
-
-
-// /**
-//  * For onend() event
-//  * @returns 
-//  */
-// export function makeTranscriptEnd(stream : string) {
-
-//    return async function makeTranscriptEndThunk(dispatch : React.Dispatch<any>, getState) {
-//       batch(() => {
-//          dispatch({ type: 'transcript/end' });
-//          dispatch({ type: 'sRecog/set_status', payload: STATUS.ENDED})
-//       });
-//    }
-// }
-
-// /**
-//  * for end and error events of both webspeech and azure
-//  * 
-//  * @rationale when an error occurs, both end and error event are fired
-//  * and I am not sure which one is fired first.
-//  * However, for end event,
-//  * as long as we check the status was not error,
-//  * then we can make sure an error stays as an error.
-//  * @param type 
-//  * @returns 
-//  */
-// export function makeEndErrorHanlder(type : string) {
-
-//    if (type === 'end') {
-//       return async function recogEndThunk(dispatch : React.Dispatch<any>, getState) {
-//          const recogStatus : StatusType = await getState().sRecogReducer.status;
-//          if (recogStatus === STATUS.ERROR) {
-//             dispatch({ type: 'transcript/end' });
-//          } else { // not error
-//             batch(() => {
-//                dispatch({ type: 'transcript/end' });
-//                dispatch({ type: 'sRecog/set_status', payload: STATUS.ENDED });
-//             });
-//          }
-//       }
-//    } else if (type === 'error') {
-//       return async function recogErrorThunk(dispatch : React.Dispatch<any>, getState) {
-//          batch(() => {
-//             dispatch({ type: 'transcript/end' });
-//             dispatch({ type: 'sRecog/set_status', payload: STATUS.ERROR });
-//          });
-//       }
-//    }
-// } 

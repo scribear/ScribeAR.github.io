@@ -8,6 +8,7 @@ import swal from 'sweetalert';
 import { createTheme, ThemeProvider, ListItemButton, ListItemText, ListItemIcon, Collapse, ErrorIcon, ExpandLess, ExpandMore, CancelIcon, IconButton, DoNotDisturbOnIcon, CheckCircleIcon } from '../../../../muiImports' 
 
 import AzureDropdown from './AzureDropdown';
+import WhisperDropdown from './WhisperDropdown';
 
 
 const currTheme = createTheme({
@@ -65,6 +66,7 @@ export default function PickApi(props) {
    const [state, setState] = React.useState({
       azureStatus: false,
       webspeechStatus: false,
+      whisperStatus: false,
       apiStatus: useSelector((state: RootState) => {
          return state.APIStatusReducer as ApiStatus;
       })
@@ -77,6 +79,9 @@ export default function PickApi(props) {
                      let apiName = "Webspeech";
                      if (api == 1) {
                            apiName = "Microsoft Azure"
+                     }
+                     if (api == 4) {
+                        apiName = "Whisper"
                      }
                      swal({
                            title: "Success!",
@@ -117,8 +122,22 @@ export default function PickApi(props) {
                </IconButton>
          </ListItemButton>
 
+         <ListItemButton onClick={toggleDrawer("whisperStatus", 4, false)} >
+               <ListItemIcon>
+                  <IconStatus{...{currentApi: state.apiStatus.whisperStatus}}/>
+               </ListItemIcon>
+               <ListItemText primary="Whisper" />
+               <IconButton onClick={toggleDrawer("whisperStatus", 4, true)}>
+                  {state.whisperStatus ? <ExpandLess /> : <ExpandMore />}
+               </IconButton>
+         </ListItemButton>
+
          <Collapse in={state.azureStatus} timeout="auto" unmountOnExit>
                <AzureDropdown apiStatus={state.apiStatus}/>
+         </Collapse>
+
+         <Collapse in={state.whisperStatus} timeout="auto" unmountOnExit>
+               <WhisperDropdown apiStatus={state.apiStatus}/>
          </Collapse>
       </div>
    );

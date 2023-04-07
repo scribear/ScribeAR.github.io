@@ -1,5 +1,5 @@
 import { DisplayReducer } from './react-redux&middleware/redux/reducers/displayReducers'
-import { APIStatusReducer, AzureReducer, PhraseListReducer } from './react-redux&middleware/redux/reducers/apiReducers'
+import { APIStatusReducer, AzureReducer, PhraseListReducer, WhisperReducer } from './react-redux&middleware/redux/reducers/apiReducers'
 import { ControlReducer } from './react-redux&middleware/redux/reducers/controlReducers'
 import { BucketStreamReducer } from './react-redux&middleware/redux/reducers/bucketStreamReducers'
 import { TranscriptReducer } from './react-redux&middleware/redux/reducers/transcriptReducers'
@@ -12,6 +12,7 @@ import thunkMiddleware from 'redux-thunk'
 const rootReducer = combineReducers({
    DisplayReducer,
    APIStatusReducer,
+   WhisperReducer,
    AzureReducer,
    ControlReducer,
    PhraseListReducer,

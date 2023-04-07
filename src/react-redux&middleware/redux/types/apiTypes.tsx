@@ -7,16 +7,18 @@ import sdk from 'microsoft-cognitiveservices-speech-sdk';
 
 /**
  * Interface for each API's status's
- * @field currentApi: an enum of WEBSPEECH, AZURE (our 2 current available API's)
+ * @field currentApi: an enum of WEBSPEECH, AZURE, WHISPER (our 3 current available API's)
  * @field webspeechStatus,
  * @field azureTranslStatus,
  * @field azureConvoStatus,
+ * @field whisperStatus,
  */
 export type ApiStatus = {
    currentApi: ApiType;
    webspeechStatus: StatusType;
    azureTranslStatus: StatusType;
    azureConvoStatus: StatusType;
+   whisperStatus: StatusType;
 }
 /**
  * AzureStatus currently has only the login information.
@@ -42,4 +44,10 @@ export type PhraseList = {
 export type PhraseListStatus = {
    currentPhraseList: PhraseList
    phraseListMap: Map<string, PhraseList>
+}
+
+export type WhisperStatus = {
+   whiserPhrases: string
+   tinyModel: string
+   baseModel: string
 }

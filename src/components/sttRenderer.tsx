@@ -29,6 +29,7 @@ export const STTRenderer = () : JSX.Element => {
       return state.SRecognitionReducer as SRecognition;
    })
 
+   // if else for whisper transcript, apiStatus for 4=whisper and control status for listening
    
    const { transcript, recogHandler } = useRecognition(sRecog, apiStatus, controlStatus, azureStatus);
    // console.log('40', transcript);

@@ -200,48 +200,55 @@ export const useRecognition = (sRecog : SRecognition, api : ApiStatus, control :
 
    // change recognizer, if api changed
    useEffect(() => {
-      getRecognition(api.currentApi, control, azure)
-         .then((result : ScribeRecognizer) => {
-            runRecognition(api.currentApi, result, dispatch)
-               .then((handler : ScribeHandler) => {
-                  setRecogHandler(() => handler);
+      if (api.currentApi !== API.WHISPER) {
+         getRecognition(api.currentApi, control, azure)
+            .then((result : ScribeRecognizer) => {
+               runRecognition(api.currentApi, result, dispatch)
+                  .then((handler : ScribeHandler) => {
+                     setRecogHandler(() => handler);
 
-                  let copy_sRecog = Object.assign({}, sRecog);
-                  copy_sRecog.recognizer = result;
-                  copy_sRecog.status = STATUS.AVAILABLE;
-                  copy_sRecog.api = api.currentApi;
+                     let copy_sRecog = Object.assign({}, sRecog);
+                     copy_sRecog.recognizer = result;
+                     copy_sRecog.status = STATUS.AVAILABLE;
+                     copy_sRecog.api = api.currentApi;
 
-                  // // change handler
-                  // console.log('recog changed', (sRecog.status === STATUS.NULL), (sRecog.status === STATUS.AVAILABLE), (control.listening));
-                  if (control.listening) {
-                     console.log(259, 'start recognition');
-                     handler({type: 'START'}); // start recognition
-                     copy_sRecog.status = STATUS.TRANSCRIBING;
-                  }
-                  
-                  dispatch({ type: 'sRecog/set_recog', payload: copy_sRecog }); // only dispatch if it is fullfilled
-               })
-               .catch((error_str : string) => {
-                  console.log(error_str);
-               });
-         })
-         .catch((error_str : string) => {
-            console.log(error_str);
-         });
+                     // // change handler
+                     // console.log('recog changed', (sRecog.status === STATUS.NULL), (sRecog.status === STATUS.AVAILABLE), (control.listening));
+                     if (control.listening) {
+                        console.log(259, 'start recognition');
+                        handler({type: 'START'}); // start recognition
+                        copy_sRecog.status = STATUS.TRANSCRIBING;
+                     }
+                     
+                     dispatch({ type: 'sRecog/set_recog', payload: copy_sRecog }); // only dispatch if it is fullfilled
+                  })
+                  .catch((error_str : string) => {
+                     console.log(error_str);
+                  });
+            })
+            .catch((error_str : string) => {
+               console.log(error_str);
+            });
+      } else if (api.currentApi === API.WHISPER) {
+         return; // do nothing becuase Whisper is using iframe
+      }
    }, [api.currentApi]);
    // control recognizer, if listening changed
    useEffect(() => {
-      if (!recogHandler) {
+      if (!recogHandler) { // whipser won't have recogHandler
          return;
       }
       if (control.listening) {
          recogHandler({type: 'START'});
       } else if (!control.listening) {
-         recogHandler({type: 'STOP'});
+         recogHandler({type: 'STOP'}); 
       }
    }, [control.listening]);
    // restart recognizer, if status not ERROR
    useEffect(() => {
+      if (!recogHandler) { // whipser won't have recogHandler
+         return;
+      }
       // console.log('change recog status: ', sRecog.status);
       if (sRecog.status === STATUS.ENDED) {
          const curTime = Date.now();
@@ -258,41 +265,17 @@ export const useRecognition = (sRecog : SRecognition, api : ApiStatus, control :
    }, [sRecog.status]);
 
 
+   // TODO: whisper's transcript is not in redux store but only in sessionStorage at the moment.
    let transcript : string = useSelector((state: RootState) => {
       const fullTranscript : string = state.TranscriptReducer.previousTranscript[0] 
                                        + ' ' + state.TranscriptReducer.currentTranscript[0];
       return fullTranscript;
    });
+   if (api.currentApi === API.WHISPER) { 
+      // TODO: inefficient to get it from sessionStorage everytime
+      // TODO: add whisper_transcript to redux store after integrating "whisper" folder (containing stream.js) into ScribeAR
+      transcript = sessionStorage.getItem('whisper_transcript') || '';
+   }
 
-   
-   // let sentences : string[] = transcript.split('. ');
-   // let intents : string[] = [];
-   // sentences.forEach((sentence : string) => {
-   //    if (sentence === '' || sentence === ' ') return;
-   //    let intent : string = '';
-   //    intent_inference(sentence).then(result => {
-   //       intents.push(result[1][1][0]);
-   //    });
-   // });
-   // console.log('intents: ', intents);
-   // let intentTranscript : string = transcript.split('. ')
-   //    .reduce((sumSentence : string, curSentence : string) => {
-   //       if (curSentence === '' || curSentence === ' ') return sumSentence;
-   //       let intent : string = '';
-   //       const infer = 
-   //          () : string => {
-   //             intent_inference(curSentence).then(result => {
-   //                console.log(result[1][1][0]);
-   //                intent = result[1][1][0];
-   //                console.log(intent);
-   //                return sumSentence + curSentence + intent + '.';
-   //             }
-   //          );
-   //       }
-   //       return infer();
-   //    }, '');
-   
-   // console.log('intentTranscript: ', intentTranscript);
-   // transcript = intentTranscript;
    return { transcript, recogHandler };
 }

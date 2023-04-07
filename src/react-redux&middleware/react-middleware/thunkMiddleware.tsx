@@ -52,36 +52,45 @@ type BucketArgs = {
 }
 
 const getSentiment = async (sentence: string) : Promise<string> => {
-   const openaiApiKey = process.env.REACT_APP_OPENAI_API_KEY;
-   const url = 'https://api.openai.com/v1/completions';
+   try {
+      const openaiApiKey = process.env.REACT_APP_OPENAI_API_KEY;
+      const url = 'https://api.openai.com/v1/completions';
 
-   const res = await fetch(url, {
-      method: 'POST',
-      headers: {
-         'Content-Type': 'application/json',
-         'Authorization': `Bearer ${openaiApiKey}`
-      },
-      body: JSON.stringify({
-         model: 'text-davinci-003',
-         prompt: sentimentPrompt + sentence,
-         temperature: 0.0,
-         max_tokens: 10,
-         top_p: 1.0,
-         n: 1,
-         echo: false,
-         frequency_penalty: 0.0,
-         presence_penalty: 0.0,
-         logit_bias: {"198": -100}, // Only for GPT-3: '\n' and <|endoftext|>
-      })
-   })
-   const completion = await res.json();
-   let interim = ((completion.choices[0].text).trim()).split('\n');
-   let interim2 = interim[interim.length - 1].split(' ');
-   const sentiment = interim2[interim2.length - 1].toLowerCase();
-   // console.log(101, sentiment);
+      if (!openaiApiKey) {
+         return '';
+      }
 
-   const emoji = sentiment ? SentimentToEmojis[sentiment] : SentimentToEmojis["neutral"];
-   return emoji;
+      const res = await fetch(url, {
+         method: 'POST',
+         headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${openaiApiKey}`
+         },
+         body: JSON.stringify({
+            model: 'text-davinci-003',
+            prompt: sentimentPrompt + sentence,
+            temperature: 0.0,
+            max_tokens: 10,
+            top_p: 1.0,
+            n: 1,
+            echo: false,
+            frequency_penalty: 0.0,
+            presence_penalty: 0.0,
+            logit_bias: {"198": -100}, // Only for GPT-3: '\n' and <|endoftext|>
+         })
+      });
+      const completion = await res.json();
+      let interim = ((completion.choices[0].text).trim()).split('\n');
+      let interim2 = interim[interim.length - 1].split(' ');
+      const sentiment = interim2[interim2.length - 1].toLowerCase();
+      // console.log(101, sentiment);
+
+      const emoji = sentiment ? SentimentToEmojis[sentiment] : SentimentToEmojis["neutral"];
+      return emoji;
+   } catch (err) {
+      console.log(87, err);
+      return '';
+   }
 }
 
 /**

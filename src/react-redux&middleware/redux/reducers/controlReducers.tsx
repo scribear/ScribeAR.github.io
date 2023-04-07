@@ -1,5 +1,18 @@
 import { ControlStatus } from "../typesImports";
 
+
+const saveSessionStorage = (key: string, value: any) => {
+  sessionStorage.setItem(key, JSON.stringify(value));
+}
+
+const loadSessionStorage = (key: string) => {
+  const value = sessionStorage.getItem(key);
+  if (value) {
+    return JSON.parse(value);
+  }
+  return null;
+}
+
 const initialControlState : ControlStatus = {
   listening: true,
   speechLanguage: {label: "English (United States)",	CountryCode: "en-US"},
@@ -12,6 +25,7 @@ const initialControlState : ControlStatus = {
 export function ControlReducer(state = initialControlState, action) {
   switch (action.type) {
     case 'FLIP_RECORDING':
+      saveSessionStorage('listening', action.payload);
       return { ...state, ...action.payload};
     case 'FLIP_SHOWFREQ': // also set showTimeData false
       return { ...state, showFrequency: !state.showFrequency, showTimeData: false, showMFCC: false };

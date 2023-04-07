@@ -130,13 +130,18 @@ const getRecognition = (currentApi: number, control: ControlStatus, azure: Azure
    } else if (currentApi === API.AZURE_TRANSLATION) { // azure TranslationRecognizer
       return getAzureTranslRecog(control, azure);
       // return useMemo(() => getAzureTranslRecog(control, azure), []);
-   } else if (currentApi === API.AZURE_CONVERSATION) { // azure ConversationTranscriber
+   } 
+   else if (currentApi === API.AZURE_CONVERSATION) { // azure ConversationTranscriber
       throw new Error("Not implemented");
    } else {
       throw new Error(`Unexpcted API_CODE: ${currentApi}`);
       // return useMemo(() => getWebSpeechRecog(control), []);
    }
 }
+
+// else if (currentApi === API.WHISPER){
+
+// }
 
 /**
  * Connect the recognizer to the event handler

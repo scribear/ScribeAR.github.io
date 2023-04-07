@@ -12,20 +12,20 @@ const displayStatus = useSelector((state: RootState) => {
     return state.DisplayReducer as DisplayStatus;
 })
 
-// console.log(displayStatus.secondaryColor);
-// console.log(displayStatus.primaryColor);
-// console.log(displayStatus.textColor);
+// alert(displayStatus.secondaryColor);
+// alert(displayStatus.primaryColor);
+// alert(displayStatus.textColor);
 const myTheme = createTheme
     ({
         palette: {
             primary: {
-                main: displayStatus.secondaryColor
+                main: '#fff'
             },
             secondary: {
-                main: displayStatus.primaryColor
+                main: '#000'
             },
             info: {
-                main: displayStatus.textColor
+                main: '#000'
             }
             
             

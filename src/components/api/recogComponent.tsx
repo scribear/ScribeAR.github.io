@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import Swal from 'sweetalert2';
 
 import { RootState } from '../../store';
-import { DisplayStatus, AzureStatus, ControlStatus, ApiStatus } from '../../react-redux&middleware/redux/typesImports'
+import { DisplayStatus, AzureStatus, ControlStatus, ApiStatus, WhisperStatus } from '../../react-redux&middleware/redux/typesImports'
 import { STTRenderer } from '../sttRenderer';
 
 
@@ -20,6 +20,9 @@ export const WebRecognitionExample: React.FC = (props) => {
    })
    const apiStatus = useSelector((state: RootState) => {
       return state.APIStatusReducer as ApiStatus
+   })
+   const whisperStatus = useSelector((state: RootState) => {
+      return state.WhisperReducer as WhisperStatus
    })
    document.addEventListener("DOMContentLoaded", () => {
       if (apiStatus.currentApi == 1) {
@@ -41,7 +44,10 @@ export const WebRecognitionExample: React.FC = (props) => {
             // webspeechHandler()
          }
          })
-      } 
+      } else if (apiStatus.currentApi == 4){
+         console.log("hereeeee")
+         // whisperHandler()
+      }
    });
    // const textSizeA = "" + textSize.textSize + "vh"
    // const { azureTranscripts, azureListen } = useAzureTranslRecog();

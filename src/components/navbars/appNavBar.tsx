@@ -32,6 +32,8 @@ export default function AppNavBar(props) {
         display = "Azure";
     } else if (apiStatus.currentApi == 0) {
         display = "Webspeech";
+    } else if (apiStatus.currentApi == 4) {
+        display = "Whisper";
     }
     const myTheme = currTheme
 

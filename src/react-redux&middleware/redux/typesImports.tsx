@@ -1,5 +1,5 @@
 import { MainStream } from "./types/bucketStreamTypes";
-import { ApiStatus, AzureStatus, PhraseList, PhraseListStatus } from './types/apiTypes';
+import { ApiStatus, AzureStatus, PhraseList, PhraseListStatus, WhisperStatus } from './types/apiTypes';
 import { ControlStatus, LanguageList } from "./types/controlStatus";
 import { DisplayStatus } from "./types/displayStatus";
 import { SRecognition, ScribeRecognizer, ScribeHandler } from "./types/sRecognition";
@@ -12,6 +12,7 @@ export type {
    AzureStatus,
    PhraseList,
    PhraseListStatus,
+   WhisperStatus,
    ControlStatus,
    LanguageList,
    DisplayStatus,
@@ -41,4 +42,5 @@ export type RootState = {
    ControlReducer: ControlStatus
    PhraseListReducer: PhraseListStatus
    initialStreams : MainStream
+   WhisperReducer: WhisperStatus
 }

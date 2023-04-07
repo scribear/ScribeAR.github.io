@@ -25,7 +25,7 @@ const initialControlState : ControlStatus = {
 export function ControlReducer(state = initialControlState, action) {
   switch (action.type) {
     case 'FLIP_RECORDING':
-      saveSessionStorage('listening', action.payload);
+      saveSessionStorage('listening', action.payload.listening === true);
       return { ...state, ...action.payload};
     case 'FLIP_SHOWFREQ': // also set showTimeData false
       return { ...state, showFrequency: !state.showFrequency, showTimeData: false, showMFCC: false };

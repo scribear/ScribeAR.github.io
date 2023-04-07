@@ -44,7 +44,10 @@ export const WebRecognitionExample: React.FC = (props) => {
             // webspeechHandler()
          }
          })
-      } 
+      } else if (apiStatus.currentApi == 4){
+         console.log("hereeeee")
+         // whisperHandler()
+      }
    });
    // const textSizeA = "" + textSize.textSize + "vh"
    // const { azureTranscripts, azureListen } = useAzureTranslRecog();

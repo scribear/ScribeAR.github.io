@@ -106,7 +106,7 @@ export function makeEventBucket(object: BucketArgs) {
    
       } else if (stream === 'userAction') {
    
-      }
+      } 
 
       // dispatch({ type: 'todos/todoAdded', payload: response.todo })
    }

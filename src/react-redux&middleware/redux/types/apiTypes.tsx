@@ -48,4 +48,6 @@ export type PhraseListStatus = {
 
 export type WhisperStatus = {
    whiserPhrases: string
+   tinyModel: string
+   baseModel: string
 }

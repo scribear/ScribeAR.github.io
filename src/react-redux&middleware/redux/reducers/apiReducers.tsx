@@ -29,7 +29,9 @@ const initialAzureState: AzureStatus = {
 }
 
 const initialWhisperState: WhisperStatus = {
-  whiserPhrases: ""
+  whiserPhrases: "",
+  tinyModel: "tiny (75 MB)",
+  baseModel: "base (145 MB)"
 }
 
 const saveLocally = (varName: string, value: any) => {

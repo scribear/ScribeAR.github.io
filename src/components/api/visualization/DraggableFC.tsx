@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-var draggableElem: HTMLElement | null;
+var draggableElem: HTMLElement | null; // TODO: it is currently a global variable. It should stay inside the component.
 
 function drag_start(event) {
     var style = window.getComputedStyle(event.target, null);
@@ -54,7 +54,7 @@ const fitInnerWindow = (newLeft : number, elemWidth : string, newTop : number, e
 }
 
 const setDraggable = (id) => {
-    draggableElem = document.getElementById(id)
+    draggableElem = document.getElementById(id); // TODO: Do not use getElementById in React
     // draggableElem?.addEventListener('dragstart', drag_start, false)
     document.body.addEventListener('dragover', drag_over, false)
     document.body.addEventListener('drop', drop, false)
@@ -70,7 +70,16 @@ export function Draggable (props) {
     }, [])
 
     return (
-        <div id={props.id} draggable='true' onDragStart={drag_start} style={{position: 'absolute', left: '100px', top: '100px', zIndex: 1}}>
+        <div 
+            id={props.id} 
+            draggable='true' 
+            onDragStart={drag_start} 
+            style={{
+                position: 'absolute',
+                left: props.left? props.left : '100px',
+                top: props.top? props.top : '100px', zIndex: 1
+            }}
+        >
             {props.children}
         </div>
     )

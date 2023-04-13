@@ -1,5 +1,3 @@
-export {}
-
 /**
  * 
  * @param weight weight given to lhs
@@ -99,7 +97,7 @@ class Subcluster {
 /**
  * An online clustering algorithm.
  */
-class LinksCluster {
+export default class LinksCluster {
     clusters: Subcluster[][];
     cluster_similarity_threshold: number;
     subcluster_similarity_threshold: number;
@@ -110,7 +108,8 @@ class LinksCluster {
         cluster_similarity_threshold: number,
         subcluster_similarity_threshold: number,
         pair_similarity_threshold: number,
-        store_vectors: boolean = false) {
+        store_vectors: boolean = false
+    ) {
         this.clusters = [];
         this.cluster_similarity_threshold = cluster_similarity_threshold;
         this.subcluster_similarity_threshold = subcluster_similarity_threshold;
@@ -285,6 +284,3 @@ class LinksCluster {
         return s;
     }
 }
-
-
-module.exports = { LinksCluster };

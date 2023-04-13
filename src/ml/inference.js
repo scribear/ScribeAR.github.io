@@ -144,7 +144,7 @@ async function lm_inference(text) {
     const output =  await session.then(s => { return s.run(model_input,['output_0'])});
     const duration = (performance.now() - start).toFixed(1);
     const probs = output['output_0'].data.map(sigmoid).map( t => Math.floor(t*100));
-    console.log(probs);
+    // console.log(147, 'probs: ', probs);
     const result = [];
     for(var i = 0; i < EMOJIS.length;i++) {
       const t = [EMOJIS[i], probs[i]];

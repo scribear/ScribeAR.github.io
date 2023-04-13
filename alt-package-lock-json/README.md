@@ -1,1 +1,1 @@
-### These are package.json/package-lock.json from [https://github.com/YunWang-yunw3/ml-inference-ts]ml-inference-ts-main
+### These are package.json/package-lock.json from [https://github.com/YunWang-yunw3/ml-inference-ts]ml-inference-ts-main, which is the currently used ones.

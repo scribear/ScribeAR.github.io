@@ -44,8 +44,10 @@ export const STTRenderer = () : JSX.Element => {
                   position: 'fixed', width: '90%', 
                   textAlign: 'left', left: '0', fontSize: displayStatus.textSize + "vh", 
                   paddingLeft: '5%', paddingRight: '60%', 
-                  overflowY: 'scroll', height: '40%', 
-                  color: displayStatus.textColor
+                  overflowY: 'scroll', height: '40vh', 
+                  color: displayStatus.textColor,
+                  bottom:'0'
+                  
                }}>{transcript}
             </h3>
          </ul>

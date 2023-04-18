@@ -4,7 +4,7 @@ import { MainStreamMap } from "../redux/types/bucketStreamTypes";
 import { ControlStatus, STATUS, StatusType } from "../redux/typesImports";
 import { loadTokenizer } from '../../ml/bert_tokenizer';
 import { intent_inference } from '../../ml/inference';
-import { Configuration, OpenAIApi } from 'openai';
+// import { Configuration, OpenAIApi } from 'openai';
 
 const ort = require('onnxruntime-web');
 
@@ -104,6 +104,8 @@ export function makeEventBucket(object: BucketArgs) {
 
    // And then creates and returns the async thunk function:
    return async function makeEventBucketThunk(dispatch : React.Dispatch<any>, getState) {
+      const curState = await getState();
+
       // ✅ Now we can use the stream value
       if (stream === 'audio') { 
          const curTime = Date.now();
@@ -117,22 +119,24 @@ export function makeEventBucket(object: BucketArgs) {
          let notFinalArr = Array<{ confidence : number, transcript : string }>();
          for (let i = 0; i < (value as SpeechRecognitionResultList).length; i++) {
             const speechResult : SpeechRecognitionResult = value[i];
-            // const intent : string = (await intent_inference(speechResult[0].transcript))[1][1][0];
-            // const intent : string = await getSentiment(speechResult[0].transcript);
-            // console.log(intent);
-            // const result = { confidence: speechResult[0].confidence, transcript: speechResult[0].transcript + ' (' + intent + ')' };
             if (speechResult.isFinal) {
-               const intent : string = await getSentiment(speechResult[0].transcript);
-               console.log(intent);
-               const result = { confidence: speechResult[0].confidence, transcript: speechResult[0].transcript + ' (' + intent + ')' };
-               finalArr.push(result);
+               if (curState.ControlReducer.showIntent) {
+                  // const intent : string = await getSentiment(speechResult[0].transcript);
+                  // const result = { confidence: speechResult[0].confidence, transcript: speechResult[0].transcript + ' (' + intent + ')' };
+                  const intent : string = (await intent_inference(speechResult[0].transcript))[1][1][0];
+                  const result = { confidence: speechResult[0].confidence, transcript: speechResult[0].transcript + ' (' + intent.split(' ')[1] + ')'};
+                  finalArr.push(result);
+               } else {
+                  const result = { confidence: speechResult[0].confidence, transcript: speechResult[0].transcript };
+                  finalArr.push(result);
+               }
             } else {
                const result = { confidence: speechResult[0].confidence, transcript: speechResult[0].transcript };
                notFinalArr.push(result);
             }
          }
 
-         const streamMap : MainStreamMap = await getState().BucketStreamReducer;
+         const streamMap : MainStreamMap = curState.BucketStreamReducer;
          let newMainStream : boolean = false;
          // If elapsed
          if (streamMap.curMSST + streamMap.timeInterval <= curTime) {

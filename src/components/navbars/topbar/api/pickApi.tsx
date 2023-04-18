@@ -75,12 +75,12 @@ export default function PickApi(props) {
       (apiStat: string, api:ApiType, isArrow:boolean) =>
          (event: React.KeyboardEvent | React.MouseEvent) => {
                if (state.apiStatus.currentApi !== api) {
-                  if (!isArrow && state.apiStatus[apiStat] === 0) {
+                  if (!isArrow && state.apiStatus[apiStat] === STATUS.AVAILABLE) {
                      let apiName = "Webspeech";
-                     if (api == 1) {
+                     if (api === API.AZURE_TRANSLATION) {
                            apiName = "Microsoft Azure"
                      }
-                     if (api == 4) {
+                     if (api === API.WHISPER) {
                         apiName = "Whisper"
                      }
                      swal({

@@ -20,6 +20,8 @@ const initialControlState : ControlStatus = {
   showFrequency: false,
   showTimeData: false,
   showMFCC: false,
+  showSpeaker: false,
+  showIntent: false,
 }
 
 export function ControlReducer(state = initialControlState, action) {
@@ -33,6 +35,10 @@ export function ControlReducer(state = initialControlState, action) {
       return { ...state, showFrequency: false, showTimeData: !state.showTimeData, showMFCC: false };
     case 'FLIP_SHOWMFCC':
       return { ...state, showFrequency: false, showTimeData: false, showMFCC: !state.showMFCC };
+    case 'control/flip_showSpeaker':
+      return { ...state, showSpeaker: !state.showSpeaker };
+    case 'control/flip_showIntent':
+      return { ...state, showIntent: !state.showIntent };
     case 'FLIP_RECORDING_PHRASE':
       return { ...state, listening: action.payload};
     case 'SET_SPEECH_LANGUAGE':

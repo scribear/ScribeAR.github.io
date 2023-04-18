@@ -3,7 +3,10 @@ import { useSelector, useDispatch } from 'react-redux';
 import Swal from 'sweetalert2';
 
 import { RootState } from '../../store';
-import { DisplayStatus, AzureStatus, ControlStatus, ApiStatus, WhisperStatus } from '../../react-redux&middleware/redux/typesImports'
+import { 
+   DisplayStatus, AzureStatus, 
+   ControlStatus, ApiStatus, WhisperStatus 
+} from '../../react-redux&middleware/redux/typesImports';
 import { STTRenderer } from '../sttRenderer';
 
 

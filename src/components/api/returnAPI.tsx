@@ -275,6 +275,7 @@ export const useRecognition = (sRecog : SRecognition, api : ApiStatus, control :
       // TODO: inefficient to get it from sessionStorage everytime
       // TODO: add whisper_transcript to redux store after integrating "whisper" folder (containing stream.js) into ScribeAR
       transcript = sessionStorage.getItem('whisper_transcript') || '';
+      return { transcript, recogHandler };
    }
 
    return { transcript, recogHandler };

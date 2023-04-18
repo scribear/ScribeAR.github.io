@@ -14,4 +14,6 @@ export type ControlStatus = {
    showFrequency: boolean
    showTimeData: boolean
    showMFCC: boolean
+   showSpeaker: boolean
+   showIntent: boolean
 }

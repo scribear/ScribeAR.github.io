@@ -5,15 +5,15 @@ export default function WhisperDropdown(props) {
 
     // const [isTrue, setIsTrue] = useState<boolean>(false);
   // const [isClearCache, setIsClearCache] = useState<boolean>(false);
-  const [isDownloadTiny, setIsDownloadTiny] = useState<boolean>(false);
+  // const [isDownloadTiny, setIsDownloadTiny] = useState<boolean>(false);
   const [isDownloadBase, setIsDownloadBase] = useState<boolean>(false);
 
 
-    const handleTinyDownload = () => {
-        console.log("clicked download tiny")
-        setIsDownloadTiny(prevIsDownloadTiny => !prevIsDownloadTiny);
-        sessionStorage.setItem('isDownloadTiny', (!isDownloadTiny).toString());
-      };
+    // const handleTinyDownload = () => {
+    //     console.log("clicked download tiny")
+    //     setIsDownloadTiny(prevIsDownloadTiny => !prevIsDownloadTiny);
+    //     sessionStorage.setItem('isDownloadTiny', (!isDownloadTiny).toString());
+    //   };
 
       const handleBaseDownload = () => {
         console.log("clicked download tiny")
@@ -30,9 +30,9 @@ export default function WhisperDropdown(props) {
     return (
         <div>
             <List component="div" disablePadding>
-               <ListItem sx={{ pl: 4 }} style={{ width: '100%' }}>
+               {/* <ListItem sx={{ pl: 4 }} style={{ width: '100%' }}>
                     <Button onClick={()=>{handleTinyDownload()}} variant="contained" color="inherit" style={{ width: '100%' }}>tiny (75 MB)</Button>
-               </ListItem>
+               </ListItem> */}
                <ListItem sx={{ pl: 4 }} style={{ width: '100%' }}>
                     <Button  onClick={()=>{handleBaseDownload()}} variant="contained" color="inherit" style={{ width: '100%' }}>base (145 MB)</Button>
                </ListItem>

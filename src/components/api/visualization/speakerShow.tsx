@@ -5,7 +5,7 @@ import { RootState } from '../../../store';
 import { 
    DisplayStatus, AzureStatus, ControlStatus, ApiStatus, WhisperStatus
 } from '../../../react-redux&middleware/redux/typesImports';
-import { computeMelLogSpectrogram } from '../../../ml/mel_log_spectrogram';
+// import { computeMelLogSpectrogram } from '../../../ml/mel_log_spectrogram';
 import { gruInference } from '../../../ml/inference';
 import LinksCluster from '../../../ml/online_links';
 
@@ -86,28 +86,28 @@ const SpeakerShow: React.FC = (props) => {
                         //    freqDataQueue[i] = freqDataQueue[i].map(data => data / norm);
                         // }
                         // console.log('frequency data: ', freqDataQueue[0][0], freqDataQueue.length, freqDataQueue[0].length);
-                        computeMelLogSpectrogram(freqDataQueue).then((melLogSpectrogram) => {
-                           // console.log(68, `mel log shape: (${melLogSpectrogram.length}, ${melLogSpectrogram[0].length})`);
-                           gruInference(melLogSpectrogram)
-                              .then(
-                                 (gruEmbedding : any) => {
-                                    // console.log(83, `gru embedding shape: (${gruEmbedding.output.dims}), ${gruEmbedding}`);
-                                    // console.log(
-                                    //    // cluster.predict(gruEmbedding.output.data),
-                                    //    cluster0.predict(gruEmbedding.output.data),
-                                    //    // cluster1.predict(gruEmbedding.output.data),
-                                    //    // cluster2.predict(gruEmbedding.output.data),
-                                    // );
-                                    const speaker = cluster0.predict(gruEmbedding.output.data);
-                                    // console.log(102, speaker);
-                                    if (speaker === 0) {
-                                       curSpeaker.current = 'silence';
-                                    } else {
-                                       curSpeaker.current = `speaker ${speaker}`;
-                                    }
-                                 }
-                              );
-                        });
+                        // computeMelLogSpectrogram(freqDataQueue).then((melLogSpectrogram) => {
+                        //    // console.log(68, `mel log shape: (${melLogSpectrogram.length}, ${melLogSpectrogram[0].length})`);
+                        //    gruInference(melLogSpectrogram)
+                        //       .then(
+                        //          (gruEmbedding : any) => {
+                        //             // console.log(83, `gru embedding shape: (${gruEmbedding.output.dims}), ${gruEmbedding}`);
+                        //             // console.log(
+                        //             //    // cluster.predict(gruEmbedding.output.data),
+                        //             //    cluster0.predict(gruEmbedding.output.data),
+                        //             //    // cluster1.predict(gruEmbedding.output.data),
+                        //             //    // cluster2.predict(gruEmbedding.output.data),
+                        //             // );
+                        //             const speaker = cluster0.predict(gruEmbedding.output.data);
+                        //             // console.log(102, speaker);
+                        //             if (speaker === 0) {
+                        //                curSpeaker.current = 'silence';
+                        //             } else {
+                        //                curSpeaker.current = `speaker ${speaker}`;
+                        //             }
+                        //          }
+                        //       );
+                        // });
                         next();
                      });
                   };

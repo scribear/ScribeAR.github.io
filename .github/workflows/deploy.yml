@@ -1,0 +1,45 @@
+name: Deploy
+
+on:
+  push:
+    branches: [ "master" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Use Node.js 16
+      uses: actions/setup-node@v3
+      with:
+        node-version: 16
+
+    - name: Build
+      run: |
+        npm install
+        npm run build
+      
+    - name: Deploy to Production
+      if: github.ref == 'refs/heads/master'
+        env:
+          DEPLOY_KEY: ${{ secrets.DEPLOY_KEY }}
+          GIT_SSH_COMMAND: "ssh -o StrictHostKeyChecking=no"
+        run: |
+          ls -la
+          eval "$(ssh-agent -s)"
+          ssh-add - <<< "${DEPLOY_KEY}"
+          git clone git@github.com:scribear/v.git
+          git config --global user.email "scribear-bot@illinois.edu"
+          git config --global user.name "scribear-bot"
+          cd v
+          ls -la
+          export SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-8`
+          git rm -r latest
+          mkdir -p latest
+          mv ../build/* latest
+          git add latest
+          
+          git commit -m "Commit Deploy: ${SHORT_SHA}"
+          git push origin master

@@ -2,7 +2,7 @@ import React from 'react';
 
 import AppNavBar from '../components/navbars/appNavBar';
 import { RootState } from '../react-redux&middleware/redux/typesImports';
-import { WebRecognitionExample } from '../components/api/recogComponent';
+import { RecogComponent } from '../components/api/recogComponent';
 import { Provider, useDispatch, useSelector} from 'react-redux';
 import { store } from '../store';
 import { useCallback, useEffect } from 'react';
@@ -24,7 +24,7 @@ export default function Desktop(props) {
    return (
      <div>
          <AppNavBar rootState = {RootState}/>
-         <WebRecognitionExample/>
+         <RecogComponent />
      </div>
    )
   }

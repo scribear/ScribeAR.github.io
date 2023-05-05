@@ -19,10 +19,13 @@ jobs:
 
     - name: Build
       run: |
-        #npm install
-        #npm run build
         mkdir -p build
-        echo "hello world" > build/index.html
+        date > build/builddate.txt
+        # npm install
+        # npm run build
+        # Fake build step (comment out and uncomment the npm lines)
+        echo "hello world" > build/index.html        
+        cat build/builddate.txt >> build/index.html
       
     - name: Deploy to Production
       if: github.ref == 'refs/heads/master'
@@ -40,9 +43,10 @@ jobs:
         ls -la
         export SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-8`
         git rm -r latest
+        git-filter-repo --path ./latest --invert-paths
         mkdir -p latest
         mv ../build/* latest
         git add latest
 
         git commit -m "Commit Deploy: ${SHORT_SHA}"
-        git push origin master
+        git push origin master --force

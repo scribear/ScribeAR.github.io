@@ -50,8 +50,9 @@ jobs:
         
         # git-filter-repo expects a fresh clone
         git-filter-repo --path latest --invert-paths
+        # TODO Need to debug why the above is not working.
         
-        # Not needed if git-filter-repo is used
+        # The following should not be required if git-filter-repo works
         # git rm -r latest
         
         mkdir -p latest
@@ -59,4 +60,4 @@ jobs:
         git add latest
 
         git commit -m "Commit Deploy: ${SHORT_SHA}"
-        git push origin master --force
+        git push origin master

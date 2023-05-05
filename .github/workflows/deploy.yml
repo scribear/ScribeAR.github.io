@@ -33,6 +33,11 @@ jobs:
         DEPLOY_KEY: ${{ secrets.DEPLOY_KEY }}
         GIT_SSH_COMMAND: "ssh -o StrictHostKeyChecking=no"
       run: |
+        mkdir -p ~/bin
+        export PATH="${HOME}/bin:${PATH}"
+        wget -O ~/bin/git-filter-repo https://raw.githubusercontent.com/newren/git-filter-repo/7b3e714b94a6e5b9f478cb981c7f560ef3f36506/git-filter-repo
+        chmod +x ~/bin/git-filter-repo
+
         ls -la
         eval "$(ssh-agent -s)"
         ssh-add - <<< "${DEPLOY_KEY}"
@@ -43,7 +48,9 @@ jobs:
         ls -la
         export SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-8`
         git rm -r latest
+
         git-filter-repo --path ./latest --invert-paths
+
         mkdir -p latest
         mv ../build/* latest
         git add latest

@@ -3,7 +3,7 @@ name: Deploy
 on:
   push:
     branches: [ "master" ]
-  workflow_dispatch:
+  workflow_dispatch: # For action testing you can also run this manually
 
 jobs:
   build:
@@ -21,7 +21,7 @@ jobs:
       run: |
         #npm install
         #npm run build
-        mkdir build
+        mkdir -p build
         echo "hello world" > build/index.html
       
     - name: Deploy to Production

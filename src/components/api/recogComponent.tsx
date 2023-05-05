@@ -10,7 +10,7 @@ import {
 import { STTRenderer } from '../sttRenderer';
 
 
-export const WebRecognitionExample: React.FC = (props) => {
+export const RecogComponent: React.FC = (props) => {
    const dispatch = useDispatch()
    const control = useSelector((state: RootState) => {
       return state.ControlReducer as ControlStatus;
@@ -28,7 +28,7 @@ export const WebRecognitionExample: React.FC = (props) => {
       return state.WhisperReducer as WhisperStatus
    })
    document.addEventListener("DOMContentLoaded", () => {
-      if (apiStatus.currentApi == 1) {
+      if (apiStatus.currentApi === 1) {
          Swal.fire({
          title: 'It appears you have a valid Microsoft Azure key, would you like to use Microsoft Azure?',
          icon: 'info',
@@ -47,7 +47,7 @@ export const WebRecognitionExample: React.FC = (props) => {
             // webspeechHandler()
          }
          })
-      } else if (apiStatus.currentApi == 4){
+      } else if (apiStatus.currentApi === 4){
          console.log("hereeeee")
          // whisperHandler()
       }

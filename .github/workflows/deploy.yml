@@ -47,10 +47,13 @@ jobs:
         cd v
         ls -la
         export SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-8`
-        git rm -r latest
-
+        
+        # git-filter-repo expects a fresh clone
         git-filter-repo --path latest --invert-paths
-
+        
+        # Not needed if git-filter-repo is used
+        # git rm -r latest
+        
         mkdir -p latest
         mv ../build/* latest
         git add latest

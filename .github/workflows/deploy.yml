@@ -49,11 +49,13 @@ jobs:
         export SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-8`
         
         # git-filter-repo expects a fresh clone
-        git-filter-repo --path latest --invert-paths
-        # TODO Need to debug why the above is not working.
+        $ git-filter-repo --path latest --invert-paths
+        # TODO Need to debug why the above fails;
+        # we can get error later when git push origin master
+        # "fatal: 'origin' does not appear to be a git repository"
         
         # The following should not be required if git-filter-repo works
-        # git rm -r latest
+        git rm -r latest
         
         mkdir -p latest
         mv ../build/* latest

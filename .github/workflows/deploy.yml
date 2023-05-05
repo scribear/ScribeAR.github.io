@@ -49,7 +49,7 @@ jobs:
         export SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-8`
         git rm -r latest
 
-        git-filter-repo --path ./latest --invert-paths
+        git-filter-repo --path latest --invert-paths
 
         mkdir -p latest
         mv ../build/* latest

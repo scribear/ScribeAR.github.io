@@ -5,9 +5,10 @@ import { RootState } from '../../../store';
 import { 
    DisplayStatus, AzureStatus, ControlStatus, ApiStatus, WhisperStatus
 } from '../../../react-redux&middleware/redux/typesImports';
-import { computeMelLogSpectrogram } from '../../../ml/mel_log_spectrogram';
+// import { computeMelLogSpectrogram } from '../../../ml/mel_log_spectrogram';
 import { gruInference } from '../../../ml/inference';
 import LinksCluster from '../../../ml/online_links';
+const { computeMelLogSpectrogram } = require('../../../ml/mel_log_spectrogram');
 
 
 const FFT_SIZE = 1024;

@@ -12,10 +12,10 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Use Node.js 19
+    - name: Use Node.js 16
       uses: actions/setup-node@v3
       with:
-        node-version: 19
+        node-version: 16
 
     - name: Build
       run: |
@@ -57,8 +57,8 @@ jobs:
         # The following should not be required if git-filter-repo works
         git rm -r latest
         
-        mkdir -p latest
-        mv ../build/* latest
+        rm -rf latest
+        mv ../build latest
         git add latest
 
         git commit -m "Commit Deploy: ${SHORT_SHA}"

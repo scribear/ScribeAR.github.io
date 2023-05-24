@@ -55,10 +55,11 @@ jobs:
         # "fatal: 'origin' does not appear to be a git repository"
         
         # The following should not be required if git-filter-repo works
-        git rm -r latest
+        git rm -rf latest
+        git commit -m "Removing old latest"
         
-        rm -rf latest
-        mv ../build latest
+        mkdir -p latest
+        mv ../build/* latest
         git add latest
 
         git commit -m "Commit Deploy: ${SHORT_SHA}"

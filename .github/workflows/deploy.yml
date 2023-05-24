@@ -19,13 +19,13 @@ jobs:
 
     - name: Build
       run: |
-        mkdir -p build
-        date > build/builddate.txt
-        # npm install
-        # npm run build
+        # mkdir -p build
+        # date > build/builddate.txt
+        npm install
+        npm run build
         # Fake build step (comment out and uncomment the npm lines)
-        echo "hello world" > build/index.html        
-        cat build/builddate.txt >> build/index.html
+        # echo "hello world" > build/index.html        
+        # cat build/builddate.txt >> build/index.html
       
     - name: Deploy to Production
       if: github.ref == 'refs/heads/master'

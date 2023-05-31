@@ -69,11 +69,11 @@ export default function PhraseListAdd(props) {
       focusConfirm: false,
       preConfirm: () => {
         return [
-          document.getElementById('swal-input1').value,
-          document.getElementById('swal-input2').value,
-          document.getElementById('swal-input3').value,
-          document.getElementById('swal-input4').value,
-          document.getElementById('swal-input5').value,
+          (document.getElementById('swal-input1') as HTMLInputElement)?.value || '',
+          (document.getElementById('swal-input2') as HTMLInputElement)?.value || '',
+          (document.getElementById('swal-input3') as HTMLInputElement)?.value || '',
+          (document.getElementById('swal-input4') as HTMLInputElement)?.value || '',
+          (document.getElementById('swal-input5') as HTMLInputElement)?.value || '',          
         ]
       }
     })

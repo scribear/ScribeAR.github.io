@@ -100,5 +100,5 @@ async function computeMelLogSpectrogram(audioData) {
    return logMelSpectrogram;
 }
   
-
-module.exports = { computeMelLogSpectrogram }
+export default computeMelLogSpectrogram
+//module.exports = { computeMelLogSpectrogram }

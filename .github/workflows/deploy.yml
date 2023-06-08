@@ -18,14 +18,11 @@ jobs:
         node-version: 16
 
     - name: Build
-      run: |
-        # mkdir -p build
-        # date > build/builddate.txt
+      run: |       
         npm install
         npm run build
-        # Fake build step (comment out and uncomment the npm lines)
-        # echo "hello world" > build/index.html        
-        # cat build/builddate.txt >> build/index.html
+        date > build/builddate.txt
+        git rev-parse --short HEAD > build/commit.txt
       
     - name: Deploy to Production
       if: github.ref == 'refs/heads/master'
@@ -56,7 +53,7 @@ jobs:
         
         # The following should not be required if git-filter-repo works
         git rm -rf latest
-        git commit -m "Removing old latest"
+        git commit -m "Removing previous latest dir"
         
         mkdir -p latest
         mv ../build/* latest

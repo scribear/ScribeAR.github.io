@@ -1,3 +1,5 @@
 .swal2-container {
     z-index: 1300;
+    /* width: 1500px !important; */
+    /* max-width: 90% !important; */
   }

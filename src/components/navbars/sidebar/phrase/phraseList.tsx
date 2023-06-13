@@ -128,7 +128,7 @@ export default function PhrasePopUp(props) {
                     
                 >
                     {state.phraseList.phrases.map((phrase: string, index) =>
-                        <div>
+                        <div key={index}>
                             <ListItem >
                                 <ListItemText primary={phrase} />
                                 <IconButton onClick={handleClickX(index)} >

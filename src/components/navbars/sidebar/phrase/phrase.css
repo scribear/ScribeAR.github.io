@@ -1,5 +1,8 @@
 .swal2-container {
     z-index: 1300;
-    /* width: 1500px !important; */
+    /* width: 2500px !important; */
     /* max-width: 90% !important; */
+  }
+#fileNamesDiv p {
+    white-space: nowrap;
   }

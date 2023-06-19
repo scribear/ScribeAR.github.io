@@ -63,7 +63,13 @@ export const addPhraseListAndChange = (newList: PhraseList) => {
 }
 
 export default function CustomizedMenus() {
-  const dispatch = useDispatch();
+  const originalDispatch = useDispatch();
+  const dispatch = (action) => {
+    if (typeof action === 'function') {
+      return action(originalDispatch);
+    }
+    return originalDispatch(action);
+  };
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const phraseListStatus = useSelector((state: RootState) => {
     return state.PhraseListReducer as PhraseListStatus;
@@ -101,16 +107,41 @@ export default function CustomizedMenus() {
         setState({ ...state, shouldCollapse: !state.shouldCollapse })
       }
 
-  // Get the contents of a file from the GitHub repository
+  // // Get the contents of a file from the GitHub repository
+  // async function getFileContent(filename, repo, owner, branch, token) {
+  //   const response = await axios.get(
+  //       `https://api.github.com/repos/${owner}/${repo}/contents/${filename}?ref=${branch}`,
+  //       { headers: { Authorization: `Token ${token}` } }
+  //   );
+  //   const contentBase64 = response.data.content;
+  //   const content = atob(contentBase64);
+  //   return content;
+  // }
+
   async function getFileContent(filename, repo, owner, branch, token) {
+    console.log(filename)
     const response = await axios.get(
-        `https://api.github.com/repos/${owner}/${repo}/contents/${filename}?ref=${branch}`,
-        { headers: { Authorization: `Token ${token}` } }
+      `https://api.github.com/repos/${owner}/${repo}/contents/${filename}?ref=${branch}`,
+      { headers: { Authorization: `Token ${token}` } }
     );
-    const contentBase64 = response.data.content;
-    const content = atob(contentBase64);
-    return content;
-  }
+  
+    console.log('Response:', response);  // Log the complete response
+
+    if (response.data && response.data.content) {
+      let contentBase64 = response.data.content;
+      // Replace line breaks before decoding
+      contentBase64 = contentBase64.replace(/\n/g, '');
+      // Decode the content
+      try {
+        const content = atob(contentBase64);
+        return content;
+      } catch (error) {
+        console.error('Failed to decode the content: ', error);
+      }
+    } else {
+      console.error('Content not found in the response');
+    }
+  }  
 
   // Check if the file exists in the GitHub repository
   async function checkFileExists(filename, repo, owner, branch, token) {
@@ -128,6 +159,44 @@ export default function CustomizedMenus() {
         }
         throw error;
     }
+  }
+
+  interface TreeItem {
+    path?: string;
+    type?: string;
+    [key: string]: any;
+  }    
+
+  async function getFileNames(owner, repo, branch, token) {
+    // Get the SHA of the latest commit on the branch
+    const latestCommitResponse = await axios.get(
+        `https://api.github.com/repos/${owner}/${repo}/git/refs/heads/${branch}`,
+        { headers: { Authorization: `Token ${token}` } }
+    );
+    const latestCommitSha = latestCommitResponse.data.object.sha;
+    
+    // Get the tree associated with the commit SHA, setting recursive to 1 to get all files
+    const treeResponse = await axios.get(
+        `https://api.github.com/repos/${owner}/${repo}/git/trees/${latestCommitSha}?recursive=1`,
+        { headers: { Authorization: `Token ${token}` } }
+    );
+    const tree = treeResponse.data;
+
+    // Create an array to store the file names
+    let fileNames: string[] = [];
+    
+    // Loop through the tree's contents and add the path of each file to the array
+    tree.tree.forEach((item: TreeItem) => {
+      if (item.type === "blob" && item.path) { // blob type means it's a file and path is not undefined
+        fileNames.push(item.path);
+      }
+    });    
+
+    // Join all file names with a break line
+    const fileNamesStr = fileNames.join("\n");
+
+    // Return the file names
+    return fileNamesStr;
   }
 
   const clickAddList = async () => {
@@ -153,7 +222,8 @@ export default function CustomizedMenus() {
           <input type="text" id="listTitle" placeholder="Make a title for your list of phrases" style="width: 400px;height: 50px;font-size: 20px;">
         </div>
         <div id="scribeARDiv" style="display: none;">
-          <input type="text" id="fileName" placeholder="File Name" style="width: 300px;height: 50px;font-size: 20px;">
+          <input type="text" id="fileName_ScribeAR" placeholder="File Name" style="width: 300px;height: 50px;font-size: 20px;">
+          <div id="fileNamesDiv"></div>
         </div>
         <div id="customDiv" style="display: none;">
           <input type="text" id="fileName" placeholder="File Name" style="width: 300px;height: 50px;font-size: 20px;"><br><br>
@@ -174,7 +244,7 @@ export default function CustomizedMenus() {
         if (selectedOption === 'manual') {
           return { action: selectedOption, listTitle: (document.getElementById('listTitle') as HTMLInputElement).value };
         } else if (selectedOption === 'scribeAR') {
-          return { action: selectedOption, fileName: (document.getElementById('fileName') as HTMLInputElement).value };
+          return { action: selectedOption, fileName_ScribeAR: (document.getElementById('fileName_ScribeAR') as HTMLInputElement).value };
         } else if (selectedOption === 'custom') {
           return {
             action: selectedOption,
@@ -186,13 +256,43 @@ export default function CustomizedMenus() {
           };
         }
       },
-      didOpen: () => {
-        const manualRadio = document.getElementById('manual');
-        const scribeARRadio = document.getElementById('scribeAR');
-        const customRadio = document.getElementById('custom');
+      didOpen: async () => {
+        const manualRadio = document.getElementById('manual') as HTMLInputElement;
+        const scribeARRadio = document.getElementById('scribeAR') as HTMLInputElement;
+        const customRadio = document.getElementById('custom') as HTMLInputElement;
         const manualDiv = document.getElementById('manualDiv');
         const scribeARDiv = document.getElementById('scribeARDiv');
         const customDiv = document.getElementById('customDiv');
+        const fileNamesDiv = document.getElementById('fileNamesDiv');
+      
+        // Function to update the file names in the DOM
+        const updateFileNames = (fileNames) => {
+          if (!fileNamesDiv) {
+            console.error('Cannot find an HTML element with ID "fileNamesDiv". Make sure it exists in your document.');
+            return;
+          }
+      
+          // Clear previous file names
+          fileNamesDiv.innerHTML = '';
+      
+          // Split the fileNames string into an array using '\n' as the separator
+          let fileNamesArray = fileNames.split('\n');
+          // Filter the array to only include files that end with '.txt'
+          let txtFilesArray = fileNamesArray.filter(name => name.endsWith('.txt'));
+          // Create a paragraph for each file name and append it to the div
+          for (const name of txtFilesArray) {
+            const p = document.createElement('p');
+            p.textContent = name;
+            fileNamesDiv.appendChild(p);
+          }
+        }
+      
+        // If the scribeAR option is initially checked, we get the file names immediately
+        if(scribeARRadio && scribeARRadio.checked) {
+          const fileNames = await getFileNames('JoniLi99', 'DomainWordExtractor', 'main', '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');
+          // console.log(fileNames)
+          updateFileNames(fileNames);
+        }
       
         if(manualRadio && manualDiv && scribeARDiv && customDiv) {
           manualRadio.addEventListener('change', () => {
@@ -203,10 +303,13 @@ export default function CustomizedMenus() {
         }
       
         if(scribeARRadio && manualDiv && scribeARDiv && customDiv) {
-          scribeARRadio.addEventListener('change', () => {
+          scribeARRadio.addEventListener('change', async () => {
             manualDiv.style.display = 'none';
             scribeARDiv.style.display = 'block';
             customDiv.style.display = 'none';
+            const fileNames = await getFileNames('JoniLi99', 'DomainWordExtractor', 'main', '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');
+            // console.log(fileNames)
+            updateFileNames(fileNames);
           });
         }
       
@@ -228,29 +331,93 @@ export default function CustomizedMenus() {
             dispatch({ type: 'CHANGE_LIST', payload: initialPhraseList.phrases });
             break;
           case 'scribeAR':
+            const fileName_ScribeAR = result.value.fileName_ScribeAR;
+            const owner_ScribeAR = "JoniLi99";
+            const repo_ScribeAR = "DomainWordExtractor";
+            const branch_ScribeAR = "main";
+            const token_ScribeAR = "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";
+            console.log(fileName_ScribeAR)
+            console.log(owner_ScribeAR)
+            console.log(repo_ScribeAR)
+            console.log(branch_ScribeAR)
+            console.log(token_ScribeAR)
+            // Check if the file exists in the GitHub repository
+            checkFileExists(fileName_ScribeAR, repo_ScribeAR, owner_ScribeAR, branch_ScribeAR, token_ScribeAR).then((fileExists) => {
+              if (fileExists) {
+                // Get the contents of the file
+                getFileContent(fileName_ScribeAR, repo_ScribeAR, owner_ScribeAR, branch_ScribeAR, token_ScribeAR).then((fileContent) => {
+                  if (fileContent) {
+                    console.log(fileContent)
+                    const words = fileContent.split('\n');
+                    // to: ChatGPT.AI
+                    const phrases = words.map((word, index) => ({
+                      id: index.toString(),
+                      text: word,
+                    }));
+        
+                    const newPhraseList = {
+                      name: fileName_ScribeAR,
+                      phrases,
+                    };
+        
+                    // Dispatch the new phrases
+                    dispatch({ type: 'ADD_PHRASE_LIST', payload: newPhraseList });
+                    dispatch({ type: 'CHANGE_LIST', payload: newPhraseList.phrases });
+                  } else {
+                    console.error('Failed to fetch file content');
+                  }
+                }).catch((error) => {
+                  console.error('Error fetching file content:', error);
+                });
+              } else {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Oops...',
+                  text: 'File not found!',
+                });
+              }
+            });
+            break;
           case 'custom':
             // For scribeAR and custom, we need to get the file contents
-            const { fileName, owner, repo, branch, token } = result.value;
+            // const { fileName, owner, repo, branch, token } = result.value;
+            const fileName = result.value.fileName;
+            const owner = result.value.owner;
+            const repo = result.value.repo;
+            const branch = result.value.branch;
+            const token = result.value.token;
+            console.log(fileName)
+            console.log(owner)
+            console.log(repo)
+            console.log(branch)
+            console.log(token)
             // Check if the file exists in the GitHub repository
             checkFileExists(fileName, repo, owner, branch, token).then((fileExists) => {
               if (fileExists) {
                 // Get the contents of the file
                 getFileContent(fileName, repo, owner, branch, token).then((fileContent) => {
-                  const words = fileContent.split('\n');
-                  // to: ChatGPT.AI
-                  const phrases = words.map((word, index) => ({
-                    id: index.toString(),
-                    text: word,
-                  }));
-      
-                  const newPhraseList = {
-                    name: fileName,
-                    phrases,
-                  };
-      
-                  // Dispatch the new phrases
-                  dispatch({ type: 'ADD_PHRASE_LIST', payload: newPhraseList });
-                  dispatch({ type: 'CHANGE_LIST', payload: newPhraseList.phrases });
+                  if (fileContent) {
+                    console.log(fileContent)
+                    const words = fileContent.split('\n');
+                    // to: ChatGPT.AI
+                    const phrases = words.map((word, index) => ({
+                      id: index.toString(),
+                      text: word,
+                    }));
+        
+                    const newPhraseList = {
+                      name: fileName,
+                      phrases,
+                    };
+        
+                    // Dispatch the new phrases
+                    dispatch({ type: 'ADD_PHRASE_LIST', payload: newPhraseList });
+                    dispatch({ type: 'CHANGE_LIST', payload: newPhraseList.phrases });
+                  } else {
+                    console.error('Failed to fetch file content');
+                  }
+                }).catch((error) => {
+                  console.error('Error fetching file content:', error);
                 });
               } else {
                 Swal.fire({

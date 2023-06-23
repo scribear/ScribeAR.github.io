@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       versionnum:
-        description: '5 digit version Number e.g. 00099 or word (no spaces)'
+        description: '5 digit version Number e.g. 00099 or AZaz-_09'
         required: true
 
 
@@ -35,11 +35,6 @@ jobs:
         DEPLOY_KEY: ${{ secrets.DEPLOY_KEY }}
         GIT_SSH_COMMAND: "ssh -o StrictHostKeyChecking=no"
       run: |
-        mkdir -p ~/bin
-        export PATH="${HOME}/bin:${PATH}"
-        wget -O ~/bin/git-filter-repo https://raw.githubusercontent.com/newren/git-filter-repo/7b3e714b94a6e5b9f478cb981c7f560ef3f36506/git-filter-repo
-        chmod +x ~/bin/git-filter-repo
-
         ls -la
         eval "$(ssh-agent -s)"
         ssh-add - <<< "${DEPLOY_KEY}"
@@ -50,15 +45,10 @@ jobs:
         ls -la
         export SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-8`
         
-
         
-        # The following should not be required if git-filter-repo works
-        git rm -rf ${{ inputs.versionnum }}
-        git commit -m "Removing previous dir"
-        
-        mkdir -p ${{ inputs.versionnum }}
-        mv ../build/* ${{ inputs.versionnum }}
-        git add ${{ inputs.versionnum }}
+        mkdir -p "${{ inputs.versionnum }}"
+        mv ../build/* "${{ inputs.versionnum }}"
+        git add "${{ inputs.versionnum }}"
 
         git commit -m "Commit Deploy: ${SHORT_SHA} to ${{ inputs.versionnum }}"
         git push origin master

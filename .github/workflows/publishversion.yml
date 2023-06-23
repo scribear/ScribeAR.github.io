@@ -22,7 +22,7 @@ jobs:
 
     - name: Build
       run: |       
-        perl -p -i -e 's/v\/latest/v\/${{versionnum}}/' package.json
+        perl -p -i -e 's/v\/latest/v\/${{inputs.versionnum}}/' package.json
         grep homepage package.json
         npm install
         npm run build
@@ -53,12 +53,12 @@ jobs:
 
         
         # The following should not be required if git-filter-repo works
-        git rm -rf ${{ versionnum }}
+        git rm -rf ${{ inputs.versionnum }}
         git commit -m "Removing previous dir"
         
-        mkdir -p ${{ versionnum }}
-        mv ../build/* ${{ versionnum }}
-        git add ${{ versionnum }}
+        mkdir -p ${{ inputs.versionnum }}
+        mv ../build/* ${{ inputs.versionnum }}
+        git add ${{ inputs.versionnum }}
 
-        git commit -m "Commit Deploy: ${SHORT_SHA} to ${{ versionnum }}"
+        git commit -m "Commit Deploy: ${SHORT_SHA} to ${{ inputs.versionnum }}"
         git push origin master

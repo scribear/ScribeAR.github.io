@@ -18,7 +18,7 @@ export default function CustomizedMenus(props) {
               id="combo-box-demo"
               value={props.currLanguage.label}
               options={props.languageList}
-              sx={{ width: 300 }}
+              sx={{ width: "200%"  }}
               onChange={(event, newValue) => {
                 handleClickItem(newValue)
               }}

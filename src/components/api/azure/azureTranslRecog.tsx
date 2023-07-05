@@ -5,13 +5,21 @@ import { ControlStatus, AzureStatus, ApiStatus, PhraseList } from '../../../reac
 
 import * as speechSDK from 'microsoft-cognitiveservices-speech-sdk';
 
+/**
+ * References:
+ * JS Promises: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise 
+ * Azure recognizer SDK: https://learn.microsoft.com/en-us/javascript/api/microsoft-cognitiveservices-speech-sdk/?view=azure-node-latest 
+ */
 
 /**
+ * Try to instantiate and return an Azure recognizer object using the given parameters
+ * The recognizer is set to recognize the current speech language, does not translate, and masks profanities
  * 
- * @param control 
- * @param azureStatus 
- * @param mic 
- * @returns 
+ * @param control Global parameters of ScribeAR, see ControlStatus for more info 
+ * @param azureStatus Parameters used specifically by Azure
+ * @param mic ID of current microphone
+ * 
+ * @returns An azure recognizer, or an error string if it could not instantiate the recognizer
  */
 export const getAzureTranslRecog = async (control: ControlStatus, azureStatus: AzureStatus, mic : number = 0) => new Promise<speechSDK.TranslationRecognizer>((resolve, reject) => {  
   try {
@@ -19,7 +27,7 @@ export const getAzureTranslRecog = async (control: ControlStatus, azureStatus: A
     speechConfig.speechRecognitionLanguage = control.speechLanguage.CountryCode;
     speechConfig.addTargetLanguage(control.textLanguage.CountryCode);
     // console.log("Speech: ", speechConfig.speechRecognitionLanguage, "; Text: ", speechConfig.targetLanguages);
-    speechConfig.setProfanity(2);
+    speechConfig.setProfanity(speechSDK.ProfanityOption.Raw);
     let recognizer
     if (mic === 0) {
       const audioConfig = speechSDK.AudioConfig.fromDefaultMicrophoneInput();
@@ -67,6 +75,9 @@ export const testAzureTranslRecog = async (control: ControlStatus, azure: AzureS
 });
 
 /**
+ * Custom hook that tries to transcribe more speech using a given azure recognizer
+ * Not used anywhere, remove?
+ * 
  * @param recognizer speechSDK.TranslationRecognizer
  * @returns [string[], recognizer, start function]
  */
@@ -116,6 +127,9 @@ export const useAzureTranslRecog = (recognizer : speechSDK.TranslationRecognizer
           };
           recognizer.sessionStarted = (s, e) => {
           }
+          // Why?
+          // Why would recognizer stop, unless we called stopContinuousRecognitionAsync?
+          // What does the timer do?
           recognizer.sessionStopped = (s, e) => {
             const timeSinceStart = new Date().getTime() - lastStartedAt;
             if (control.current.listening == false || currentApi.current.currentApi != 1) {

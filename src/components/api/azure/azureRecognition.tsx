@@ -53,10 +53,15 @@ export const GetuseAzureTranslRecog = () => {
   const test = useCallback(
     async (control: ControlStatus, azureStatus: AzureStatus) => new Promise((resolve, reject) => {
       try {
+        // Set azure to not translate to another language
         let azureSpeech = speechSDK.SpeechTranslationConfig.fromSubscription(azureStatus.azureKey, azureStatus.azureRegion)
         azureSpeech.speechRecognitionLanguage = control.speechLanguage.CountryCode;
         azureSpeech.addTargetLanguage(control.textLanguage.CountryCode)
+        
+        // Use default microphone
         let azureAudioConfig = speechSDK.AudioConfig.fromDefaultMicrophoneInput();
+        
+        // Initialize recognizer using the above settings
         let reco = new speechSDK.TranslationRecognizer(azureSpeech, azureAudioConfig);
         reco.canceled = () => {
           resolve(false);

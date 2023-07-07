@@ -18,8 +18,8 @@ export default function ApiDropdown(props) {
   // Make this a dropdown menu with the current api as the menu title
   return (
     <React.Fragment>
-      <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
-        {props.display}
+      <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center'}}>
+        {props.apiDisplayName}
         <Tooltip title="API choice">
           <IconButton onClick={handleClick}>
             <ThemeProvider theme={props.theme}>

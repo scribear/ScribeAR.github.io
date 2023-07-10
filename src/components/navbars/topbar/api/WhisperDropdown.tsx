@@ -25,7 +25,7 @@ export default function WhisperDropdown(props) {
 
         const intervalId = setInterval(() => {
           let p = sessionStorage.getItem('whisper_progress');
-          if (p === '100%') {
+          if (p === '100') {
               alert("Base model downloaded! trigger the mike by stopping and starting again");
               clearInterval(intervalId); // Stop checking once it's 100%
           }

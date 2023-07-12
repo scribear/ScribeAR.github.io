@@ -59,24 +59,14 @@ export default function AzureDropdown(props) {
          copyStatus.azureTranslStatus = STATUS.AVAILABLE;
          localStorage.setItem("azureStatus", JSON.stringify(state.azureStatus));
          
+         copyStatus.currentApi = API.AZURE_TRANSLATION;
+         copyStatus.azureTranslStatus = STATUS.AVAILABLE;
          swal({
                title: "Success!",
                text: "Switching to Microsoft Azure",
                icon: "success", 
                timer: 1500,
-               buttons: {
-                  no: { text: "Cancel", value: "no" },    
-               },
-         }).then((value) => {
-               switch (value) {
-                  case "no":
-                     // setState({ ...state }); // is it necessary?
-                     break;
-                  default:
-                     copyStatus.currentApi = API.AZURE_TRANSLATION;
-                     copyStatus.azureTranslStatus = STATUS.TRANSCRIBING;
-               }
-         });
+         })
 
          dispatch({type: 'CHANGE_API_STATUS', payload: copyStatus});
          setState({ ...state, apiStatus: copyStatus});

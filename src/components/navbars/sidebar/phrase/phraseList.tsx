@@ -25,6 +25,15 @@ export default function PhrasePopUp(props) {
     let phrases: string[] = Array();
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
+
+        let fileName: string = props.pushed_fileName;
+        console.log("fileName: ")
+        console.log(fileName)
+        console.log("state.phraseList.name: ")
+        console.log(state.phraseList.name)
+        if (fileName == state.phraseList.name) {
+            automaticAddList()
+        }
     };
     const handleClickX = (head: any) => (event: React.MouseEvent<HTMLElement>) => {
         let listPhrases = state.phraseList.phrases.splice(head, 1);
@@ -56,8 +65,28 @@ export default function PhrasePopUp(props) {
             dispatch({ type: "EDIT_PHRASE_LIST", payload: state.phraseList })
             dispatch({ type: "CHANGE_LIST", payload: state.phraseList.phrases })
         }
-
-        
+    }
+    
+    const automaticAddList = () => {
+        // console.log("ADD!YEAH!")
+        // Access fileContent here like this:
+        let fileContent: string = props.fileContent;
+        // console.log(fileContent)
+        // console.log(typeof fileContent)
+        // console.log("HAHAHAHAHAHAHAHA!")
+        if (fileContent.length != 0) {
+            // Split the string into an array of words
+            let words: string[] = fileContent.split('\n');
+            console.log(words)
+            // const member_array = ["Joni", "Tiger", "Isaac"]
+            for (let i = 0; i < words.length; i++) {
+                if(!state.phraseList.phrases.includes(words[i])){
+                    state.phraseList.phrases.push(words[i])
+                    dispatch({ type: "EDIT_PHRASE_LIST", payload: state.phraseList })
+                    dispatch({ type: "CHANGE_LIST", payload: state.phraseList.phrases })
+                }
+            }
+        }
     }
 
     if (state.phraseList.availableSpace == -1) {

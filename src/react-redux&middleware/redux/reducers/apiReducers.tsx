@@ -124,6 +124,10 @@ export const PhraseListReducer = (state = initialPhraseListState, action) => {
     case 'EDIT_PHRASE_LIST':     
       return { ...state,
                currentPhraseList: action.payload}
+    // existing cases
+    case 'SET_FILE_CONTENT':     
+      return { ...state,
+               fileContent: action.payload}
     default:
       return state;
   }

@@ -9,8 +9,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import axios, { AxiosError } from 'axios';
 import { ThunkDispatch } from 'redux-thunk';
 import { Action } from 'redux';
+import getWordList from './phraseList';
 import { createStore, applyMiddleware } from 'redux';
 import thunkMiddleware from 'redux-thunk';
+
 
 /* todo:
   1   Make language bar a fixed height so that it can only display ~8 languages 
@@ -29,6 +31,9 @@ import thunkMiddleware from 'redux-thunk';
 // );
 
 // export default store;
+let pushed_wordList_name;
+// let pushed_option;
+let wordList = "";
 
 // This is the action to add a new phrase list
 export const addPhraseList = (newList: PhraseList) => {
@@ -62,7 +67,7 @@ export const addPhraseListAndChange = (newList: PhraseList) => {
   }
 }
 
-export default function CustomizedMenus() {
+export default function CustomizedMenus() { 
   const originalDispatch = useDispatch();
   const dispatch = (action) => {
     if (typeof action === 'function') {
@@ -348,6 +353,13 @@ export default function CustomizedMenus() {
                   if (fileContent) {
                     console.log(fileContent)
                     const words = fileContent.split('\n');
+                    wordList = fileContent;
+                    pushed_wordList_name = fileName_ScribeAR;
+                    console.log(pushed_wordList_name);
+                    // pushed_option = "scribeAR";
+                    // pushed_wordList_name = fileName_ScribeAR;
+                    // console.log("Word List: ")
+                    // console.log(wordList)
                     // to: ChatGPT.AI
                     const phrases = words.map((word, index) => ({
                       id: index.toString(),
@@ -398,6 +410,12 @@ export default function CustomizedMenus() {
                   if (fileContent) {
                     console.log(fileContent)
                     const words = fileContent.split('\n');
+                    wordList = fileContent;
+                    pushed_wordList_name = fileName;
+                    console.log(pushed_wordList_name);
+                    // pushed_option = "custom";
+                    // console.log("Word List: ")
+                    // console.log(wordList)
                     // to: ChatGPT.AI
                     const phrases = words.map((word, index) => ({
                       id: index.toString(),
@@ -408,10 +426,12 @@ export default function CustomizedMenus() {
                       name: fileName,
                       phrases,
                     };
-        
+
                     // Dispatch the new phrases
                     dispatch({ type: 'ADD_PHRASE_LIST', payload: newPhraseList });
                     dispatch({ type: 'CHANGE_LIST', payload: newPhraseList.phrases });
+
+                    
                   } else {
                     console.error('Failed to fetch file content');
                   }
@@ -617,6 +637,8 @@ export default function CustomizedMenus() {
   //   });
   // }
 
+  // console.log("Before RETURN!!!!!!")
+  // console.log(wordList)
   return (
     <div>
       <List
@@ -634,7 +656,9 @@ export default function CustomizedMenus() {
           {phrases.map((phrase: string, index) =>
             <div key={index}>
               <Divider />
-              <PhrasePopUp currentPhraseList={phraseListStatus.phraseListMap.get(phrase)}/>
+              <PhrasePopUp currentPhraseList={phraseListStatus.phraseListMap.get(phrase)}
+              fileContent={wordList}
+              pushed_fileName={pushed_wordList_name}/>
             </div>
           )}
         </List>

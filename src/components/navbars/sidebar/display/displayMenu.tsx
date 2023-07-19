@@ -45,3 +45,5 @@ export default function DisplayMenu(props) {
     </div>
   );
 }
+
+// seems not being used

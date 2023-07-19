@@ -10,4 +10,6 @@ export type DisplayStatus = {
    secondaryColor: string // header, sidebar
    textColor: string
    menuVisible: boolean
+   lineNum: number // number of lines shown in transcript
+   linePos: number // position of the transcript
 }

@@ -34,6 +34,36 @@ export const STTRenderer = () : JSX.Element => {
    const { transcript, recogHandler } = useRecognition(sRecog, apiStatus, controlStatus, azureStatus);
    // console.log('40', transcript);
 
+   /**
+    * The fontsize comes from ./navbars/sidebar/display
+    * default is top 50%, height 40%.
+    * will change to height n * (displayStatus.textSize) + "vh".
+    * top can consider 0% and 50% for top middle. What about bottom?
+    * Or maybe percentage graduate change?
+    */
+   function vhToPx(vh) {
+      const viewportHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+      return (vh * viewportHeight) / 100;
+   }
+   
+   function initialVal(value) {
+      if (isNaN(value) || typeof value === 'undefined') {return 4;}
+      return value;
+   }
+
+   function initialPos(value) {
+      if (isNaN(value) || typeof value === 'undefined') {return 10;}
+      return value;
+   }
+
+   let text_size = initialVal(displayStatus.textSize);
+   let line_num = initialVal(displayStatus.lineNum);
+   let transformed_line_num = (line_num * text_size * 1.18);
+   let line_pos = initialPos(displayStatus.linePos);
+
+   console.log(transformed_line_num);
+   console.log(text_size);
+   console.log(line_pos);
 
    return (
       <div>
@@ -42,9 +72,10 @@ export const STTRenderer = () : JSX.Element => {
             <h3 id = "captionsSpace" 
                style = {{
                   position: 'fixed', width: '90%', 
-                  textAlign: 'left', left: '0', fontSize: displayStatus.textSize + "vh", 
-                  paddingLeft: '5%', paddingRight: '60%', 
-                  overflowY: 'scroll', height: '40%', 
+                  textAlign: 'left', fontSize: text_size + "vh", 
+                  paddingLeft: '5%', paddingRight: '50%', paddingTop: '0%',
+                  left: '0', top: (line_pos * 5) + '%', 
+                  overflowY: 'scroll', height: transformed_line_num + "vh", lineHeight: (text_size * 1.18) + "vh",
                   color: displayStatus.textColor
                }}>{transcript}
             </h3>

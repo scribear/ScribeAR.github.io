@@ -18,11 +18,11 @@ export default function CaptionsMenu(props) {
                   <ListItemText primary="Text Size" />
                </ListItem>
                <TextSize />
-               <ListItem sx={{ pl: 4 }}>
+               <ListItem sx={{ pl: 4, pt: 5 }}>
                   <ListItemText primary="Number of Display Rows" />
                </ListItem>
                <DisplayRows />
-               <ListItem sx={{ pl: 4 }}>
+               <ListItem sx={{ pl: 4, pt: 5  }}>
                   <ListItemText primary="Position" />
                </ListItem>
                <Position />

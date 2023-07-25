@@ -2,7 +2,8 @@ import React from 'react';
 
 import { List, ListItemText, Collapse, ArchitectureIcon, ListItem } from '../../../../muiImports'
 // import TextSize from './textSize'
-import ThemeDropdown from './themeDropdown'
+import ThemeDropdown from './themeDropdown';
+import FontColor from './fontColor';
 
 export default function DisplayMenu(props) {
 
@@ -11,11 +12,11 @@ export default function DisplayMenu(props) {
       {props.listItemHeader("Display", "display", ArchitectureIcon)}
       <Collapse in={props.open} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
-          {/* <ListItem sx={{ pl: 4 }}>
-            <ListItemText primary="Textsize" />
+          <ListItem sx={{ pl: 4 }}>
+            <ListItemText primary="Font Color" />
+            <FontColor />
           </ListItem>
-          <TextSize /> */}
-          <ListItem sx={{ pl: 4, pt: 5 }}>
+          <ListItem sx={{ pl: 4 }}>
             <ListItemText primary="Theme" />
             <ThemeDropdown />
           </ListItem>

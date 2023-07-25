@@ -52,7 +52,7 @@ export const STTRenderer = () : JSX.Element => {
    }
 
    function initialPos(value) {
-      if (isNaN(value) || typeof value === 'undefined') {return 10;}
+      if (isNaN(value) || typeof value === 'undefined') {return 8;}
       return value;
    }
 
@@ -62,9 +62,11 @@ export const STTRenderer = () : JSX.Element => {
    let line_pos = initialPos(displayStatus.linePos);
 
    console.log(transformed_line_num);
-   console.log(text_size);
-   console.log(line_pos);
+   console.log("text size:", text_size);
+   console.log("line position:", line_pos);
+   console.log("font color:", displayStatus.textColor);
 
+   // 100 / 16 = 6.25
    return (
       <div>
          <AudioVis></AudioVis>
@@ -74,7 +76,7 @@ export const STTRenderer = () : JSX.Element => {
                   position: 'fixed', width: '90%', 
                   textAlign: 'left', fontSize: text_size + "vh", 
                   paddingLeft: '5%', paddingRight: '50%', paddingTop: '0%',
-                  left: '0', top: (line_pos * 5) + '%', 
+                  left: '0', top: (line_pos * 6.25) + '%', 
                   overflowY: 'scroll', height: transformed_line_num + "vh", lineHeight: (text_size * 1.18) + "vh",
                   color: displayStatus.textColor
                }}>{transcript}

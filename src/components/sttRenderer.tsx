@@ -32,20 +32,8 @@ export const STTRenderer = () : JSX.Element => {
    // if else for whisper transcript, apiStatus for 4=whisper and control status for listening
    
    const { transcript, recogHandler } = useRecognition(sRecog, apiStatus, controlStatus, azureStatus);
-   // console.log('40', transcript);
 
-   /**
-    * The fontsize comes from ./navbars/sidebar/display
-    * default is top 50%, height 40%.
-    * will change to height n * (displayStatus.textSize) + "vh".
-    * top can consider 0% and 50% for top middle. What about bottom?
-    * Or maybe percentage graduate change?
-    */
-   function vhToPx(vh) {
-      const viewportHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
-      return (vh * viewportHeight) / 100;
-   }
-   
+
    function initialVal(value) {
       if (isNaN(value) || typeof value === 'undefined') {return 4;}
       return value;
@@ -61,12 +49,16 @@ export const STTRenderer = () : JSX.Element => {
    let transformed_line_num = (line_num * text_size * 1.18);
    let line_pos = initialPos(displayStatus.linePos);
 
-   console.log(transformed_line_num);
    console.log("text size:", text_size);
    console.log("line position:", line_pos);
    console.log("font color:", displayStatus.textColor);
 
-   // 100 / 16 = 6.25
+   /**
+    * 6.25 comes from 100 / 16. 
+    * The position height has been divided into 16 parts. Top represents position height.
+    * The fontsize comes from ./navbars/sidebar/captions
+    * default is top at 50%, lineHeight at 4 lines.
+    */
    return (
       <div>
          <AudioVis></AudioVis>

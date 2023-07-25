@@ -9,6 +9,7 @@ export default function ColorWheelButton() {
     });
 
     const [selectedColor, setSelectedColor] = useState(color.textColor);
+    // console.log("the current color is:", color.textColor);
 
     const dispatch = useDispatch();
     const position = useSelector((state: RootState) => {

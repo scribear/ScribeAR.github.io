@@ -57,7 +57,7 @@ export const STTRenderer = () : JSX.Element => {
    }
 
    let text_size = initialVal(displayStatus.textSize);
-   let line_num = initialVal(displayStatus.lineNum);
+   let line_num = initialVal(displayStatus.rowNum);
    let transformed_line_num = (line_num * text_size * 1.18);
    let line_pos = initialPos(displayStatus.linePos);
 

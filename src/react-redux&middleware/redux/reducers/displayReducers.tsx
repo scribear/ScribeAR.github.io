@@ -9,7 +9,7 @@ const  initialState : DisplayStatus = {
   secondaryColor: "#292929",
   textColor: '#FFFFFF',
   menuVisible: true,
-  lineNum: 5,
+  rowNum: 5,
   linePos: 0,
 }
 
@@ -50,11 +50,11 @@ export const DisplayReducer = (state = getLocalState("displayReducer2"), action)
         ...state, 
         textSize: action.payload };
 
-    case 'SET_LINE_NUM':
+    case 'SET_ROW_NUM':
       saveLocally("displayReducer2", action.payload)
       return { 
         ...state, 
-        lineNum: action.payload };
+        rowNum: action.payload };
 
     case 'SET_POS':
       saveLocally("displayReducer2", action.payload)

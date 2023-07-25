@@ -2,7 +2,7 @@ import React from 'react';
 
 import { List, ListItemText, Collapse, ListItem, SubtitlesIcon } from '../../../../muiImports';
 import Position from './position';
-import LineNumbers from './lineNumbers'
+import DisplayRows from './displayRows'
 
 
 export default function CaptionsMenu(props) {
@@ -14,9 +14,9 @@ export default function CaptionsMenu(props) {
          <Collapse in={props.open} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
                <ListItem sx={{ pl: 4 }}>
-                  <ListItemText primary="Line Numbers" />
+                  <ListItemText primary="Number of Display Rows" />
                </ListItem>
-               <LineNumbers />
+               <DisplayRows />
                <ListItem sx={{ pl: 4 }}>
                   <ListItemText primary="Position" />
                </ListItem>

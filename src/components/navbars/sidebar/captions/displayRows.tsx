@@ -21,7 +21,7 @@ export default function PlusMinus(props) {
     return state.DisplayReducer as DisplayStatus;
   });
   const handleInputChangeSlider = (event) => {
-    dispatch({ type: 'SET_LINE_NUM', payload: event })
+    dispatch({ type: 'SET_ROW_NUM', payload: event })
   }
   const styles = useStyles()
 
@@ -32,7 +32,7 @@ function HoverThumb(props: HoverThumbProps) {
   return (
     <SliderThumb {...other}>
       {children}      
-      {lines.lineNum}
+      {lines.rowNum}
     </SliderThumb>
   );
 }
@@ -73,7 +73,7 @@ const marks = [{value: 1, label: "1",}, {value: 5, label: "5",}, {value: 10, lab
                   }}
         components={{ Thumb: HoverThumb }}
         style={{ color: lines.secondaryColor }}
-        value={lines.lineNum}
+        value={lines.rowNum}
         onChange={(e, val) => { handleInputChangeSlider(val) }}
         marks={marks}
         step={1}

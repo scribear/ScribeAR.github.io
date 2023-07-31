@@ -46,7 +46,7 @@ function HoverThumb(props: HoverThumbProps) {
 
 // let lineheight = initialVal(lines.lineNum)
 
-const marks = [{value: 0, label: "Top",}, {value: 4, label: "Q1",}, {value: 8, label: "Middle",}, {value: 12, label: "Q3",}, {value: 16, label: "Bottom",}];                                              
+const marks = [{value: 0, label: "Top",}, {value: 4, label: "",}, {value: 8, label: "Middle",}, {value: 12, label: "",}, {value: 16, label: "Bottom",}];                                              
   return (
     <div className={styles.slider}>
         <Typography gutterBottom>

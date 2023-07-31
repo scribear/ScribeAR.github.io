@@ -4,6 +4,8 @@ import { List, ListItemText, Collapse, ArchitectureIcon, ListItem } from '../../
 // import TextSize from './textSize'
 import ThemeDropdown from './themeDropdown';
 import FontColor from './fontColor';
+import BackgroundColor from './backgroundColor';
+import AccentColor from './accentColor';
 
 export default function DisplayMenu(props) {
 
@@ -17,7 +19,15 @@ export default function DisplayMenu(props) {
             <FontColor />
           </ListItem>
           <ListItem sx={{ pl: 4 }}>
-            <ListItemText primary="Theme" />
+            <ListItemText primary="Background Color" />
+            <BackgroundColor />
+          </ListItem>
+          <ListItem sx={{ pl: 4 }}>
+            <ListItemText primary="Accent Color" />
+            <AccentColor />
+          </ListItem>
+          <ListItem sx={{ pl: 4 }}>
+            <ListItemText primary="Preset Themes" />
             <ThemeDropdown />
           </ListItem>
         </List>

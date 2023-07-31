@@ -3,32 +3,29 @@ import {Button, FormatColorTextIcon } from '../../../../muiImports';
 import { RootState, DisplayStatus } from '../../../../react-redux&middleware/redux/typesImports';
 import { useDispatch, useSelector } from 'react-redux';
 
-export default function ColorWheelButton() {
+export default function AccentColorButton() {
     const color = useSelector((state: RootState) => {
       return state.DisplayReducer as DisplayStatus;
     });
-
-    const [selectedColor, setSelectedColor] = useState(color.textColor);
-    // console.log("the current color is:", color.textColor);
-
+    const [selectedColor, setSelectedColor] = useState(color.secondaryColor);
     const dispatch = useDispatch();
     const position = useSelector((state: RootState) => {
       return state.DisplayReducer as DisplayStatus;
     });
     const handleInputChange = (event) => {
-      dispatch({ type: 'CHANGE_TEXT_COLOR', payload: event });
+      dispatch({ type: 'CHANGE_SECONDARY_THEME', payload: event });
     }
 
     const inputRef = useRef<HTMLInputElement>(null);
 
     const handleButtonClick = (event) => {
-      console.log("font color button click");
+      console.log("accent color button click");
       inputRef.current?.click(); 
     };
 
     const handleColorChange = (event) => {
       const selectedColor = event.target.value;
-      console.log("Selected color:", selectedColor);
+      console.log("accent selected color:", selectedColor);
       handleInputChange(event.target.value);
       setSelectedColor(selectedColor);
     };

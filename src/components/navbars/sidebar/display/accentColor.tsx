@@ -1,16 +1,16 @@
 import Theme from '../../../theme';
 import { ThemeProvider } from '../../../../muiImports';
-import FontColorWheelButton from './fontColorButton';
+import AccentColorButton from './accentColorButton';
 
 
-export default function FontColor() {
+export default function AccentColor() {
 
   const {myTheme} = Theme();
 
   return (
     <div>
       <ThemeProvider theme={myTheme}>
-        <FontColorWheelButton />
+        <AccentColorButton />
       </ThemeProvider>
     </div>
   );

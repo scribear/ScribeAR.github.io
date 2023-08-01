@@ -16,11 +16,13 @@ const useStyles = makeStyles({
 });
 
 export default function PlusMinus(props) {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const position = useSelector((state: RootState) => {
     return state.DisplayReducer as DisplayStatus;
   });
   const handleInputChangeSlider = (event) => {
+    // event is the value of slide
+    // console.log("event: ", event)
     dispatch({ type: 'SET_POS', payload: event })
   }
   const styles = useStyles()

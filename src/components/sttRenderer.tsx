@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Swal from 'sweetalert2'; // TODO: use Swal like before if appropriate
 
 import { RootState } from '../store';
@@ -52,6 +52,19 @@ export const STTRenderer = () : JSX.Element => {
    console.log("text size:", text_size);
    console.log("line position:", line_pos);
    console.log("font color:", displayStatus.textColor);
+
+   let position_change = 0;
+   while (line_pos * 6.25 + transformed_line_num > 93) {
+      position_change = 1;
+      line_pos--;
+   }
+   console.log("lower bound:", (line_pos * 6.25 + transformed_line_num));
+
+   const dispatch = useDispatch();
+   const handleLinePositionBound = (event) => {
+      dispatch({ type: 'SET_POS', payload: event })
+   }
+   if (position_change) {handleLinePositionBound(line_pos);}
 
    /**
     * 6.25 comes from 100 / 16. 

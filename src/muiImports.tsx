@@ -47,6 +47,8 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import DoNotDisturbOnIcon from '@mui/icons-material/DoNotDisturbOn';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import MicOffIcon from '@mui/icons-material/MicOff'
+import SubtitlesIcon from '@mui/icons-material/Subtitles';
+import FormatColorTextIcon from '@mui/icons-material/FormatColorText';
 import Autocomplete from '@mui/material/Autocomplete';
 import { Switch } from '@mui/material';
 
@@ -102,6 +104,8 @@ export {
     FullscreenExitIcon,    
     PaletteIcon,
     MicOffIcon,
+    SubtitlesIcon,
+    FormatColorTextIcon,
     ArchitectureIcon,
     Switch,
 }

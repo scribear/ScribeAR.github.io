@@ -37,7 +37,7 @@ export default function AccountMenu() {
         PaperProps={{
           elevation: 0,
           sx: {
-            height: '14vw',
+            height: '19vw',
             filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
             '& .MuiAvatar-root': {
               boxSizing: "border-box",

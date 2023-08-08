@@ -18,6 +18,7 @@ import * as React from 'react';
      }
      const {myTheme} = Theme()
 
+     // color "primary" comes from Theme()
      return (
        <div>
         <ThemeProvider theme={myTheme}>
@@ -25,8 +26,8 @@ import * as React from 'react';
             {props.listening === false ? "Begin Listening" : "Pause Listening"}>
             <IconButton onClick={handleClick}>
               {props.listening ? 
-                <MicIcon color="info" fontSize="large"/> : 
-                <MicOffIcon color="info" fontSize="large"/>
+                <MicIcon color="primary" fontSize="large"/> : 
+                <MicOffIcon color="primary" fontSize="large"/>
               }
             </IconButton>
           </Tooltip>

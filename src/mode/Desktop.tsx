@@ -18,8 +18,7 @@ export default function Desktop(props) {
       return state;
    });
    
-
-   console.log(RootState)
+   console.log("rootstate: ", RootState)
 
    return (
      <div>

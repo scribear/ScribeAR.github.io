@@ -57,11 +57,6 @@ export default function Theme(props) {
     const changeTheme = (event) =>
     {
         let copy = JSON.parse(event.target.value)
-        // if (copy.text == 0) {
-        //     copy.text = '#000000'
-        // } else {
-        //     copy.text = '#FFFFFF'
-        // }
         dispatch({type: 'CHANGE_PRIMARY_THEME', payload: copy.hex})
         dispatch({type: 'CHANGE_SECONDARY_THEME', payload: copy.rgb})
         dispatch({type: 'CHANGE_TEXT_COLOR', payload: copy.text})

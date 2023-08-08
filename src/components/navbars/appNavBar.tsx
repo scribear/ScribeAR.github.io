@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { ApiStatus, RootState, DisplayStatus, ControlStatus } from '../../react-redux&middleware/redux/typesImports';
-import { createTheme, ThemeProvider, IconButton, MenuIcon, Drawer, Grid, AppBar, Toolbar } from '../../muiImports'
+import { createTheme, ThemeProvider, IconButton, MenuIcon, Drawer, Grid, AppBar, Toolbar } from '../../muiImports';
 
 import SideBar from './sidebar/sidebar'
 import TopBar from './topbar/topBar';
@@ -61,12 +61,19 @@ export default function AppNavBar(props) {
     const toggleDrawer = (open: boolean) => (event: React.MouseEvent) => {
         setState({ ...state, isOpen: open });
     };
-    
+
+    const dispatch = useDispatch();
+    let accent_color = displayStatus.secondaryColor;
+    // if (typeof accent_color === 'undefined') {
+    //     accent_color = "#3f51bf";
+    //     dispatch({type: 'CHANGE_SECONDARY_THEME', payload: accent_color});
+    // }
+    console.log("Accent Color: ", accent_color);
 
     return (
         <AppBar position="fixed" id="topbar-wrapper" onMouseOut={changeVisibility} onMouseOver={changeVisibilityOver} style={{ transition: '0.6s' }}>
             <Grid container spacing={2} alignItems="center"  >
-                <Toolbar style={{ backgroundColor: displayStatus.secondaryColor, width: '100%', maxHeight: '10vh', paddingLeft: '20px' }}>
+                <Toolbar style={{ backgroundColor: accent_color, width: '100%', maxHeight: '10vh', paddingLeft: '20px' }}>
                     <Grid item xs={6}>
                         <Grid container spacing={1} alignItems="center"  >
                             <Grid item>

@@ -68,7 +68,7 @@ export default function AppNavBar(props) {
     //     accent_color = "#3f51bf";
     //     dispatch({type: 'CHANGE_SECONDARY_THEME', payload: accent_color});
     // }
-    console.log("Accent Color: ", accent_color);
+    // console.log("Accent Color: ", accent_color);
 
     return (
         <AppBar position="fixed" id="topbar-wrapper" onMouseOut={changeVisibility} onMouseOver={changeVisibilityOver} style={{ transition: '0.6s' }}>

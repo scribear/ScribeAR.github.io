@@ -10,6 +10,7 @@ export default function Theme(props) {
     }
     
     let colors: color[][] = [
+        //hex background, rgb accent, text font color
         //black and white
         [    
             {hex: '#0f0f0f', rgb: '#292929', text: '#FFFFFF'},
@@ -47,10 +48,16 @@ export default function Theme(props) {
         ],
         //colorful
         [   
-            {hex: '#13294B', rgb: '#E84A27', text: '#ffffff'},
+            {hex: '#13294B', rgb: '#e84a27', text: '#ffffff'},
             {hex: '#000000', rgb: '#8b0000', text: '#ffff00'},
             {hex: '#734f9a', rgb: '#8bd450', text: '#ffffff'},
             {hex: '#f2bc94', rgb: '#722620', text: '#30110d'},
+        ],
+        [   
+            {hex: '#3499cb', rgb: '#e2af8d', text: '#ffffff'},
+            {hex: '#210070', rgb: '#42aad7', text: '#2be0f7'},
+            {hex: '#ffa781', rgb: '#c40a0a', text: '#5b0e2d'},
+            {hex: '#cc7619', rgb: '#41321d', text: '#fbd9bc'},
         ],
     ]
 
@@ -78,7 +85,7 @@ export default function Theme(props) {
     return (
         <div className="circle-picker " style={{display: 'flex', flexWrap: 'wrap', marginBottom: '-2vw', marginLeft: '.8vw' }}>
                 <table>
-                {Array.from(Array(6)).map((_, xIndex) => (
+                {Array.from(Array(7)).map((_, xIndex) => (
                     <tr>
                         {colors[xIndex].map((colors: color, yIndex) =>
                             <th>

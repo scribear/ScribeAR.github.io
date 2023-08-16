@@ -4,7 +4,7 @@ import Swal from 'sweetalert2';
 
 import { RootState } from '../../store';
 import { 
-   DisplayStatus, AzureStatus, 
+   DisplayStatus, AzureStatus, STATUS, API,
    ControlStatus, ApiStatus, WhisperStatus 
 } from '../../react-redux&middleware/redux/typesImports';
 import { STTRenderer } from '../sttRenderer';
@@ -28,7 +28,7 @@ export const RecogComponent: React.FC = (props) => {
       return state.WhisperReducer as WhisperStatus
    })
    document.addEventListener("DOMContentLoaded", () => {
-      if (apiStatus.currentApi === 1) {
+      if (apiStatus.currentApi === API.AZURE_TRANSLATION) {
          Swal.fire({
          title: 'It appears you have a valid Microsoft Azure key, would you like to use Microsoft Azure?',
          icon: 'info',
@@ -40,9 +40,20 @@ export const RecogComponent: React.FC = (props) => {
             Swal.fire('Switching to Azure', '', 'success')
             // desiredAPI = 1
             // azureHandler()
+            let copyStatus = Object.assign({}, apiStatus);
+            copyStatus.currentApi = API.AZURE_TRANSLATION;
+            copyStatus.webspeechStatus = STATUS.AVAILABLE;
+            copyStatus.whisperStatus = STATUS.AVAILABLE;
+            copyStatus.azureConvoStatus = STATUS.AVAILABLE;
+            copyStatus.azureTranslStatus = STATUS.TRANSCRIBING;
+            dispatch({type: 'CHANGE_API_STATUS', payload: copyStatus})
          } else {
             let copyStatus = Object.assign({}, apiStatus);
             copyStatus.currentApi = 0;
+            copyStatus.webspeechStatus = STATUS.TRANSCRIBING;
+            copyStatus.whisperStatus = STATUS.AVAILABLE;
+            copyStatus.azureConvoStatus = STATUS.AVAILABLE;
+            copyStatus.azureTranslStatus = STATUS.AVAILABLE;
             dispatch({type: 'CHANGE_API_STATUS', payload: copyStatus})
             // webspeechHandler()
          }

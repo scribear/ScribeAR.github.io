@@ -14,6 +14,7 @@ import { createStore, applyMiddleware } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import StarIcon from '@mui/icons-material/Star';
 import HomeIcon from '@mui/icons-material/Home';
+import PublicIcon from '@mui/icons-material/Public';
 
 
 /* todo:
@@ -675,10 +676,10 @@ export default function CustomizedMenus() {
                   />
                   {currentPhraseOption === 'scribeAR' ? 
                     <IconButton>
-                      <StarIcon />
+                      <HomeIcon />
                     </IconButton> :
                     <IconButton>
-                      <HomeIcon />
+                      <PublicIcon />
                     </IconButton>
                   }
                 </div>

@@ -66,16 +66,30 @@ export default function PhrasePopUp(props) {
         clickAddList({ target: { value: state.currentPhrase } });
     }    
 
+    // const clickAddList = (event) => {
+    //     if (event.target.value) {
+    //         state.phraseList.phrases.push(event.target.value)
+    //         // Sort the phrases in alphabetical order
+    //         state.phraseList.phrases.sort((a, b) => a.localeCompare(b));
+    //         dispatch({ type: "EDIT_PHRASE_LIST", payload: state.phraseList })
+    //         dispatch({ type: "CHANGE_LIST", payload: state.phraseList.phrases })
+    //     }
+    // }
+    
+    const [additionMessage, setAdditionMessage] = React.useState("");
+
     const clickAddList = (event) => {
-        if (event.target.value) {
-            state.phraseList.phrases.push(event.target.value)
+        if (event.target.value && !state.phraseList.phrases.includes(event.target.value)) {
+            state.phraseList.phrases.push(event.target.value);
+            // Set the message after adding the word
+            setAdditionMessage(`${event.target.value} is successfully added!!!`);
             // Sort the phrases in alphabetical order
             state.phraseList.phrases.sort((a, b) => a.localeCompare(b));
-            dispatch({ type: "EDIT_PHRASE_LIST", payload: state.phraseList })
-            dispatch({ type: "CHANGE_LIST", payload: state.phraseList.phrases })
+            dispatch({ type: "EDIT_PHRASE_LIST", payload: state.phraseList });
+            dispatch({ type: "CHANGE_LIST", payload: state.phraseList.phrases });
         }
-    }
-    
+    }    
+
     const automaticAddList = () => {
         // console.log("ADD!YEAH!")
         // Access fileContent here like this:
@@ -163,6 +177,7 @@ export default function PhrasePopUp(props) {
                         <span style={{ color: 'blue' }}>Add</span>
                     </IconButton>
                 </Paper>
+                <div style={{ textAlign: 'center' }}>{additionMessage}</div>  {/* Render the additionMessage here */}
                 <List
                     sx={{height: '30vh', mt: '1vh', bgcolor: 'background.paper',  overflow: 'overlay', overflowWrap: 'anywhere' }}
                     component="nav"

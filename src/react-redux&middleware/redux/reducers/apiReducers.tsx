@@ -5,7 +5,7 @@ import { WhisperStatus } from "../types/apiTypes";
 
 const initialAPIStatusState: ApiStatus = {
   currentApi: API.WEBSPEECH,
-  webspeechStatus: STATUS.AVAILABLE,
+  webspeechStatus: STATUS.TRANSCRIBING,
   azureTranslStatus: STATUS.AVAILABLE,
   azureConvoStatus: STATUS.AVAILABLE,
   whisperStatus: STATUS.AVAILABLE,
@@ -132,8 +132,3 @@ export const PhraseListReducer = (state = initialPhraseListState, action) => {
       return state;
   }
 }
-
-
-
-
-

@@ -14,6 +14,7 @@ export type ApiType = typeof API[keyof typeof API];
 /**
  * Status for a particular API recognizer
  */
+// TODO: Reconfigure it
 export const STATUS = {
    AVAILABLE: 0,
    NULL: 1,

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { 
    ApiStatus, RootState,
-   API, ApiType, STATUS, StatusType, ControlStatus, AzureStatus
+   API, ApiType, STATUS, StatusType, ControlStatus, AzureStatus, WhisperStatus
 } from '../../../../react-redux&middleware/redux/typesImports';
 import { useDispatch, useSelector } from 'react-redux';
 import swal from 'sweetalert';
@@ -79,7 +79,10 @@ export default function PickApi(props) {
    })
    const azureStatus = useSelector((state: RootState) => {
       return state.AzureReducer as AzureStatus;
-   }) 
+   })
+   const whisperStatus = useSelector((state: RootState) => {
+      return state.WhisperReducer as WhisperStatus;
+   })
 
    const [state, setState] = React.useState({
       showAzureDropdown: false,
@@ -123,10 +126,10 @@ export default function PickApi(props) {
    const toggleDrawer =
       (apiStat: string, api:ApiType, isArrow:boolean) =>
          (event: React.KeyboardEvent | React.MouseEvent) => {
-               if (state.apiStatus.currentApi !== api) {
+               if (apiStatus.currentApi !== api) {
                   console.log(78);
                   if (!isArrow) {
-                     let copyStatus = Object.assign({}, state.apiStatus);
+                     let copyStatus = Object.assign({}, apiStatus);
                      copyStatus.currentApi = api;
                      let apiName = "Webspeech";
                      if (api === API.AZURE_TRANSLATION) {
@@ -148,7 +151,6 @@ export default function PickApi(props) {
                         copyStatus.whisperStatus = STATUS.AVAILABLE;
                      }
                      console.log(88, copyStatus);
-                     setState({ ...state, apiStatus: copyStatus });
                      dispatch({type: 'CHANGE_API_STATUS', payload: copyStatus});
                      swal({
                         title: "Success!",
@@ -193,7 +195,7 @@ export default function PickApi(props) {
                </ListItemIcon>
                <ListItemText primary="Whisper" />
                <IconButton onClick={toggleDrawer("whisperStatus", API.WHISPER, true)}>
-                  {state.whisperStatus ? <ExpandLess /> : <ExpandMore />}
+                  {whisperStatus ? <ExpandLess /> : <ExpandMore />}
                </IconButton>
          </ListItemButton>
 

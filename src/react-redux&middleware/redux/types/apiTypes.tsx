@@ -39,6 +39,7 @@ export type PhraseList = {
    phrases: string[]
    name: string
    availableSpace: number
+   pushed_option: string;  // new
 }
 
 export type PhraseListStatus = {

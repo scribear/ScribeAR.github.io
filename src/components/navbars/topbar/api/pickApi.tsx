@@ -1,14 +1,16 @@
 import * as React from 'react';
 import { 
    ApiStatus, RootState,
-   API, ApiType, STATUS, StatusType
+   API, ApiType, STATUS, StatusType, ControlStatus, AzureStatus
 } from '../../../../react-redux&middleware/redux/typesImports';
 import { useDispatch, useSelector } from 'react-redux';
 import swal from 'sweetalert';
 import { createTheme, ThemeProvider, ListItemButton, ListItemText, ListItemIcon, Collapse, ErrorIcon, ExpandLess, ExpandMore, CancelIcon, IconButton, DoNotDisturbOnIcon, CheckCircleIcon } from '../../../../muiImports' 
 
-import AzureDropdown from './AzureDropdown';
 import WhisperDropdown from './WhisperDropdown';
+import AzureSettings from './AzureSettings';
+import { ListItem, ListItemSecondaryAction } from '@mui/material';
+import { testAzureTranslRecog } from '../../../api/azure/azureTranslRecog';
 
 
 const currTheme = createTheme({
@@ -28,9 +30,13 @@ const currTheme = createTheme({
    }
 });
 
+/**
+ * Icon component whose symbol and color represent the current availability of a given API
+ * @param currentApi the API to represent
+ * @returns The icon component
+ */
 const IconStatus = (currentApi: any) => {
    const myTheme = currTheme;
-   console.log(currentApi);
    switch (currentApi.currentApi) {
       case STATUS.AVAILABLE:
          return (
@@ -59,18 +65,61 @@ const IconStatus = (currentApi: any) => {
    )
 }
 
+// Switch to azure -> keep api menu open -> cannot switch to webspeech
+// Switch to azure -> reopen api menu -> can switch to webspeech -> webspeech doesn't work until microphone restarted
 export default function PickApi(props) {
    const dispatch = useDispatch();
    const myTheme = currTheme;
 
+   const apiStatus = useSelector((state: RootState) => {
+      return state.APIStatusReducer as ApiStatus;
+   })
+   const controlStatus = useSelector((state: RootState) => {
+      return state.ControlReducer as ControlStatus;
+   })
+   const azureStatus = useSelector((state: RootState) => {
+      return state.AzureReducer as AzureStatus;
+   }) 
+
    const [state, setState] = React.useState({
-      azureStatus: false,
-      webspeechStatus: false,
-      whisperStatus: false,
-      apiStatus: useSelector((state: RootState) => {
-         return state.APIStatusReducer as ApiStatus;
-      })
+      showAzureDropdown: false,
+      showWhisperDropdown: false,
    });
+
+   // TODO: change Whisper dropdown to pop-up as well
+   // TODO: merge switchToAzure and toggleDrawer into one switch-to function
+   const switchToAzure = async () => {
+      dispatch({type: 'FLIP_RECORDING', payload: controlStatus});
+      let copyStatus = Object.assign({}, apiStatus);
+      testAzureTranslRecog(controlStatus, azureStatus).then(recognizer => { 
+         // fullfill (test good)
+         copyStatus.azureTranslStatus = STATUS.AVAILABLE;
+         localStorage.setItem("azureStatus", JSON.stringify(azureStatus));
+         
+         copyStatus.currentApi = API.AZURE_TRANSLATION;
+         copyStatus.azureTranslStatus = STATUS.AVAILABLE;
+         swal({
+               title: "Success!",
+               text: "Switching to Microsoft Azure",
+               icon: "success", 
+               timer: 1500,
+         })
+
+         dispatch({type: 'CHANGE_API_STATUS', payload: copyStatus});
+      }, (error)=> {
+         // reject (test bad)
+         console.log("error");
+         copyStatus.azureTranslStatus = STATUS.ERROR;   
+         swal({
+               title: "Warning!",
+               text: `${error}`,
+               icon: "warning",
+         })
+      }).finally(() => {
+         dispatch({type: 'FLIP_RECORDING', payload: controlStatus})
+      })
+   }
+
    const toggleDrawer =
       (apiStat: string, api:ApiType, isArrow:boolean) =>
          (event: React.KeyboardEvent | React.MouseEvent) => {
@@ -115,30 +164,32 @@ export default function PickApi(props) {
                   setState({ ...state, [apiStat]: !state[apiStat] });
                }
          }
+
    return (
       <div>
          <ListItemButton onClick={toggleDrawer("webspeechStatus", API.WEBSPEECH, false)}>
                <ThemeProvider theme={myTheme}>
                   <ListItemIcon>
-                     <IconStatus{...{currentApi: state.apiStatus.webspeechStatus}}/>
+                     <IconStatus{...{currentApi: apiStatus.webspeechStatus}}/>
                   </ListItemIcon>
                </ThemeProvider>
                <ListItemText primary="Webspeech" />
          </ListItemButton>
 
-         <ListItemButton onClick={toggleDrawer("azureStatus", API.AZURE_TRANSLATION, false)} >
+         <ListItem>
+            <ListItemButton disableGutters onClick={switchToAzure} >
                <ListItemIcon>
-                  <IconStatus{...{currentApi: state.apiStatus.azureTranslStatus}}/>
+                  <IconStatus{...{currentApi: apiStatus.azureTranslStatus}}/>
                </ListItemIcon>
                <ListItemText primary="Microsoft Azure" />
-               <IconButton onClick={toggleDrawer("azureStatus", API.AZURE_TRANSLATION, true)}>
-                  {state.azureStatus ? <ExpandLess /> : <ExpandMore />}
-               </IconButton>
-         </ListItemButton>
+            </ListItemButton>
+
+            <AzureSettings/>
+         </ListItem>
 
          <ListItemButton onClick={toggleDrawer("whisperStatus", API.WHISPER, false)} >
                <ListItemIcon>
-                  <IconStatus{...{currentApi: state.apiStatus.whisperStatus}}/>
+                  <IconStatus{...{currentApi: apiStatus.whisperStatus}}/>
                </ListItemIcon>
                <ListItemText primary="Whisper" />
                <IconButton onClick={toggleDrawer("whisperStatus", API.WHISPER, true)}>
@@ -146,12 +197,8 @@ export default function PickApi(props) {
                </IconButton>
          </ListItemButton>
 
-         <Collapse in={state.azureStatus} timeout="auto" unmountOnExit>
-               <AzureDropdown apiStatus={state.apiStatus}/>
-         </Collapse>
-
-         <Collapse in={state.whisperStatus} timeout="auto" unmountOnExit>
-               <WhisperDropdown apiStatus={state.apiStatus}/>
+         <Collapse in={state.showWhisperDropdown} timeout="auto" unmountOnExit>
+               <WhisperDropdown apiStatus={apiStatus}/>
          </Collapse>
       </div>
    );

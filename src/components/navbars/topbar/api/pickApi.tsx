@@ -38,14 +38,14 @@ const currTheme = createTheme({
 const IconStatus = (currentApi: any) => {
    const myTheme = currTheme;
    switch (currentApi.currentApi) {
-      case STATUS.NULL:
+      case STATUS.AVAILABLE:
          return (
                <ThemeProvider theme={myTheme}>
                   <DoNotDisturbOnIcon/>
                </ThemeProvider>
          )
       
-      case STATUS.AVAILABLE:
+      case STATUS.TRANSCRIBING:
          return (
                <ThemeProvider theme={myTheme}>
                   <CheckCircleIcon color="success" />
@@ -123,33 +123,40 @@ export default function PickApi(props) {
    const toggleDrawer =
       (apiStat: string, api:ApiType, isArrow:boolean) =>
          (event: React.KeyboardEvent | React.MouseEvent) => {
-
-               console.warn("API menu click event: ")
-               console.warn(api)
-               console.warn(apiStatus.currentApi)
-               console.warn(apiStatus)
-               if (apiStatus.currentApi !== api) {
-                  if (!isArrow && apiStatus[apiStat] === STATUS.AVAILABLE) {
-                     console.warn("Switching API...")
+               if (state.apiStatus.currentApi !== api) {
+                  console.log(78);
+                  if (!isArrow) {
+                     let copyStatus = Object.assign({}, state.apiStatus);
+                     copyStatus.currentApi = api;
                      let apiName = "Webspeech";
                      if (api === API.AZURE_TRANSLATION) {
-                           apiName = "Microsoft Azure"
+                        apiName = "Microsoft Azure";
+                        copyStatus.azureTranslStatus = STATUS.TRANSCRIBING;
+                        copyStatus.webspeechStatus = STATUS.AVAILABLE;
+                        copyStatus.azureConvoStatus = STATUS.AVAILABLE;
+                        copyStatus.whisperStatus = STATUS.AVAILABLE;
+                     } else if (api === API.WHISPER) {
+                        apiName = "Whisper";
+                        copyStatus.whisperStatus = STATUS.TRANSCRIBING
+                        copyStatus.webspeechStatus = STATUS.AVAILABLE;
+                        copyStatus.azureConvoStatus = STATUS.AVAILABLE;
+                        copyStatus.azureTranslStatus = STATUS.AVAILABLE;
+                     } else if (api === API.WEBSPEECH) {
+                        copyStatus.webspeechStatus = STATUS.TRANSCRIBING
+                        copyStatus.azureTranslStatus = STATUS.AVAILABLE;
+                        copyStatus.azureConvoStatus = STATUS.AVAILABLE;
+                        copyStatus.whisperStatus = STATUS.AVAILABLE;
                      }
-                     if (api === API.WHISPER) {
-                        apiName = "Whisper"
-                     }
-                     swal({
-                           title: "Success!",
-                           text: "Switching to " + apiName,
-                           icon: "success", 
-                           timer: 2500,
-                     
-                        })
-                     let copyStatus = Object.assign({}, apiStatus);
-                     copyStatus.currentApi = api;
-                     console.warn("New status to be dispatched: ")
-                     console.warn(copyStatus)
+                     console.log(88, copyStatus);
+                     setState({ ...state, apiStatus: copyStatus });
                      dispatch({type: 'CHANGE_API_STATUS', payload: copyStatus});
+                     swal({
+                        title: "Success!",
+                        text: "Switching to " + apiName,
+                        icon: "success", 
+                        timer: 2500,
+                  
+                     })
                   } else {
                      setState({ ...state, [apiStat]: !state[apiStat] });
                   }
@@ -160,7 +167,7 @@ export default function PickApi(props) {
 
    return (
       <div>
-         <ListItemButton onClick={toggleDrawer("webspeechStatus", 0, false)}>
+         <ListItemButton onClick={toggleDrawer("webspeechStatus", API.WEBSPEECH, false)}>
                <ThemeProvider theme={myTheme}>
                   <ListItemIcon>
                      <IconStatus{...{currentApi: apiStatus.webspeechStatus}}/>
@@ -180,13 +187,13 @@ export default function PickApi(props) {
             <AzureSettings/>
          </ListItem>
 
-         <ListItemButton onClick={toggleDrawer("whisperStatus", 4, false)} >
+         <ListItemButton onClick={toggleDrawer("whisperStatus", API.WHISPER, false)} >
                <ListItemIcon>
                   <IconStatus{...{currentApi: apiStatus.whisperStatus}}/>
                </ListItemIcon>
                <ListItemText primary="Whisper" />
-               <IconButton onClick={toggleDrawer("whisperStatus", 4, true)}>
-                  {state.showWhisperDropdown ? <ExpandLess /> : <ExpandMore />}
+               <IconButton onClick={toggleDrawer("whisperStatus", API.WHISPER, true)}>
+                  {state.whisperStatus ? <ExpandLess /> : <ExpandMore />}
                </IconButton>
          </ListItemButton>
 

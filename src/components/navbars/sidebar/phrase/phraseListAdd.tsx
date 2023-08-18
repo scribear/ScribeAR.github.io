@@ -9,8 +9,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import axios, { AxiosError } from 'axios';
 import { ThunkDispatch } from 'redux-thunk';
 import { Action } from 'redux';
+import getWordList from './phraseList';
 import { createStore, applyMiddleware } from 'redux';
 import thunkMiddleware from 'redux-thunk';
+import StarIcon from '@mui/icons-material/Star';
+import HomeIcon from '@mui/icons-material/Home';
+import PublicIcon from '@mui/icons-material/Public';
+
 
 /* todo:
   1   Make language bar a fixed height so that it can only display ~8 languages 
@@ -29,6 +34,9 @@ import thunkMiddleware from 'redux-thunk';
 // );
 
 // export default store;
+let pushed_wordList_name;
+let pushed_option;
+let wordList = "";
 
 // This is the action to add a new phrase list
 export const addPhraseList = (newList: PhraseList) => {
@@ -62,7 +70,7 @@ export const addPhraseListAndChange = (newList: PhraseList) => {
   }
 }
 
-export default function CustomizedMenus() {
+export default function CustomizedMenus() { 
   const originalDispatch = useDispatch();
   const dispatch = (action) => {
     if (typeof action === 'function') {
@@ -88,7 +96,8 @@ export default function CustomizedMenus() {
   let initialPhraseList: PhraseList = {
     phrases: [],
     name: "empty",
-    availableSpace: Infinity
+    availableSpace: Infinity,
+    pushed_option: "scribeAR" // new
   }
   
   const handleClickItem = (event) => {
@@ -118,15 +127,14 @@ export default function CustomizedMenus() {
   //   return content;
   // }
 
-  async function getFileContent(filename, repo, owner, branch, token) {
+  async function getFileContent(filename, repo, owner, branch) {
     console.log(filename)
     const response = await axios.get(
-      `https://api.github.com/repos/${owner}/${repo}/contents/${filename}?ref=${branch}`,
-      { headers: { Authorization: `Token ${token}` } }
+      `https://api.github.com/repos/${owner}/${repo}/contents/${filename}?ref=${branch}`
     );
   
     console.log('Response:', response);  // Log the complete response
-
+  
     if (response.data && response.data.content) {
       let contentBase64 = response.data.content;
       // Replace line breaks before decoding
@@ -142,46 +150,43 @@ export default function CustomizedMenus() {
       console.error('Content not found in the response');
     }
   }  
-
+  
   // Check if the file exists in the GitHub repository
-  async function checkFileExists(filename, repo, owner, branch, token) {
+  async function checkFileExists(filename, repo, owner, branch) {
     try {
-        await axios.get(
-            `https://api.github.com/repos/${owner}/${repo}/contents/${filename}?ref=${branch}`,
-            { headers: { Authorization: `Token ${token}` } }
-        );
-        return true;
+      await axios.get(
+        `https://api.github.com/repos/${owner}/${repo}/contents/${filename}?ref=${branch}`
+      );
+      return true;
     } catch (error) {
-        // We cast the error to AxiosError
-        const axiosError = error as AxiosError;
-        if (axiosError.response?.status === 404) {
-            return false;
-        }
-        throw error;
+      // We cast the error to AxiosError
+      const axiosError = error as AxiosError;
+      if (axiosError.response?.status === 404) {
+        return false;
+      }
+      throw error;
     }
   }
-
+  
   interface TreeItem {
     path?: string;
     type?: string;
     [key: string]: any;
   }    
-
-  async function getFileNames(owner, repo, branch, token) {
+  
+  async function getFileNames(owner, repo, branch) {
     // Get the SHA of the latest commit on the branch
     const latestCommitResponse = await axios.get(
-        `https://api.github.com/repos/${owner}/${repo}/git/refs/heads/${branch}`,
-        { headers: { Authorization: `Token ${token}` } }
+      `https://api.github.com/repos/${owner}/${repo}/git/refs/heads/${branch}`
     );
     const latestCommitSha = latestCommitResponse.data.object.sha;
     
     // Get the tree associated with the commit SHA, setting recursive to 1 to get all files
     const treeResponse = await axios.get(
-        `https://api.github.com/repos/${owner}/${repo}/git/trees/${latestCommitSha}?recursive=1`,
-        { headers: { Authorization: `Token ${token}` } }
+      `https://api.github.com/repos/${owner}/${repo}/git/trees/${latestCommitSha}?recursive=1`
     );
     const tree = treeResponse.data;
-
+  
     // Create an array to store the file names
     let fileNames: string[] = [];
     
@@ -191,13 +196,13 @@ export default function CustomizedMenus() {
         fileNames.push(item.path);
       }
     });    
-
+  
     // Join all file names with a break line
     const fileNamesStr = fileNames.join("\n");
-
+  
     // Return the file names
     return fileNamesStr;
-  }
+  }  
 
   const clickAddList = async () => {
     const result = await Swal.fire({
@@ -230,7 +235,6 @@ export default function CustomizedMenus() {
           <input type="text" id="owner" placeholder="GitHub Owner" style="width: 300px;height: 50px;font-size: 20px;"><br><br>
           <input type="text" id="repo" placeholder="Repository" style="width: 300px;height: 50px;font-size: 20px;"><br><br>
           <input type="text" id="branch" placeholder="Branch" style="width: 300px;height: 50px;font-size: 20px;"><br><br>
-          <input type="text" id="token" placeholder="GitHub Token" style="width: 300px;height: 50px;font-size: 20px;">
         </div>
       `,
       focusConfirm: false,
@@ -252,7 +256,7 @@ export default function CustomizedMenus() {
             owner: (document.getElementById('owner') as HTMLInputElement).value,
             repo: (document.getElementById('repo') as HTMLInputElement).value,
             branch: (document.getElementById('branch') as HTMLInputElement).value,
-            token: (document.getElementById('token') as HTMLInputElement).value,
+            // token: (document.getElementById('token') as HTMLInputElement).value,
           };
         }
       },
@@ -289,7 +293,8 @@ export default function CustomizedMenus() {
       
         // If the scribeAR option is initially checked, we get the file names immediately
         if(scribeARRadio && scribeARRadio.checked) {
-          const fileNames = await getFileNames('JoniLi99', 'DomainWordExtractor', 'main', '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');
+          // const fileNames = await getFileNames('JoniLi99', 'DomainWordExtractor', 'main');
+          const fileNames = await getFileNames('scribear', 'Phrases', 'main');
           // console.log(fileNames)
           updateFileNames(fileNames);
         }
@@ -307,7 +312,8 @@ export default function CustomizedMenus() {
             manualDiv.style.display = 'none';
             scribeARDiv.style.display = 'block';
             customDiv.style.display = 'none';
-            const fileNames = await getFileNames('JoniLi99', 'DomainWordExtractor', 'main', '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');
+            // const fileNames = await getFileNames('JoniLi99', 'DomainWordExtractor', 'main');
+            const fileNames = await getFileNames('scribear', 'Phrases', 'main');
             // console.log(fileNames)
             updateFileNames(fileNames);
           });
@@ -326,29 +332,39 @@ export default function CustomizedMenus() {
       if (result.isConfirmed) {
         switch (result?.value?.action) {
           case 'manual':
+            console.log(pushed_option)
             initialPhraseList.name = result?.value?.listTitle || '';
             dispatch({ type: 'ADD_PHRASE_LIST', payload: initialPhraseList });
             dispatch({ type: 'CHANGE_LIST', payload: initialPhraseList.phrases });
             break;
           case 'scribeAR':
             const fileName_ScribeAR = result.value.fileName_ScribeAR;
-            const owner_ScribeAR = "JoniLi99";
-            const repo_ScribeAR = "DomainWordExtractor";
+            // const owner_ScribeAR = "JoniLi99";
+            const owner_ScribeAR = "scribear";
+            // const repo_ScribeAR = "DomainWordExtractor";
+            const repo_ScribeAR = "Phrases";
             const branch_ScribeAR = "main";
-            const token_ScribeAR = "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";
+            // const token_ScribeAR = "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";
             console.log(fileName_ScribeAR)
             console.log(owner_ScribeAR)
             console.log(repo_ScribeAR)
             console.log(branch_ScribeAR)
-            console.log(token_ScribeAR)
+            // console.log(token_ScribeAR)
             // Check if the file exists in the GitHub repository
-            checkFileExists(fileName_ScribeAR, repo_ScribeAR, owner_ScribeAR, branch_ScribeAR, token_ScribeAR).then((fileExists) => {
+            checkFileExists(fileName_ScribeAR, repo_ScribeAR, owner_ScribeAR, branch_ScribeAR).then((fileExists) => {
               if (fileExists) {
                 // Get the contents of the file
-                getFileContent(fileName_ScribeAR, repo_ScribeAR, owner_ScribeAR, branch_ScribeAR, token_ScribeAR).then((fileContent) => {
+                getFileContent(fileName_ScribeAR, repo_ScribeAR, owner_ScribeAR, branch_ScribeAR).then((fileContent) => {
                   if (fileContent) {
                     console.log(fileContent)
                     const words = fileContent.split('\n');
+                    wordList = fileContent;
+                    pushed_wordList_name = fileName_ScribeAR;
+                    console.log(pushed_wordList_name);
+                    pushed_option = "scribeAR";
+                    // pushed_wordList_name = fileName_ScribeAR;
+                    // console.log("Word List: ")
+                    // console.log(wordList)
                     // to: ChatGPT.AI
                     const phrases = words.map((word, index) => ({
                       id: index.toString(),
@@ -358,6 +374,7 @@ export default function CustomizedMenus() {
                     const newPhraseList = {
                       name: fileName_ScribeAR,
                       phrases,
+                      pushed_option,
                     };
         
                     // Dispatch the new phrases
@@ -385,20 +402,26 @@ export default function CustomizedMenus() {
             const owner = result.value.owner;
             const repo = result.value.repo;
             const branch = result.value.branch;
-            const token = result.value.token;
+            // const token = result.value.token;
             console.log(fileName)
             console.log(owner)
             console.log(repo)
             console.log(branch)
-            console.log(token)
+            // console.log(token)
             // Check if the file exists in the GitHub repository
-            checkFileExists(fileName, repo, owner, branch, token).then((fileExists) => {
+            checkFileExists(fileName, repo, owner, branch).then((fileExists) => {
               if (fileExists) {
                 // Get the contents of the file
-                getFileContent(fileName, repo, owner, branch, token).then((fileContent) => {
+                getFileContent(fileName, repo, owner, branch).then((fileContent) => {
                   if (fileContent) {
                     console.log(fileContent)
                     const words = fileContent.split('\n');
+                    wordList = fileContent;
+                    pushed_wordList_name = fileName;
+                    console.log(pushed_wordList_name);
+                    pushed_option = "custom";
+                    // console.log("Word List: ")
+                    // console.log(wordList)
                     // to: ChatGPT.AI
                     const phrases = words.map((word, index) => ({
                       id: index.toString(),
@@ -408,11 +431,14 @@ export default function CustomizedMenus() {
                     const newPhraseList = {
                       name: fileName,
                       phrases,
+                      pushed_option,
                     };
-        
+
                     // Dispatch the new phrases
                     dispatch({ type: 'ADD_PHRASE_LIST', payload: newPhraseList });
                     dispatch({ type: 'CHANGE_LIST', payload: newPhraseList.phrases });
+
+                    
                   } else {
                     console.error('Failed to fetch file content');
                   }
@@ -438,7 +464,6 @@ export default function CustomizedMenus() {
       }
     });
   };
-  
 
   /** LAST CORRECT ONE */
   // const clickAddList = async () => {
@@ -618,30 +643,50 @@ export default function CustomizedMenus() {
   //   });
   // }
 
-  return (
-    <div>
-      <List
-        sx={{ width: '20vw', bgcolor: 'background.paper' }}
-        component="div"
-        aria-labelledby="nested-list-subheader"
-      >
-        <ListItem sx={{ pl: 4, mb: 1 }}>
-          <ListItemText primary={"My Phrase Lists"} />
-          <IconButton onClick={clickAddList} >
-            <AddIcon />
-          </IconButton>
-        </ListItem>
-        <List component="div" disablePadding>
-          {phrases.map((phrase: string, index) =>
-            <div key={index}>
-              <Divider />
-              <PhrasePopUp currentPhraseList={phraseListStatus.phraseListMap.get(phrase)}/>
-            </div>
-          )}
+  // console.log("Before RETURN!!!!!!")
+  // console.log(wordList)
+    return (
+      <div>
+        <List
+          sx={{ width: '20vw', bgcolor: 'background.paper' }}
+          component="div"
+          aria-labelledby="nested-list-subheader"
+        >
+          <ListItem sx={{ pl: 4, mb: 1 }}>
+            <ListItemText primary={"My Phrase Lists"} />
+            <IconButton onClick={clickAddList}>
+              <AddIcon />
+            </IconButton>
+          </ListItem>
+          <List component="div" disablePadding>
+            {phrases.map((phrase: string, index) => {
+              const currentPhraseOption = phraseListStatus.phraseListMap.get(phrase)?.pushed_option;
+              const phraseListObject = phraseListStatus.phraseListMap.get(phrase);
+              console.log("PhraseList Object: ", phraseListObject);
+              console.log(pushed_option)
+              console.log(currentPhraseOption)
+              
+              return (
+                <div key={index}>
+                  <Divider />
+                  <PhrasePopUp 
+                    currentPhraseList={phraseListStatus.phraseListMap.get(phrase)}
+                    fileContent={wordList}
+                    pushed_fileName={pushed_wordList_name}
+                  />
+                  {currentPhraseOption === 'scribeAR' ? 
+                    <IconButton>
+                      <HomeIcon />
+                    </IconButton> :
+                    <IconButton>
+                      <PublicIcon />
+                    </IconButton>
+                  }
+                </div>
+              );
+            })}
+          </List>
         </List>
-      </List>
-    </div>
-  );
+      </div>
+  );   
 }
-
-

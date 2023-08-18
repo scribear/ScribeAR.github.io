@@ -1,8 +1,11 @@
 import React from 'react';
 
 import { List, ListItemText, Collapse, ArchitectureIcon, ListItem } from '../../../../muiImports'
-import TextSize from './textSize'
-import ThemeDropdown from './themeDropdown'
+// import TextSize from './textSize'
+import ThemeDropdown from './themeDropdown';
+import FontColor from './fontColor';
+import BackgroundColor from './backgroundColor';
+import AccentColor from './accentColor';
 
 export default function DisplayMenu(props) {
 
@@ -12,11 +15,19 @@ export default function DisplayMenu(props) {
       <Collapse in={props.open} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
           <ListItem sx={{ pl: 4 }}>
-            <ListItemText primary="Textsize" />
+            <ListItemText primary="Font Color" />
+            <FontColor />
           </ListItem>
-          <TextSize />
-          <ListItem sx={{ pl: 4, pt: 5 }}>
-            <ListItemText primary="Theme" />
+          <ListItem sx={{ pl: 4 }}>
+            <ListItemText primary="Background Color" />
+            <BackgroundColor />
+          </ListItem>
+          <ListItem sx={{ pl: 4 }}>
+            <ListItemText primary="Accent Color" />
+            <AccentColor />
+          </ListItem>
+          <ListItem sx={{ pl: 4 }}>
+            <ListItemText primary="Preset Themes" />
             <ThemeDropdown />
           </ListItem>
         </List>

@@ -80,9 +80,6 @@ export default function PickApi(props) {
    const azureStatus = useSelector((state: RootState) => {
       return state.AzureReducer as AzureStatus;
    })
-   const whisperStatus = useSelector((state: RootState) => {
-      return state.WhisperReducer as WhisperStatus;
-   })
 
    const [state, setState] = React.useState({
       showAzureDropdown: false,
@@ -96,11 +93,15 @@ export default function PickApi(props) {
       let copyStatus = Object.assign({}, apiStatus);
       testAzureTranslRecog(controlStatus, azureStatus).then(recognizer => { 
          // fullfill (test good)
-         copyStatus.azureTranslStatus = STATUS.AVAILABLE;
          localStorage.setItem("azureStatus", JSON.stringify(azureStatus));
          
          copyStatus.currentApi = API.AZURE_TRANSLATION;
-         copyStatus.azureTranslStatus = STATUS.AVAILABLE;
+
+         copyStatus.azureTranslStatus = STATUS.TRANSCRIBING;
+         copyStatus.webspeechStatus = STATUS.AVAILABLE;
+         copyStatus.azureConvoStatus = STATUS.AVAILABLE;
+         copyStatus.whisperStatus = STATUS.AVAILABLE;
+
          swal({
                title: "Success!",
                text: "Switching to Microsoft Azure",
@@ -195,7 +196,7 @@ export default function PickApi(props) {
                </ListItemIcon>
                <ListItemText primary="Whisper" />
                <IconButton onClick={toggleDrawer("whisperStatus", API.WHISPER, true)}>
-                  {whisperStatus ? <ExpandLess /> : <ExpandMore />}
+                  {state.showWhisperDropdown ? <ExpandLess /> : <ExpandMore />}
                </IconButton>
          </ListItemButton>
 

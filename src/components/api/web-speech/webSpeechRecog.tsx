@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
+import util from 'util';
 
 import { makeEventBucket } from '../../../react-redux&middleware/react-middleware/thunkMiddleware';
 import { 
@@ -46,7 +47,7 @@ export const useWebSpeechRecog = (recognizer : SpeechRecognition, dispatch : Rea
          dispatch(eventBucketThunk);
       };
       recognizer.onend = (event: any) => { 
-         console.log(`WebSpeech, onend, event: ${event}`);
+         console.log(`WebSpeech, onend, event: ${JSON.stringify(event)}`);
          dispatch({ type: 'transcript/end' });
          dispatch({ type: 'sRecog/set_status', payload: {status: STATUS.ENDED} });
       }
@@ -61,7 +62,7 @@ export const useWebSpeechRecog = (recognizer : SpeechRecognition, dispatch : Rea
          dispatch({ type: 'sRecog/set_status', payload: {status: STATUS.TRANSCRIBING} });
       }
       recognizer.onerror = (event: SpeechRecognitionErrorEvent) => {
-         console.log(`WebSpeech, onerror, event: ${event}`);
+         console.log(`WebSpeech, onerror, event: ${JSON.stringify(event)}`);
          if (event.error !== 'no-speech') {
             console.log('error not no-speech');
             dispatch({ type: 'transcript/end' });

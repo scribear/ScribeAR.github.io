@@ -119,7 +119,6 @@ export const useAzureTranslRecog = () => {
           let phraseList = speechSDK.PhraseListGrammar.fromRecognizer(speechRecognition)
           for (let i = 0; i < azureStatus.current.phrases.length; i++) {
             phraseList.addPhrase(azureStatus.current.phrases[i])
-
           }
           if (control.current.listening == false || currentApi.current.currentApi != 1) {
             console.log("STOPPED AZURE RECOG");

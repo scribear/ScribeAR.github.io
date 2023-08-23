@@ -128,7 +128,6 @@ export default function PickApi(props) {
       (apiStat: string, api:ApiType, isArrow:boolean) =>
          (event: React.KeyboardEvent | React.MouseEvent) => {
                if (apiStatus.currentApi !== api) {
-                  console.log(78);
                   if (!isArrow) {
                      let copyStatus = Object.assign({}, apiStatus);
                      copyStatus.currentApi = api;

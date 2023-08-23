@@ -49,16 +49,16 @@ export const STTRenderer = () : JSX.Element => {
    let transformed_line_num = (line_num * text_size * 1.18);
    let line_pos = initialPos(displayStatus.linePos);
 
-   console.log("text size:", text_size);
-   console.log("line position:", line_pos);
-   console.log("font color:", displayStatus.textColor);
+   // console.log("text size:", text_size);
+   // console.log("line position:", line_pos);
+   // console.log("font color:", displayStatus.textColor);
 
    let position_change = 0;
    while (line_pos * 6.25 + transformed_line_num > 93) {
       position_change = 1;
       line_pos--;
    }
-   console.log("lower bound:", (line_pos * 6.25 + transformed_line_num));
+   // console.log("lower bound:", (line_pos * 6.25 + transformed_line_num));
 
    const dispatch = useDispatch();
    const handleLinePositionBound = (event) => {
@@ -84,7 +84,7 @@ export const STTRenderer = () : JSX.Element => {
                   left: '0', top: (line_pos * 6.25) + '%', 
                   overflowY: 'scroll', height: transformed_line_num + "vh", lineHeight: (text_size * 1.18) + "vh",
                   color: displayStatus.textColor
-               }}>{transcript}
+               }}>{ transcript }
             </h3>
          </ul>
       </div>

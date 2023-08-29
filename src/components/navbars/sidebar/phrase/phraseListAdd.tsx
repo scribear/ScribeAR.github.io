@@ -15,6 +15,7 @@ import thunkMiddleware from 'redux-thunk';
 import StarIcon from '@mui/icons-material/Star';
 import HomeIcon from '@mui/icons-material/Home';
 import PublicIcon from '@mui/icons-material/Public';
+import { useState } from 'react';
 
 
 /* todo:
@@ -97,7 +98,7 @@ export default function CustomizedMenus() {
     phrases: [],
     name: "empty",
     availableSpace: Infinity,
-    pushed_option: "scribeAR" // new
+    pushed_option: "custom" // new
   }
   
   const handleClickItem = (event) => {
@@ -419,7 +420,7 @@ export default function CustomizedMenus() {
                     wordList = fileContent;
                     pushed_wordList_name = fileName;
                     console.log(pushed_wordList_name);
-                    pushed_option = "custom";
+                    pushed_option = "scribeAR";
                     // console.log("Word List: ")
                     // console.log(wordList)
                     // to: ChatGPT.AI
@@ -464,187 +465,6 @@ export default function CustomizedMenus() {
       }
     });
   };
-
-  /** LAST CORRECT ONE */
-  // const clickAddList = async () => {
-  //   const { value: action } = await Swal.fire({
-  //     title: 'Phase Recognition: Import Domain Lists',
-  //     input: 'radio',
-  //     inputOptions: {
-  //       'manual': 'Manual',
-  //       'scribeAR': 'ScribeAR Domain Lists',
-  //       'custom': 'Custom Domain Lists'
-  //     },
-  //     inputValue: 'manual',
-  //     showCancelButton: true
-  //   })
-  
-  //   switch (action) {
-  //     case 'manual':
-  //       Swal.fire({
-  //         customClass: {
-  //           container: 'swal2-container',
-  //         },
-  //         text: "Make a title for your list of phrases",
-  //         input: 'text',
-  //         returnFocus: true,
-  //         showCancelButton: true
-  //       }).then((result) => {
-  //         if (result.value) {
-  //           initialPhraseList.name = result.value
-  //           dispatch({ type: 'ADD_PHRASE_LIST', payload: initialPhraseList })
-  //           dispatch({ type: 'CHANGE_LIST', payload: initialPhraseList.phrases })
-  //         }
-  //       });
-  //       break;
-  
-  //     case 'scribeAR':
-  //     case 'custom':
-  //       const { value: formValues } = await Swal.fire({
-  //         title: action === 'scribeAR' ? 'ScribeAR Domain Lists' : 'Custom Domain Lists',
-  //         html:
-  //           '<input id="swal-input1" class="swal2-input" placeholder="File Name">' +
-  //           (action === 'custom' ?
-  //             '<input id="swal-input2" class="swal2-input" placeholder="GitHub Owner">' +
-  //             '<input id="swal-input3" class="swal2-input" placeholder="Repository">' +
-  //             '<input id="swal-input4" class="swal2-input" placeholder="Branch">' +
-  //             '<input id="swal-input5" class="swal2-input" placeholder="GitHub Token">' : ''),
-  //         focusConfirm: false,
-  //         preConfirm: () => {
-  //           if (action === 'custom') {
-  //             return [
-  //               (document.getElementById('swal-input1') as HTMLInputElement).value,
-  //               (document.getElementById('swal-input2') as HTMLInputElement).value,
-  //               (document.getElementById('swal-input3') as HTMLInputElement).value,
-  //               (document.getElementById('swal-input4') as HTMLInputElement).value,
-  //               (document.getElementById('swal-input5') as HTMLInputElement).value,
-  //             ]
-  //           } else {
-  //             return [
-  //               (document.getElementById('swal-input1') as HTMLInputElement).value,
-  //               "JoniLi99",
-  //               "DomainWordExtractor",
-  //               "main",
-  //               "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",
-  //             ]
-  //           }
-  //         }
-  //       })
-  
-  //       if (formValues) {
-  //         const [fileName, owner, repo, branch, token] = formValues;
-  
-  //         // Check if the file exists in the GitHub repository
-  //         const fileExists = await checkFileExists(fileName, repo, owner, branch, token);
-  //         if (fileExists) {
-  //           // Get the contents of the file
-  //           const fileContent = await getFileContent(fileName, repo, owner, branch, token);
-  
-  //           console.log(fileContent)
-  //           const words = fileContent.split('\n');
-  //           // to: ChatGPT.AI
-  //           const phrases = words.map((word, index) => ({
-  //             id: index.toString(),
-  //             text: word,
-  //           }));
-  
-  //           const newPhraseList = {
-  //             name: fileName,
-  //             phrases,
-  //           };
-  
-  //           // Dispatch the new phrases
-  //           dispatch({ type: 'ADD_PHRASE_LIST', payload: newPhraseList });
-  //           dispatch({ type: 'CHANGE_LIST', payload: newPhraseList.phrases });
-  //         } else {
-  //           Swal.fire({
-  //             icon: 'error',
-  //             title: 'Oops...',
-  //             text: 'File not found!',
-  //           });
-  //         }
-  //       }
-  
-  //       break;
-  //     default:
-  //       Swal.fire({
-  //         icon: 'error',
-  //         title: 'Oops...',
-  //         text: 'Invalid option selected!',
-  //       });
-  //   }
-  // };
-  
-  
-  /** CORRECT ONE */
-  // const clickAddList = async () => {
-  //   const { value: formValues } = await Swal.fire({
-  //     title: 'Input GitHub Information',
-  //     html:
-  //       '<input id="swal-input1" class="swal2-input" placeholder="File Name">' +
-  //       '<input id="swal-input2" class="swal2-input" placeholder="GitHub Owner">' +
-  //       '<input id="swal-input3" class="swal2-input" placeholder="Repository">' +
-  //       '<input id="swal-input4" class="swal2-input" placeholder="Branch">' +
-  //       '<input id="swal-input5" class="swal2-input" placeholder="GitHub Token">',
-  //     focusConfirm: false,
-  //     preConfirm: () => {
-  //       return [
-  //         (document.getElementById('swal-input1') as HTMLInputElement).value,
-  //         (document.getElementById('swal-input2') as HTMLInputElement).value,
-  //         (document.getElementById('swal-input3') as HTMLInputElement).value,
-  //         (document.getElementById('swal-input4') as HTMLInputElement).value,
-  //         (document.getElementById('swal-input5') as HTMLInputElement).value,
-  //       ]
-  //     }
-  //   })
-  
-  //   if (formValues) {
-  //     const [fileName, owner, repo, branch, token] = formValues;
-
-  //     // Check if the file exists in the GitHub repository
-  //     const fileExists = await checkFileExists(fileName, repo, owner, branch, token);
-  //     if (fileExists) {
-  //       // Get the contents of the file
-  //       const fileContent = await getFileContent(fileName, repo, owner, branch, token);
-
-  //       console.log(fileContent)
-  //       const words = fileContent.split('\n');
-  //       // const newList = {name: fileName, phrases: words, availableSpace: 10 - words.length}
-  //       const newList = {name: fileName, phrases: words, availableSpace: Infinity}
-  //       // dispatch({ type: 'ADD_PHRASE_LIST', payload: newList })
-  //       // dispatch({ type: 'CHANGE_LIST', payload: newList.phrases })
-  //       // Dispatch the actions separately
-  //       dispatch(addPhraseList(newList));
-  //       dispatch(changeList(newList.phrases));
-  //       // dispatch(addPhraseListAndChange(newList)); // Dispatch the combined action
-  //     } else {
-  //       // Handle the case when the file does not exist
-  //       console.error("File does not exist");
-  //     }
-  //   }
-  // };
-  
-  /** ORIGINAL ONE */
-  // const clickAddList = () => {
-  //   Swal.fire({
-  //     customClass: {
-  //       container: 'swal2-container',
-  //     },
-  //     text: "Make a title for your list of phrases",
-  //     input: 'text',
-  //     returnFocus: true,
-  //     showCancelButton: true
-  //   }).then((result) => {
-  //     if (result.value) {
-  //       initialPhraseList.name = result.value
-  //       dispatch({ type: 'ADD_PHRASE_LIST', payload: initialPhraseList })
-  //       dispatch({ type: 'CHANGE_LIST', payload: initialPhraseList.phrases })
-  //     }
-  //   });
-  // }
-
-  // console.log("Before RETURN!!!!!!")
-  // console.log(wordList)
     return (
       <div>
         <List
@@ -676,10 +496,10 @@ export default function CustomizedMenus() {
                   />
                   {currentPhraseOption === 'scribeAR' ? 
                     <IconButton>
-                      <HomeIcon />
+                      <PublicIcon />
                     </IconButton> :
                     <IconButton>
-                      <PublicIcon />
+                      <HomeIcon />
                     </IconButton>
                   }
                 </div>

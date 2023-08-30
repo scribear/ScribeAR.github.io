@@ -48,6 +48,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import DoNotDisturbOnIcon from '@mui/icons-material/DoNotDisturbOn';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import MicOffIcon from '@mui/icons-material/MicOff'
+import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
 import SubtitlesIcon from '@mui/icons-material/Subtitles';
 import FormatColorTextIcon from '@mui/icons-material/FormatColorText';
 import Autocomplete from '@mui/material/Autocomplete';
@@ -106,6 +107,7 @@ export {
     FullscreenExitIcon,    
     PaletteIcon,
     MicOffIcon,
+    KeyboardDoubleArrowDownIcon,
     SubtitlesIcon,
     FormatColorTextIcon,
     ArchitectureIcon,

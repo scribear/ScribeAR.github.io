@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Swal from 'sweetalert2'; // TODO: use Swal like before if appropriate
 
@@ -9,6 +9,7 @@ import {
 } from '../react-redux&middleware/redux/typesImports'
 import { useRecognition } from './api/returnAPI';
 import { AudioVis } from './api/visualization/audioVis';
+import { KeyboardDoubleArrowDownIcon } from '../muiImports';
 
 
 export const STTRenderer = () : JSX.Element => {
@@ -49,22 +50,74 @@ export const STTRenderer = () : JSX.Element => {
    let transformed_line_num = (line_num * text_size * 1.18);
    let line_pos = initialPos(displayStatus.linePos);
 
-   // console.log("text size:", text_size);
-   // console.log("line position:", line_pos);
-   // console.log("font color:", displayStatus.textColor);
-
    let position_change = 0;
    while (line_pos * 6.25 + transformed_line_num > 93) {
       position_change = 1;
       line_pos--;
    }
-   // console.log("lower bound:", (line_pos * 6.25 + transformed_line_num));
+   let transcript_info = {
+      "text size": text_size, 
+      "line position": line_pos, 
+      "font color": displayStatus.textColor,
+      "lower bound": (line_pos * 6.25 + transformed_line_num)
+   }
+   console.log("caption info:", transcript_info)
 
    const dispatch = useDispatch();
    const handleLinePositionBound = (event) => {
       dispatch({ type: 'SET_POS', payload: event })
    }
    if (position_change) {handleLinePositionBound(line_pos);}
+   position_change = 0;
+
+
+
+   const containerRef = useRef<HTMLDivElement | null>(null);
+   const handleClick = () => {
+      const container = containerRef.current;
+      if (container) {
+         if (container.scrollTop + container.clientHeight < container.scrollHeight - 5) {
+            container.scrollTop = container.scrollHeight - container.clientHeight;
+         }
+      }
+   }
+
+
+   // const [visible, setVisible] = useState(false);
+   // const [top, setTop] = useState(0);
+   // const container = containerRef.current;
+   // if (container && top !== 0) {
+   //    container.scrollTop = top;
+   //    console.log('container.scrollTop', container.scrollTop);
+   // }
+   
+   // const handleScroll = () => {
+   //    const container = containerRef.current;
+   //    console.log('container!', container);
+   //    if (container) {
+   //       console.log('container sctop!', container.scrollTop);
+   //       console.log('container clhie!', container.clientHeight);
+   //       console.log('container scrhei!', container.scrollHeight);
+   //       if (container.scrollTop + container.clientHeight < container.scrollHeight - 5) {
+   //          console.log('visible should be true');
+   //          // if (!visible) {
+   //          //    setTop(container.scrollTop);
+   //          //    setVisible(true);
+   //          // }
+   //       } else {
+   //          console.log('visible should be false');
+   //          // if (visible) {
+   //          //    setTop(container.scrollTop);
+   //          //    setVisible(false);
+   //          // }
+   //       }
+   //    }
+   // };
+   // console.log('visible val', visible);
+
+
+
+
 
    /**
     * 6.25 comes from 100 / 16. 
@@ -76,7 +129,9 @@ export const STTRenderer = () : JSX.Element => {
       <div>
          <AudioVis></AudioVis>
          <ul >
-            <h3 id = "captionsSpace" 
+            {/* <h3 className="captions" ref={containerRef} onScroll={handleScroll} */}
+            <h3 className="captions"
+               id = "captionsSpace" 
                style = {{
                   position: 'fixed', width: '90%', 
                   textAlign: 'left', fontSize: text_size + "vh", 
@@ -86,6 +141,24 @@ export const STTRenderer = () : JSX.Element => {
                   color: displayStatus.textColor
                }}>{ transcript }
             </h3>
+            {/* {!shouldHide &&  */}
+            {/* <button
+            onClick={handleClick}
+            style = {{
+                  position: 'fixed', 
+                  paddingTop: '0%', borderRadius: "34%", border: '5px solid ' + displayStatus.secondaryColor,
+                  left: '5%', top: (line_pos * 6.25) - 0.8 * text_size + '%', 
+                  height: (2 * 0.618 * text_size) + "vh",
+                  width: (2 * text_size) + "vh",
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: displayStatus.textColor,
+                  backgroundColor: displayStatus.primaryColor,
+                  cursor: "pointer",
+                  display: "flex",
+               }}> <KeyboardDoubleArrowDownIcon/>
+            </button> */}
+            {/* } */}
          </ul>
       </div>
    );

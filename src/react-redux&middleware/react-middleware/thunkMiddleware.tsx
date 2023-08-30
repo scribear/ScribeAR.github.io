@@ -167,7 +167,32 @@ export function makeEventBucket(object: BucketArgs) {
             });
          });
       } else if (stream === 'azure') {
-   
+         const curTime = Date.now();
+
+         let finalArr = Array<{ confidence : number, transcript : string }>();
+         let notFinalArr = Array<{ confidence : number, transcript : string }>();
+         notFinalArr.push(value);
+
+         const streamMap : MainStreamMap = curState.BucketStreamReducer;
+         let newMainStream : boolean = false;
+         // If elapsed
+         if (streamMap.curMSST + streamMap.timeInterval <= curTime) {
+            newMainStream = true;
+            console.log("New html5 stream created; sessionStorage updated!");
+         }
+
+         // TODO: merge HTML5 and Azure
+         batch(() => {
+            dispatch({
+               type: 'APPEND_HTML5_STT_STREAM', 
+               payload: {curTime: curTime, fArr: finalArr, nfArr: notFinalArr}, 
+               newMainStream: newMainStream,
+            });
+            dispatch({
+               type: 'transcript/recognized',
+               payload: {fArr: finalArr, nfArr: notFinalArr},
+            });
+         });
       } else if (stream === 'userAction') {
    
       }

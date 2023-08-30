@@ -53,10 +53,15 @@ export const GetuseAzureTranslRecog = () => {
   const test = useCallback(
     async (control: ControlStatus, azureStatus: AzureStatus) => new Promise((resolve, reject) => {
       try {
+        // Set azure to not translate to another language
         let azureSpeech = speechSDK.SpeechTranslationConfig.fromSubscription(azureStatus.azureKey, azureStatus.azureRegion)
         azureSpeech.speechRecognitionLanguage = control.speechLanguage.CountryCode;
         azureSpeech.addTargetLanguage(control.textLanguage.CountryCode)
+        
+        // Use default microphone
         let azureAudioConfig = speechSDK.AudioConfig.fromDefaultMicrophoneInput();
+        
+        // Initialize recognizer using the above settings
         let reco = new speechSDK.TranslationRecognizer(azureSpeech, azureAudioConfig);
         reco.canceled = () => {
           resolve(false);
@@ -114,7 +119,6 @@ export const useAzureTranslRecog = () => {
           let phraseList = speechSDK.PhraseListGrammar.fromRecognizer(speechRecognition)
           for (let i = 0; i < azureStatus.current.phrases.length; i++) {
             phraseList.addPhrase(azureStatus.current.phrases[i])
-
           }
           if (control.current.listening == false || currentApi.current.currentApi != 1) {
             console.log("STOPPED AZURE RECOG");

@@ -1,8 +1,8 @@
-import { ApiType, StatusType } from './apiEnums';
+import { StatusType } from './apiEnums';
 import sdk from 'microsoft-cognitiveservices-speech-sdk';
 
 export type ScribeRecognizer = null | SpeechRecognition | sdk.TranslationRecognizer | sdk.ConversationTranscriber;
-export type ScribeHandler = ((action: {type: string, payload?: string}) => "poggers" | undefined);
+export type ScribeHandler = ((action: {type: string, payload?: any}) => "poggers" | undefined);
  
 
 /**
@@ -16,5 +16,4 @@ export type SRecognition = {
    // handler: ScribeHandler;
    // resetTranscript: () => string;
    status: StatusType;
-   api : ApiType;
 }

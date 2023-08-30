@@ -59,14 +59,37 @@ export default function PhrasePopUp(props) {
         event.preventDefault();
       }
     }
-    const clickAddList = (event) => {
-        if (event.target.value) {
-            state.phraseList.phrases.push(event.target.value)
-            dispatch({ type: "EDIT_PHRASE_LIST", payload: state.phraseList })
-            dispatch({ type: "CHANGE_LIST", payload: state.phraseList.phrases })
-        }
-    }
+
+    const handleAddButtonClick = () => {
+        console.log("Add Button Clicked");
+        setState({ ...state, currentPhrase: "" });
+        clickAddList({ target: { value: state.currentPhrase } });
+    }    
+
+    // const clickAddList = (event) => {
+    //     if (event.target.value) {
+    //         state.phraseList.phrases.push(event.target.value)
+    //         // Sort the phrases in alphabetical order
+    //         state.phraseList.phrases.sort((a, b) => a.localeCompare(b));
+    //         dispatch({ type: "EDIT_PHRASE_LIST", payload: state.phraseList })
+    //         dispatch({ type: "CHANGE_LIST", payload: state.phraseList.phrases })
+    //     }
+    // }
     
+    const [additionMessage, setAdditionMessage] = React.useState("");
+
+    const clickAddList = (event) => {
+        if (event.target.value && !state.phraseList.phrases.includes(event.target.value)) {
+            state.phraseList.phrases.push(event.target.value);
+            // Set the message after adding the word
+            setAdditionMessage(`${event.target.value} is successfully added!!!`);
+            // Sort the phrases in alphabetical order
+            state.phraseList.phrases.sort((a, b) => a.localeCompare(b));
+            dispatch({ type: "EDIT_PHRASE_LIST", payload: state.phraseList });
+            dispatch({ type: "CHANGE_LIST", payload: state.phraseList.phrases });
+        }
+    }    
+
     const automaticAddList = () => {
         // console.log("ADD!YEAH!")
         // Access fileContent here like this:
@@ -82,6 +105,7 @@ export default function PhrasePopUp(props) {
             for (let i = 0; i < words.length; i++) {
                 if(!state.phraseList.phrases.includes(words[i])){
                     state.phraseList.phrases.push(words[i])
+                    state.phraseList.phrases.sort((a, b) => a.localeCompare(b));
                     dispatch({ type: "EDIT_PHRASE_LIST", payload: state.phraseList })
                     dispatch({ type: "CHANGE_LIST", payload: state.phraseList.phrases })
                 }
@@ -149,14 +173,18 @@ export default function PhrasePopUp(props) {
                         onKeyDown = {handleEnter}
                         onChange = {handleChange}
                     />
+                    <IconButton onClick={handleAddButtonClick}>
+                        <span style={{ color: 'blue' }}>Add</span>
+                    </IconButton>
                 </Paper>
+                <div style={{ textAlign: 'center' }}>{additionMessage}</div>  {/* Render the additionMessage here */}
                 <List
                     sx={{height: '30vh', mt: '1vh', bgcolor: 'background.paper',  overflow: 'overlay', overflowWrap: 'anywhere' }}
                     component="nav"
                     aria-labelledby="nested-list-subheader"
                     
                 >
-                    {state.phraseList.phrases.map((phrase: string, index) =>
+                    {/* {state.phraseList.phrases.map((phrase: string, index) =>
                         <div key={index}>
                             <ListItem >
                                 <ListItemText primary={phrase} />
@@ -166,11 +194,22 @@ export default function PhrasePopUp(props) {
 
                             </ListItem>
                         </div>
+                    )} */}
+
+                    {state.phraseList.phrases.filter((phrase) => 
+                        phrase.toLowerCase().startsWith(state.currentPhrase.toLowerCase())
+                        ).map((phrase: string, index) =>
+                        <div key={index}>
+                            <ListItem>
+                            <ListItemText primary={phrase} />
+                            <IconButton onClick={handleClickX(index)}>
+                                <ClearIcon />
+                            </IconButton>
+                            </ListItem>
+                        </div>
                     )}
                 </List>
             </Menu>
-
-
         </div>
     );
 }

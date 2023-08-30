@@ -138,7 +138,7 @@ export const BucketStreamReducer = (state = defaultMainStreamMap(), action : {ty
             let curHTML5Stream : HTML5STTStream = copyState.map.get(state.curMSST)!.HTML5STTStream!;
 
             // we first complete the last bucket in the current stream
-            if (curHTML5Stream.length == 0) { throw("HTML5Stream length 0!"); };
+            if (curHTML5Stream.length === 0) { throw("HTML5Stream length 0!"); };
             curHTML5Stream[curHTML5Stream.length - 1]!.endTime = action.payload.curTime;
             curHTML5Stream[curHTML5Stream.length - 1]!.finalTranscript = action.payload.fArr;
             curHTML5Stream[curHTML5Stream.length - 1]!.notFinalTranscript = action.payload.nfArr;

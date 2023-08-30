@@ -27,13 +27,13 @@ export default function AppNavBar(props) {
     })
 
 
-    let display = "Webspeech"
+    let apiDisplayName = "Webspeech"
     if (apiStatus.currentApi == 1) {
-        display = "Azure";
+        apiDisplayName = "Azure";
     } else if (apiStatus.currentApi == 0) {
-        display = "Webspeech";
+        apiDisplayName = "Webspeech";
     } else if (apiStatus.currentApi == 4) {
-        display = "Whisper";
+        apiDisplayName = "Whisper";
     }
     const myTheme = currTheme
 
@@ -92,7 +92,7 @@ export default function AppNavBar(props) {
                         </Grid>
                     </Grid>
                     <Grid item xs={6}>
-                        <TopBar theme={myTheme} display={display} listening={controlStatus.listening} menuVisible={displayStatus.menuVisible}/>
+                        <TopBar theme={myTheme} apiDisplayName={apiDisplayName} listening={controlStatus.listening} menuVisible={displayStatus.menuVisible}/>
                     </Grid>
                 </Toolbar>
             </Grid>

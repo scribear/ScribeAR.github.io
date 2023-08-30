@@ -1,14 +1,16 @@
 import * as React from 'react';
 import { 
    ApiStatus, RootState,
-   API, ApiType, STATUS, StatusType
+   API, ApiType, STATUS, StatusType, ControlStatus, AzureStatus, WhisperStatus
 } from '../../../../react-redux&middleware/redux/typesImports';
 import { useDispatch, useSelector } from 'react-redux';
 import swal from 'sweetalert';
 import { createTheme, ThemeProvider, ListItemButton, ListItemText, ListItemIcon, Collapse, ErrorIcon, ExpandLess, ExpandMore, CancelIcon, IconButton, DoNotDisturbOnIcon, CheckCircleIcon } from '../../../../muiImports' 
 
-import AzureDropdown from './AzureDropdown';
 import WhisperDropdown from './WhisperDropdown';
+import AzureSettings from './AzureSettings';
+import { ListItem, ListItemSecondaryAction } from '@mui/material';
+import { testAzureTranslRecog } from '../../../api/azure/azureTranslRecog';
 
 
 const currTheme = createTheme({
@@ -28,18 +30,22 @@ const currTheme = createTheme({
    }
 });
 
+/**
+ * Icon component whose symbol and color represent the current availability of a given API
+ * @param currentApi the API to represent
+ * @returns The icon component
+ */
 const IconStatus = (currentApi: any) => {
    const myTheme = currTheme;
-   console.log(currentApi);
    switch (currentApi.currentApi) {
-      case STATUS.NULL:
+      case STATUS.AVAILABLE:
          return (
                <ThemeProvider theme={myTheme}>
                   <DoNotDisturbOnIcon/>
                </ThemeProvider>
          )
       
-      case STATUS.AVAILABLE:
+      case STATUS.TRANSCRIBING:
          return (
                <ThemeProvider theme={myTheme}>
                   <CheckCircleIcon color="success" />
@@ -59,41 +65,100 @@ const IconStatus = (currentApi: any) => {
    )
 }
 
+// Switch to azure -> keep api menu open -> cannot switch to webspeech
+// Switch to azure -> reopen api menu -> can switch to webspeech -> webspeech doesn't work until microphone restarted
 export default function PickApi(props) {
    const dispatch = useDispatch();
    const myTheme = currTheme;
 
+   const apiStatus = useSelector((state: RootState) => {
+      return state.APIStatusReducer as ApiStatus;
+   })
+   const controlStatus = useSelector((state: RootState) => {
+      return state.ControlReducer as ControlStatus;
+   })
+   const azureStatus = useSelector((state: RootState) => {
+      return state.AzureReducer as AzureStatus;
+   })
+
    const [state, setState] = React.useState({
-      azureStatus: false,
-      webspeechStatus: false,
-      whisperStatus: false,
-      apiStatus: useSelector((state: RootState) => {
-         return state.APIStatusReducer as ApiStatus;
-      })
+      showAzureDropdown: false,
+      showWhisperDropdown: false,
    });
+
+   // TODO: change Whisper dropdown to pop-up as well
+   // TODO: merge switchToAzure and toggleDrawer into one switch-to function
+   const switchToAzure = async () => {
+      dispatch({type: 'FLIP_RECORDING', payload: controlStatus});
+      let copyStatus = Object.assign({}, apiStatus);
+      testAzureTranslRecog(controlStatus, azureStatus).then(recognizer => { 
+         // fullfill (test good)
+         localStorage.setItem("azureStatus", JSON.stringify(azureStatus));
+         
+         copyStatus.currentApi = API.AZURE_TRANSLATION;
+
+         copyStatus.azureTranslStatus = STATUS.TRANSCRIBING;
+         copyStatus.webspeechStatus = STATUS.AVAILABLE;
+         copyStatus.azureConvoStatus = STATUS.AVAILABLE;
+         copyStatus.whisperStatus = STATUS.AVAILABLE;
+
+         swal({
+               title: "Success!",
+               text: "Switching to Microsoft Azure",
+               icon: "success", 
+               timer: 1500,
+         })
+
+         dispatch({type: 'CHANGE_API_STATUS', payload: copyStatus});
+      }, (error)=> {
+         // reject (test bad)
+         console.log("error");
+         copyStatus.azureTranslStatus = STATUS.ERROR;   
+         swal({
+               title: "Warning!",
+               text: `${error}`,
+               icon: "warning",
+         })
+      }).finally(() => {
+         dispatch({type: 'FLIP_RECORDING', payload: controlStatus})
+      })
+   }
+
    const toggleDrawer =
       (apiStat: string, api:ApiType, isArrow:boolean) =>
          (event: React.KeyboardEvent | React.MouseEvent) => {
-               if (state.apiStatus.currentApi !== api) {
-                  if (!isArrow && state.apiStatus[apiStat] === STATUS.AVAILABLE) {
+               if (apiStatus.currentApi !== api) {
+                  if (!isArrow) {
+                     let copyStatus = Object.assign({}, apiStatus);
+                     copyStatus.currentApi = api;
                      let apiName = "Webspeech";
                      if (api === API.AZURE_TRANSLATION) {
-                           apiName = "Microsoft Azure"
+                        apiName = "Microsoft Azure";
+                        copyStatus.azureTranslStatus = STATUS.TRANSCRIBING;
+                        copyStatus.webspeechStatus = STATUS.AVAILABLE;
+                        copyStatus.azureConvoStatus = STATUS.AVAILABLE;
+                        copyStatus.whisperStatus = STATUS.AVAILABLE;
+                     } else if (api === API.WHISPER) {
+                        apiName = "Whisper";
+                        copyStatus.whisperStatus = STATUS.TRANSCRIBING
+                        copyStatus.webspeechStatus = STATUS.AVAILABLE;
+                        copyStatus.azureConvoStatus = STATUS.AVAILABLE;
+                        copyStatus.azureTranslStatus = STATUS.AVAILABLE;
+                     } else if (api === API.WEBSPEECH) {
+                        copyStatus.webspeechStatus = STATUS.TRANSCRIBING
+                        copyStatus.azureTranslStatus = STATUS.AVAILABLE;
+                        copyStatus.azureConvoStatus = STATUS.AVAILABLE;
+                        copyStatus.whisperStatus = STATUS.AVAILABLE;
                      }
-                     if (api === API.WHISPER) {
-                        apiName = "Whisper"
-                     }
-                     swal({
-                           title: "Success!",
-                           text: "Switching to " + apiName,
-                           icon: "success", 
-                           timer: 2500,
-                     
-                        })
-                     let copyStatus = Object.assign({}, state.apiStatus);
-                     copyStatus.currentApi = api;
-                     setState({ ...state, apiStatus: copyStatus });
+                     console.log(88, copyStatus);
                      dispatch({type: 'CHANGE_API_STATUS', payload: copyStatus});
+                     swal({
+                        title: "Success!",
+                        text: "Switching to " + apiName,
+                        icon: "success", 
+                        timer: 2500,
+                  
+                     })
                   } else {
                      setState({ ...state, [apiStat]: !state[apiStat] });
                   }
@@ -101,43 +166,41 @@ export default function PickApi(props) {
                   setState({ ...state, [apiStat]: !state[apiStat] });
                }
          }
+
    return (
       <div>
-         <ListItemButton onClick={toggleDrawer("webspeechStatus", 0, false)}>
+         <ListItemButton onClick={toggleDrawer("webspeechStatus", API.WEBSPEECH, false)}>
                <ThemeProvider theme={myTheme}>
                   <ListItemIcon>
-                     <IconStatus{...{currentApi: state.apiStatus.webspeechStatus}}/>
+                     <IconStatus{...{currentApi: apiStatus.webspeechStatus}}/>
                   </ListItemIcon>
                </ThemeProvider>
                <ListItemText primary="Webspeech" />
          </ListItemButton>
 
-         <ListItemButton onClick={toggleDrawer("azureStatus", 1, false)} >
+         <ListItem>
+            <ListItemButton disableGutters onClick={switchToAzure} >
                <ListItemIcon>
-                  <IconStatus{...{currentApi: state.apiStatus.azureTranslStatus}}/>
+                  <IconStatus{...{currentApi: apiStatus.azureTranslStatus}}/>
                </ListItemIcon>
                <ListItemText primary="Microsoft Azure" />
-               <IconButton onClick={toggleDrawer("azureStatus", 1, true)}>
-                  {state.azureStatus ? <ExpandLess /> : <ExpandMore />}
-               </IconButton>
-         </ListItemButton>
+            </ListItemButton>
 
-         <ListItemButton onClick={toggleDrawer("whisperStatus", 4, false)} >
+            <AzureSettings/>
+         </ListItem>
+
+         <ListItemButton onClick={toggleDrawer("whisperStatus", API.WHISPER, false)} >
                <ListItemIcon>
-                  <IconStatus{...{currentApi: state.apiStatus.whisperStatus}}/>
+                  <IconStatus{...{currentApi: apiStatus.whisperStatus}}/>
                </ListItemIcon>
                <ListItemText primary="Whisper" />
-               <IconButton onClick={toggleDrawer("whisperStatus", 4, true)}>
-                  {state.whisperStatus ? <ExpandLess /> : <ExpandMore />}
+               <IconButton onClick={toggleDrawer("whisperStatus", API.WHISPER, true)}>
+                  {state.showWhisperDropdown ? <ExpandLess /> : <ExpandMore />}
                </IconButton>
          </ListItemButton>
 
-         <Collapse in={state.azureStatus} timeout="auto" unmountOnExit>
-               <AzureDropdown apiStatus={state.apiStatus}/>
-         </Collapse>
-
-         <Collapse in={state.whisperStatus} timeout="auto" unmountOnExit>
-               <WhisperDropdown apiStatus={state.apiStatus}/>
+         <Collapse in={state.showWhisperDropdown} timeout="auto" unmountOnExit>
+               <WhisperDropdown apiStatus={apiStatus}/>
          </Collapse>
       </div>
    );

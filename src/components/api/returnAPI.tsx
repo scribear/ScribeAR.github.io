@@ -13,7 +13,6 @@ import { getAzureTranslRecog, testAzureTranslRecog, useAzureTranslRecog } from '
 import { loadTokenizer } from '../../ml/bert_tokenizer';
 
 import { intent_inference } from '../../ml/inference';
-const ort = require('onnxruntime-web');
 
 
 // controls what api to send and what to do when error handling.
@@ -53,50 +52,65 @@ export const returnRecogAPI = (api : ApiStatus, control : ControlStatus, azure :
  */
 const makeWebSpeechHandler = (recognition : ScribeRecognizer) : ScribeHandler => {
    const handler : ScribeHandler = (action) => {
-      // console.log(103, recognition, action);
-      recognition = recognition as SpeechRecognition;
-      switch (action.type) {
-         case 'STOP':
-            recognition!.stop();
-            break
-         case 'START':
-            recognition!.start();
-            break
-         case 'ABORT':
-            recognition!.abort();
-            break
-         case 'CHANGE_LANGUAGE':
-            recognition.lang = action.payload!;
-            break
-         default:
-            return "poggers";
+      try {
+         // console.log(103, recognition, action);
+         recognition = recognition as SpeechRecognition;
+         switch (action.type) {
+            case 'STOP':
+               recognition!.stop();
+               break
+            case 'START':
+               recognition!.start();
+               break
+            case 'ABORT':
+               recognition!.abort();
+               break
+            case 'CHANGE_LANGUAGE':
+               recognition.lang = action.payload!;
+               break
+            default:
+               return "poggers";
+         }
+      } catch (e : any) {
+         console.log(`While trying to ${action.type} WebSpeech, an error occurred`, e);
       }
    }
    return handler;
 }
 /**
  * 
- * @param recognition 
+ * @param recognizer
  * @returns 
  */
-const makeAzureTranslHandler = (recognition : ScribeRecognizer) : ScribeHandler => {
+const makeAzureTranslHandler = (recognizer : ScribeRecognizer) : ScribeHandler => {
    const handler : ScribeHandler = (action) => {
-      recognition = recognition as sdk.TranslationRecognizer;
-      switch (action.type) {
-         case 'STOP':
-            recognition!.stopContinuousRecognitionAsync()
-            break
-         case 'START':
-            recognition!.startContinuousRecognitionAsync()
-            break
-         case 'ABORT':
-            recognition!.close()
-            break
-         case 'CHANGE_LANGUAGE':
-            recognition!.addTargetLanguage(action.payload!)
-            break
-         default:
-            return "poggers";
+      try {
+         recognizer = recognizer as sdk.TranslationRecognizer;
+         switch (action.type) {
+            case 'STOP':
+               recognizer!.stopContinuousRecognitionAsync();
+               break;
+            case 'START':
+               recognizer!.startContinuousRecognitionAsync()
+               break;
+            case 'ABORT':
+               recognizer!.close()
+               break;
+            case 'CHANGE_LANGUAGE':
+               recognizer!.addTargetLanguage(action.payload!)
+               break;
+            case 'CHANGE_PHRASE':
+               // add phraseList
+               let phraseList = sdk.PhraseListGrammar.fromRecognizer(recognizer);
+               for (let i = 0; i < action.payload!.length; i++) {
+                  phraseList.addPhrase(action.payload![i])
+               }
+               break;
+            default:
+               return "poggers";
+         }
+      } catch (e : any) {
+         console.log(`While trying to ${action.type} Azure, an error occurred`, e);
       }
    }
    return handler;
@@ -150,7 +164,7 @@ const getRecognition = (currentApi: number, control: ControlStatus, azure: Azure
  * @returns Promsie<ScribeHandler>
  */
 const runRecognition = (currentApi: number, recognizer : ScribeRecognizer, dispatch : React.Dispatch<any>) => new Promise<ScribeHandler>((resolve, reject) => {
-   if (currentApi === 0) { // webspeech recognition event controller
+   if (currentApi === API.WEBSPEECH) { // webspeech recognition event controller
       useWebSpeechRecog(recognizer as SpeechRecognition, dispatch)
          .then(() => {
             resolve(makeWebSpeechHandler(recognizer));            
@@ -158,8 +172,16 @@ const runRecognition = (currentApi: number, recognizer : ScribeRecognizer, dispa
          .catch((error_str : string) => {
             reject(error_str);
          });
-   } else if (currentApi === 1) { // azure recognition event controller
-      reject("Azure Not implemented yet");
+   } else if (currentApi === API.AZURE_TRANSLATION) { // azure recognition event controller
+      useAzureTranslRecog(recognizer as sdk.TranslationRecognizer, dispatch)
+         .then(() => {
+            console.log(163, 'Azure recog initiated');
+            resolve(makeAzureTranslHandler(recognizer));
+         })
+         .catch((error_str : string) => {
+            console.log(167, error_str);
+            reject(error_str);
+         });
    } else {
       reject(`Unexpcted API_CODE: ${currentApi}`);
    }
@@ -199,18 +221,22 @@ export const useRecognition = (sRecog : SRecognition, api : ApiStatus, control :
 
 
    // change recognizer, if api changed
+   // TODO: currently we store the recognizer to redux, but never use it.
    useEffect(() => {
       if (api.currentApi !== API.WHISPER) {
+         // stop recognizer
+         if (recogHandler) recogHandler({type: 'STOP'});
+         console.log(214,);
+
          getRecognition(api.currentApi, control, azure)
-            .then((result : ScribeRecognizer) => {
-               runRecognition(api.currentApi, result, dispatch)
+            .then((recog : ScribeRecognizer) => {
+               runRecognition(api.currentApi, recog, dispatch)
                   .then((handler : ScribeHandler) => {
                      setRecogHandler(() => handler);
 
                      let copy_sRecog = Object.assign({}, sRecog);
-                     copy_sRecog.recognizer = result;
-                     copy_sRecog.status = STATUS.AVAILABLE;
-                     copy_sRecog.api = api.currentApi;
+                     copy_sRecog.recognizer = recog;
+                     copy_sRecog.status = STATUS.TRANSCRIBING;
 
                      // // change handler
                      // console.log('recog changed', (sRecog.status === STATUS.NULL), (sRecog.status === STATUS.AVAILABLE), (control.listening));
@@ -233,6 +259,7 @@ export const useRecognition = (sRecog : SRecognition, api : ApiStatus, control :
          return; // do nothing becuase Whisper is using iframe
       }
    }, [api.currentApi]);
+   // TODO: Fix useEffect dependency arrays. Adding recogHandler to the array causes DOM to crash.
    // control recognizer, if listening changed
    useEffect(() => {
       if (!recogHandler) { // whipser won't have recogHandler
@@ -263,6 +290,14 @@ export const useRecognition = (sRecog : SRecognition, api : ApiStatus, control :
          if (recogHandler) recogHandler({type: 'STOP'});
       }
    }, [sRecog.status]);
+   // add phrases
+   useEffect(() => {
+      console.log(295, azure.phrases);
+      if (api.currentApi === API.AZURE_TRANSLATION) {
+         if (recogHandler) recogHandler({type: 'CHANGE_PHRASE', payload: azure.phrases});
+      }
+   }, [azure.phrases]);
+
 
 
    // TODO: whisper's transcript is not in redux store but only in sessionStorage at the moment.

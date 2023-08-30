@@ -5,7 +5,7 @@ import { WhisperStatus } from "../types/apiTypes";
 
 const initialAPIStatusState: ApiStatus = {
   currentApi: API.WEBSPEECH,
-  webspeechStatus: STATUS.AVAILABLE,
+  webspeechStatus: STATUS.TRANSCRIBING,
   azureTranslStatus: STATUS.AVAILABLE,
   azureConvoStatus: STATUS.AVAILABLE,
   whisperStatus: STATUS.AVAILABLE,
@@ -14,7 +14,8 @@ const initialAPIStatusState: ApiStatus = {
 const initialPhraseList: PhraseList = {
   phrases: [],
   name: "None",
-  availableSpace: -1
+  availableSpace: -1,
+  pushed_option: "scribeAR"   // new
 }
 
 const initialPhraseListState: PhraseListStatus = {
@@ -98,6 +99,7 @@ export const PhraseListReducer = (state = initialPhraseListState, action) => {
         phrases: [],
         name: newListName,
         availableSpace: action.payload.availableSpace,
+        pushed_option: action.payload.pushed_option || "",  // new
       }
       state.phraseListMap.set(newListName, newPhraseList)
       return {
@@ -132,8 +134,3 @@ export const PhraseListReducer = (state = initialPhraseListState, action) => {
       return state;
   }
 }
-
-
-
-
-

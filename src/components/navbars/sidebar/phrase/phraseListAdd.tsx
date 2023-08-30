@@ -12,6 +12,9 @@ import { Action } from 'redux';
 import getWordList from './phraseList';
 import { createStore, applyMiddleware } from 'redux';
 import thunkMiddleware from 'redux-thunk';
+import StarIcon from '@mui/icons-material/Star';
+import HomeIcon from '@mui/icons-material/Home';
+import PublicIcon from '@mui/icons-material/Public';
 
 
 /* todo:
@@ -32,7 +35,7 @@ import thunkMiddleware from 'redux-thunk';
 
 // export default store;
 let pushed_wordList_name;
-// let pushed_option;
+let pushed_option;
 let wordList = "";
 
 // This is the action to add a new phrase list
@@ -93,7 +96,8 @@ export default function CustomizedMenus() {
   let initialPhraseList: PhraseList = {
     phrases: [],
     name: "empty",
-    availableSpace: Infinity
+    availableSpace: Infinity,
+    pushed_option: "scribeAR" // new
   }
   
   const handleClickItem = (event) => {
@@ -328,6 +332,7 @@ export default function CustomizedMenus() {
       if (result.isConfirmed) {
         switch (result?.value?.action) {
           case 'manual':
+            console.log(pushed_option)
             initialPhraseList.name = result?.value?.listTitle || '';
             dispatch({ type: 'ADD_PHRASE_LIST', payload: initialPhraseList });
             dispatch({ type: 'CHANGE_LIST', payload: initialPhraseList.phrases });
@@ -356,7 +361,7 @@ export default function CustomizedMenus() {
                     wordList = fileContent;
                     pushed_wordList_name = fileName_ScribeAR;
                     console.log(pushed_wordList_name);
-                    // pushed_option = "scribeAR";
+                    pushed_option = "scribeAR";
                     // pushed_wordList_name = fileName_ScribeAR;
                     // console.log("Word List: ")
                     // console.log(wordList)
@@ -369,6 +374,7 @@ export default function CustomizedMenus() {
                     const newPhraseList = {
                       name: fileName_ScribeAR,
                       phrases,
+                      pushed_option,
                     };
         
                     // Dispatch the new phrases
@@ -413,7 +419,7 @@ export default function CustomizedMenus() {
                     wordList = fileContent;
                     pushed_wordList_name = fileName;
                     console.log(pushed_wordList_name);
-                    // pushed_option = "custom";
+                    pushed_option = "custom";
                     // console.log("Word List: ")
                     // console.log(wordList)
                     // to: ChatGPT.AI
@@ -425,6 +431,7 @@ export default function CustomizedMenus() {
                     const newPhraseList = {
                       name: fileName,
                       phrases,
+                      pushed_option,
                     };
 
                     // Dispatch the new phrases
@@ -457,7 +464,6 @@ export default function CustomizedMenus() {
       }
     });
   };
-  
 
   /** LAST CORRECT ONE */
   // const clickAddList = async () => {
@@ -639,30 +645,48 @@ export default function CustomizedMenus() {
 
   // console.log("Before RETURN!!!!!!")
   // console.log(wordList)
-  return (
-    <div>
-      <List
-        sx={{ width: '20vw', bgcolor: 'background.paper' }}
-        component="div"
-        aria-labelledby="nested-list-subheader"
-      >
-        <ListItem sx={{ pl: 4, mb: 1 }}>
-          <ListItemText primary={"My Phrase Lists"} />
-          <IconButton onClick={clickAddList} >
-            <AddIcon />
-          </IconButton>
-        </ListItem>
-        <List component="div" disablePadding>
-          {phrases.map((phrase: string, index) =>
-            <div key={index}>
-              <Divider />
-              <PhrasePopUp currentPhraseList={phraseListStatus.phraseListMap.get(phrase)}
-              fileContent={wordList}
-              pushed_fileName={pushed_wordList_name}/>
-            </div>
-          )}
+    return (
+      <div>
+        <List
+          sx={{ width: '20vw', bgcolor: 'background.paper' }}
+          component="div"
+          aria-labelledby="nested-list-subheader"
+        >
+          <ListItem sx={{ pl: 4, mb: 1 }}>
+            <ListItemText primary={"My Phrase Lists"} />
+            <IconButton onClick={clickAddList}>
+              <AddIcon />
+            </IconButton>
+          </ListItem>
+          <List component="div" disablePadding>
+            {phrases.map((phrase: string, index) => {
+              const currentPhraseOption = phraseListStatus.phraseListMap.get(phrase)?.pushed_option;
+              const phraseListObject = phraseListStatus.phraseListMap.get(phrase);
+              console.log("PhraseList Object: ", phraseListObject);
+              console.log(pushed_option)
+              console.log(currentPhraseOption)
+              
+              return (
+                <div key={index}>
+                  <Divider />
+                  <PhrasePopUp 
+                    currentPhraseList={phraseListStatus.phraseListMap.get(phrase)}
+                    fileContent={wordList}
+                    pushed_fileName={pushed_wordList_name}
+                  />
+                  {currentPhraseOption === 'scribeAR' ? 
+                    <IconButton>
+                      <HomeIcon />
+                    </IconButton> :
+                    <IconButton>
+                      <PublicIcon />
+                    </IconButton>
+                  }
+                </div>
+              );
+            })}
+          </List>
         </List>
-      </List>
-    </div>
-  );
+      </div>
+  );   
 }

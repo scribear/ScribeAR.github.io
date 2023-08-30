@@ -34,6 +34,7 @@ import MessageIcon from '@mui/icons-material/Message';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PauseIcon from '@mui/icons-material/Pause';
 import AddIcon from '@mui/icons-material/Add';
+import SettingsIcon from '@mui/icons-material/Settings';
 import TextField from '@mui/material/TextField';
 import Paper from '@mui/material/Paper';
 import InputBase from '@mui/material/InputBase';
@@ -70,6 +71,7 @@ export {
     CancelIcon,
     DoNotDisturbOnIcon,
     CheckCircleIcon,
+    SettingsIcon,
     Box,
     Menu,
     styled,

@@ -7,8 +7,7 @@ const defaultSRecognition = () : SRecognition => {
       recognizer: null,
       // handler: null,
       // resetTranscript: () => useDispatch()('RESET_TRANSCRIPT'),
-      status: STATUS.NULL,
-      api: API.WEBSPEECH,
+      status: STATUS.TRANSCRIBING,
    }
 }
 
@@ -24,8 +23,6 @@ export const SRecognitionReducer = (state = defaultSRecognition(), action : {typ
             return {...state, status: action.payload.status};
          }
          return state;
-      case 'sRecog/set_api':
-         return {...state, api: action.payload.api};
       default:
          return state;
    }

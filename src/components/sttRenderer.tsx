@@ -139,7 +139,7 @@ export const STTRenderer = () : JSX.Element => {
                   left: '0', top: (line_pos * 6.25) + '%', 
                   overflowY: 'scroll', height: transformed_line_num + "vh", lineHeight: (text_size * 1.18) + "vh",
                   color: displayStatus.textColor
-               }}>{transcript}
+               }}>{ transcript }
             </h3>
             {/* {!shouldHide &&  */}
             {/* <button

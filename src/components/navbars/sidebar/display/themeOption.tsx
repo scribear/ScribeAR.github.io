@@ -57,7 +57,7 @@ export default function Theme(props) {
             {hex: '#3499cb', rgb: '#e2af8d', text: '#ffffff'},
             {hex: '#210070', rgb: '#42aad7', text: '#2be0f7'},
             {hex: '#ffa781', rgb: '#c40a0a', text: '#5b0e2d'},
-            {hex: '#cc7619', rgb: '#41321d', text: '#fbd9bc'},
+            {hex: '#cc7619', rgb: '#41321d', text: '#2be0f7'},
         ],
     ]
 

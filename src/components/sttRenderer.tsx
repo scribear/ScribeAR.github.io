@@ -91,28 +91,28 @@ export const STTRenderer = () : JSX.Element => {
    //    console.log('container.scrollTop', container.scrollTop);
    // }
    
-   const handleScroll = () => {
-      const container = containerRef.current;
-      console.log('container!', container);
-      if (container) {
-         console.log('container sctop!', container.scrollTop);
-         console.log('container clhie!', container.clientHeight);
-         console.log('container scrhei!', container.scrollHeight);
-         if (container.scrollTop + container.clientHeight < container.scrollHeight - 5) {
-            console.log('visible should be true');
-            // if (!visible) {
-            //    setTop(container.scrollTop);
-            //    setVisible(true);
-            // }
-         } else {
-            console.log('visible should be false');
-            // if (visible) {
-            //    setTop(container.scrollTop);
-            //    setVisible(false);
-            // }
-         }
-      }
-   };
+   // const handleScroll = () => {
+   //    const container = containerRef.current;
+   //    console.log('container!', container);
+   //    if (container) {
+   //       console.log('container sctop!', container.scrollTop);
+   //       console.log('container clhie!', container.clientHeight);
+   //       console.log('container scrhei!', container.scrollHeight);
+   //       if (container.scrollTop + container.clientHeight < container.scrollHeight - 5) {
+   //          console.log('visible should be true');
+   //          // if (!visible) {
+   //          //    setTop(container.scrollTop);
+   //          //    setVisible(true);
+   //          // }
+   //       } else {
+   //          console.log('visible should be false');
+   //          // if (visible) {
+   //          //    setTop(container.scrollTop);
+   //          //    setVisible(false);
+   //          // }
+   //       }
+   //    }
+   // };
    // console.log('visible val', visible);
 
 
@@ -129,7 +129,8 @@ export const STTRenderer = () : JSX.Element => {
       <div>
          <AudioVis></AudioVis>
          <ul >
-            <h3 className="captions" ref={containerRef} onScroll={handleScroll}
+            {/* <h3 className="captions" ref={containerRef} onScroll={handleScroll} */}
+            <h3 className="captions"
                id = "captionsSpace" 
                style = {{
                   position: 'fixed', width: '90%', 
@@ -141,7 +142,7 @@ export const STTRenderer = () : JSX.Element => {
                }}>{transcript}
             </h3>
             {/* {!shouldHide &&  */}
-            <button
+            {/* <button
             onClick={handleClick}
             style = {{
                   position: 'fixed', 
@@ -156,7 +157,7 @@ export const STTRenderer = () : JSX.Element => {
                   cursor: "pointer",
                   display: "flex",
                }}> <KeyboardDoubleArrowDownIcon/>
-            </button>
+            </button> */}
             {/* } */}
          </ul>
       </div>

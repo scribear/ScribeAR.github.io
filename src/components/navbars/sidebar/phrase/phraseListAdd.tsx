@@ -212,15 +212,32 @@ export default function CustomizedMenus() {
         <div style="display: flex; justify-content: space-between;">
           <div>
             <input type="radio" id="manual" name="drone" value="manual" checked>
-            <label for="manual">Manual</label>
+            <button for="manual" type="radio" id="manual" name="drone" value="manual">
+              <svg width="24" height="24">
+                <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"></path>
+              </svg>
+              Manual
+            </button>
           </div>
           <div>
             <input type="radio" id="scribeAR" name="drone" value="scribeAR">
-            <label for="scribeAR">ScribeAR Domain Lists</label>
+            <button  for="scribeAR">
+              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px">
+                <path d="M0 0h24v24H0V0z" fill="none"/>
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79.1-.03.21-.04.31-.04.26 0 .5.1.7.26.51.4.99.82 1.45 1.26.3-.13.61-.26.92-.39-.2-.45-.35-.92-.45-1.4H8v-2h1.01c.03-.32.09-.64.15-.95-.41-.24-.8-.52-1.14-.83-.35-.3-.65-.65-.94-1.02-.05-.07-.09-.13-.13-.2-.04-.06-.06-.13-.09-.2.04-.26.09-.51.14-.77H8V7h2V6h2v1h2V6h2v1h.13c.04.26.1.52.14.77-.03.07-.05.14-.09.2-.04.07-.08.14-.13.20-.28.37-.59.73-.94 1.02-.34.31-.73.59-1.14.83.07.31.12.63.15.95H16v2h-1.07c-.1.48-.25.95-.45 1.4.31.13.62.26.92.39.46-.43.94-.86 1.45-1.26.2-.16.44-.26.7-.26.1 0 .2.01.31.04.13.58.21 1.17.21 1.79 0 4.08-3.05 7.44-7 7.93z"/>
+              </svg>
+              ScribeAR Domain Lists
+            </button>
           </div>
           <div>
             <input type="radio" id="custom" name="drone" value="custom">
-            <label for="custom">Custom Domain Lists</label>
+            <button  for="custom">
+              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px">
+                <path d="M0 0h24v24H0V0z" fill="none"/>
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79.1-.03.21-.04.31-.04.26 0 .5.1.7.26.51.4.99.82 1.45 1.26.3-.13.61-.26.92-.39-.2-.45-.35-.92-.45-1.4H8v-2h1.01c.03-.32.09-.64.15-.95-.41-.24-.8-.52-1.14-.83-.35-.3-.65-.65-.94-1.02-.05-.07-.09-.13-.13-.2-.04-.06-.06-.13-.09-.2.04-.26.09-.51.14-.77H8V7h2V6h2v1h2V6h2v1h.13c.04.26.1.52.14.77-.03.07-.05.14-.09.2-.04.07-.08.14-.13.20-.28.37-.59.73-.94 1.02-.34.31-.73.59-1.14.83.07.31.12.63.15.95H16v2h-1.07c-.1.48-.25.95-.45 1.4.31.13.62.26.92.39.46-.43.94-.86 1.45-1.26.2-.16.44-.26.7-.26.1 0 .2.01.31.04.13.58.21 1.17.21 1.79 0 4.08-3.05 7.44-7 7.93z"/>
+              </svg>
+              Custom Domain Lists
+            </button>
           </div>
         </div>
         <br><br>
@@ -510,3 +527,11 @@ export default function CustomizedMenus() {
       </div>
   );   
 }
+
+
+
+// <label for="manual">Manual</label>
+
+// <label for="scribeAR">ScribeAR Domain Lists</label>
+
+// <label for="custom">Custom Domain Lists</label>

@@ -136,8 +136,21 @@ export default function PhrasePopUp(props) {
         copy.name = event.target.value
         setState({ ...state, phraseList:copy})  
         dispatch({ type: 'CHANGE_PHRASE_LIST', payload: state.phraseList })
-
     }
+
+    const handleCopyToClipboard = () => {
+        // Combine all phrases into a single string separated by newlines
+        const textToCopy = state.phraseList.phrases.join('\n');
+        // Use the Clipboard API to copy the text
+        navigator.clipboard.writeText(textToCopy).then(() => {
+          // Successful copy
+          console.log("Phrases copied to clipboard");
+        }).catch(err => {
+          // Failed to copy
+          console.error("Could not copy text: ", err);
+        });
+    };
+
     return (
         <div>
             
@@ -189,6 +202,9 @@ export default function PhrasePopUp(props) {
                     />
                     <IconButton onClick={handleAddButtonClick}>
                         <span style={{ color: 'blue' }}>Add</span>
+                    </IconButton>
+                    <IconButton onClick={handleCopyToClipboard}>
+                        <span style={{ color: 'green' }}>Copy to Clipboard</span>
                     </IconButton>
                 </Paper>
                 <div style={{ textAlign: 'center' }}>{additionMessage}</div>  {/* Render the additionMessage here */}

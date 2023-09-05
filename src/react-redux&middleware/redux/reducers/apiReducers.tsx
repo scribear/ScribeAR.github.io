@@ -130,6 +130,21 @@ export const PhraseListReducer = (state = initialPhraseListState, action) => {
     case 'SET_FILE_CONTENT':     
       return { ...state,
                fileContent: action.payload}
+    case 'SET_PHRASE_OPTION_TO_CUSTOM': {
+      const newPhraseListMap = new Map(state.phraseListMap);
+      const phraseData: PhraseList = newPhraseListMap.get(action.payload.phraseName) || {
+        phrases: [],
+        name: action.payload.phraseName || "None",
+        availableSpace: -1,
+        pushed_option: "default"
+      };
+      phraseData.pushed_option = 'custom';
+      newPhraseListMap.set(action.payload.phraseName, { ...phraseData });
+      return {
+        ...state,
+        phraseListMap: newPhraseListMap,
+      };
+    }
     default:
       return state;
   }

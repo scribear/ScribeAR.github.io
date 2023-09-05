@@ -52,9 +52,9 @@ export default function PhrasePopUp(props) {
     const handleEnter = (event) =>
     {
       if (event.key === 'Enter') {
-          console.log(event)
-          setState({ ...state, currentPhrase: ""})  
-        clickAddList(event)
+        console.log(event)
+        //   setState({ ...state, currentPhrase: ""})  
+        // clickAddList(event)
        
         event.preventDefault();
       }
@@ -79,16 +79,30 @@ export default function PhrasePopUp(props) {
     const [additionMessage, setAdditionMessage] = React.useState("");
 
     const clickAddList = (event) => {
-        if (event.target.value && !state.phraseList.phrases.includes(event.target.value)) {
+        // Remove spaces and convert to lowercase for comparison
+        const newPhrase = event.target.value.replace(/\s+/g, '').toLowerCase();
+    
+        // Remove spaces and convert existing phrases to lowercase for comparison
+        const existingPhrases = state.phraseList.phrases.map(phrase => phrase.replace(/\s+/g, '').toLowerCase());
+    
+        if (event.target.value && !existingPhrases.includes(newPhrase)) {
+            // Add the original phrase as it was entered by the user
             state.phraseList.phrases.push(event.target.value);
+    
             // Set the message after adding the word
             setAdditionMessage(`${event.target.value} is successfully added!!!`);
+    
             // Sort the phrases in alphabetical order
             state.phraseList.phrases.sort((a, b) => a.localeCompare(b));
+    
+            // Dispatch to update state
             dispatch({ type: "EDIT_PHRASE_LIST", payload: state.phraseList });
             dispatch({ type: "CHANGE_LIST", payload: state.phraseList.phrases });
+
+            // New: Dispatch action to set pushed_option to 'custom'
+            dispatch({ type: "SET_PHRASE_OPTION_TO_CUSTOM", payload: { phraseName: state.phraseList.name } });
         }
-    }    
+    };            
 
     const automaticAddList = () => {
         // console.log("ADD!YEAH!")
@@ -122,8 +136,21 @@ export default function PhrasePopUp(props) {
         copy.name = event.target.value
         setState({ ...state, phraseList:copy})  
         dispatch({ type: 'CHANGE_PHRASE_LIST', payload: state.phraseList })
-
     }
+
+    const handleCopyToClipboard = () => {
+        // Combine all phrases into a single string separated by newlines
+        const textToCopy = state.phraseList.phrases.join('\n');
+        // Use the Clipboard API to copy the text
+        navigator.clipboard.writeText(textToCopy).then(() => {
+          // Successful copy
+          console.log("Phrases copied to clipboard");
+        }).catch(err => {
+          // Failed to copy
+          console.error("Could not copy text: ", err);
+        });
+    };
+
     return (
         <div>
             
@@ -175,6 +202,9 @@ export default function PhrasePopUp(props) {
                     />
                     <IconButton onClick={handleAddButtonClick}>
                         <span style={{ color: 'blue' }}>Add</span>
+                    </IconButton>
+                    <IconButton onClick={handleCopyToClipboard}>
+                        <span style={{ color: 'green' }}>Copy to Clipboard</span>
                     </IconButton>
                 </Paper>
                 <div style={{ textAlign: 'center' }}>{additionMessage}</div>  {/* Render the additionMessage here */}

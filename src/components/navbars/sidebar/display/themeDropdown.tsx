@@ -35,9 +35,10 @@ export default function AccountMenu() {
         open={open}
         onClose={handleClose}
         PaperProps={{
-          elevation: 0,
+          elevation: 5,
           sx: {
-            height: '22vw',
+            height: '25.5vw',
+            // width: '30vw',
             filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
             '& .MuiAvatar-root': {
               boxSizing: "border-box",

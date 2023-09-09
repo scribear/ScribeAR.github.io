@@ -1,13 +1,26 @@
 import { useDispatch } from 'react-redux';
 import React, { useEffect } from 'react';
+import { Divider } from '../../../../muiImports'
+// import './themeOption.css';
 
 export default function Theme(props) {
     const dispatch = useDispatch()
+
     type color = {
         hex: string
         rgb: string
         text: string
     }
+
+    let top_colors: color[][] = [
+        //hex background, rgb accent, text font color
+        [    
+            {hex: '#13294B', rgb: '#e84a27', text: '#ffffff'},
+            {hex: '#000000', rgb: '#8b0000', text: '#ffff00'},
+            {hex: '#734f9a', rgb: '#8bd450', text: '#ffffff'},
+            {hex: '#f2bc94', rgb: '#722620', text: '#30110d'},
+        ],
+    ]
     
     let colors: color[][] = [
         //hex background, rgb accent, text font color
@@ -48,12 +61,6 @@ export default function Theme(props) {
         ],
         //colorful
         [   
-            {hex: '#13294B', rgb: '#e84a27', text: '#ffffff'},
-            {hex: '#000000', rgb: '#8b0000', text: '#ffff00'},
-            {hex: '#734f9a', rgb: '#8bd450', text: '#ffffff'},
-            {hex: '#f2bc94', rgb: '#722620', text: '#30110d'},
-        ],
-        [   
             {hex: '#3499cb', rgb: '#e2af8d', text: '#ffffff'},
             {hex: '#210070', rgb: '#42aad7', text: '#2be0f7'},
             {hex: '#ffa781', rgb: '#c40a0a', text: '#5b0e2d'},
@@ -84,38 +91,62 @@ export default function Theme(props) {
 
     return (
         <div className="circle-picker " style={{display: 'flex', flexWrap: 'wrap', marginBottom: '-2vw', marginLeft: '.8vw' }}>
-                <table>
-                {Array.from(Array(7)).map((_, xIndex) => (
-                    <tr>
-                        {colors[xIndex].map((colors: color, yIndex) =>
-                            <th>
-                                <div style={{ width: '2vw', height: '2vw', marginRight: '.8vw', marginBottom: '.8vw', transform: 'scale(1)', transition: 'transform 100ms ease 0s' }}>
-                                    <span>
-                                        <button tabIndex={0} value = {JSON.stringify(colors)} onClick={changeTheme} style={{
-                                            background: 'transparent',
-                                            height: '100%',
-                                            width: '100%',
-                                            cursor: 'pointer',
-                                            borderStyle: 'solid',
-                                            position: 'relative',
-                                            borderColor: colors.rgb,
-                                            borderRadius: '30%',
-                                            borderWidth: 'thick',
-                                            outline: 'none',
-                                            boxShadow: colors.hex + ' 0px 0px 0px 15px inset',
-                                            transition: 'box-shadow 100ms ease 0s',
-                                            color: colors.text,
-                                            textAlign: 'center',
-                                            fontWeight: 'bold'
-                                        }}>
-                                            T
-                                        </button>
-                                    </span>
-                                </div>
-                            </th>
-                        )}
-                    </tr>
-                     ))}
+            <table>
+                {Array.from(Array(1)).map((_, xIndex) => (
+                <tr>{top_colors[xIndex].map((colors: color, yIndex) =>
+                    <th><div style={{ width: '2.5vw', height: '2.5vw', marginRight: '.8vw', marginBottom: '.2vw', transform: 'scale(1)', transition: 'transform 100ms ease 0s' }}>
+                        <span>
+                            <button tabIndex={0} value = {JSON.stringify(colors)} onClick={changeTheme} style={{
+                                background: 'transparent',
+                                height: '100%',
+                                width: '100%',
+                                cursor: 'pointer',
+                                borderStyle: 'solid',
+                                position: 'relative',
+                                borderColor: colors.rgb,
+                                borderRadius: '30%',
+                                borderWidth: 'thick',
+                                outline: 'none',
+                                boxShadow: colors.hex + ' 0px 0px 0px 100px inset',
+                                transition: 'box-shadow 100ms ease 0s',
+                                color: colors.text,
+                                textAlign: 'center',
+                                fontWeight: 'bolder',
+                                fontSize: '1.2vw'
+                                }}> T </button>
+                        </span>
+                        </div>
+                    </th>)}
+                </tr>))}
+                
+                <div style={{width: '400%', height: '2px', backgroundColor: '#000', margin: '10px 0'}}></div>
+
+                {Array.from(Array(6)).map((_, xIndex) => (
+                <tr>{colors[xIndex].map((colors: color, yIndex) =>
+                    <th><div style={{ width: '2.5vw', height: '2.5vw', marginRight: '.8vw', marginBottom: '.8vw', transform: 'scale(1)', transition: 'transform 100ms ease 0s' }}>
+                        <span>
+                            <button tabIndex={0} value = {JSON.stringify(colors)} onClick={changeTheme} style={{
+                                background: 'transparent',
+                                height: '100%',
+                                width: '100%',
+                                cursor: 'pointer',
+                                borderStyle: 'solid',
+                                position: 'relative',
+                                borderColor: colors.rgb,
+                                borderRadius: '30%',
+                                borderWidth: 'thick',
+                                outline: 'none',
+                                boxShadow: colors.hex + ' 0px 0px 0px 100px inset',
+                                transition: 'box-shadow 100ms ease 0s',
+                                color: colors.text,
+                                textAlign: 'center',
+                                fontWeight: 'bolder',
+                                fontSize: '1.2vw'
+                                }}> T </button>
+                        </span>
+                        </div>
+                    </th>)}
+                </tr>))}
                 </table>
         </div>
 

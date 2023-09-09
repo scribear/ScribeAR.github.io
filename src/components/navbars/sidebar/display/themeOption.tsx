@@ -1,7 +1,5 @@
-import { useDispatch } from 'react-redux';
-import React, { useEffect } from 'react';
-import { Divider } from '../../../../muiImports'
-// import './themeOption.css';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState, DisplayStatus } from '../../../../react-redux&middleware/redux/typesImports';
 
 export default function Theme(props) {
     const dispatch = useDispatch()
@@ -76,6 +74,10 @@ export default function Theme(props) {
         dispatch({type: 'CHANGE_TEXT_COLOR', payload: copy.text})
     }
 
+    const displayStatus = useSelector((state: RootState) => {
+        return state.DisplayReducer as DisplayStatus;
+     });
+
     // will be called everytime i click on Preset Themes; needs debugging
     // const testing = () => {
     //     dispatch({type: 'CHANGE_PRIMARY_THEME', payload: colors[4][0].hex})
@@ -119,7 +121,7 @@ export default function Theme(props) {
                     </th>)}
                 </tr>))}
                 
-                <div style={{width: '400%', height: '2px', backgroundColor: '#000', margin: '10px 0'}}></div>
+                <div style={{width: '400%', height: '2px', backgroundColor: displayStatus.secondaryColor, margin: '10px 0'}}></div>
 
                 {Array.from(Array(6)).map((_, xIndex) => (
                 <tr>{colors[xIndex].map((colors: color, yIndex) =>

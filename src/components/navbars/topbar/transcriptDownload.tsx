@@ -5,7 +5,7 @@ import { ControlStatus, Transcript } from '../../../react-redux&middleware/redux
 import Theme from '../../theme'
 import * as React from 'react';
 
-export default function DownloadTranscript() {
+export default function TranscriptDownload() {
   const dispatch = useDispatch();
   
   let controlStatus = useSelector((state: RootState) => {

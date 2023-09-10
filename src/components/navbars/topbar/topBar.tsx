@@ -5,6 +5,7 @@ import ApiDropdown from './apiDropdown';
 import Fullscreen from './fullScreen';
 import Listening from './listening';
 import MenuHider from './menuHider';
+import DownloadTranscript from './downloadTranscript';
 
 
 export default function TopBar(props) {
@@ -22,6 +23,10 @@ export default function TopBar(props) {
 
                 <Grid item>
                     <MenuHider menuVisible={props.menuVisible} />
+                </Grid>
+
+                <Grid item>
+                    <DownloadTranscript/>
                 </Grid>
 
                 <Grid item>

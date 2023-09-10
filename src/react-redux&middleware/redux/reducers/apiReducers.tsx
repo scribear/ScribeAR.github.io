@@ -39,18 +39,37 @@ const saveLocally = (varName: string, value: any) => {
   localStorage.setItem(varName, JSON.stringify(value))
 }
 
+// fixed apiStatus
+// TO-DO: look into azureStatus and whisperStatus
 const getLocalState = (name: string) => {
-  let checkNull = localStorage.getItem(name)
-  if (checkNull) {
-    return JSON.parse(checkNull);
-  } else {
+  let localState = localStorage.getItem(name);
+  if (localState) {
+    console.log("localStorage-api current name and state:", name, localState);
     if (name == "apiStatus") {
-      return initialAPIStatusState
-    } else if (name == "azureStatus") {
-      return initialAzureState
-    } else if (name == "whisperStatus") {
-      return initialWhisperState
+      try {
+        let state = JSON.parse(localState);
+        let length = Object.keys(state).length;
+        if (length !== 5) {
+          console.log("localStorage-api not correct length:", localState);
+          console.log("localStorage-api using inital state:", initialAPIStatusState);
+          saveLocally("apiStatus", initialAPIStatusState);
+          return initialAPIStatusState;
+        }
+        // state is the JSON object version with correct length
+        return state;
+      } catch (error) {
+        console.log("localStorage-api not JSON string:", localState);
+      }
     }
+  }
+  if (name == "apiStatus") {
+    console.log("localStorage-api using inital state:", initialAPIStatusState);
+    saveLocally("apiStatus", initialAPIStatusState);
+    return initialAPIStatusState;
+  } else if (name == "azureStatus") {
+    return initialAzureState
+  } else if (name == "whisperStatus") {
+    return initialWhisperState
   }
 };
 

@@ -200,11 +200,11 @@ export default function PhrasePopUp(props) {
                         onKeyDown = {handleEnter}
                         onChange = {handleChange}
                     />
-                    <IconButton onClick={handleAddButtonClick}>
-                        <span style={{ color: 'blue' }}>Add</span>
+                    <IconButton onClick={handleAddButtonClick} className="swal2-confirm swal2-styled" style={{ marginRight: '10px' }}>
+                        <span>Add</span>
                     </IconButton>
-                    <IconButton onClick={handleCopyToClipboard}>
-                        <span style={{ color: 'green' }}>Copy to Clipboard</span>
+                    <IconButton onClick={handleCopyToClipboard} className="swal2-confirm swal2-styled">
+                        <span>Copy to Clipboard</span>
                     </IconButton>
                 </Paper>
                 <div style={{ textAlign: 'center' }}>{additionMessage}</div>  {/* Render the additionMessage here */}

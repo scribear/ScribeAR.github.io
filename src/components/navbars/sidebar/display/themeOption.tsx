@@ -13,18 +13,25 @@ export default function Theme(props) {
     let top_colors: color[][] = [
         //hex background, rgb accent, text font color
         [    
-            {hex: '#13294B', rgb: '#e84a27', text: '#ffffff'},
             {hex: '#000000', rgb: '#8b0000', text: '#ffff00'},
-            {hex: '#734f9a', rgb: '#8bd450', text: '#ffffff'},
-            {hex: '#f2bc94', rgb: '#722620', text: '#30110d'},
+            {hex: '#0f0f0f', rgb: '#5c5c5c', text: '#FFFFFF'},
+            {hex: '#281ffb', rgb: '#42aad7', text: '#fcfc35'},
+            {hex: '#110c89', rgb: '#42aad7', text: '#fcfc35'},
         ],
     ]
     
     let colors: color[][] = [
         //hex background, rgb accent, text font color
-        //black and white
+        //colorful
         [    
-            {hex: '#0f0f0f', rgb: '#292929', text: '#FFFFFF'},
+            {hex: '#13294B', rgb: '#e84a27', text: '#ffffff'},
+            {hex: '#734f9a', rgb: '#8bd450', text: '#ffffff'},
+            {hex: '#3499cb', rgb: '#e2af8d', text: '#ffffff'},
+            {hex: '#ffa781', rgb: '#c40a0a', text: '#5b0e2d'},
+        ],
+        //black and white
+        [   
+            {hex: '#000000', rgb: '#000000', text: '#FFFFFF'},
             {hex: '#5c5c5c', rgb: '#1f1f1f', text: '#FFFFFF'},
             {hex: '#c2c2c2', rgb: '#5c5c5c', text: '#000000'},
             {hex: '#ebebeb', rgb: '#858585', text: '#000000'},
@@ -56,13 +63,6 @@ export default function Theme(props) {
             {hex: '#fff3f6', rgb: '#ff88a3', text: '#000000'},
             {hex: '#f3f9ff', rgb: '#88bfff', text: '#000000'},
             {hex: '#f8f3ff', rgb: '#bb88ff', text: '#000000'},
-        ],
-        //colorful
-        [   
-            {hex: '#3499cb', rgb: '#e2af8d', text: '#ffffff'},
-            {hex: '#210070', rgb: '#42aad7', text: '#2be0f7'},
-            {hex: '#ffa781', rgb: '#c40a0a', text: '#5b0e2d'},
-            {hex: '#cc7619', rgb: '#41321d', text: '#2be0f7'},
         ],
     ]
 

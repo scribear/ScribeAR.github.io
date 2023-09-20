@@ -9,7 +9,8 @@ permalink: /index.html
 
 ## Resources
 
-* React: https://reactjs.org/docs/getting-started.html
+* React: https://react.dev/learn, https://www.w3schools.com/REACT
+* TypeScript: https://www.typescriptlang.org/docs/handbook/intro.html, https://www.w3schools.com/typescript
 * Redux: https://redux.js.org/tutorials/essentials/part-1-overview-concepts, https://daveceddia.com/redux-tutorial/ 
 
 ## Setup

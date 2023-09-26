@@ -5,9 +5,9 @@ enum COLOR {
 }
 const  initialState : DisplayStatus = {
   textSize: 4,
-  primaryColor: '#0f0f0f',
-  secondaryColor: "#292929",
-  textColor: '#FFFFFF',
+  primaryColor: '#000000',
+  secondaryColor: "#8b0000",
+  textColor: '#ffff00',
   menuVisible: true,
   rowNum: 4,
   linePos: 8,
@@ -17,27 +17,32 @@ const saveLocally = (varName: string, value: any) => {
   localStorage.setItem(varName, JSON.stringify(value));
 }
 
-/**
- * TO DO LATER
- * Add more try catches.
- * The local storage could possibly contain garbage that would crash everything. Should prevent this from happening.
- */
+
 const getLocalState = (name: string) => {
   let localState = localStorage.getItem(name);
   
   // localStorage displayReducer2 exists
   if (localState) {
-    console.log("localStorage current state:", localState);
+    console.log("localStorage-display current state:", localState);
     // displayReducer is valid JSON object string form
     try {
       let state = JSON.parse(localState);
-      // state is the JSON object version
+      let length = Object.keys(state).length;
+      // there are currently 7 attributes for the localStorage-display
+      if (length !== 7) {
+          console.log("localStorage-display not correct length:", localState);
+          console.log("localStorage-display using inital state:", initialState);
+          saveLocally("displayReducer2", initialState);
+          return initialState;
+        }
+      // state is the JSON object version with correct length
       return state;
     } catch (error) {
-      console.log("localStorage not JSON string:", localState);
+      console.log("localStorage-display not JSON string:", localState);
     }
   }
-  console.log("localStorage using inital state:", initialState);
+  console.log("localStorage-display using inital state:", initialState);
+  saveLocally("displayReducer2", initialState);
   return initialState;
 };
 
@@ -87,10 +92,15 @@ export const DisplayReducer = (state = getLocalState("displayReducer2"), action)
       return new_state;
   
     case 'HIDE_MENU':
-      return {
-        ...state,
-        menuVisible: !state.menuVisible,
-        };
+      new_state = {
+        ...state, 
+        menuVisible: !state.menuVisible };
+      saveLocally("displayReducer2", new_state)
+      return new_state;
+      // return {
+      //   ...state,
+      //   menuVisible: !state.menuVisible,
+      //   };
     default:
       return state;
   }

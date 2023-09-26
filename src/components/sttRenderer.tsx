@@ -31,7 +31,6 @@ export const STTRenderer = () : JSX.Element => {
    })
 
    // if else for whisper transcript, apiStatus for 4=whisper and control status for listening
-   
    const { transcript, recogHandler } = useRecognition(sRecog, apiStatus, controlStatus, azureStatus);
 
 
@@ -50,11 +49,24 @@ export const STTRenderer = () : JSX.Element => {
    let transformed_line_num = (line_num * text_size * 1.18);
    let line_pos = initialPos(displayStatus.linePos);
 
+   // position_change represents if we changed the line position (top, middle, bottom, etc.)
+   // The goal is to make sure that we don't go below the bottom of the screen.
    let position_change = 0;
-   while (line_pos * 6.25 + transformed_line_num > 93) {
+   while ((line_pos * 6.25 + transformed_line_num > 93) && (line_pos > 0)) {
       position_change = 1;
       line_pos--;
    }
+
+   // row_change represents if we changed the number of displayed rows.
+   // The goal is to make sure that we don't show too many lines of caption if we are at the limit 
+   // (when line position is already at the very top).
+   let row_change = 0;
+   while ((line_pos * 6.25 + transformed_line_num > 93) && (line_pos == 0)) {
+      row_change = 1;
+      line_num--;
+      transformed_line_num = (line_num * text_size * 1.18);
+   }
+   
    let transcript_info = {
       "text size": text_size, 
       "line position": line_pos, 
@@ -67,20 +79,25 @@ export const STTRenderer = () : JSX.Element => {
    const handleLinePositionBound = (event) => {
       dispatch({ type: 'SET_POS', payload: event })
    }
+   const handleRowNumberBound = (event) => {
+      dispatch({ type: 'SET_ROW_NUM', payload: event })
+   }
    if (position_change) {handleLinePositionBound(line_pos);}
    position_change = 0;
+   if (row_change) {handleRowNumberBound(line_num);}
+   row_change = 0;
 
 
 
-   const containerRef = useRef<HTMLDivElement | null>(null);
-   const handleClick = () => {
-      const container = containerRef.current;
-      if (container) {
-         if (container.scrollTop + container.clientHeight < container.scrollHeight - 5) {
-            container.scrollTop = container.scrollHeight - container.clientHeight;
-         }
-      }
-   }
+   // const containerRef = useRef<HTMLDivElement | null>(null);
+   // const handleClick = () => {
+   //    const container = containerRef.current;
+   //    if (container) {
+   //       if (container.scrollTop + container.clientHeight < container.scrollHeight - 5) {
+   //          container.scrollTop = container.scrollHeight - container.clientHeight;
+   //       }
+   //    }
+   // }
 
 
    // const [visible, setVisible] = useState(false);

@@ -2,20 +2,49 @@ permalink: /index.html
 # ScribeAR
 
 * For all other documents and references, see our Box folder. If you can't access Box with your Illinois account, go to https://cloud-dashboard.illinois.edu/cbdash/ and turn U of I Box on.
-* [RampUpTest](./Readme/WalkThroughGuide.md)
-* [WebUIGuide](./Readme/WebUIGuide.md)
-* For all communications, see Slack.
-* Replace/update this readme as necessary.
 
 ## Resources
 
-* React: https://react.dev/learn, https://www.w3schools.com/REACT
+* React: https://react.dev/learn, https://www.w3schools.com/REACT, https://roadmap.sh/react
 * TypeScript: https://www.typescriptlang.org/docs/handbook/intro.html, https://www.w3schools.com/typescript
 * Redux: https://redux.js.org/tutorials/essentials/part-1-overview-concepts, https://daveceddia.com/redux-tutorial/ 
 
 ## Setup
 
 Download Node.js at nodejs.org. Node comes with npm (Node Package Manager), which we will use for running code on your machine and deploying it to Github Pages. Make sure node and npm are in your `PATH` and then run `node -v` and `npm -v`.
+
+1. Cloning the repo
+  - Once in VSCode, in the terminal of the application type "git clone " + the https link under the ScribeAR repo
+    - Https link can be found by clicking the green "Code" button on the top right 
+    
+2. Get into the "ScribeAR.github.io" directory
+  - You should now be able to access the code by cd-ing into the directory
+    - If you are unsure where the "ScribeAR.github.io" folder is, you can type "ls" to see what you can currently cd into (it should be in 
+      same same location you are currently in though). 
+      - You should see "ScribeAR.github.io" as an option after typing "ls". type "cd ScribeAR.github.io" to be inside the repository.
+      - If you don't see "ScribeAR.github.io", then you need to look for the folder within your computer. Out of the files/folders that
+        are shown to you, cd into the folder that you think "ScribeAR.github.io" will be in by typing the command "cd " + the name of the folder. 
+        Continue doing so until you've found "ScribeAR.github.io". If you need to go backwards to check other folders, type "cd ..".
+
+3. Branch for each issue
+  - Under the scribear/ScribeAR.github.io github page, there is the "Issues" tab. You can choose any of these issues to work on (easier issues 
+    will likely be labeled as 'good first issue' but not all of them are labeled, so feel free to look at any of them!)
+  - Once you've chosen what issue you want to work on, create a branch labeled "iss" + number of the issue (example: issue 27 would be names "iss27")
+    - To create a branch and work in that branch, type "git checkout -b " + the issue title (look at example above for proper naming)
+   
+4. Edit the code! :)
+  - Most of the code we are working with is in the src/components folder
+  - To test your changes locally, type "npm start" and a local version of your code will open in your default browser. 
+    - Chrome is best, so if you're having issues with other browsers, make sure to try Chrome
+
+5. Pushing
+  - Once you're done fixing the issue, you'll need to merge the two branches
+    - Switch back to the master branch: "git checkout master"
+    - Merge your issue branch to the master: "git merge " + issue name from before
+    - Delete the previous branch: "git branch -d " + issue name
+      - This closes the issue (also make sure to mark on the issues page that your issue number has been completed)
+
+When you push a commit, if the commit is ready to deploy to Github Pages, also run `npm run deploy` and the site at our URL will be updated within a couple minutes.
 
 Here are some relevant files worth knowing about. These files are present in any React repository. Most of them are initialized automatically with the command `npx create-react-app`.
 * `.gitignore` lists files that won't be committed to Git. You will likely never touch any of the files listed there (except for `notes.txt`, which you may create in your local directory to keep any personal notes).
@@ -35,11 +64,9 @@ Here are some relevant files worth knowing about. These files are present in any
      * All images should be stored in the public directory and referenced in the project as though they are in the same folder, i.e. simply as `./imgname.jpg`.
 * `src` directory is where 99% of the work is done. `App.tsx`, the top overarching file, lives here. All components are stored in `src/components` and most of the code you write is somewhere in here.
 
-When you push a commit, if the commit is ready to deploy to Github Pages, also run `npm run deploy` and the site at our URL will be updated within a couple minutes.
 
 ## Relevant Technologies
 
-I prefer to learn through videos so most of the links I'm posting will be videos. I will also post some documentation, which is useful, but imo only as a reference, not a way to learn something new.
 
 **ReactJS** is a JavaScript library for frontend development, but you can also think of it as a template for organizing code for a web page. You will want to become comfortable with JavaScript if you are not already.
 * The core idea of React is to separate code into components. For example, on most websites, a header is a component; a sidebar is a component; buttons can be components nested in other components, and so on. This is useful because it allows us to reuse code when we need the same type of components multiple times. It also allows us to render only one component at a time, using much less overhead than re-rendering a whole site. React handles component rendering automatically to optimize it for the page. For example, the Recognition component renders multiple times per second as it gets Speech Recognition results (because we keep updating the component's `recognition` variable). We don’t want the whole page to re-render every time this happens so we split it into components.

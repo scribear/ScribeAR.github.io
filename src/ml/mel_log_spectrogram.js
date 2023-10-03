@@ -1,7 +1,6 @@
 const math = require("mathjs");
 const linspace = require("linspace");
 
-const audioContext = new AudioContext();
 const filterLength = 1024;
 const hopLength = 256;
 const winLength = 1024;

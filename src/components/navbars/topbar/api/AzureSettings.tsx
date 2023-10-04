@@ -34,7 +34,8 @@ export default function AzureSettings(props) {
    const showPopup = (event) => {
       setAnchorEl(event.currentTarget);
    };
-   const closePopup = () => {
+   const closePopup = (event) => {
+      event.preventDefault();
       setAnchorEl(null);
       dispatch({ type: 'CHANGE_AZURE_LOGIN', payload: azureStatusBuf });
    };
@@ -76,7 +77,9 @@ export default function AzureSettings(props) {
                            '& > :not(style)': { pr: '1vw', width: '15vw' },
                      }}
                      noValidate
-                     autoComplete="off">
+                     autoComplete="off"
+                     onSubmit={closePopup} // Prevent default submission behavior of refreshing page
+                  >
                      <style>
                            {`
                               #azureKey {
@@ -84,7 +87,17 @@ export default function AzureSettings(props) {
                               }
                            `}
                      </style>
-                     <TextField onChange={updateBuf} value={azureStatusBuf.azureKey} id="azureKey" label="Key" variant="outlined" style={{ width: '100%' }}/>
+                     <TextField
+                        onChange={updateBuf}
+                        value={azureStatusBuf.azureKey}
+                        id="azureKey"
+                        label="Key"
+                        variant="outlined"
+                        inputProps={{
+                           placeholder: 'Enter Azure key here',
+                        }}
+                        style={{ width: '100%' }}
+                     />
                   </Box>
                </ListItem>
                <ListItem sx={{ pl: 4 }}>
@@ -94,8 +107,20 @@ export default function AzureSettings(props) {
                            '& > :not(style)': { mr: '1vw', width: '15vw' },
                      }}
                      noValidate
-                     autoComplete="off">
-                     <TextField onChange={updateBuf} value={azureStatusBuf.azureRegion} id="azureRegion" label="Region" variant="outlined" style={{ width: '100%' }}/>
+                     autoComplete="off"
+                     onSubmit={closePopup}
+                  >
+                     <TextField 
+                        onChange={updateBuf} 
+                        value={azureStatusBuf.azureRegion} 
+                        id="azureRegion" 
+                        label="Region" 
+                        variant="outlined"
+                        inputProps={{
+                           placeholder: 'Enter Azure key here',
+                        }}
+                        style={{ width: '100%' }}
+                     />
                   </Box>
                </ListItem>
             </List>

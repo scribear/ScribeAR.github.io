@@ -24,8 +24,8 @@ const initialPhraseListState: PhraseListStatus = {
 }
 
 const initialAzureState: AzureStatus = {
-  azureKey: "Enter",
-  azureRegion: "Enter",
+  azureKey: "",
+  azureRegion: "",
   phrases: [""]
 }
 
@@ -39,41 +39,39 @@ const saveLocally = (varName: string, value: any) => {
   localStorage.setItem(varName, JSON.stringify(value))
 }
 
-// fixed apiStatus
-// TO-DO: look into azureStatus and whisperStatus
+// Try to retrieve state values saved into local storage in previous sessions
 const getLocalState = (name: string) => {
-  let localState = localStorage.getItem(name);
-  if (localState) {
-    console.log("localStorage-api current name and state:", name, localState);
-    if (name == "apiStatus") {
-      try {
-        let state = JSON.parse(localState);
-        let length = Object.keys(state).length;
-        if (length !== 5) {
-          console.log("localStorage-api not correct length:", localState);
-          console.log("localStorage-api using inital state:", initialAPIStatusState);
-          saveLocally("apiStatus", initialAPIStatusState);
-          return initialAPIStatusState;
-        }
-        // state is the JSON object version with correct length
-        return state;
-      } catch (error) {
-        console.log("localStorage-api not JSON string:", localState);
-      }
+  let stateJson = localStorage.getItem(name);
+  if (stateJson) {
+    console.log("Retrived state from local storage:", name, stateJson);
+    try {
+      let state: {} = JSON.parse(stateJson);
+      // Checking shape of apiStatus object, currently disabled
+      // if (length !== 5) {
+      //   console.log("localStorage-api not correct length:", localState);
+      //   console.log("localStorage-api using inital state:", initialAPIStatusState);
+      //   saveLocally("apiStatus", initialAPIStatusState);
+      //   return initialAPIStatusState;
+      // }
+      return state;
+    } catch (error) {
+      console.log("State retrieved from local stroage " + name + " cannot be deserialized");
     }
   }
+  // Else we save initial state values into local storage
   if (name == "apiStatus") {
-    console.log("localStorage-api using inital state:", initialAPIStatusState);
     saveLocally("apiStatus", initialAPIStatusState);
-    return initialAPIStatusState;
+    return initialAPIStatusState
   } else if (name == "azureStatus") {
+    saveLocally("azureStatus", initialAzureState);
     return initialAzureState
   } else if (name == "whisperStatus") {
+    saveLocally("whisperStatus", initialWhisperState);
     return initialWhisperState
   }
 };
 
-export const APIStatusReducer = (state = getLocalState("apiStatus"), action) => {
+export const APIStatusReducer = (state = getLocalState("apiStatus") as ApiStatus, action) => {
   switch (action.type) {
     case 'CHANGE_CURRENT_API': // never called
       return { ...state, ...action.payload };

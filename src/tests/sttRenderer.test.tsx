@@ -3,6 +3,7 @@ import { store } from '../store';
 import { Provider } from 'react-redux';
 import '@testing-library/jest-dom';
 
+import * as fs from 'fs'
 import { STTRenderer } from '../components/sttRenderer';
 import * as speechSDK from 'microsoft-cognitiveservices-speech-sdk';
 import { AudioConfig } from 'microsoft-cognitiveservices-speech-sdk';
@@ -13,7 +14,8 @@ jest.mock('../components/api/visualization/audioVis', () => ({ AudioVis: () => '
 // Mocking AudioConfig to pass an audio file instead of microphone to Azure
 // This lets us test Azure transcription
 let mockfromDefaultMicrophoneInput = () => {
-  return AudioConfig.fromDefaultMicrophoneInput();
+  const audio = fs.readFileSync('rat-audio.wav');
+  return AudioConfig.fromWavFileInput(audio);
 }
 jest.doMock('microsoft-cognitiveservices-speech-sdk', () => ({
   ...jest.requireActual('microsoft-cognitiveservices-speech-sdk'),

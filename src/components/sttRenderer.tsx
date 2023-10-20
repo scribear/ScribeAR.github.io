@@ -33,6 +33,9 @@ export const STTRenderer = () : JSX.Element => {
    // if else for whisper transcript, apiStatus for 4=whisper and control status for listening
    const { transcript, recogHandler } = useRecognition(sRecog, apiStatus, controlStatus, azureStatus);
 
+   let parts = transcript.split('<br>');
+   console.log("parts", parts)
+
 
    function initialVal(value) {
       if (isNaN(value) || typeof value === 'undefined') {return 4;}
@@ -74,6 +77,7 @@ export const STTRenderer = () : JSX.Element => {
       "lower bound": (line_pos * 6.25 + transformed_line_num)
    }
    console.log("caption info:", transcript_info)
+   let top = line_pos * 6.25
 
    const dispatch = useDispatch();
    const handleLinePositionBound = (event) => {
@@ -87,53 +91,30 @@ export const STTRenderer = () : JSX.Element => {
    if (row_change) {handleRowNumberBound(line_num);}
    row_change = 0;
 
-
-
-   // const containerRef = useRef<HTMLDivElement | null>(null);
-   // const handleClick = () => {
-   //    const container = containerRef.current;
-   //    if (container) {
-   //       if (container.scrollTop + container.clientHeight < container.scrollHeight - 5) {
-   //          container.scrollTop = container.scrollHeight - container.clientHeight;
-   //       }
-   //    }
-   // }
-
-
-   // const [visible, setVisible] = useState(false);
-   // const [top, setTop] = useState(0);
-   // const container = containerRef.current;
-   // if (container && top !== 0) {
-   //    container.scrollTop = top;
-   //    console.log('container.scrollTop', container.scrollTop);
-   // }
+   const [showButton, setShowButton] = useState(false);
    
-   // const handleScroll = () => {
-   //    const container = containerRef.current;
-   //    console.log('container!', container);
-   //    if (container) {
-   //       console.log('container sctop!', container.scrollTop);
-   //       console.log('container clhie!', container.clientHeight);
-   //       console.log('container scrhei!', container.scrollHeight);
-   //       if (container.scrollTop + container.clientHeight < container.scrollHeight - 5) {
-   //          console.log('visible should be true');
-   //          // if (!visible) {
-   //          //    setTop(container.scrollTop);
-   //          //    setVisible(true);
-   //          // }
-   //       } else {
-   //          console.log('visible should be false');
-   //          // if (visible) {
-   //          //    setTop(container.scrollTop);
-   //          //    setVisible(false);
-   //          // }
-   //       }
-   //    }
-   // };
-   // console.log('visible val', visible);
+   const capts = document.getElementById('captionsSpace')
+   
+   // autoscroll to bottom
+   if (capts && !showButton) {
+      capts.scrollTop = capts.scrollHeight - capts.clientHeight
+   }
 
+   const handleClick = () => {
+      // setAllowScroll(!allowScroll);
+      setShowButton(false);
+   }
 
-
+   const handleScroll = () => {
+      // we scroll up, the scrolldown button appears, and we disable auto scroll down.
+      if ((!showButton) && capts && (capts.scrollTop + capts.clientHeight < capts.scrollHeight - 5)) {
+         setShowButton(true);
+      }
+      // we manually scroll down, the scrolldown button should disappear, and should trigger automatic scroll down.
+      else if ((showButton) && capts && (capts.scrollTop + capts.clientHeight >= capts.scrollHeight - 5)) {
+         setShowButton(false);
+      }
+   }
 
 
    /**
@@ -146,8 +127,7 @@ export const STTRenderer = () : JSX.Element => {
       <div>
          <AudioVis></AudioVis>
          <ul >
-            {/* <h3 className="captions" ref={containerRef} onScroll={handleScroll} */}
-            <h3 className="captions"
+            <h3 className="captions" onScroll={handleScroll}
                id = "captionsSpace" 
                style = {{
                   position: 'fixed', width: '90%', 
@@ -158,13 +138,17 @@ export const STTRenderer = () : JSX.Element => {
                   color: displayStatus.textColor
                }}>{ transcript }
             </h3>
-            {/* {!shouldHide &&  */}
-            {/* <button
+
+            {showButton && 
+            <button
             onClick={handleClick}
             style = {{
                   position: 'fixed', 
                   paddingTop: '0%', borderRadius: "34%", border: '5px solid ' + displayStatus.secondaryColor,
-                  left: '5%', top: (line_pos * 6.25) - 0.8 * text_size + '%', 
+                  left: '5%', 
+                  // marginLeft: '70%',
+                  top: (line_pos * 6.25) - 0.8 * text_size + '%', 
+                  // top: `calc(${top}% + ${transformed_line_num}vh)`, 
                   height: (2 * 0.618 * text_size) + "vh",
                   width: (2 * text_size) + "vh",
                   alignItems: 'center',
@@ -174,8 +158,9 @@ export const STTRenderer = () : JSX.Element => {
                   cursor: "pointer",
                   display: "flex",
                }}> <KeyboardDoubleArrowDownIcon/>
-            </button> */}
-            {/* } */}
+            </button>
+            }
+
          </ul>
       </div>
    );

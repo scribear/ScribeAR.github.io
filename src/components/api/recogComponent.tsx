@@ -93,11 +93,11 @@ export const RecogComponent: React.FC = (props) => {
    // };
 
    const sttElem : JSX.Element = STTRenderer();
-   const capts = document.getElementById('captionsSpace')
-   if (capts != null) {
-      let isScrolledToBottom = capts.scrollHeight - capts.clientHeight <= capts.scrollTop + 1
-      capts.scrollTop = capts.scrollHeight - capts.clientHeight // scroll to bottom
-   }
+   // const capts = document.getElementById('captionsSpace')
+   // if (capts != null) {
+   //    let isScrolledToBottom = capts.scrollHeight - capts.clientHeight <= capts.scrollTop + 1
+   //    capts.scrollTop = capts.scrollHeight - capts.clientHeight // scroll to bottom
+   // }
 
    
    return sttElem;

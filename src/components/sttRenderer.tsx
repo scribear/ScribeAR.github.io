@@ -74,6 +74,7 @@ export const STTRenderer = () : JSX.Element => {
       "text size": text_size, 
       "line position": line_pos, 
       "font color": displayStatus.textColor,
+      "word spacing": displayStatus.wordSpacing,
       "lower bound": (line_pos * 6.25 + transformed_line_num)
    }
    console.log("caption info:", transcript_info)
@@ -135,7 +136,8 @@ export const STTRenderer = () : JSX.Element => {
                   paddingLeft: '5%', paddingRight: '50%', paddingTop: '0%',
                   left: '0', top: (line_pos * 6.25) + '%', 
                   overflowY: 'scroll', height: transformed_line_num + "vh", lineHeight: (text_size * 1.18) + "vh",
-                  color: displayStatus.textColor
+                  color: displayStatus.textColor,
+                  wordSpacing: 2*displayStatus.wordSpacing + "px"
                }}>{ transcript }
             </h3>
 

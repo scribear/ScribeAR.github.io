@@ -4,6 +4,7 @@ import { List, ListItemText, Collapse, ListItem, SubtitlesIcon } from '../../../
 import Position from './position';
 import DisplayRows from './displayRows';
 import TextSize from './textSize';
+import WordSpacing from './wordSpacing';
 
 
 export default function CaptionsMenu(props) {
@@ -26,6 +27,10 @@ export default function CaptionsMenu(props) {
                   <ListItemText primary="Position" />
                </ListItem>
                <Position />
+               <ListItem sx={{ pl: 4, pt: 5  }}>
+                  <ListItemText primary="Word Spacing" />
+               </ListItem>
+               <WordSpacing />
             </List>
          </Collapse>
       </div>

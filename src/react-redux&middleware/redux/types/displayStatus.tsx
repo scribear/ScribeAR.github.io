@@ -12,4 +12,5 @@ export type DisplayStatus = {
    menuVisible: boolean
    rowNum: number // number of rows shown in transcript
    linePos: number // position of the transcript
+   wordSpacing: number // spacing between each word
 }

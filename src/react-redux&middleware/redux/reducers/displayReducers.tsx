@@ -11,6 +11,7 @@ const  initialState : DisplayStatus = {
   menuVisible: true,
   rowNum: 4,
   linePos: 8,
+  wordSpacing: 5,
 }
 
 const saveLocally = (varName: string, value: any) => {
@@ -28,8 +29,8 @@ const getLocalState = (name: string) => {
     try {
       let state = JSON.parse(localState);
       let length = Object.keys(state).length;
-      // there are currently 7 attributes for the localStorage-display
-      if (length !== 7) {
+      // there are currently 8 attributes for the localStorage-display
+      if (length !== 8) {
           console.log("localStorage-display not correct length:", localState);
           console.log("localStorage-display using inital state:", initialState);
           saveLocally("displayReducer2", initialState);
@@ -88,6 +89,13 @@ export const DisplayReducer = (state = getLocalState("displayReducer2"), action)
       new_state = {
         ...state, 
         linePos: action.payload };
+      saveLocally("displayReducer2", new_state)
+      return new_state;
+
+    case 'SET_WORD_SPACING':
+      new_state = {
+        ...state, 
+        wordSpacing: action.payload };
       saveLocally("displayReducer2", new_state)
       return new_state;
   

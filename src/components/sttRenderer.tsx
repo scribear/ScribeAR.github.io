@@ -1,37 +1,17 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import Swal from 'sweetalert2'; // TODO: use Swal like before if appropriate
 
 import { RootState } from '../store';
-import { 
-   DisplayStatus, AzureStatus, ControlStatus, 
-   ApiStatus, SRecognition 
-} from '../react-redux&middleware/redux/typesImports'
-import { useRecognition } from './api/returnAPI';
+import { DisplayStatus } from '../react-redux&middleware/redux/typesImports'
 import { AudioVis } from './api/visualization/audioVis';
 import { KeyboardDoubleArrowDownIcon } from '../muiImports';
 
 
-export const STTRenderer = () : JSX.Element => {
-   // TODO: use createSelector to memoize the selector
-   const controlStatus = useSelector((state: RootState) => {
-      return state.ControlReducer as ControlStatus;
-   });
+export const STTRenderer = (transcript: string) : JSX.Element => {
+
    const displayStatus = useSelector((state: RootState) => {
       return state.DisplayReducer as DisplayStatus;
    });
-   const azureStatus = useSelector((state: RootState) => {
-      return state.AzureReducer as AzureStatus;
-   })
-   const apiStatus = useSelector((state: RootState) => {
-      return state.APIStatusReducer as ApiStatus;
-   })
-   const sRecog = useSelector((state: RootState) => {
-      return state.SRecognitionReducer as SRecognition;
-   })
-
-   // if else for whisper transcript, apiStatus for 4=whisper and control status for listening
-   const { transcript, recogHandler } = useRecognition(sRecog, apiStatus, controlStatus, azureStatus);
 
    let parts = transcript.split('<br>');
    console.log("parts", parts)

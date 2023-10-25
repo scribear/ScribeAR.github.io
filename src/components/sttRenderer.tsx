@@ -50,6 +50,7 @@ export const STTRenderer = () : JSX.Element => {
    let text_size = initialVal(displayStatus.textSize);
    let line_num = initialVal(displayStatus.rowNum);
    let transformed_line_num = (line_num * text_size * 1.18);
+   let button_line_num = ((line_num + 1) * text_size * 1.18);
    let line_pos = initialPos(displayStatus.linePos);
 
    // position_change represents if we changed the line position (top, middle, bottom, etc.)
@@ -68,6 +69,7 @@ export const STTRenderer = () : JSX.Element => {
       row_change = 1;
       line_num--;
       transformed_line_num = (line_num * text_size * 1.18);
+      button_line_num = ((line_num + 1) * text_size * 1.18);
    }
    
    let transcript_info = {
@@ -141,6 +143,25 @@ export const STTRenderer = () : JSX.Element => {
                }}>{ transcript }
             </h3>
 
+            {showButton &&
+            <h3
+            style = {{
+                  position: 'fixed', 
+                  paddingTop: '0%',
+                  left: '5%', 
+                  marginLeft: '70%',
+                  // top: (line_pos * 6.25) - 0.8 * text_size + '%', 
+                  top: `calc(${top}% + ${transformed_line_num}vh)`, 
+                  height: (2 * 0.618 * text_size) + "vh",
+                  width: (2 * text_size) + "vh",
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: displayStatus.textColor,
+                  backgroundColor: displayStatus.primaryColor,
+               }}> . . . 
+            </h3>
+            }
+
             {showButton && 
             <button
             onClick={handleClick}
@@ -148,9 +169,9 @@ export const STTRenderer = () : JSX.Element => {
                   position: 'fixed', 
                   paddingTop: '0%', borderRadius: "34%", border: '5px solid ' + displayStatus.secondaryColor,
                   left: '5%', 
-                  // marginLeft: '70%',
-                  top: (line_pos * 6.25) - 0.8 * text_size + '%', 
-                  // top: `calc(${top}% + ${transformed_line_num}vh)`, 
+                  marginLeft: '80%',
+                  // top: (line_pos * 6.25) - 0.8 * text_size + '%', 
+                  top: `calc(${top}% + ${button_line_num}vh)`, 
                   height: (2 * 0.618 * text_size) + "vh",
                   width: (2 * text_size) + "vh",
                   alignItems: 'center',

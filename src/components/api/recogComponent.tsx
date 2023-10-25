@@ -27,42 +27,37 @@ export const RecogComponent: React.FC = (props) => {
    const whisperStatus = useSelector((state: RootState) => {
       return state.WhisperReducer as WhisperStatus
    })
-   document.addEventListener("DOMContentLoaded", () => {
-      if (apiStatus.currentApi === API.AZURE_TRANSLATION) {
+   useEffect(() => {
+      if (apiStatus.currentApi == API.AZURE_TRANSLATION) {
          Swal.fire({
-         title: 'It appears you have a valid Microsoft Azure key, would you like to use Microsoft Azure?',
-         icon: 'info',
-         allowOutsideClick: false,
-         showDenyButton: true,
-         confirmButtonText: 'Yes!',
-         }).then((result) => {
-         if (result.isConfirmed) {
-            Swal.fire('Switching to Azure', '', 'success')
-            // desiredAPI = 1
-            // azureHandler()
-            let copyStatus = Object.assign({}, apiStatus);
-            copyStatus.currentApi = API.AZURE_TRANSLATION;
-            copyStatus.webspeechStatus = STATUS.AVAILABLE;
-            copyStatus.whisperStatus = STATUS.AVAILABLE;
-            copyStatus.azureConvoStatus = STATUS.AVAILABLE;
-            copyStatus.azureTranslStatus = STATUS.TRANSCRIBING;
-            dispatch({type: 'CHANGE_API_STATUS', payload: copyStatus})
-         } else {
-            let copyStatus = Object.assign({}, apiStatus);
-            copyStatus.currentApi = 0;
-            copyStatus.webspeechStatus = STATUS.TRANSCRIBING;
-            copyStatus.whisperStatus = STATUS.AVAILABLE;
-            copyStatus.azureConvoStatus = STATUS.AVAILABLE;
-            copyStatus.azureTranslStatus = STATUS.AVAILABLE;
-            dispatch({type: 'CHANGE_API_STATUS', payload: copyStatus})
-            // webspeechHandler()
-         }
-         })
-      } else if (apiStatus.currentApi === 4){
-         console.log("hereeeee")
-         // whisperHandler()
+            title: `It appears you were using Azure recognizer last time, would you like to switch to that?`,
+            icon: 'info',
+            allowOutsideClick: false,
+            showDenyButton: true,
+            confirmButtonText: 'Yes!',
+            }).then((result) => {
+               if (result.isConfirmed) {
+                  Swal.fire('Switching to Azure', '', 'success')
+                  let copyStatus = Object.assign({}, apiStatus);
+                  copyStatus.currentApi = API.AZURE_TRANSLATION;
+                  copyStatus.webspeechStatus = STATUS.AVAILABLE;
+                  copyStatus.whisperStatus = STATUS.AVAILABLE;
+                  copyStatus.azureConvoStatus = STATUS.AVAILABLE;
+                  copyStatus.azureTranslStatus = STATUS.TRANSCRIBING;
+                  dispatch({type: 'CHANGE_API_STATUS', payload: copyStatus})
+               } else {
+                  let copyStatus = Object.assign({}, apiStatus);
+                  copyStatus.currentApi = API.WEBSPEECH;
+                  copyStatus.webspeechStatus = STATUS.TRANSCRIBING;
+                  copyStatus.whisperStatus = STATUS.AVAILABLE;
+                  copyStatus.azureConvoStatus = STATUS.AVAILABLE;
+                  copyStatus.azureTranslStatus = STATUS.AVAILABLE;
+                  dispatch({type: 'CHANGE_API_STATUS', payload: copyStatus})
+               }
+            })
       }
-   });
+   },[])
+
    // const textSizeA = "" + textSize.textSize + "vh"
    // const { azureTranscripts, azureListen } = useAzureTranslRecog();
    // const { transcripts, listen } = useWebSpeechRecog();

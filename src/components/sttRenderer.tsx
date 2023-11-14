@@ -49,14 +49,15 @@ export const STTRenderer = () : JSX.Element => {
 
    let text_size = initialVal(displayStatus.textSize);
    let line_num = initialVal(displayStatus.rowNum);
-   let transformed_line_num = (line_num * text_size * 1.18);
-   let button_line_num = ((line_num + 1) * text_size * 1.18);
+   let line_height = (1 + 0.1 * displayStatus.lineHeight);
+   let transformed_line_num = (line_height * line_num * text_size * 1.18);
+   let button_line_num = (line_height * (line_num + 1) * text_size * 1.18);
    let line_pos = initialPos(displayStatus.linePos);
 
    // position_change represents if we changed the line position (top, middle, bottom, etc.)
    // The goal is to make sure that we don't go below the bottom of the screen.
    let position_change = 0;
-   while ((line_pos * 6.25 + transformed_line_num > 93) && (line_pos > 0)) {
+   while ((line_pos * 6.25 + button_line_num > 93) && (line_pos > 0)) {
       position_change = 1;
       line_pos--;
    }
@@ -65,19 +66,31 @@ export const STTRenderer = () : JSX.Element => {
    // The goal is to make sure that we don't show too many lines of caption if we are at the limit 
    // (when line position is already at the very top).
    let row_change = 0;
-   while ((line_pos * 6.25 + transformed_line_num > 93) && (line_pos == 0)) {
+   while ((line_pos * 6.25 + button_line_num > 93) && (line_pos == 0)) {
       row_change = 1;
       line_num--;
-      transformed_line_num = (line_num * text_size * 1.18);
-      button_line_num = ((line_num + 1) * text_size * 1.18);
+      transformed_line_num = (line_height * line_num * text_size * 1.18);
+      button_line_num = (line_height * (line_num + 1) * text_size * 1.18);
    }
+
+   // // row_change represents if we changed the number of displayed rows.
+   // // The goal is to make sure that we don't show too many lines of caption if we are at the limit 
+   // // (when line position is already at the very top).
+   // let line_height_change = 0;
+   // while ((line_pos * 6.25 + transformed_line_num > 93) && (line_pos == 0)) {
+   //    line_height_change = 1;
+   //    line_num--;
+   //    transformed_line_num = (line_num * text_size * 1.18);
+   //    button_line_num = ((line_num + 1) * text_size * 1.18);
+   // }
    
    let transcript_info = {
       "text size": text_size, 
       "line position": line_pos, 
       "font color": displayStatus.textColor,
       "word spacing": displayStatus.wordSpacing,
-      "lower bound": (line_pos * 6.25 + transformed_line_num)
+      "lower bound": (line_pos * 6.25 + transformed_line_num),
+      "line height": displayStatus.lineHeight
    }
    console.log("caption info:", transcript_info)
    let top = line_pos * 6.25
@@ -137,13 +150,15 @@ export const STTRenderer = () : JSX.Element => {
                   textAlign: 'left', fontSize: text_size + "vh", 
                   paddingLeft: '5%', paddingRight: '50%', paddingTop: '0%',
                   left: '0', top: (line_pos * 6.25) + '%', 
-                  overflowY: 'scroll', height: transformed_line_num + "vh", lineHeight: (text_size * 1.18) + "vh",
+                  overflowY: 'scroll', 
+                  height: transformed_line_num + "vh", 
+                  lineHeight: (line_height * text_size * 1.18) + "vh",
                   color: displayStatus.textColor,
-                  wordSpacing: 2*displayStatus.wordSpacing + "px"
+                  wordSpacing: 2 * displayStatus.wordSpacing + "px"
                }}>{ transcript }
             </h3>
 
-            {showButton &&
+            {/* {showButton &&
             <h3
             style = {{
                   position: 'fixed', 
@@ -160,7 +175,7 @@ export const STTRenderer = () : JSX.Element => {
                   backgroundColor: displayStatus.primaryColor,
                }}> . . . 
             </h3>
-            }
+            } */}
 
             {showButton && 
             <button

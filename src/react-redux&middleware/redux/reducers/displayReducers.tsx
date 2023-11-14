@@ -12,6 +12,7 @@ const  initialState : DisplayStatus = {
   rowNum: 4,
   linePos: 8,
   wordSpacing: 5,
+  lineHeight: 5,
 }
 
 const saveLocally = (varName: string, value: any) => {
@@ -29,8 +30,8 @@ const getLocalState = (name: string) => {
     try {
       let state = JSON.parse(localState);
       let length = Object.keys(state).length;
-      // there are currently 8 attributes for the localStorage-display
-      if (length !== 8) {
+      // there are currently 9 attributes for the localStorage-display
+      if (length !== 9) {
           console.log("localStorage-display not correct length:", localState);
           console.log("localStorage-display using inital state:", initialState);
           saveLocally("displayReducer2", initialState);
@@ -96,6 +97,13 @@ export const DisplayReducer = (state = getLocalState("displayReducer2"), action)
       new_state = {
         ...state, 
         wordSpacing: action.payload };
+      saveLocally("displayReducer2", new_state)
+      return new_state;
+
+    case 'SET_LINE_HEIGHT':
+      new_state = {
+        ...state, 
+        lineHeight: action.payload };
       saveLocally("displayReducer2", new_state)
       return new_state;
   

@@ -271,6 +271,7 @@ export const useRecognition = (sRecog : SRecognition, api : ApiStatus, control :
          recogHandler({type: 'STOP'}); 
       }
    }, [control.listening]);
+   // Webspeech recognizer stops itself after not detecting speech for a while, needs to be restarted
    // restart recognizer, if status not ERROR
    useEffect(() => {
       if (!recogHandler) { // whipser won't have recogHandler

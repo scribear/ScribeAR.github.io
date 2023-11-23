@@ -34,7 +34,7 @@
  * final_0 -> final_1 ->...-> final_n -> in_progress
  * 
  */
-type Transcript = {
+export type Transcript = {
     finalBlocks: [string];
     inProgressBlock: string;
 }
@@ -77,6 +77,6 @@ export interface Recognizer{
      * when the recognizer has encountered an error that it cannot handle
      * @param callback A callback function called with the error object when the event is triggered
      */
-    onTranscribed(callback: (e: Error) => void);
+    onError(callback: (e: Error) => void);
 }
 

@@ -102,7 +102,8 @@ export const useAzureTranslRecog = (recognizer : speechSDK.TranslationRecognizer
          // Newer event.result.text is not guaranteed to contain older event.result.text as prefix, e.g. "Five bites" -> "Five bytes of memory"
          console.log(89);
          const eventBucketThunk = makeEventBucket({ stream: 'azure', value: { confidence: -1, transcript: e.result.text }});
-         dispatch(eventBucketThunk); // TODO: Documentation for makeEventBucket and dispatching thunk
+         dispatch(eventBucketThunk); 
+         // TODO: Documentation for makeEventBucket and dispatching thunk
       };
       recognizer.recognized = (s, e) => {
          // Signals that the current paragraph is over.

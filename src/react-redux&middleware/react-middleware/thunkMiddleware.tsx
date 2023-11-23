@@ -8,7 +8,6 @@ import { intent_inference } from '../../ml/inference';
 
 const ort = require('onnxruntime-web');
 
-
 const SentimentToEmojis : { [index: string]: string } = {
    "admiration": "👏", "amusement": "😂", "anger": "😡", "annoyance": "😒",
    "approval": "👍", "caring": "🤗", "confusion": "😕", "curiosity": "🤔",
@@ -19,37 +18,6 @@ const SentimentToEmojis : { [index: string]: string } = {
    "remorse": "😞",  "sadness": "😞", "surprise": "😲", "neutral": "😐",
 };
 const sentimentPrompt = "Decide whether the sentence is admiration amusement anger annoyance approval caring confusion curiosity desire disappointment disapproval disgust embarrassment excitement fear gratitude grief joy love nervousness optimism pride realization relief remorse sadness surprise, or neutral:";
-
-/* Save to sessionStorage so that it is cleared when refreshed */
-const saveSessionly = (varName: string, value: any) => {
-   sessionStorage.setItem(varName, JSON.stringify(value));
-   // if (varName === 'audio') {
-
-   // } else if (varName === 'html5STT') {
-
-   // } else if (varName === 'AzureSTT') {
-
-   // } else if (varName === 'UserAction') {
-
-   // }
-}
-
-const getSessionState = (varName: string) => {
-   let checkNull = sessionStorage.getItem(varName)
-   if (checkNull) {
-      return JSON.parse(checkNull);
-   } else {
-      // if (varName === "streams") {
-      //     const mainStreamMap = defaultMainStreamMap();
-      //     saveSessionly("streams", mainStreamMap);
-      //     return mainStreamMap;
-      // }
-   }
-};
-type BucketArgs = {
-   stream: string,
-   value: any | SpeechRecognitionResultList,
-}
 
 const getSentiment = async (sentence: string) : Promise<string> => {
    try {
@@ -93,8 +61,41 @@ const getSentiment = async (sentence: string) : Promise<string> => {
    }
 }
 
+/* Save to sessionStorage so that it is cleared when refreshed */
+const saveSessionly = (varName: string, value: any) => {
+   sessionStorage.setItem(varName, JSON.stringify(value));
+   // if (varName === 'audio') {
+
+   // } else if (varName === 'html5STT') {
+
+   // } else if (varName === 'AzureSTT') {
+
+   // } else if (varName === 'UserAction') {
+
+   // }
+}
+
+const getSessionState = (varName: string) => {
+   let checkNull = sessionStorage.getItem(varName)
+   if (checkNull) {
+      return JSON.parse(checkNull);
+   } else {
+      // if (varName === "streams") {
+      //     const mainStreamMap = defaultMainStreamMap();
+      //     saveSessionly("streams", mainStreamMap);
+      //     return mainStreamMap;
+      // }
+   }
+};
+
+type BucketArgs = {
+   stream: string,
+   value: any | SpeechRecognitionResultList,
+}
+
 /**
  * Write a synchronous outer function that receives the `text` parameter:
+ * See this for how Redux thunks and dispatching thunks work: https://redux.js.org/usage/writing-logic-thunks
  * @param object 
  * @returns 
  */
@@ -124,6 +125,7 @@ export function makeEventBucket(object: BucketArgs) {
                   // const intent : string = await getSentiment(speechResult[0].transcript);
                   // const result = { confidence: speechResult[0].confidence, transcript: speechResult[0].transcript + ' (' + intent + ')' };
                   const intent : string = (await intent_inference(speechResult[0].transcript))[1][1][0];
+                  console.log("Intent recog result", intent)
                   const result = { confidence: speechResult[0].confidence, transcript: speechResult[0].transcript + ' (' + intent.split(' ')[1] + ')'};
                   finalArr.push(result);
                } else {

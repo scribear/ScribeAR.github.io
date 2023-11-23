@@ -1,11 +1,6 @@
 /**
  * A recognizer is an abstract object that has the following functions
  * 
- * Recognizer createRecognizer(enum? audioSource, string? language)
- *      Constructor that creates a recognizer instance ready to be started using the given args
- *      (Are args necessary? Should CreateRecognizer directly fetch from Redux store?)
- *      (What types are appropriate for representing audio source and language?)
- * 
  * void start()
  *      Makes the recognizer starts transcribing speech from given audio source
  * 
@@ -22,6 +17,13 @@
  *      when the recognizer encouters an error (that may or may not be fatal)
  * 
  * (Should there be an event handler for unexpected stop like one caused by fatal error?)
+ * 
+ * Further, it should be instantiated by the following function:
+ * 
+ * Recognizer createRecognizer(enum? audioSource, string? language)
+ *      Constructor that creates a recognizer instance ready to be started using the given args
+ *      (Are args necessary? Should CreateRecognizer directly fetch from Redux store?)
+ *      (What types are appropriate for representing audio source and language?)
  */
 
 /**
@@ -34,9 +36,9 @@
  * final_0 -> final_1 ->...-> final_n -> in_progress
  * 
  */
-export type Transcript = {
-    finalBlocks: [string];
-    inProgressBlock: string;
+export class Transcript {
+    finalBlocks: Array<string> = [];
+    inProgressBlock: string = "";
 }
 
 /**
@@ -45,22 +47,17 @@ export type Transcript = {
  */
 export interface Recognizer{
     // TODO: create audio source type
-    /**
-     * Creates a recognizer instance that listens to the given audio source
-     * and expects speech in the given language 
-     * @param audioSource Audio source (microphone, audio file, etc.) that the recognizer listens to
-     * @param language Expected language of the speech to be transcribed
-     */
-    constructor(audioSource: any, language: string);
 
     /**
      * Makes the recognizer start transcribing speech asynchronously
+     * 
      * Throws exception if recognizer fails to start
      */
     start();
 
     /**
      * Makes the recognizer stop transcribing speech asynchronously
+     * 
      * Throws exception if recognizer fails to stop
      */
     stop();

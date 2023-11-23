@@ -12,26 +12,24 @@ import { makeEventBucket } from '../../../react-redux&middleware/react-middlewar
 
 /**
  * References:
- * JS Promises: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise 
  * Azure recognizer SDK: https://learn.microsoft.com/en-us/javascript/api/microsoft-cognitiveservices-speech-sdk/?view=azure-node-latest 
  */
 
 /**
  * Try to instantiate and return an Azure recognizer object using the given parameters
- * The recognizer is set to recognize the current speech language, does not translate, and masks profanities
+ * The recognizer is set to recognize the current speech language, does not translate, and censor profanities
  * 
  * @param control Global parameters of ScribeAR, see ControlStatus for more info 
  * @param azureStatus Parameters used specifically by Azure
- * @param mic ID of current microphone
+ * @param mic ID of microphone to be used
  * 
- * @returns An azure recognizer, or an error string if it could not instantiate the recognizer
+ * @returns An Azure TranslationRecognizer if instantiation succeds, else an error string
  */
 export const getAzureTranslRecog = async (control: ControlStatus, azureStatus: AzureStatus, mic : number = 0) => new Promise<speechSDK.TranslationRecognizer>((resolve, reject) => {  
    try {
       const speechConfig = speechSDK.SpeechTranslationConfig.fromSubscription(azureStatus.azureKey, azureStatus.azureRegion)
       speechConfig.speechRecognitionLanguage = control.speechLanguage.CountryCode;
       speechConfig.addTargetLanguage(control.textLanguage.CountryCode);
-      // console.log("Speech: ", speechConfig.speechRecognitionLanguage, "; Text: ", speechConfig.targetLanguages);
       speechConfig.setProfanity(2);
       if (mic === 0) {
          const audioConfig = speechSDK.AudioConfig.fromDefaultMicrophoneInput();
@@ -86,34 +84,43 @@ export const testAzureTranslRecog = async (control: ControlStatus, azure: AzureS
 });
 
 /**
- * @param recognizer speechSDK.TranslationRecognizer
- * @returns [string[], recognizer, start function]
+ * Subscribing to Azure TranslationRecognizer's incomplete result, complete result, start, and stop event
+ * To dispatch transcript and status updates to the redux store 
+ * 
+ * @param recognizer An Azure TranslationRecognizer
+ * @param dispatch Redux dispatch function
+ * @returns Error message if it fails to subscribe
  */
 export const useAzureTranslRecog = (recognizer : speechSDK.TranslationRecognizer, dispatch : React.Dispatch<any>) => new Promise<void>((resolve, reject) => {
+   // see https://learn.microsoft.com/en-us/javascript/api/microsoft-cognitiveservices-speech-sdk/recognitionresult?view=azure-node-latest
    try {
-      // e.result is a TranslationRecognitionResult
+      // Azure recognizes speech in "paragraphs," defined as continuous speech with short pauses.
+      // When it detects a long enough pause, it stops the current paragraph and starts a new paragraph
       recognizer.recognizing = (s, e) => {
+         // Signals that the current paragraph is not yet over, but more transcript is available
+         // event.result.text is the in-progress transcript of the current paragraph
+         // Newer event.result.text is not guaranteed to contain older event.result.text as prefix, e.g. "Five bites" -> "Five bytes of memory"
          console.log(89);
          const eventBucketThunk = makeEventBucket({ stream: 'azure', value: { confidence: -1, transcript: e.result.text }});
-         dispatch(eventBucketThunk);
+         dispatch(eventBucketThunk); 
+         // TODO: Documentation for makeEventBucket and dispatching thunk
       };
       recognizer.recognized = (s, e) => {
-         console.log(101, speechSDK.PhraseListGrammar.fromRecognizer(recognizer));
+         // Signals that the current paragraph is over.
+         // event.result.text is the finalized transcript of the current paragraph
+         console.log(101, e.result.text);
          dispatch({ type: 'transcript/azure/recognized', payload: {newTranscript: e.result.text} }); // TODO: modify, think over how this would affect the Stream
       };
       recognizer.sessionStarted = (s, e) => {
+         // Signals that the recognizer has started accepting and processing speech
          console.log(`Azure, sessionStarted, event: ${JSON.stringify(e)}`);
          dispatch({ type: 'sRecog/set_status', payload: {status: STATUS.TRANSCRIBING} });
       };
       recognizer.sessionStopped = (s, e) => {
+          // Signals that the recognizer has stopped accepting and processing speech
          console.log(`Azure, sessionStopped, event: ${JSON.stringify(e)}`);
          dispatch({ type: 'sRecog/set_status', payload: {status: STATUS.ENDED} });
       };
-      // recognizer.speechEndDetected = (s, e) => {
-      //    console.log(`Azure, speechEndDetected, event: ${JSON.stringify(e)}`);
-      //    dispatch({ type: 'sRecog/set_status', payload: {status: STATUS.ENDED} });
-      //    dispatch({ type: 'transcript/end' });
-      // };
       resolve();
    } catch (e) {
       const error_str : string = `Failed to Add Callbacks to Azure TranslationRecognizer, error: ${e}`;

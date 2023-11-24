@@ -1,21 +1,13 @@
-import React, { useCallback, useMemo, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import * as speechSDK from 'microsoft-cognitiveservices-speech-sdk';
-
-import { ControlStatus, AzureStatus, ApiStatus, PhraseList, STATUS } from '../../../react-redux&middleware/redux/typesImports';
-import { makeEventBucket } from '../../../react-redux&middleware/react-middleware/thunkMiddleware';
+import { ControlStatus, AzureStatus } from '../../../react-redux&middleware/redux/typesImports';
 import { Recognizer } from '../recognizer';
 import { TranscriptBlock } from '../../../react-redux&middleware/redux/types/TranscriptTypes';
-
-// TODO: Do we still need API status and updating API status?
-// TODO: How does event bucket thunk work? What should onTranscribed feed to the callback?
-
 export class AzureRecognizer implements Recognizer {
     /**
      * Underlying azure recognizer instance
      * Azure recognizer SDK: https://learn.microsoft.com/en-us/javascript/api/microsoft-cognitiveservices-speech-sdk/?view=azure-node-latest 
      */
-    private recognizer: speechSDK.TranslationRecognizer;
+    private recognizer: speechSDK.SpeechRecognizer;
 
     /**
      * Creates an Azure recognizer instance that listens to the default microphone
@@ -32,7 +24,7 @@ export class AzureRecognizer implements Recognizer {
             speechConfig.setProfanity(2);
 
             const audioConfig = speechSDK.AudioConfig.fromDefaultMicrophoneInput();
-            this.recognizer = new speechSDK.TranslationRecognizer(speechConfig, audioConfig);
+            this.recognizer = new speechSDK.SpeechRecognizer(speechConfig, audioConfig);
                
             let phraseList = speechSDK.PhraseListGrammar.fromRecognizer(this.recognizer);
             for (let i = 0; i < azureArgs.phrases.length; i++) {

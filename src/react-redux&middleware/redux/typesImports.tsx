@@ -19,7 +19,6 @@ export type {
    SRecognition,
    Word,
    Sentence,
-   Transcript,
 
    // alias
    ScribeRecognizer,

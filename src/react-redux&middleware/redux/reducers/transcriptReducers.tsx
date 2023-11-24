@@ -1,3 +1,4 @@
+import { MultiSpeakerTranscript, TranscriptBlock, Transcript } from "../types/TranscriptTypes";
 import { 
    AudioEventBucket, 
    HTML5STTEventBucket, 
@@ -11,78 +12,21 @@ import {
    MainStreamMap, 
 } from "../types/bucketStreamTypes";
 
-import { Word, Sentence, Transcript } from "../typesImports";
-
-
-// type TranscriptPayLoad = {
-//    fArr : string[],
-//    nfArr : string[],
-//    transcript : SpeechRecognitionResultList,
-// } | {}
-
-const defaultWord = () : Word => {
-   return {
-      value: '',
-      pitch: -1,
-      volume: -1,
-   }
-}
-
-const defaultSentence = () : Sentence => {
-   return {
-      text: [defaultWord()],
-      intent: '',
-      avgVolume: -1,
-      avgPitch: -1,
-      confidence: -1,
-   }
-}
-
-const defaultTranscript = () : Transcript => {
-   // const num : number = 4;
-   return {
-      speakerNum: 1,
-      maxSpeaker: 4,
-      previousTranscript: [''],
-      currentTranscript: [''],
-      speakerIDs: ['Unamed 1'],
-  }
-}
-
-export const TranscriptReducer = (state = defaultTranscript(), action : {type: string; payload: any;}) => {
-   let copyState : Transcript = Object.assign({}, state);
-   
+export const TranscriptReducer = (state = new MultiSpeakerTranscript(), action : {type: string; payload: any;}) => {
+   let copyState : MultiSpeakerTranscript = Object.assign({}, state);
+   let transcript: Transcript = copyState.transcripts[0]; // We only support 1 speaker right now
+   console.log("Transcript Reducer, receiving dispatch", action);
    switch (action.type) {
-      case 'transcript/recognized':
-         // console.log(`line ${39} transcript/recognized reducer`);
-         const fTranscript = action.payload.fArr.map((result : SpeechRecognitionAlternative) => result.transcript).join('');
-         const nfTranscript = action.payload.nfArr.map((result : SpeechRecognitionAlternative) => result.transcript).join('');
-         copyState.currentTranscript[0] = fTranscript + ' ' + nfTranscript;
+      case 'transcript/new_final_block':
+         console.log("Transcript Reducer, new final transcript block added", action.payload.block);
+         transcript.addFinalBlock(action.payload);
          return copyState;
-      case 'transcript/end':
-         // append current to previos
-         console.log(`line ${46} transcript/end reducer`);
-         for (let i = 0; i < state.speakerNum; i++) {
-            const curTranscript : string  = copyState.currentTranscript[i];
-            if (curTranscript !== '') {
-               copyState.previousTranscript[i] += ' ' + curTranscript;
-               copyState.currentTranscript[i] = '';
-            }
-         }
-
+      case 'transcript/update_in_progress_block':
+         console.log("Transcript Reducer, in-progress block updated", action.payload.block);
+         transcript.inProgressBlock = action.payload;
          return copyState;
-      case 'transcript/azure/recognized':
-         if (action.payload.newTranscript === undefined) { return state; }
-         copyState.currentTranscript[0] = action.payload.newTranscript;
-         
-         for (let i = 0; i < state.speakerNum; i++) {
-            const curTranscript : string  = copyState.currentTranscript[i];
-            if (curTranscript !== '') {
-               copyState.previousTranscript[i] += ' ' + curTranscript;
-               copyState.currentTranscript[i] = '';
-            }
-         }
-
+      case 'RESET_TRANSCRIPT':
+         transcript = new Transcript
          return copyState;
       case 'AZ_CONVO_RECOGNIZED':
          // for (let i = 0; i < state.speakerNum; i++) {
@@ -90,8 +34,6 @@ export const TranscriptReducer = (state = defaultTranscript(), action : {type: s
          // }
          throw new Error('Convo Not implemented');
          break;
-      case 'RESET_TRANSCRIPT':
-         return {...state, previousTranscript: [], currentTranscript: []};
       case 'RESET_SPEAKER':
          throw new Error('RESET_SPEAKER Not implemented');
       case 'SET_MAX_SPEAKER':
@@ -105,8 +47,6 @@ export const TranscriptReducer = (state = defaultTranscript(), action : {type: s
          return state;
          // throw new Error('Default Not implemented');
          break;
-
-
 
    }
 

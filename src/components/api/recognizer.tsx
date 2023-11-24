@@ -7,10 +7,9 @@
  * void stop()
  *      Makes the recognizer stops transcribing speech
  * 
- * void onTranscribed(transcript -> void function Callback)
+ * void onTranscribed(transcript update -> void function Callback)
  *      Subscribes a callback function to the transcript update event, which is triggered
  *      when the transcript has been updated due to more speech being transcribed
- *      (What type is appropriate for representing transcript? plain string?)
  * 
  * void onError(error -> void function Callback)
  *      Subscribes a callback function to the recognizer error event, which is triggered
@@ -25,6 +24,8 @@
  *      (Are args necessary? Should CreateRecognizer directly fetch from Redux store?)
  *      (What types are appropriate for representing audio source and language?)
  */
+
+import { TranscriptBlock } from "../../react-redux&middleware/redux/types/TranscriptTypes";
 
 /**
  * Webspeech recognizer maintains an array of blocks, each containing a transcript string, a confidence value,
@@ -62,20 +63,6 @@
  *  * 4. The in-progress block is empty in the last recognized event immediately before the recognizer stops
  */
 
-/**
- * The transcript of a continuous segment of speech, represented by one or more 
- * Finalized transcript blocks followed by an in-progress block.
- * 
- * Each block is the transcript of a sub-segment of speech, in chronological order, and the
- * Complete transcript is the concatenation of all blocks:
- * 
- * final_0 -> final_1 ->...-> final_n -> in_progress
- * 
- */
-export class Transcript {
-    finalBlocks: Array<string> = [];
-    inProgressBlock: string = "";
-}
 
 /**
  * Abstract recognizer interface that describes an async speech recognizer that converts
@@ -101,9 +88,9 @@ export interface Recognizer{
     /**
      * Subscribe a callback function to the transcript update event, which is usually triggered
      * when the recognizer has processed more speech
-     * @param callback A callback function called with the latest transcript when the event is triggered
+     * @param callback A callback function called with newly finalized blocks and new in-progress block
      */
-    onTranscribed(callback: (transcript: Transcript) => void);
+    onTranscribed(callback: (newFinalBlocks: Array<TranscriptBlock>, newInProgressBlock: TranscriptBlock) => void);
 
     /**
      * Subscribe a callback function to the error event, which is triggered

@@ -266,8 +266,10 @@ export const useRecognition = (sRecog : SRecognition, api : ApiStatus, control :
          return;
       }
       if (control.listening) {
+         console.log("Sending start signal to recognizer using handler")
          recogHandler({type: 'START'});
       } else if (!control.listening) {
+         console.log("Sending stop signal to recognizer using handler")
          recogHandler({type: 'STOP'}); 
       }
    }, [control.listening]);

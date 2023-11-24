@@ -100,7 +100,7 @@ export const useAzureTranslRecog = (recognizer : speechSDK.TranslationRecognizer
          // Signals that the current paragraph is not yet over, but more transcript is available
          // event.result.text is the in-progress transcript of the current paragraph
          // Newer event.result.text is not guaranteed to contain older event.result.text as prefix, e.g. "Five bites" -> "Five bytes of memory"
-         console.log(89);
+         console.log("Azure, incomplete transcript", e.result);
          const eventBucketThunk = makeEventBucket({ stream: 'azure', value: { confidence: -1, transcript: e.result.text }});
          dispatch(eventBucketThunk); 
          // TODO: Documentation for makeEventBucket and dispatching thunk
@@ -108,7 +108,7 @@ export const useAzureTranslRecog = (recognizer : speechSDK.TranslationRecognizer
       recognizer.recognized = (s, e) => {
          // Signals that the current paragraph is over.
          // event.result.text is the finalized transcript of the current paragraph
-         console.log(101, e.result.text);
+         console.log("Azure, finalized transcript", e.result);
          dispatch({ type: 'transcript/azure/recognized', payload: {newTranscript: e.result.text} }); // TODO: modify, think over how this would affect the Stream
       };
       recognizer.sessionStarted = (s, e) => {

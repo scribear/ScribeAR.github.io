@@ -118,36 +118,6 @@ const getRecognizer = (currentApi: number, control: ControlStatus, azure: AzureS
 }
 
 /**
- * Connect the recognizer to the event handler
- * @param currentApi 
- * @param recognizer 
- * @returns Promsie<ScribeHandler>
- */
-const runRecognition = (currentApi: number, recognizer : ScribeRecognizer, dispatch : React.Dispatch<any>) => new Promise<ScribeHandler>((resolve, reject) => {
-   if (currentApi === API.WEBSPEECH) { // webspeech recognition event controller
-      useWebSpeechRecog(recognizer as SpeechRecognition, dispatch)
-         .then(() => {
-            resolve(makeWebSpeechHandler(recognizer));            
-         })
-         .catch((error_str : string) => {
-            reject(error_str);
-         });
-   } else if (currentApi === API.AZURE_TRANSLATION) { // azure recognition event controller
-      useAzureTranslRecog(recognizer as sdk.TranslationRecognizer, dispatch)
-         .then(() => {
-            console.log(163, 'Azure recog initiated');
-            resolve(makeAzureTranslHandler(recognizer));
-         })
-         .catch((error_str : string) => {
-            console.log(167, error_str);
-            reject(error_str);
-         });
-   } else {
-      reject(`Unexpcted API_CODE: ${currentApi}`);
-   }
-});
-
-/**
  * Make a callback function that updates the Redux transcript using new final blocks and new
  * in-progress block
  * 

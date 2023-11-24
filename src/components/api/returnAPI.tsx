@@ -18,6 +18,7 @@ import { Recognizer } from './recognizer';
 import { AzureRecognizer } from './azure/azureRecognizer';
 import { TranscriptBlock } from '../../react-redux&middleware/redux/types/TranscriptTypes';
 import { Dispatch } from 'redux';
+import { WebSpeechRecognizer } from './web-speech/webSpeechRecognizer';
 
 
 // controls what api to send and what to do when error handling.
@@ -105,10 +106,9 @@ const getRecognition = (currentApi: number, control: ControlStatus, azure: Azure
 const getRecognizer = (currentApi: number, control: ControlStatus, azure: AzureStatus): Recognizer => {
 
    if (currentApi === API.WEBSPEECH) {
-      // TODO
-      throw new Error("Not implemented");
+      return new WebSpeechRecognizer(null, control.speechLanguage.CountryCode);
    } else if (currentApi === API.AZURE_TRANSLATION) {
-      return new AzureRecognizer(null, control.speechLanguage.CountryCode, azure)
+      return new AzureRecognizer(null, control.speechLanguage.CountryCode, azure);
    } 
    else if (currentApi === API.AZURE_CONVERSATION) {
       throw new Error("Not implemented");
@@ -171,6 +171,7 @@ export const useRecognition = (sRecog : SRecognition, api : ApiStatus, control :
    // Change recognizer, if api changed
    // TODO: currently we store the recognizer to redux, but never use it.
    useEffect(() => {
+      console.log("UseRecognition, switching to new recognizer: ", api.currentApi);
       // Stop existing recognizer
       if (recognizer) recognizer.stop();
       try{

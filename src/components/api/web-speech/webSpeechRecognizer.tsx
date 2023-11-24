@@ -1,10 +1,28 @@
 import { Recognizer } from '../recognizer';
 import { TranscriptBlock } from '../../../react-redux&middleware/redux/types/TranscriptTypes';
 
+/**
+ * A SpeechRecognition recognizer yields an array of blocks, each containing a transcript string, a final / in-progress bit, and some extra info
+ * 
+ * Whenever the array is updated, a recognized event is triggered. A recognized event is also triggered when the recognizer
+ * Receives the stop signal, as the in-progress blocks are forced to be finalized before stopping the recognizer.
+ * 
+ * If we conceptualize it as an array of final blocks and an array of in progress blocks, then they obey
+ * these invariants:
+ * 
+ * 1. The array of final blocks is append-only, array_old is a prefix of array_new
+ * 2. The array of in-progress blocks can only contain 0-2 blocks
+ * 3. Both arrays are emptied when the recognier starts / restarts
+ * 4. The in-progress array is empty in the last array update event immediately before the recognizer stops
+ */
+
+/**
+ * Wrapper for HTML5's SpeechRecognition class that implements Recognizer interface
+ */
 export class WebSpeechRecognizer implements Recognizer {
+
     /**
-     * Underlying Web Speech recognizer instance
-     * Built-in to HTML 5, see documentation here: https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API 
+     * Underlying Web Speech recognizer instance, see documentation here: https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API 
      */
     private recognizer: SpeechRecognition;
     /**
@@ -13,10 +31,11 @@ export class WebSpeechRecognizer implements Recognizer {
      */
     private prevFinalBlockNum: number = 0;
     /**
-     * Whether the recognizer should be stopped right now
-     * Used to restart recognizer after it self-stops due to inactivity
+     * Whether the recognizer should be running right now
+     * Used to restart recognizer if it were to go into sleep due to inactivity
+     * Also prevents double start() or end(), which cause errors
      */
-    private shouldStop: boolean = true;
+    private shouldBeRunning: boolean = false;
 
     /**
      * Creates an Web Speech recognizer instance that listens to the default microphone
@@ -34,11 +53,12 @@ export class WebSpeechRecognizer implements Recognizer {
             this.recognizer.continuous = true;
             this.recognizer.interimResults = true;
             this.recognizer.lang = language;
-
+            // Restart recognizer if it went to sleep
             this.recognizer.onend = (ev) => {
                 console.log(ev);
-                if (!this.shouldStop) this.start();
+                if (this.shouldBeRunning) this.start();
             }
+            
         } catch (e) {
             const error_str : string = `Failed to Make WebSpeech SpeechRecognition, error: ${e}`;
             throw new Error(error_str);
@@ -46,13 +66,15 @@ export class WebSpeechRecognizer implements Recognizer {
     }
 
     /**
-     * Makes the Web Speech recognizer start transcribing speech asynchronously
+     * Makes the Web Speech recognizer start transcribing speech, if not already started
      * Throws exception if recognizer fails to start
      */
     start() {
-        this.shouldStop = false;
-        this.prevFinalBlockNum = 0; // Webspeech clears all final blocks when restarting
-        this.recognizer.start();
+        if (!this.shouldBeRunning) {
+            this.shouldBeRunning = true;
+            this.prevFinalBlockNum = 0; // Webspeech clears all final blocks when restarting
+            this.recognizer.start();
+        }
     }
 
     /**
@@ -60,14 +82,16 @@ export class WebSpeechRecognizer implements Recognizer {
      * Throws exception if recognizer fails to stop
      */
     stop() {
-        this.shouldStop = true;
-        this.recognizer.stop();
+        if (this.shouldBeRunning) {
+            this.shouldBeRunning = false;
+            this.recognizer.stop();
+        }
     }
 
     /**
      * Subscribe a callback function to the transcript update event, which is usually triggered
-     * when the recognizer has processed more speech
-     * @param callback A callback function called with updates to the transcript when the event is triggered
+     * when the recognizer has processed more speech or finalized some in-progress part
+     * @param callback A callback function called with updates to the transcript
      */
     onTranscribed(callback: (newFinalBlocks: Array<TranscriptBlock>, newInProgressBlock: TranscriptBlock) => void) {
         try {
@@ -105,7 +129,7 @@ export class WebSpeechRecognizer implements Recognizer {
 
     /**
      * Subscribe a callback function to the error event, which is triggered
-     * when the recognizer has encountered an error that it cannot handle
+     * when the recognizer has encountered an error
      * @param callback A callback function called with the error object when the event is triggered
      */
     onError(callback: (e: Error) => void) {

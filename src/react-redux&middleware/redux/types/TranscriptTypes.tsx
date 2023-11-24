@@ -32,11 +32,17 @@ export class TranscriptBlock {
 
 /**
  * A transcript of a single speaker's speech, containing a list of finalized transcript blocks
- * and a single in-progress transcript block.
+ * and a single in-progress transcript block, in chronological order.
  * 
- * The final blocks can only be appended to, as finalized blocks cannot be "unfinalized". However,
- * the in-progress block can be modified freely, allowing revising recent transcript based on new information
- * (e.g. as done by Azure recognizer)
+ * We assume that once a block is finalized it cannot be un-finalized, but the in-progress block
+ * can be modified freely. This means that the final block list is append-only, whereas the in-progress
+ * block is public.
+ * 
+ * Furthermore, we assume that a recognizer finalizes the in-progress block before it stops -
+ * thus no transcript is lost when a different recognizer takes over the in-progress block.
+ * 
+ * This protocol allowing aggregating transcript from multiple APIs, while still allowing revising
+ * recent transcript based on new information (e.g. as done by Azure recognizer)
  */
 export class Transcript {
    /**

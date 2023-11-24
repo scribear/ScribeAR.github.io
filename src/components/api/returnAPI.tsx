@@ -51,57 +51,6 @@ export const returnRecogAPI = (api : ApiStatus, control : ControlStatus, azure :
 * === * TRIBUTE TO THE ORIGINAL AUTHOR OF THIS CODE: Will * === *
 */
 
-/**
- * 
- * @param recognition 
- * @returns 
- */
-const makeWebSpeechHandler = (recognition : ScribeRecognizer) : ScribeHandler => {
-   const handler : ScribeHandler = (action) => {
-      try {
-         // console.log(103, recognition, action);
-         recognition = recognition as SpeechRecognition;
-         switch (action.type) {
-            case 'STOP':
-               recognition!.stop();
-               break
-            case 'START':
-               recognition!.start();
-               break
-            case 'ABORT':
-               recognition!.abort();
-               break
-            case 'CHANGE_LANGUAGE':
-               recognition.lang = action.payload!;
-               break
-            default:
-               return "poggers";
-         }
-      } catch (e : any) {
-         console.log(`While trying to ${action.type} WebSpeech, an error occurred`, e);
-      }
-   }
-   return handler;
-}
-
-const getRecognition = (currentApi: number, control: ControlStatus, azure: AzureStatus) => {
-   // https://reactjs.org/docs/hooks-reference.html#usecallback
-   // quote: "useCallback(fn, deps) is equivalent to useMemo(() => fn, deps)."
-
-   if (currentApi === API.WEBSPEECH) { // webspeech recognition
-      return getWebSpeechRecog(control);
-      // return useMemo(() => getWebSpeechRecog(control), []);
-   } else if (currentApi === API.AZURE_TRANSLATION) { // azure TranslationRecognizer
-      return getAzureTranslRecog(control, azure);
-      // return useMemo(() => getAzureTranslRecog(control, azure), []);
-   } 
-   else if (currentApi === API.AZURE_CONVERSATION) { // azure ConversationTranscriber
-      throw new Error("Not implemented");
-   } else {
-      throw new Error(`Unexpcted API_CODE: ${currentApi}`);
-      // return useMemo(() => getWebSpeechRecog(control), []);
-   }
-}
 
 const getRecognizer = (currentApi: number, control: ControlStatus, azure: AzureStatus): Recognizer => {
 
@@ -137,20 +86,10 @@ const updateTranscript = (dispatch: Dispatch) => (newFinalBlocks: Array<Transcri
 }
 
 /**
- * Called when the compoenent rerender.
- * Check current state, setup/start the recognizer if needed.
- * Always return the full transcripts, a function to reset the transcript,
- * and a function to change/handle recognizer (called in useEffect; when a api/listening change happens.).
- * 
- * Possible permutations of [ApiStatus, SRecognition, AzureStatus, ControlStatus]:
- * change can be monitored using useEffect or useCallback.
- * 1. first time call (recogStatus === null)
- *    - listening=false -> do nothing
- *    - listening=true -> start recognizer
- * 2. api change (called within a useEffect)
- *    - change recognizer and recogHandler, keep listening the same
- * 3. only listening change (called within a useEffect)
- *   - stop/pause recognizer
+ * Syncs up the recognizer with the API selection and listening status
+ * - Creates new recognizer and stop old ones when API is changed
+ * - Start / stop recognizer as listening changes
+ * - Feed any phrase list updates to azure recognizer
  * 
  * @param recog
  * @param api 
@@ -165,25 +104,32 @@ export const useRecognition = (sRecog : SRecognition, api : ApiStatus, control :
    const [recognizer, setRecognizer] = useState<Recognizer>();
    // TODO: Add a reset button to utitlize resetTranscript
    // const [resetTranscript, setResetTranscript] = useState<() => string>(() => () => dispatch('RESET_TRANSCRIPT'));
-   const [lastChangeApiTime, setLastChangeApiTime] = useState<number>(Date.now());
    const dispatch = useDispatch();
 
    // Change recognizer, if api changed
-   // TODO: currently we store the recognizer to redux, but never use it.
    useEffect(() => {
       console.log("UseRecognition, switching to new recognizer: ", api.currentApi);
-      // Stop existing recognizer
-      if (recognizer) recognizer.stop();
+
+      let newRecognizer: Recognizer | null;
       try{
          // Create new recognizer, and subscribe to its events
-         let newRecognizer = getRecognizer(api.currentApi, control, azure);
+         newRecognizer = getRecognizer(api.currentApi, control, azure);
          newRecognizer.onTranscribed(updateTranscript(dispatch));
          setRecognizer(newRecognizer)
+
+         // Start new recognizer if necessary
+         if (control.listening) {
+            console.log("UseRecognition, attempting to start recognizer after switching")
+            newRecognizer.start()
+         }
       } catch (e) {
-         console.log("UseRecognition, failed to get new recognizer: ", e);
+         console.log("UseRecognition, failed to switch to new recognizer: ", e);
       }
-      // Start new recognizer if necessary
-      if (control.listening) recognizer?.start()
+
+      return () => {
+         // Stop current recognizer when switching to another one, if possible
+         newRecognizer?.stop();
+      }
    }, [api.currentApi]);
 
    // Start / stop recognizer, if listening toggled
@@ -199,27 +145,6 @@ export const useRecognition = (sRecog : SRecognition, api : ApiStatus, control :
          recognizer.stop();
       }
    }, [control.listening]);
-
-   // Webspeech recognizer stops itself after not detecting speech for a while, needs to be restarted
-   // restart recognizer, if status not ERROR
-   // useEffect(() => {
-   //    if (!recogHandler) { // whipser won't have recogHandler
-   //       return;
-   //    }
-   //    // console.log('change recog status: ', sRecog.status);
-   //    if (sRecog.status === STATUS.ENDED) {
-   //       const curTime = Date.now();
-   //       const timeSinceStart = curTime - lastChangeApiTime;
-   //       // console.log(curTime, timeSinceStart);
-   //       if (timeSinceStart > 1000 && control.listening) {
-   //          // console.log(timeSinceStart, control.listening);
-   //          if (recogHandler) recogHandler({type: 'START'});
-   //          setLastChangeApiTime(curTime);
-   //       }
-   //    } else if (sRecog.status === STATUS.ERROR) {
-   //       if (recogHandler) recogHandler({type: 'STOP'});
-   //    }
-   // }, [sRecog.status]);
 
    // Update domain phrases for azure recognizer
    useEffect(() => {

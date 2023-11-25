@@ -21,7 +21,7 @@ export default function PlusMinus(props) {
     return state.DisplayReducer as DisplayStatus;
   });
   const handleInputChangeSlider = (event) => {
-    dispatch({ type: 'SET_WORD_SPACING', payload: event })
+    dispatch({ type: 'SET_LINE_HEIGHT', payload: event })
   }
   const styles = useStyles()
 
@@ -32,7 +32,7 @@ function HoverThumb(props: HoverThumbProps) {
   return (
     <SliderThumb {...other}>
       {children}      
-      {lines.wordSpacing}
+      {lines.lineHeight}
     </SliderThumb>
   );
 }
@@ -73,7 +73,7 @@ const marks = [{value: 0, label: "Narrow",}, {value: 4, label: "",}, {value: 8, 
                   }}
         components={{ Thumb: HoverThumb }}
         style={{ color: lines.secondaryColor }}
-        value={lines.wordSpacing}
+        value={lines.lineHeight}
         onChange={(e, val) => { handleInputChangeSlider(val) }}
         marks={marks}
         step={1}

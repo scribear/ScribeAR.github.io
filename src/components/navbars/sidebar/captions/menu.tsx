@@ -5,6 +5,7 @@ import Position from './position';
 import DisplayRows from './displayRows';
 import TextSize from './textSize';
 import WordSpacing from './wordSpacing';
+import LineHeight from './lineHeight';
 
 
 export default function CaptionsMenu(props) {
@@ -31,6 +32,10 @@ export default function CaptionsMenu(props) {
                   <ListItemText primary="Word Spacing" />
                </ListItem>
                <WordSpacing />
+               <ListItem sx={{ pl: 4, pt: 5  }}>
+                  <ListItemText primary="Line Height" />
+               </ListItem>
+               <LineHeight />
             </List>
          </Collapse>
       </div>

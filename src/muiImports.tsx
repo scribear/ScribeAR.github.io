@@ -52,6 +52,8 @@ import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
 import SubtitlesIcon from '@mui/icons-material/Subtitles';
 import FormatColorTextIcon from '@mui/icons-material/FormatColorText';
+import GraphicEqIcon from '@mui/icons-material/GraphicEq';
+import FileUploadIcon from '@mui/icons-material/FileUpload';
 import Autocomplete from '@mui/material/Autocomplete';
 import { Switch } from '@mui/material';
 
@@ -112,6 +114,8 @@ export {
     KeyboardDoubleArrowDownIcon,
     SubtitlesIcon,
     FormatColorTextIcon,
+    GraphicEqIcon,
+    FileUploadIcon,
     ArchitectureIcon,
     Switch,
 }

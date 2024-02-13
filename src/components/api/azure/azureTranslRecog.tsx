@@ -33,6 +33,10 @@ export const getAzureTranslRecog = async (control: ControlStatus, azureStatus: A
       speechConfig.setProfanity(2);
       if (mic === 0) {
          const audioConfig = speechSDK.AudioConfig.fromDefaultMicrophoneInput();
+         // const fs = require('fs');
+         // const filePath = './hi.m4a';
+         // const fileBuffer = fs.readFileSync(filePath);
+         // const audioConfig = speechSDK.AudioConfig.fromWavFileInput(fileBuffer);
          const recognizer : speechSDK.TranslationRecognizer = new speechSDK.TranslationRecognizer(speechConfig, audioConfig);
          
          // add phraseList

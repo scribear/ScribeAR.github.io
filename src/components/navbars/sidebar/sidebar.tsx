@@ -1,10 +1,11 @@
 import * as React from 'react';
-import { IconButton,  ListItemText, ListItem, ListItemIcon,  ExpandMore,  ExpandLess,  List,  EqualizerIcon,  DetailsIcon, Divider, SubtitlesIcon } from '../../../muiImports'
+import { IconButton, ListItemText, ListItem, ListItemIcon, ExpandMore, ExpandLess, List, EqualizerIcon, DetailsIcon, Divider, SubtitlesIcon, GraphicEqIcon } from '../../../muiImports'
 import DisplayMenu from './display/menu';
 import LangMenu from './language/menu';
 import PhraseMenu from './phrase/menu';
 import VisualizationMenu from './audioVisBar/menu';
 import CaptionsMenu from './captions/menu';
+import AudioTestingMenu from './audiotesting/menu';
 
 
 export default function SideBar(props) {
@@ -14,6 +15,7 @@ export default function SideBar(props) {
     visualization: false,
     phraseRecognition: false,
     captions: false,
+    audiotesting: false,
   });
 
   
@@ -55,6 +57,9 @@ export default function SideBar(props) {
         <Divider/>
 
         <CaptionsMenu open={state.captions} icon={SubtitlesIcon} listItemHeader={listItemHeader} />
+        <Divider/>
+
+        <AudioTestingMenu open={state.audiotesting} icon={GraphicEqIcon} listItemHeader={listItemHeader} />
         <Divider/>
       </List>
     </div>

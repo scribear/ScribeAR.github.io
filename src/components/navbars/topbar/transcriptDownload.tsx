@@ -1,9 +1,10 @@
 import { FileDownloadIcon, ThemeProvider, IconButton, Tooltip  } from '../../../muiImports';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store';
-import { ControlStatus, Transcript } from '../../../react-redux&middleware/redux/typesImports';
+import { ControlStatus } from '../../../react-redux&middleware/redux/typesImports';
 import Theme from '../../theme'
 import * as React from 'react';
+import { MultiSpeakerTranscript } from '../../../react-redux&middleware/redux/types/TranscriptTypes';
 
 export default function TranscriptDownload() {
   const dispatch = useDispatch();
@@ -13,12 +14,12 @@ export default function TranscriptDownload() {
   });
 
   let transcriptStatus = useSelector((state: RootState) => {
-    return state.TranscriptReducer as Transcript;
+    return state.TranscriptReducer as MultiSpeakerTranscript;
   });
 
 
   const handleClick = (event: React.MouseEvent) => {
-    let text = transcriptStatus.previousTranscript[0] + transcriptStatus.currentTranscript[0];
+    let text = transcriptStatus.transcripts[0].toString();
     console.log("transcript download", text);
     const blob = new Blob([text], { type: 'text/plain' });
     const url = window.URL.createObjectURL(blob);

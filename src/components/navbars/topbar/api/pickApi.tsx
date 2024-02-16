@@ -91,7 +91,7 @@ export default function PickApi(props) {
    const switchToAzure = async () => {
       dispatch({type: 'FLIP_RECORDING', payload: controlStatus});
       let copyStatus = Object.assign({}, apiStatus);
-      testAzureTranslRecog(controlStatus, azureStatus).then(recognizer => { 
+      testAzureTranslRecog(controlStatus, azureStatus).then(() => { 
          // fullfill (test good)
          localStorage.setItem("azureStatus", JSON.stringify(azureStatus));
          

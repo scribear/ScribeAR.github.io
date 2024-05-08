@@ -1,12 +1,10 @@
 import * as speechSDK from 'microsoft-cognitiveservices-speech-sdk';
 
-import { AzureStatus, ControlStatus } from '../../../react-redux&middleware/redux/typesImports';
-
 import { Recognizer } from '../recognizer';
 import { TranscriptBlock } from '../../../react-redux&middleware/redux/types/TranscriptTypes';
 
 /**
- * Azure recognizer only yield a single block that contains a transcript string, and a final / in progress bit
+ * StreamText recognizer only yield a single block that contains a transcript string, and a final / in progress bit
  * Representing the transcript of the latest segment of speech
  * 
  * Whenever the block is updated but still in-progress, a recognizing event is triggered. Whenever the block
@@ -24,46 +22,39 @@ import { TranscriptBlock } from '../../../react-redux&middleware/redux/types/Tra
  * 3. The block is guaranteed to be final in the last recognized event immediately before the recognizer stops
  */
 
-/**
- * Wrapper for Microsoft Azure SpeechRecognizer class, implements Recognizer interface 
- */
 export class StreamTextRecognizer implements Recognizer {
-    /**
-     * Underlying azure recognizer instance
-     * Azure recognizer SDK: https://learn.microsoft.com/en-us/javascript/api/microsoft-cognitiveservices-speech-sdk/?view=azure-node-latest 
-     */
     private event: string
     private language: string
     private lastPosition: number
     private session: any
 
     /**
-     * Creates an Azure recognizer instance that listens to the default microphone
+     * Creates an StreamText recognizer instance that listens to an ongoing event
      * and expects speech in the given language 
-     * @param audioSource Not implemented yet
+     * @param event An ongoing event on StreamText
      * @param language Expected language of the speech to be transcribed
      */
     constructor(event: string, language: string) {
-        console.log("Azure recognizer, new recognizer being created!")
+        console.log("StreamText recognizer, new recognizer being created!")
         try {
 
             this.event = event
             this.language = language
             this.lastPosition = 0
         } catch (e : any) {
-            throw new Error(`Failed to Make Azure TranslationRecognizer, error: ${e}`);
+            throw new Error(`Failed to Make StreamText Recognizer, error: ${e}`);
         }
     }
 
     /**
-     * Makes the Azure recognizer start transcribing speech asynchronously, if it has not started already
+     * Makes the StreamText recognizer start transcribing speech asynchronously, if it has not started already
      * Throws exception if recognizer fails to start
      */
     start() {
     }
 
     /**
-     * Makes the Azure recognizer stop transcribing speech asynchronously
+     * Makes the StreamText recognizer stop transcribing speech asynchronously
      * Throws exception if recognizer fails to stop
      */
     stop() {
@@ -104,6 +95,6 @@ export class StreamTextRecognizer implements Recognizer {
      * @param callback A callback function called with the error object when the event is triggered
      */
     onError(callback: (e: Error) => void) {
-        // Do nothing, Azure does not have an error event
+        // Do nothing, StreamText does not have an error event
     }
 }

@@ -1,17 +1,26 @@
 import * as React from 'react';
-import { 
-   ApiStatus, RootState,
-   API, ApiType, STATUS, StatusType, ControlStatus, AzureStatus, WhisperStatus
+
+import {
+   API,
+   ApiStatus,
+   ApiType,
+   AzureStatus,
+   ControlStatus,
+   RootState,
+   STATUS,
+   StatusType,
+   StreamTextStatus,
+   WhisperStatus
 } from '../../../../react-redux&middleware/redux/typesImports';
-import { useDispatch, useSelector } from 'react-redux';
-import swal from 'sweetalert';
-import { createTheme, ThemeProvider, ListItemButton, ListItemText, ListItemIcon, Collapse, ErrorIcon, ExpandLess, ExpandMore, CancelIcon, IconButton, DoNotDisturbOnIcon, CheckCircleIcon } from '../../../../muiImports' 
-
-import WhisperDropdown from './WhisperDropdown';
-import AzureSettings from './AzureSettings';
+import { CancelIcon, CheckCircleIcon, Collapse, DoNotDisturbOnIcon, ErrorIcon, ExpandLess, ExpandMore, IconButton, ListItemButton, ListItemIcon, ListItemText, ThemeProvider, createTheme } from '../../../../muiImports'
 import { ListItem, ListItemSecondaryAction } from '@mui/material';
-import { testAzureTranslRecog } from '../../../api/azure/azureTranslRecog';
+import { useDispatch, useSelector } from 'react-redux';
 
+import AzureSettings from './AzureSettings';
+import StreamTextSettings from './StreamTextSettings';
+import WhisperDropdown from './WhisperDropdown';
+import swal from 'sweetalert';
+import { testAzureTranslRecog } from '../../../api/azure/azureTranslRecog';
 
 const currTheme = createTheme({
    palette: {
@@ -80,6 +89,9 @@ export default function PickApi(props) {
    const azureStatus = useSelector((state: RootState) => {
       return state.AzureReducer as AzureStatus;
    })
+   const streamTextStatus = useSelector((state: RootState) => {
+      return state.StreamTextReducer as StreamTextStatus;
+   })
 
    const [state, setState] = React.useState({
       showAzureDropdown: false,
@@ -101,6 +113,7 @@ export default function PickApi(props) {
          copyStatus.webspeechStatus = STATUS.AVAILABLE;
          copyStatus.azureConvoStatus = STATUS.AVAILABLE;
          copyStatus.whisperStatus = STATUS.AVAILABLE;
+         copyStatus.streamTextStatus = STATUS.AVAILABLE;
 
          swal({
                title: "Success!",
@@ -124,8 +137,10 @@ export default function PickApi(props) {
       })
    }
 
-   const switchToStreamText = 
-   ()=> {toggleDrawer("streamTextStatus", API.STREAM_TEXT, false)}
+   const switchToStreamText = (event: React.KeyboardEvent | React.MouseEvent) => {
+      localStorage.setItem("streamTextStatus", JSON.stringify(streamTextStatus));
+      return toggleDrawer("streamTextStatus", API.STREAM_TEXT, false)(event)
+   }
 
    const toggleDrawer =
       (apiStat: string, api:ApiType, isArrow:boolean) =>
@@ -135,33 +150,22 @@ export default function PickApi(props) {
                      let copyStatus = Object.assign({}, apiStatus);
                      copyStatus.currentApi = api;
                      let apiName = "Webspeech";
+                     copyStatus.azureTranslStatus = STATUS.AVAILABLE;
+                     copyStatus.webspeechStatus = STATUS.AVAILABLE;
+                     copyStatus.azureConvoStatus = STATUS.AVAILABLE;
+                     copyStatus.whisperStatus = STATUS.AVAILABLE;
+                     copyStatus.streamTextStatus = STATUS.AVAILABLE;
                      if (api === API.AZURE_TRANSLATION) {
                         apiName = "Microsoft Azure";
                         copyStatus.azureTranslStatus = STATUS.TRANSCRIBING;
-                        copyStatus.webspeechStatus = STATUS.AVAILABLE;
-                        copyStatus.azureConvoStatus = STATUS.AVAILABLE;
-                        copyStatus.whisperStatus = STATUS.AVAILABLE;
-                        copyStatus.streamTextStatus = STATUS.AVAILABLE;
                      } else if (api === API.WHISPER) {
                         apiName = "Whisper";
                         copyStatus.whisperStatus = STATUS.TRANSCRIBING
-                        copyStatus.webspeechStatus = STATUS.AVAILABLE;
-                        copyStatus.azureConvoStatus = STATUS.AVAILABLE;
-                        copyStatus.azureTranslStatus = STATUS.AVAILABLE;
-                        copyStatus.streamTextStatus = STATUS.AVAILABLE;
                      } else if (api === API.WEBSPEECH) {
                         copyStatus.webspeechStatus = STATUS.TRANSCRIBING
-                        copyStatus.azureTranslStatus = STATUS.AVAILABLE;
-                        copyStatus.azureConvoStatus = STATUS.AVAILABLE;
-                        copyStatus.whisperStatus = STATUS.AVAILABLE;
-                        copyStatus.streamTextStatus = STATUS.AVAILABLE;
-                        
                      } else if (api === API.STREAM_TEXT) {
+                        apiName = "StreamText";
                         copyStatus.streamTextStatus  = STATUS.TRANSCRIBING
-                        copyStatus.azureTranslStatus = STATUS.AVAILABLE;
-                        copyStatus.azureConvoStatus = STATUS.AVAILABLE;
-                        copyStatus.whisperStatus = STATUS.AVAILABLE;
-                        copyStatus.webspeechStatus = STATUS.AVAILABLE;
                      }
                      console.log(88, copyStatus);
                      dispatch({type: 'CHANGE_API_STATUS', payload: copyStatus});
@@ -210,7 +214,7 @@ export default function PickApi(props) {
                <ListItemText primary="StreamText" />
             </ListItemButton>
 
-            <AzureSettings/>
+            <StreamTextSettings/>
          </ListItem>
 
          <ListItemButton onClick={toggleDrawer("whisperStatus", API.WHISPER, false)} >

@@ -1,11 +1,11 @@
-import { MainStream } from "./types/bucketStreamTypes";
-import { ApiStatus, AzureStatus, PhraseList, PhraseListStatus, WhisperStatus } from './types/apiTypes';
-import { ControlStatus, LanguageList } from "./types/controlStatus";
-import { DisplayStatus } from "./types/displayStatus";
-import { SRecognition, ScribeRecognizer, ScribeHandler } from "./types/sRecognition";
-import { Word, Sentence, Transcript } from "./types/TranscriptTypes";
-
 import { API, ApiType, STATUS, StatusType } from './types/apiEnums';
+import { ApiStatus, AzureStatus, PhraseList, PhraseListStatus, StreamTextStatus, WhisperStatus } from './types/apiTypes';
+import { ControlStatus, LanguageList } from "./types/controlStatus";
+import { SRecognition, ScribeHandler, ScribeRecognizer } from "./types/sRecognition";
+import { Sentence, Transcript, Word } from "./types/TranscriptTypes";
+
+import { DisplayStatus } from "./types/displayStatus";
+import { MainStream } from "./types/bucketStreamTypes";
 
 export type {
    ApiStatus,
@@ -19,6 +19,7 @@ export type {
    SRecognition,
    Word,
    Sentence,
+   StreamTextStatus,
 
    // alias
    ScribeRecognizer,
@@ -42,4 +43,5 @@ export type RootState = {
    PhraseListReducer: PhraseListStatus
    initialStreams : MainStream
    WhisperReducer: WhisperStatus
+   StreamTextReducer: StreamTextStatus
 }

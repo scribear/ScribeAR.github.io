@@ -1,147 +1,109 @@
+import * as speechSDK from 'microsoft-cognitiveservices-speech-sdk';
+
+import { AzureStatus, ControlStatus } from '../../../react-redux&middleware/redux/typesImports';
+
 import { Recognizer } from '../recognizer';
 import { TranscriptBlock } from '../../../react-redux&middleware/redux/types/TranscriptTypes';
 
 /**
- * A SpeechRecognition recognizer yields an array of blocks, each containing a transcript string, a final / in-progress bit, and some extra info
+ * Azure recognizer only yield a single block that contains a transcript string, and a final / in progress bit
+ * Representing the transcript of the latest segment of speech
  * 
- * Whenever the array is updated, a recognized event is triggered. A recognized event is also triggered when the recognizer
- * Receives the stop signal, as the in-progress blocks are forced to be finalized before stopping the recognizer.
+ * Whenever the block is updated but still in-progress, a recognizing event is triggered. Whenever the block
+ * becomes final, a recognized event is triggered.
  * 
- * If we conceptualize it as an array of final blocks and an array of in progress blocks, then they obey
- * these invariants:
+ * A recognized event is also triggered when the stop signal is received, as the block is forced
+ * to be finalized before stopping the recognizer. This is followed by a **spurious** recognized event
+ * that yields an empty string
  * 
- * 1. The array of final blocks is append-only, array_old is a prefix of array_new
- * 2. The array of in-progress blocks can only contain 0-2 blocks
- * 3. Both arrays are emptied when the recognier starts / restarts
- * 4. The in-progress array is empty in the last array update event immediately before the recognizer stops
+ * The block obeys these invariants:
+ * 
+ * 1. If in event k the block is final, in event k+1 the block will be in-progress and transcribing the next segment of speech
+ * 2. If in event k it's in-progress instead, it could still be in-progress in k+1, transcribing the same segment of speech
+ * 3. The block is empty when the recognizer starts / restarts
+ * 3. The block is guaranteed to be final in the last recognized event immediately before the recognizer stops
  */
 
 /**
- * Wrapper for HTML5's SpeechRecognition class that implements Recognizer interface
+ * Wrapper for Microsoft Azure SpeechRecognizer class, implements Recognizer interface 
  */
 export class StreamTextRecognizer implements Recognizer {
-// CHANGE ME!!! Elephants are cool
+    /**
+     * Underlying azure recognizer instance
+     * Azure recognizer SDK: https://learn.microsoft.com/en-us/javascript/api/microsoft-cognitiveservices-speech-sdk/?view=azure-node-latest 
+     */
+    private event: string
+    private language: string
+    private lastPosition: number
+    private session: any
 
     /**
-     * Underlying Web Speech recognizer instance, see documentation here: https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API 
-     */
-    private recognizer: SpeechRecognition;
-    /**
-     * Number of final blocks in the recognizer's last event
-     * Used to only return new final blocks
-     */
-    private prevFinalBlockNum: number = 0;
-    /**
-     * Whether the recognizer should be running right now
-     * Used to restart recognizer if it were to go into sleep due to inactivity
-     * Also prevents double start() or end(), which cause errors
-     */
-    private shouldBeRunning: boolean = false;
-
-    /**
-     * Creates an Web Speech recognizer instance that listens to the default microphone
+     * Creates an Azure recognizer instance that listens to the default microphone
      * and expects speech in the given language 
      * @param audioSource Not implemented yet
      * @param language Expected language of the speech to be transcribed
      */
-    constructor(audioSource: any, language: string) {
-        console.log("Web Speech recognizer, new recognizer being created!")
-        if (!window || !(window as any).webkitSpeechRecognition) {
-            throw new Error('Your browser does not support web speech recognition');
-        }
+    constructor(event: string, language: string) {
+        console.log("Azure recognizer, new recognizer being created!")
         try {
-            this.recognizer = new (window as any).webkitSpeechRecognition();
-            this.recognizer.continuous = true;
-            this.recognizer.interimResults = true;
-            this.recognizer.lang = language;
-            // Restart recognizer if it went to sleep
-            this.recognizer.onend = (ev) => {
-                console.log(ev);
-                if (this.shouldBeRunning) this.start();
-            }
-            
-        } catch (e) {
-            const error_str : string = `Failed to Make WebSpeech SpeechRecognition, error: ${e}`;
-            throw new Error(error_str);
+
+            this.event = event
+            this.language = language
+            this.lastPosition = 0
+        } catch (e : any) {
+            throw new Error(`Failed to Make Azure TranslationRecognizer, error: ${e}`);
         }
     }
 
     /**
-     * Makes the Web Speech recognizer start transcribing speech, if not already started
+     * Makes the Azure recognizer start transcribing speech asynchronously, if it has not started already
      * Throws exception if recognizer fails to start
      */
     start() {
-        if (!this.shouldBeRunning) {
-            this.shouldBeRunning = true;
-            this.prevFinalBlockNum = 0; // Webspeech clears all final blocks when restarting
-            this.recognizer.start();
-        }
     }
 
     /**
-     * Makes the Web Speech recognizer stop transcribing speech asynchronously
+     * Makes the Azure recognizer stop transcribing speech asynchronously
      * Throws exception if recognizer fails to stop
      */
     stop() {
-        if (this.shouldBeRunning) {
-            this.shouldBeRunning = false;
-            this.recognizer.stop();
-        }
+        clearInterval(this.session);
     }
 
     /**
      * Subscribe a callback function to the transcript update event, which is usually triggered
-     * when the recognizer has processed more speech or finalized some in-progress part
-     * @param callback A callback function called with updates to the transcript
+     * when the recognizer has processed more speech or some transcript has been finalized
+     * @param callback A callback function called with the updates to the transcript
      */
     onTranscribed(callback: (newFinalBlocks: Array<TranscriptBlock>, newInProgressBlock: TranscriptBlock) => void) {
+        // "recognizing" event signals that the in-progress block has been updated
+        // event.result.text is new in-progress block's text
         try {
-            this.recognizer.onresult = (event) => {
-                // Find how many final blocks the new result has
-                let finalBlockNum = 0;
-                for (finalBlockNum = this.prevFinalBlockNum;
-                    finalBlockNum < event.results.length && event.results[finalBlockNum].isFinal;
-                    finalBlockNum++) {}
-
-                let newFinalBlocks = Array<TranscriptBlock>();
-                let newInProgressBlock = new TranscriptBlock();
-                // Gather all new final blocks
-                for (let i = this.prevFinalBlockNum; i < finalBlockNum; i++) {
-                    const result = event.results[i];
-                    let block = new TranscriptBlock();
-                    // Each result could have multiple alterantive transcription, arbitrarily choose first one
-                    block.text = result[0].transcript;
-                    newFinalBlocks.push(block);
-                }
-                // Concat all new in-progress blocks
-                for (let i = finalBlockNum; i < event.results.length; i++) {
-                    const result = event.results[i];
-                    newInProgressBlock.text += result[0].transcript;
-                }
-                // Update number of seen final blocks
-                this.prevFinalBlockNum = finalBlockNum;
-
-                callback(newFinalBlocks, newInProgressBlock);
-            }
+            let newInProgressBlock = new TranscriptBlock;
+            this.session = setInterval(() => {
+                let api = `https://www.streamtext.net/captions?event=${this.event}&last=${this.lastPosition}&language=${this.language}`
+                console.log(api)
+                fetch(api).then(
+                    response => response.json()
+                ).then(
+                    json => {
+                        this.lastPosition = json.lastPosition
+                        newInProgressBlock.text += json.content
+                        callback([], newInProgressBlock)
+                    }
+                )
+            }, 1000);
         } catch (e) {
-            throw new Error(`Could not add callback to Web Speech recognizer, error: ${e}`)
+            throw new Error(`Could not add callback to StreamText recognizer, error: ${e}`)
         }
     }
 
     /**
      * Subscribe a callback function to the error event, which is triggered
-     * when the recognizer has encountered an error
+     * when the recognizer has encountered an error that it cannot handle
      * @param callback A callback function called with the error object when the event is triggered
      */
     onError(callback: (e: Error) => void) {
-        // Signals that the recognizer has encountered an error of some kind
-        this.recognizer.onerror = (ev) => {
-            if (ev.error == 'no-speech') {
-                return;
-            }
-            console.log(`WebSpeech on error, event: ${ev}`);
-            callback(new Error(ev.message))
-        }
+        // Do nothing, Azure does not have an error event
     }
-
 }

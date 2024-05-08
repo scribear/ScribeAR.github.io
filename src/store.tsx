@@ -1,11 +1,11 @@
-import { DisplayReducer } from './react-redux&middleware/redux/reducers/displayReducers'
-import { APIStatusReducer, AzureReducer, PhraseListReducer, WhisperReducer } from './react-redux&middleware/redux/reducers/apiReducers'
-import { ControlReducer } from './react-redux&middleware/redux/reducers/controlReducers'
-import { BucketStreamReducer } from './react-redux&middleware/redux/reducers/bucketStreamReducers'
-import { TranscriptReducer } from './react-redux&middleware/redux/reducers/transcriptReducers'
-import { SRecognitionReducer } from './react-redux&middleware/redux/reducers/sRecognitionReducers'
-
+import { APIStatusReducer, AzureReducer, PhraseListReducer, StreamTextReducer, WhisperReducer } from './react-redux&middleware/redux/reducers/apiReducers'
 import { combineReducers, createStore } from 'redux'
+
+import { BucketStreamReducer } from './react-redux&middleware/redux/reducers/bucketStreamReducers'
+import { ControlReducer } from './react-redux&middleware/redux/reducers/controlReducers'
+import { DisplayReducer } from './react-redux&middleware/redux/reducers/displayReducers'
+import { SRecognitionReducer } from './react-redux&middleware/redux/reducers/sRecognitionReducers'
+import { TranscriptReducer } from './react-redux&middleware/redux/reducers/transcriptReducers'
 import { configureStore } from '@reduxjs/toolkit'
 import thunkMiddleware from 'redux-thunk'
 
@@ -14,6 +14,7 @@ const rootReducer = combineReducers({
    APIStatusReducer,
    WhisperReducer,
    AzureReducer,
+   StreamTextReducer,
    ControlReducer,
    PhraseListReducer,
    BucketStreamReducer,

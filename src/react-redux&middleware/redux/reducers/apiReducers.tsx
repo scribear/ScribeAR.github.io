@@ -9,6 +9,7 @@ const initialAPIStatusState: ApiStatus = {
   azureTranslStatus: STATUS.AVAILABLE,
   azureConvoStatus: STATUS.AVAILABLE,
   whisperStatus: STATUS.AVAILABLE,
+  streamTextStatus: STATUS.AVAILABLE
 }
 
 const initialPhraseList: PhraseList = {

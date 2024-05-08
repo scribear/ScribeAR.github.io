@@ -16,6 +16,7 @@ import { intent_inference } from '../../ml/inference';
 import { TranscriptReducer } from '../../react-redux&middleware/redux/reducers/transcriptReducers';
 import { Recognizer } from './recognizer';
 import { AzureRecognizer } from './azure/azureRecognizer';
+import { StreamTextRecognizer } from './streamtext/streamTextRecognizer';
 import { TranscriptBlock } from '../../react-redux&middleware/redux/types/TranscriptTypes';
 import { Dispatch } from 'redux';
 import { WebSpeechRecognizer } from './web-speech/webSpeechRecognizer';
@@ -61,6 +62,10 @@ const getRecognizer = (currentApi: number, control: ControlStatus, azure: AzureS
    } 
    else if (currentApi === API.AZURE_CONVERSATION) {
       throw new Error("Not implemented");
+   }
+   else if (currentApi === API.STREAM_TEXT) {
+      // Placeholder - this is just WebSpeech for now
+      return new StreamTextRecognizer(null, control.speechLanguage.CountryCode);
    } else {
       throw new Error(`Unexpcted API_CODE: ${currentApi}`);
    }

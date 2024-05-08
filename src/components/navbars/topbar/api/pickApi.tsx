@@ -124,6 +124,9 @@ export default function PickApi(props) {
       })
    }
 
+   const switchToStreamText = 
+   ()=> {toggleDrawer("streamTextStatus", API.STREAM_TEXT, false)}
+
    const toggleDrawer =
       (apiStat: string, api:ApiType, isArrow:boolean) =>
          (event: React.KeyboardEvent | React.MouseEvent) => {
@@ -138,17 +141,27 @@ export default function PickApi(props) {
                         copyStatus.webspeechStatus = STATUS.AVAILABLE;
                         copyStatus.azureConvoStatus = STATUS.AVAILABLE;
                         copyStatus.whisperStatus = STATUS.AVAILABLE;
+                        copyStatus.streamTextStatus = STATUS.AVAILABLE;
                      } else if (api === API.WHISPER) {
                         apiName = "Whisper";
                         copyStatus.whisperStatus = STATUS.TRANSCRIBING
                         copyStatus.webspeechStatus = STATUS.AVAILABLE;
                         copyStatus.azureConvoStatus = STATUS.AVAILABLE;
                         copyStatus.azureTranslStatus = STATUS.AVAILABLE;
+                        copyStatus.streamTextStatus = STATUS.AVAILABLE;
                      } else if (api === API.WEBSPEECH) {
                         copyStatus.webspeechStatus = STATUS.TRANSCRIBING
                         copyStatus.azureTranslStatus = STATUS.AVAILABLE;
                         copyStatus.azureConvoStatus = STATUS.AVAILABLE;
                         copyStatus.whisperStatus = STATUS.AVAILABLE;
+                        copyStatus.streamTextStatus = STATUS.AVAILABLE;
+                        
+                     } else if (api === API.STREAM_TEXT) {
+                        copyStatus.streamTextStatus  = STATUS.TRANSCRIBING
+                        copyStatus.azureTranslStatus = STATUS.AVAILABLE;
+                        copyStatus.azureConvoStatus = STATUS.AVAILABLE;
+                        copyStatus.whisperStatus = STATUS.AVAILABLE;
+                        copyStatus.webspeechStatus = STATUS.AVAILABLE;
                      }
                      console.log(88, copyStatus);
                      dispatch({type: 'CHANGE_API_STATUS', payload: copyStatus});
@@ -184,6 +197,17 @@ export default function PickApi(props) {
                   <IconStatus{...{currentApi: apiStatus.azureTranslStatus}}/>
                </ListItemIcon>
                <ListItemText primary="Microsoft Azure" />
+            </ListItemButton>
+
+            <AzureSettings/>
+         </ListItem>
+
+         <ListItem>
+            <ListItemButton disableGutters onClick={switchToStreamText} >
+               <ListItemIcon>
+                  <IconStatus{...{currentApi: apiStatus.streamTextStatus}}/>
+               </ListItemIcon>
+               <ListItemText primary="StreamText" />
             </ListItemButton>
 
             <AzureSettings/>

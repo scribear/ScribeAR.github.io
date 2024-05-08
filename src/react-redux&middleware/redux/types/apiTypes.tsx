@@ -19,6 +19,7 @@ export type ApiStatus = {
    azureTranslStatus: StatusType;
    azureConvoStatus: StatusType;
    whisperStatus: StatusType;
+   streamTextStatus: StatusType;
 }
 /**
  * AzureStatus currently has only the login information.

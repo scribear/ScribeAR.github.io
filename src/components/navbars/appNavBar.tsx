@@ -1,10 +1,11 @@
 import * as React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { ApiStatus, RootState, DisplayStatus, ControlStatus } from '../../react-redux&middleware/redux/typesImports';
+import { ApiStatus, RootState, DisplayStatus, ControlStatus, API } from '../../react-redux&middleware/redux/typesImports';
 import { createTheme, ThemeProvider, IconButton, MenuIcon, Drawer, Grid, AppBar, Toolbar } from '../../muiImports';
 
 import SideBar from './sidebar/sidebar'
 import TopBar from './topbar/topBar';
+import { API_Name } from '../../react-redux&middleware/redux/types/apiEnums';
 
 const currTheme = createTheme({
     palette: {
@@ -27,14 +28,8 @@ export default function AppNavBar(props) {
     })
 
 
-    let apiDisplayName = "Webspeech"
-    if (apiStatus.currentApi == 1) {
-        apiDisplayName = "Azure";
-    } else if (apiStatus.currentApi == 0) {
-        apiDisplayName = "Webspeech";
-    } else if (apiStatus.currentApi == 4) {
-        apiDisplayName = "Whisper";
-    }
+    let apiDisplayName =API_Name(apiStatus.currentApi)
+   
     const myTheme = currTheme
 
 

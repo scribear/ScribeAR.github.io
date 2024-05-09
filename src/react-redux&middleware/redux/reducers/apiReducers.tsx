@@ -110,11 +110,8 @@ export const WhisperReducer = (state = getLocalState("whisperStatus"), action) =
 }
 
 export const StreamTextReducer = (state = getLocalState("streamTextStatus"), action) => {
-  console.log("received change request 0")
   switch(action.type) {
     case 'CHANGE_STREAMTEXT_STATUS':
-      console.log("received change request 1")
-      console.log(action.payload)
       return { ...state, ...action.payload };
       
     default:

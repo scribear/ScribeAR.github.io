@@ -38,7 +38,7 @@ export class StreamTextRecognizer implements Recognizer {
         console.log("StreamText recognizer, new recognizer being created!")
         try {
 
-            this.event = event
+            this.event = encodeURI(event.trim())
             this.language = language
             this.lastPosition = 0
         } catch (e : any) {

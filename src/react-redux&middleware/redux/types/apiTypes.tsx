@@ -1,6 +1,6 @@
 import { ApiType, StatusType } from './apiEnums';
-import sdk from 'microsoft-cognitiveservices-speech-sdk';
 
+import sdk from 'microsoft-cognitiveservices-speech-sdk';
 
 // we might merge PhraseListStatus with AzureStatus
 
@@ -19,6 +19,7 @@ export type ApiStatus = {
    azureTranslStatus: StatusType;
    azureConvoStatus: StatusType;
    whisperStatus: StatusType;
+   streamTextStatus: StatusType;
 }
 /**
  * AzureStatus currently has only the login information.
@@ -51,4 +52,8 @@ export type WhisperStatus = {
    whiserPhrases: string
    tinyModel: string
    baseModel: string
+}
+
+export type StreamTextStatus = {
+   streamTextEvent: string
 }

@@ -1,15 +1,21 @@
+import {
+   API,
+   ApiStatus,
+   AzureStatus,
+   ControlStatus,
+   DisplayStatus,
+   SRecognition,
+   STATUS,
+   WhisperStatus
+} from '../../react-redux&middleware/redux/typesImports';
 import React, { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import Swal from 'sweetalert2';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { RootState } from '../../store';
-import { 
-   DisplayStatus, AzureStatus, STATUS, API,
-   ControlStatus, ApiStatus, WhisperStatus, SRecognition 
-} from '../../react-redux&middleware/redux/typesImports';
 import { STTRenderer } from '../sttRenderer';
+import { StreamTextStatus } from '../../react-redux&middleware/redux/types/apiTypes';
+import Swal from 'sweetalert2';
 import { useRecognition } from './returnAPI';
-
 
 export const RecogComponent: React.FC = (props) => {
 
@@ -48,6 +54,9 @@ export const RecogComponent: React.FC = (props) => {
    const azureStatus = useSelector((state: RootState) => {
       return state.AzureReducer as AzureStatus
    })
+   const streamTextStatus = useSelector((state: RootState) => {
+      return state.StreamTextReducer as StreamTextStatus
+   })
    const apiStatus = useSelector((state: RootState) => {
       return state.APIStatusReducer as ApiStatus
    })
@@ -59,7 +68,7 @@ export const RecogComponent: React.FC = (props) => {
    })
 
    // if else for whisper transcript, apiStatus for 4=whisper and control status for listening
-   const transcript = useRecognition(sRecog, apiStatus, controlStatus, azureStatus);
+   const transcript = useRecognition(sRecog, apiStatus, controlStatus, azureStatus, streamTextStatus);
    console.log("Recog component received new transcript: ", transcript)
    return STTRenderer(transcript);
 };

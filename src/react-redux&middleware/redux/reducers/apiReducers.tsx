@@ -1,7 +1,6 @@
-import { ApiStatus, AzureStatus, PhraseList, PhraseListStatus } from "../typesImports";
 import { API, STATUS } from '../types/apiEnums';
-import { WhisperStatus } from "../types/apiTypes";
-
+import { ApiStatus, AzureStatus, PhraseList, PhraseListStatus } from "../typesImports";
+import { StreamTextStatus, WhisperStatus } from "../types/apiTypes";
 
 const initialAPIStatusState: ApiStatus = {
   currentApi: API.WEBSPEECH,
@@ -9,6 +8,7 @@ const initialAPIStatusState: ApiStatus = {
   azureTranslStatus: STATUS.AVAILABLE,
   azureConvoStatus: STATUS.AVAILABLE,
   whisperStatus: STATUS.AVAILABLE,
+  streamTextStatus: STATUS.AVAILABLE
 }
 
 const initialPhraseList: PhraseList = {
@@ -33,6 +33,10 @@ const initialWhisperState: WhisperStatus = {
   whiserPhrases: "",
   tinyModel: "tiny (75 MB)",
   baseModel: "base (145 MB)"
+}
+
+const initialStreamTextState: StreamTextStatus = {
+  streamTextEvent: ""
 }
 
 const saveLocally = (varName: string, value: any) => {
@@ -68,6 +72,8 @@ const getLocalState = (name: string) => {
   } else if (name == "whisperStatus") {
     saveLocally("whisperStatus", initialWhisperState);
     return initialWhisperState
+  } else if (name == "streamTextStatus") {
+    saveLocally("streamTextStatus", initialStreamTextState);
   }
 };
 
@@ -101,6 +107,19 @@ export const AzureReducer = (state = getLocalState("azureStatus"), action) => {
 
 export const WhisperReducer = (state = getLocalState("whisperStatus"), action) => {
   return state;
+}
+
+export const StreamTextReducer = (state = getLocalState("streamTextStatus"), action) => {
+  console.log("received change request 0")
+  switch(action.type) {
+    case 'CHANGE_STREAMTEXT_STATUS':
+      console.log("received change request 1")
+      console.log(action.payload)
+      return { ...state, ...action.payload };
+      
+    default:
+      return state;
+  }
 }
 
 export const PhraseListReducer = (state = initialPhraseListState, action) => {

@@ -1,25 +1,31 @@
-import React, { useEffect, useState, useMemo, useCallback } from 'react';
-import { batch, useDispatch, useSelector } from 'react-redux';
-import { 
-   DisplayStatus, AzureStatus, ControlStatus, 
-   ApiStatus, SRecognition,
-   ScribeRecognizer, ScribeHandler, } from '../../react-redux&middleware/redux/typesImports';
-import { API, ApiType, STATUS, StatusType } from '../../react-redux&middleware/redux/typesImports';
-import { RootState } from '../../store';
 import * as sdk from 'microsoft-cognitiveservices-speech-sdk'
 
-import  { getWebSpeechRecog, useWebSpeechRecog } from './web-speech/webSpeechRecog';
+import { API, ApiType, STATUS, StatusType } from '../../react-redux&middleware/redux/typesImports';
+import {
+   ApiStatus,
+   AzureStatus,
+   ControlStatus,
+   DisplayStatus,
+   SRecognition,
+   ScribeHandler,
+   ScribeRecognizer,
+   StreamTextStatus,
+} from '../../react-redux&middleware/redux/typesImports';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { batch, useDispatch, useSelector } from 'react-redux';
 import { getAzureTranslRecog, testAzureTranslRecog, useAzureTranslRecog } from './azure/azureTranslRecog';
-import { loadTokenizer } from '../../ml/bert_tokenizer';
+import  { getWebSpeechRecog, useWebSpeechRecog } from './web-speech/webSpeechRecog';
 
-import { intent_inference } from '../../ml/inference';
-import { TranscriptReducer } from '../../react-redux&middleware/redux/reducers/transcriptReducers';
-import { Recognizer } from './recognizer';
 import { AzureRecognizer } from './azure/azureRecognizer';
-import { TranscriptBlock } from '../../react-redux&middleware/redux/types/TranscriptTypes';
 import { Dispatch } from 'redux';
+import { Recognizer } from './recognizer';
+import { RootState } from '../../store';
+import { StreamTextRecognizer } from './streamtext/streamTextRecognizer';
+import { TranscriptBlock } from '../../react-redux&middleware/redux/types/TranscriptTypes';
+import { TranscriptReducer } from '../../react-redux&middleware/redux/reducers/transcriptReducers';
 import { WebSpeechRecognizer } from './web-speech/webSpeechRecognizer';
-
+import { intent_inference } from '../../ml/inference';
+import { loadTokenizer } from '../../ml/bert_tokenizer';
 
 // controls what api to send and what to do when error handling.
 
@@ -52,7 +58,7 @@ export const returnRecogAPI = (api : ApiStatus, control : ControlStatus, azure :
 */
 
 
-const getRecognizer = (currentApi: number, control: ControlStatus, azure: AzureStatus): Recognizer => {
+const getRecognizer = (currentApi: number, control: ControlStatus, azure: AzureStatus, streamTextConfig: StreamTextStatus): Recognizer => {
 
    if (currentApi === API.WEBSPEECH) {
       return new WebSpeechRecognizer(null, control.speechLanguage.CountryCode);
@@ -61,6 +67,10 @@ const getRecognizer = (currentApi: number, control: ControlStatus, azure: AzureS
    } 
    else if (currentApi === API.AZURE_CONVERSATION) {
       throw new Error("Not implemented");
+   }
+   else if (currentApi === API.STREAM_TEXT) {
+      // Placeholder - this is just WebSpeech for now
+      return new StreamTextRecognizer(streamTextConfig.streamTextEvent, 'en');
    } else {
       throw new Error(`Unexpcted API_CODE: ${currentApi}`);
    }
@@ -98,7 +108,7 @@ const updateTranscript = (dispatch: Dispatch) => (newFinalBlocks: Array<Transcri
  * 
  * @return transcripts, resetTranscript, recogHandler
  */
-export const useRecognition = (sRecog : SRecognition, api : ApiStatus, control : ControlStatus, azure : AzureStatus) => {
+export const useRecognition = (sRecog : SRecognition, api : ApiStatus, control : ControlStatus, azure : AzureStatus, streamTextConfig : StreamTextStatus) => {
 
 
    const [recognizer, setRecognizer] = useState<Recognizer>();
@@ -113,7 +123,7 @@ export const useRecognition = (sRecog : SRecognition, api : ApiStatus, control :
       let newRecognizer: Recognizer | null;
       try{
          // Create new recognizer, and subscribe to its events
-         newRecognizer = getRecognizer(api.currentApi, control, azure);
+         newRecognizer = getRecognizer(api.currentApi, control, azure, streamTextConfig);
          newRecognizer.onTranscribed(updateTranscript(dispatch));
          setRecognizer(newRecognizer)
 

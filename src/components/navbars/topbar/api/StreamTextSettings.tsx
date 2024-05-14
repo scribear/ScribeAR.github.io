@@ -4,6 +4,7 @@ import { API, STATUS } from '../../../../react-redux&middleware/redux/types/apiE
 import { ApiStatus, AzureStatus, ControlStatus, PhraseList } from '../../../../react-redux&middleware/redux/typesImports';
 import { Box, ClearIcon, IconButton, InputBase, List, ListItem, ListItemText, Menu, Paper, SettingsIcon, TextField } from '../../../../muiImports'
 import { useDispatch, useSelector } from 'react-redux';
+import {useEffect, useState} from 'react'
 
 import { RootState } from '../../../../store';
 import { StreamTextStatus } from '../../../../react-redux&middleware/redux/types/apiTypes';
@@ -42,6 +43,14 @@ export default function StreamTextSettings(props) {
       setStreamTextStatusBuf({...streamTextsBuf, [event.target.id]: event.target.value})
    }
 
+   useEffect(() => {
+      // Set the initial value for startPosition and call updateBuf
+      if (streamTextStatus.startPosition === undefined) {
+        updateBuf({ target: { id: 'startPosition', value: -1 } });
+      }
+    }, []);
+  
+
    return (
        <React.Fragment>
          
@@ -73,7 +82,7 @@ export default function StreamTextSettings(props) {
                   <Box
                      component="form"
                      sx={{
-                           '& > :not(style)': { pr: '1vw', width: '15vw' },
+                           '& > :not(style)': { pr: '1vw', width: '30vw' },
                      }}
                      noValidate
                      autoComplete="off"
@@ -94,6 +103,36 @@ export default function StreamTextSettings(props) {
                         variant="outlined"
                         inputProps={{
                            placeholder: 'Enter Stream Text event here',
+                        }}
+                        style={{ width: '100%' }}
+                     />
+                  </Box>
+               </ListItem>
+               <ListItem sx={{ pl: 4 }}>
+                  <Box
+                     component="form"
+                     sx={{
+                           '& > :not(style)': { pr: '1vw', width: '30vw' },
+                     }}
+                     noValidate
+                     autoComplete="off"
+                     onSubmit={closePopup} // Prevent default submission behavior of refreshing page
+                  >
+                     <style>
+                           {`
+                              #startPosition {
+                              width: '100%';
+                              }
+                           `}
+                     </style>
+                     <TextField
+                        onChange={updateBuf}
+                        value={streamTextsBuf.startPosition}
+                        id="startPosition"
+                        label="position"
+                        variant="outlined"
+                        inputProps={{
+                           placeholder: '-1 means current position, 0 means from the start',
                         }}
                         style={{ width: '100%' }}
                      />

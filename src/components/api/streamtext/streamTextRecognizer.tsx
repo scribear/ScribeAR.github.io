@@ -34,13 +34,13 @@ export class StreamTextRecognizer implements Recognizer {
      * @param event An ongoing event on StreamText
      * @param language Expected language of the speech to be transcribed
      */
-    constructor(event: string, language: string) {
+    constructor(event: string, language: string, startPosition: number) {
         console.log("StreamText recognizer, new recognizer being created!")
         try {
 
             this.event = encodeURI(event.trim())
             this.language = language
-            this.lastPosition = 0
+            this.lastPosition = startPosition
         } catch (e : any) {
             throw new Error(`Failed to Make StreamText Recognizer, error: ${e}`);
         }

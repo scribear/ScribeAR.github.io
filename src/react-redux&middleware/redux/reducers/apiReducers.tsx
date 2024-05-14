@@ -36,7 +36,8 @@ const initialWhisperState: WhisperStatus = {
 }
 
 const initialStreamTextState: StreamTextStatus = {
-  streamTextEvent: ""
+  streamTextEvent: "",
+  startPosition: -1,
 }
 
 const saveLocally = (varName: string, value: any) => {

@@ -70,7 +70,7 @@ const getRecognizer = (currentApi: number, control: ControlStatus, azure: AzureS
    }
    else if (currentApi === API.STREAM_TEXT) {
       // Placeholder - this is just WebSpeech for now
-      return new StreamTextRecognizer(streamTextConfig.streamTextEvent, 'en');
+      return new StreamTextRecognizer(streamTextConfig.streamTextEvent, 'en', streamTextConfig.startPosition);
    } else {
       throw new Error(`Unexpcted API_CODE: ${currentApi}`);
    }

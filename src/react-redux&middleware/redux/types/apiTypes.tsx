@@ -56,4 +56,5 @@ export type WhisperStatus = {
 
 export type StreamTextStatus = {
    streamTextEvent: string
+   startPosition: number
 }

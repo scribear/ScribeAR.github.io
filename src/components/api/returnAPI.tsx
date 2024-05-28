@@ -24,6 +24,7 @@ import { StreamTextRecognizer } from './streamtext/streamTextRecognizer';
 import { TranscriptBlock } from '../../react-redux&middleware/redux/types/TranscriptTypes';
 import { TranscriptReducer } from '../../react-redux&middleware/redux/reducers/transcriptReducers';
 import { WebSpeechRecognizer } from './web-speech/webSpeechRecognizer';
+import { WhisperRecognizer } from './whisper/whisperRecognizer';
 import { intent_inference } from '../../ml/inference';
 import { loadTokenizer } from '../../ml/bert_tokenizer';
 
@@ -71,6 +72,10 @@ const getRecognizer = (currentApi: number, control: ControlStatus, azure: AzureS
    else if (currentApi === API.STREAM_TEXT) {
       // Placeholder - this is just WebSpeech for now
       return new StreamTextRecognizer(streamTextConfig.streamTextEvent, 'en', streamTextConfig.startPosition);
+   } else if (currentApi === API.WHISPER) {
+      let recog = new WhisperRecognizer(null, control.speechLanguage.CountryCode, 4);
+      recog.load_whisper();
+      return recog;
    } else {
       throw new Error(`Unexpcted API_CODE: ${currentApi}`);
    }
@@ -109,7 +114,6 @@ const updateTranscript = (dispatch: Dispatch) => (newFinalBlocks: Array<Transcri
  * @return transcripts, resetTranscript, recogHandler
  */
 export const useRecognition = (sRecog : SRecognition, api : ApiStatus, control : ControlStatus, azure : AzureStatus, streamTextConfig : StreamTextStatus) => {
-
 
    const [recognizer, setRecognizer] = useState<Recognizer>();
    // TODO: Add a reset button to utitlize resetTranscript
@@ -173,12 +177,12 @@ export const useRecognition = (sRecog : SRecognition, api : ApiStatus, control :
    let transcript : string = useSelector((state: RootState) => {
       return state.TranscriptReducer.transcripts[0].toString()
    });
-   if (api.currentApi === API.WHISPER) { 
-      // TODO: inefficient to get it from sessionStorage everytime
-      // TODO: add whisper_transcript to redux store after integrating "whisper" folder (containing stream.js) into ScribeAR
-      transcript = sessionStorage.getItem('whisper_transcript') || '';
-      return transcript;
-   }
+   // if (api.currentApi === API.WHISPER) { 
+   //    // TODO: inefficient to get it from sessionStorage everytime
+   //    // TODO: add whisper_transcript to redux store after integrating "whisper" folder (containing stream.js) into ScribeAR
+   //    transcript = sessionStorage.getItem('whisper_transcript') || '';
+   //    return transcript;
+   // }
 
    return transcript;
 }

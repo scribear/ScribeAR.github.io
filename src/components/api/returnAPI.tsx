@@ -1,5 +1,5 @@
 import * as sdk from 'microsoft-cognitiveservices-speech-sdk'
-
+import installCOIServiceWorker from './coi-serviceworker'
 import { API, ApiType, STATUS, StatusType } from '../../react-redux&middleware/redux/typesImports';
 import {
    ApiStatus,
@@ -115,6 +115,11 @@ export const useRecognition = (sRecog : SRecognition, api : ApiStatus, control :
    // TODO: Add a reset button to utitlize resetTranscript
    // const [resetTranscript, setResetTranscript] = useState<() => string>(() => () => dispatch('RESET_TRANSCRIPT'));
    const dispatch = useDispatch();
+
+   // Register service worker for whisper on launch 
+   useEffect(() => {
+      installCOIServiceWorker();
+   }, [])
 
    // Change recognizer, if api changed
    useEffect(() => {

@@ -4,34 +4,6 @@ let dbVersion = 1
 let dbName    = 'whisper.ggerganov.com';
 let indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB
 
-// Common Javascript functions used by the examples
-
-function convertTypedArray(src, type) {
-    var buffer = new ArrayBuffer(src.byteLength);
-    var baseView = new src.constructor(buffer).set(src);
-    return new type(buffer);
-}
-
-var printTextarea = (function() {
-    var element = document.getElementById('output');
-    if (element) element.value = ''; // clear browser cache
-    return function(text) {
-        if (arguments.length > 1) text = Array.prototype.slice.call(arguments).join(' ');
-        console.log(text);
-        if (element) {
-            element.value += text + "\n";
-            element.scrollTop = element.scrollHeight; // focus on bottom
-        }
-    };
-})();
-
-async function clearCache() {
-    if (confirm('Are you sure you want to clear the cache?\nAll the models will be downloaded again.')) {
-        indexedDB.deleteDatabase(dbName);
-        location.reload();
-    }
-}
-
 // fetch a remote file from remote URL using the Fetch API
 async function fetchRemote(url, cbProgress, cbPrint) {
     cbPrint('fetchRemote: downloading with fetch()...');

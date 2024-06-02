@@ -1,9 +1,5 @@
-// HACK: export makeWhisper here because we're *statically* importing it
-export var makeWhisper = (() => {
-  var _scriptDir =
-    typeof document !== "undefined" && document.currentScript
-      ? document.currentScript.src
-      : undefined;
+var makeWhisper = (() => {
+  var _scriptDir = import.meta.url;
 
   return function (moduleArg = {}) {
     var Module = moduleArg;
@@ -2884,7 +2880,7 @@ export var makeWhisper = (() => {
           worker.postMessage({
             cmd: "load",
             handlers: handlers,
-            urlOrBlob: Module["mainScriptUrlOrBlob"] || _scriptDir,
+            urlOrBlob: Module["mainScriptUrlOrBlob"],
             wasmMemory: wasmMemory,
             wasmModule: wasmModule,
           });
@@ -2894,8 +2890,12 @@ export var makeWhisper = (() => {
       },
       allocateUnusedWorker() {
         var worker;
-        // var pthreadMainJs = locateFile("libmain.worker.js");
-        worker = new Worker(new URL("libmain.worker.js", import.meta.url)); // HACK: Webpack requires new Worker(new URL(...)) else it can't find the right worker file
+        if (!Module["locateFile"]) {
+          worker = new Worker(new URL("libmain.worker.js", import.meta.url));
+        } else {
+          var pthreadMainJs = locateFile("libmain.worker.js");
+          worker = new Worker(pthreadMainJs);
+        }
         PThread.unusedWorkers.push(worker);
       },
       getNewWorker() {
@@ -5355,7 +5355,4 @@ export var makeWhisper = (() => {
     return moduleArg.ready;
   };
 })();
-if (typeof exports === "object" && typeof module === "object")
-  module.exports = makeWhisper;
-else if (typeof define === "function" && define["amd"])
-  define([], () => makeWhisper);
+export default makeWhisper;

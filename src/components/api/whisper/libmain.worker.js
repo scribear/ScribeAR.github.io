@@ -1,12 +1,4 @@
 "use strict";
-// HACK: statically importing makeWhisper for line 57-
-import { makeWhisper } from "./main";
-// HACK: stop importScripts from throwing error in dev mode due to extra symbols inserted into the js files
-if (process.env.NODE_ENV != 'production') {
-  global.$RefreshReg$ = () => {};
-  global.$RefreshSig$ = () => () => {};
-}
-
 var Module = {};
 var initializedJS = false;
 function threadPrintErr() {
@@ -54,14 +46,10 @@ function handleMessage(e) {
       Module["wasmMemory"] = e.data.wasmMemory;
       Module["buffer"] = Module["wasmMemory"].buffer;
       Module["ENVIRONMENT_IS_PTHREAD"] = true;
-      if (typeof e.data.urlOrBlob == "string") {
-        // HACK: webpack does not like dynamic importScripts, so we have to import main.js statically
-      } else {
-        var objectUrl = URL.createObjectURL(e.data.urlOrBlob);
-        importScripts(objectUrl);
-        URL.revokeObjectURL(objectUrl);
-      }
-      makeWhisper(Module);
+      (e.data.urlOrBlob
+        ? import(e.data.urlOrBlob)
+        : import("./libmain.js")
+      ).then((exports) => exports.default(Module));
     } else if (e.data.cmd === "run") {
       Module["__emscripten_thread_init"](e.data.pthread_ptr, 0, 0, 1);
       Module["__emscripten_thread_mailbox_await"](e.data.pthread_ptr);

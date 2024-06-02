@@ -1,11 +1,11 @@
 import { Recognizer } from '../recognizer';
 import { TranscriptBlock } from '../../../react-redux&middleware/redux/types/TranscriptTypes';
-import { makeWhisper } from './main.js'
+import makeWhisper from './libmain';
 import { string } from 'mathjs';
-import { loadRemote } from './helpers.js'
+import { loadRemote } from './indexedDB'
 
 const kMaxAudio_s = 30*60;
-const kMaxRecording_s = 60;
+const kMaxRecording_s = 5;
 const kSampleRate = 16000;
 
 /**
@@ -118,7 +118,6 @@ export class WhisperRecognizer implements Recognizer {
         let url     = urls[model];
         let dst     = 'whisper.bin';
         let size_mb = sizes[model];
-
         loadRemote(url, dst, size_mb, (text) => {}, this.storeFS.bind(this), this.print, this.print);
     }
 

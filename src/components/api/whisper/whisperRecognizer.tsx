@@ -5,7 +5,7 @@ import { string } from 'mathjs';
 import { loadRemote } from './indexedDB'
 
 const kMaxAudio_s = 30*60;
-const kMaxRecording_s = 5;
+const kMaxRecording_s = 10;
 const kSampleRate = 16000;
 
 /**
@@ -18,7 +18,7 @@ export class WhisperRecognizer implements Recognizer {
     private transcript: string = "";
     private instance: any;
     private num_threads: number;
-    private chunks: any[] = [];
+    private chunks: Blob[] = [];
 
     private context: AudioContext;
     private stream: any;
@@ -62,7 +62,7 @@ export class WhisperRecognizer implements Recognizer {
                 }
             });
         }
-        this.load_model("tiny.en")
+        this.load_model("tiny-en-q5_1")
     }
 
     private storeFS(fname, buf) {
@@ -79,22 +79,22 @@ export class WhisperRecognizer implements Recognizer {
 
     private async load_model(model: string) {
         let urls = {
-            'tiny.en':  'https://whisper.ggerganov.com/ggml-model-whisper-tiny.en.bin',
-            'tiny':     'https://whisper.ggerganov.com/ggml-model-whisper-tiny.bin',
-            'base.en':  'https://whisper.ggerganov.com/ggml-model-whisper-base.en.bin',
-            'base':     'https://whisper.ggerganov.com/ggml-model-whisper-base.bin',
-            'small.en': 'https://whisper.ggerganov.com/ggml-model-whisper-small.en.bin',
-            'small':    'https://whisper.ggerganov.com/ggml-model-whisper-small.bin',
+            'tiny.en':  'ggml-model-whisper-tiny.en.bin',
+            'tiny':     'ggml-model-whisper-tiny.bin',
+            'base.en':  'ggml-model-whisper-base.en.bin',
+            'base':     'ggml-model-whisper-base.bin',
+            'small.en': 'ggml-model-whisper-small.en.bin',
+            'small':    'ggml-model-whisper-small.bin',
 
-            'tiny-en-q5_1':  'https://whisper.ggerganov.com/ggml-model-whisper-tiny.en-q5_1.bin',
-            'tiny-q5_1':     'https://whisper.ggerganov.com/ggml-model-whisper-tiny-q5_1.bin',
-            'base-en-q5_1':  'https://whisper.ggerganov.com/ggml-model-whisper-base.en-q5_1.bin',
-            'base-q5_1':     'https://whisper.ggerganov.com/ggml-model-whisper-base-q5_1.bin',
-            'small-en-q5_1': 'https://whisper.ggerganov.com/ggml-model-whisper-small.en-q5_1.bin',
-            'small-q5_1':    'https://whisper.ggerganov.com/ggml-model-whisper-small-q5_1.bin',
-            'medium-en-q5_0':'https://whisper.ggerganov.com/ggml-model-whisper-medium.en-q5_0.bin',
-            'medium-q5_0':   'https://whisper.ggerganov.com/ggml-model-whisper-medium-q5_0.bin',
-            'large-q5_0':    'https://whisper.ggerganov.com/ggml-model-whisper-large-q5_0.bin',
+            'tiny-en-q5_1':  'ggml-model-whisper-tiny.en-q5_1.bin',
+            'tiny-q5_1':     'ggml-model-whisper-tiny-q5_1.bin',
+            'base-en-q5_1':  'ggml-model-whisper-base.en-q5_1.bin',
+            'base-q5_1':     'ggml-model-whisper-base-q5_1.bin',
+            'small-en-q5_1': 'ggml-model-whisper-small.en-q5_1.bin',
+            'small-q5_1':    'ggml-model-whisper-small-q5_1.bin',
+            'medium-en-q5_0':'ggml-model-whisper-medium.en-q5_0.bin',
+            'medium-q5_0':   'ggml-model-whisper-medium-q5_0.bin',
+            'large-q5_0':    'ggml-model-whisper-large-q5_0.bin',
         };
         let sizes = {
             'tiny.en':  75,
@@ -115,7 +115,7 @@ export class WhisperRecognizer implements Recognizer {
             'large-q5_0':     1030,
         };
 
-        let url     = urls[model];
+        let url     = process.env.PUBLIC_URL + "/models/" + urls[model];
         let dst     = 'whisper.bin';
         let size_mb = sizes[model];
         loadRemote(url, dst, size_mb, (text) => {}, this.storeFS.bind(this), this.print, this.print);
@@ -144,7 +144,6 @@ export class WhisperRecognizer implements Recognizer {
                     let reader = new FileReader();
                     reader.onload = function(event) {
                         var buf = new Uint8Array(reader.result as ArrayBuffer); // HACK: casting to keep typescript happy
-
                         that.context.decodeAudioData(buf.buffer, function(audioBuffer) {
                             var offlineContext = new OfflineAudioContext(audioBuffer.numberOfChannels, audioBuffer.length, audioBuffer.sampleRate);
                             var source = offlineContext.createBufferSource();

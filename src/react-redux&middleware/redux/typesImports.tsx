@@ -1,5 +1,5 @@
 import { API, ApiType, STATUS, StatusType } from './types/apiEnums';
-import { ApiStatus, AzureStatus, PhraseList, PhraseListStatus, StreamTextStatus, WhisperStatus } from './types/apiTypes';
+import { ApiStatus, AzureStatus, PhraseList, PhraseListStatus, StreamTextStatus, WhisperStatus, ScribearServerStatus } from './types/apiTypes';
 import { ControlStatus, LanguageList } from "./types/controlStatus";
 import { SRecognition, ScribeHandler, ScribeRecognizer } from "./types/sRecognition";
 import { Sentence, Word } from "./types/TranscriptTypes";
@@ -20,6 +20,7 @@ export type {
    Word,
    Sentence,
    StreamTextStatus,
+   ScribearServerStatus,
 
    // alias
    ScribeRecognizer,
@@ -44,4 +45,5 @@ export type RootState = {
    initialStreams : MainStream
    WhisperReducer: WhisperStatus
    StreamTextReducer: StreamTextStatus
+   ScribearServerReducer : ScribearServerStatus
 }

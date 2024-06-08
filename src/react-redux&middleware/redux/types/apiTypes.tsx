@@ -59,6 +59,6 @@ export type StreamTextStatus = {
    streamTextEvent: string
    startPosition: number
 }
-export type ScribearServerState = {
+export type ScribearServerStatus = {
    // Many IP (or hostname) and port in the future
 }

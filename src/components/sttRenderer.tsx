@@ -46,7 +46,7 @@ export const STTRenderer = (transcript: string) : JSX.Element => {
    // The goal is to make sure that we don't show too many lines of caption if we are at the limit 
    // (when line position is already at the very top).
    let row_change = 0;
-   while ((line_pos * 6.25 + button_line_num > 93) && (line_pos == 0)) {
+   while ((line_pos * 6.25 + button_line_num > 93) && (line_pos === 0)) {
       row_change = 1;
       line_num--;
       transformed_line_num = (line_height * line_num * text_size * 1.18);

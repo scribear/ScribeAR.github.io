@@ -20,7 +20,7 @@ import { useRecognition } from './returnAPI';
 export const RecogComponent: React.FC = (props) => {
 
    useEffect(() => {
-      if (apiStatus.currentApi == API.AZURE_TRANSLATION) {
+      if (apiStatus.currentApi === API.AZURE_TRANSLATION) {
          Swal.fire({
             title: `It appears you were using Azure recognizer last time, would you like to switch to that?`,
             icon: 'info',

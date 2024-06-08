@@ -1,4 +1,3 @@
-import { ControlStatus } from '../../../react-redux&middleware/redux/typesImports';
 import { Recognizer } from '../recognizer';
 import { TranscriptBlock } from '../../../react-redux&middleware/redux/types/TranscriptTypes';
 

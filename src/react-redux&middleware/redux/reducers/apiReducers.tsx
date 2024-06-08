@@ -1,6 +1,6 @@
 import { API, STATUS } from '../types/apiEnums';
 import { ApiStatus, AzureStatus, PhraseList, PhraseListStatus } from "../typesImports";
-import { StreamTextStatus, WhisperStatus,ScribearServerState } from "../types/apiTypes";
+import { StreamTextStatus, WhisperStatus,ScribearServerStatus } from "../types/apiTypes";
 
 const initialAPIStatusState: ApiStatus = {
   currentApi: API.WEBSPEECH,
@@ -41,7 +41,7 @@ const initialStreamTextState: StreamTextStatus = {
   startPosition: -1,
 }
 
-const initialScribearServerState: ScribearServerState = {
+const initialScribearServerState: ScribearServerStatus = {
 
 }
 

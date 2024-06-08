@@ -1,16 +1,16 @@
-import { MultiSpeakerTranscript, TranscriptBlock, Transcript } from "../types/TranscriptTypes";
-import { 
-   AudioEventBucket, 
-   HTML5STTEventBucket, 
-   AzureSTTEventBucket, 
-   UserActionEventBucket, 
-   AudioStream, 
-   HTML5STTStream, 
-   AzureSTTStream, 
-   UserActionStream, 
-   MainStream, 
-   MainStreamMap, 
-} from "../types/bucketStreamTypes";
+import { MultiSpeakerTranscript, Transcript } from "../types/TranscriptTypes";
+// import { 
+//    AudioEventBucket, 
+//    HTML5STTEventBucket, 
+//    AzureSTTEventBucket, 
+//    UserActionEventBucket, 
+//    AudioStream, 
+//    HTML5STTStream, 
+//    AzureSTTStream, 
+//    UserActionStream, 
+//    MainStream, 
+//    MainStreamMap, 
+// } from "../types/bucketStreamTypes";
 
 export const TranscriptReducer = (state = new MultiSpeakerTranscript(), action : {type: string; payload: any;}) => {
    let copyState : MultiSpeakerTranscript = Object.assign({}, state);
@@ -28,14 +28,14 @@ export const TranscriptReducer = (state = new MultiSpeakerTranscript(), action :
          transcript.inProgressBlock = action.payload;
          return copyState;
       case 'RESET_TRANSCRIPT':
-         transcript = new Transcript
+         transcript = new Transcript()
          return copyState;
       case 'AZ_CONVO_RECOGNIZED':
          // for (let i = 0; i < state.speakerNum; i++) {
          //    copyState.currentTranscript[i] += ' ' + copyState.currentTranscript[i];
          // }
          throw new Error('Convo Not implemented');
-         break;
+         
       case 'RESET_SPEAKER':
          throw new Error('RESET_SPEAKER Not implemented');
       case 'SET_MAX_SPEAKER':
@@ -48,7 +48,7 @@ export const TranscriptReducer = (state = new MultiSpeakerTranscript(), action :
       default:
          return state;
          // throw new Error('Default Not implemented');
-         break;
+         
 
    }
 

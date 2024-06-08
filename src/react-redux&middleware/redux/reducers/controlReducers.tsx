@@ -5,13 +5,13 @@ const saveSessionStorage = (key: string, value: any) => {
   sessionStorage.setItem(key, JSON.stringify(value));
 }
 
-const loadSessionStorage = (key: string) => {
-  const value = sessionStorage.getItem(key);
-  if (value) {
-    return JSON.parse(value);
-  }
-  return null;
-}
+// const loadSessionStorage = (key: string) => {
+//   const value = sessionStorage.getItem(key);
+//   if (value) {
+//     return JSON.parse(value);
+//   }
+//   return null;
+// }
 
 const initialControlState : ControlStatus = {
   listening: true,

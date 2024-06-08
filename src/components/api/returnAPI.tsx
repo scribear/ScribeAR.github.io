@@ -1,20 +1,15 @@
-import * as sdk from 'microsoft-cognitiveservices-speech-sdk'
+// import * as sdk from 'microsoft-cognitiveservices-speech-sdk'
 import installCOIServiceWorker from './coi-serviceworker'
-import { API, ApiType, STATUS, StatusType } from '../../react-redux&middleware/redux/typesImports';
+import { API} from '../../react-redux&middleware/redux/typesImports';
 import {
    ApiStatus,
    AzureStatus,
    ControlStatus,
-   DisplayStatus,
    SRecognition,
-   ScribeHandler,
-   ScribeRecognizer,
    StreamTextStatus,
 } from '../../react-redux&middleware/redux/typesImports';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import  {useEffect, useState } from 'react';
 import { batch, useDispatch, useSelector } from 'react-redux';
-import { getAzureTranslRecog, testAzureTranslRecog, useAzureTranslRecog } from './azure/azureTranslRecog';
-import  { getWebSpeechRecog, useWebSpeechRecog } from './web-speech/webSpeechRecog';
 
 import { AzureRecognizer } from './azure/azureRecognizer';
 import { Dispatch } from 'redux';
@@ -22,12 +17,10 @@ import { Recognizer } from './recognizer';
 import { RootState } from '../../store';
 import { StreamTextRecognizer } from './streamtext/streamTextRecognizer';
 import { TranscriptBlock } from '../../react-redux&middleware/redux/types/TranscriptTypes';
-import { TranscriptReducer } from '../../react-redux&middleware/redux/reducers/transcriptReducers';
 import { WebSpeechRecognizer } from './web-speech/webSpeechRecognizer';
 import { WhisperRecognizer } from './whisper/whisperRecognizer';
-import { intent_inference } from '../../ml/inference';
-import { loadTokenizer } from '../../ml/bert_tokenizer';
 
+import { ScribearRecognizer } from './scribearServer/scribearRecognizer';
 // controls what api to send and what to do when error handling.
 
 // NOTES: this needs to do everything I think. Handler should be returned which allows
@@ -60,7 +53,9 @@ export const returnRecogAPI = (api : ApiStatus, control : ControlStatus, azure :
 
 
 const getRecognizer = (currentApi: number, control: ControlStatus, azure: AzureStatus, streamTextConfig: StreamTextStatus): Recognizer => {
-
+   if (currentApi === API.SCRIBEAR_SERVER) {
+      return new ScribearRecognizer(control.speechLanguage.CountryCode);
+   }
    if (currentApi === API.WEBSPEECH) {
       return new WebSpeechRecognizer(null, control.speechLanguage.CountryCode);
    } else if (currentApi === API.AZURE_TRANSLATION) {
@@ -148,7 +143,7 @@ export const useRecognition = (sRecog : SRecognition, api : ApiStatus, control :
          // Stop current recognizer when switching to another one, if possible
          newRecognizer?.stop();
       }
-   }, [api.currentApi]);
+   }, [api.currentApi, azure, control, dispatch, streamTextConfig]);
 
    // Start / stop recognizer, if listening toggled
    useEffect(() => {

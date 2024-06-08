@@ -7,7 +7,8 @@ export const API = {
    AZURE_CONVERSATION: 2,
    NONE: 3,
    WHISPER: 4,
-   STREAM_TEXT: 5
+   STREAM_TEXT: 5,
+   SCRIBEAR_SERVER : 6
 } as const;
 export type ApiType = typeof API[keyof typeof API];
 
@@ -17,8 +18,9 @@ export const API_Name = function(value: number) {
       case API.AZURE_TRANSLATION: return "Azure";
       case API.AZURE_CONVERSATION: return "Azure (Conversation)";
       case API.NONE: return "None";
-      case API.WHISPER: return "Whisper";
+      case API.WHISPER: return "In Browser Whisper";
       case API.STREAM_TEXT: return "StreamText";
+      case API.SCRIBEAR_SERVER: return "ScribeAR Server"
       default: return `API ${value}`;
    }
 }

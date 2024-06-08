@@ -1,6 +1,6 @@
 import { API, STATUS } from '../types/apiEnums';
 import { ApiStatus, AzureStatus, PhraseList, PhraseListStatus } from "../typesImports";
-import { StreamTextStatus, WhisperStatus } from "../types/apiTypes";
+import { StreamTextStatus, WhisperStatus,ScribearServerState } from "../types/apiTypes";
 
 const initialAPIStatusState: ApiStatus = {
   currentApi: API.WEBSPEECH,
@@ -8,7 +8,8 @@ const initialAPIStatusState: ApiStatus = {
   azureTranslStatus: STATUS.AVAILABLE,
   azureConvoStatus: STATUS.AVAILABLE,
   whisperStatus: STATUS.AVAILABLE,
-  streamTextStatus: STATUS.AVAILABLE
+  streamTextStatus: STATUS.AVAILABLE,
+  scribearServerStatus : STATUS.AVAILABLE,
 }
 
 const initialPhraseList: PhraseList = {
@@ -30,7 +31,7 @@ const initialAzureState: AzureStatus = {
 }
 
 const initialWhisperState: WhisperStatus = {
-  whiserPhrases: "",
+  whisperPhrases: "",
   tinyModel: "tiny (75 MB)",
   baseModel: "base (145 MB)"
 }
@@ -40,8 +41,13 @@ const initialStreamTextState: StreamTextStatus = {
   startPosition: -1,
 }
 
+const initialScribearServerState: ScribearServerState = {
+
+}
+
 const saveLocally = (varName: string, value: any) => {
   localStorage.setItem(varName, JSON.stringify(value))
+  return value;
 }
 
 // Try to retrieve state values saved into local storage in previous sessions
@@ -60,22 +66,22 @@ const getLocalState = (name: string) => {
       // }
       return state;
     } catch (error) {
-      console.log("State retrieved from local stroage " + name + " cannot be deserialized");
+      console.log("State retrieved from local storage " + name + " cannot be deserialized");
     }
   }
   // Else we save initial state values into local storage
-  if (name == "apiStatus") {
-    saveLocally("apiStatus", initialAPIStatusState);
-    return initialAPIStatusState
-  } else if (name == "azureStatus") {
-    saveLocally("azureStatus", initialAzureState);
-    return initialAzureState
-  } else if (name == "whisperStatus") {
-    saveLocally("whisperStatus", initialWhisperState);
-    return initialWhisperState
-  } else if (name == "streamTextStatus") {
-    saveLocally("streamTextStatus", initialStreamTextState);
+  if (name === "apiStatus") {
+    return saveLocally("apiStatus", initialAPIStatusState);
+  } else if (name === "azureStatus") {
+    return saveLocally("azureStatus", initialAzureState);
+  } else if (name === "whisperStatus") {
+    return saveLocally("whisperStatus", initialWhisperState);
+  } else if (name === "streamTextStatus") {
+    return saveLocally("streamTextStatus", initialStreamTextState);
+  } else if (name === "scribearServerStatus") {
+    return saveLocally("scribearServerStatus", initialScribearServerState);
   }
+  return {} ;
 };
 
 export const APIStatusReducer = (state = getLocalState("apiStatus") as ApiStatus, action) => {
@@ -83,7 +89,7 @@ export const APIStatusReducer = (state = getLocalState("apiStatus") as ApiStatus
     case 'CHANGE_CURRENT_API': // never called
       return { ...state, ...action.payload };
     case 'CHANGE_API_STATUS':
-      if (action.payload.azureTranslStatus == STATUS.AVAILABLE || action.payload.currentApi !== state.currentApi) {
+      if (action.payload.azureTranslStatus === STATUS.AVAILABLE || action.payload.currentApi !== state.currentApi) {
         saveLocally("apiStatus", action.payload);
       }
       return { ...state, ...action.payload };
@@ -92,7 +98,7 @@ export const APIStatusReducer = (state = getLocalState("apiStatus") as ApiStatus
   }
 }
 
-export const AzureReducer = (state = getLocalState("azureStatus"), action) => {
+export const AzureReducer = (state = getLocalState("azureStatus") , action) => {
   switch (action.type) {
     case 'CHANGE_AZURE_LOGIN':
       return { ...state, ...action.payload };
@@ -118,6 +124,9 @@ export const StreamTextReducer = (state = getLocalState("streamTextStatus"), act
     default:
       return state;
   }
+}
+export const ScribearServerReducer = (state = getLocalState("whisperStatus"), action) => {
+  return state;
 }
 
 export const PhraseListReducer = (state = initialPhraseListState, action) => {
@@ -147,7 +156,7 @@ export const PhraseListReducer = (state = initialPhraseListState, action) => {
       }
     case 'DELETE_PHRASE_LIST':
       state.phraseListMap.delete(action.payload)
-      if (state.currentPhraseList.name == action.payload) {
+      if (state.currentPhraseList.name === action.payload) {
         return {
           ...state,
           currentPhraseList: initialPhraseList,

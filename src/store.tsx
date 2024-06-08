@@ -1,4 +1,4 @@
-import { APIStatusReducer, AzureReducer, PhraseListReducer, StreamTextReducer, WhisperReducer } from './react-redux&middleware/redux/reducers/apiReducers'
+import { APIStatusReducer, AzureReducer, PhraseListReducer, StreamTextReducer, WhisperReducer,ScribearServerReducer } from './react-redux&middleware/redux/reducers/apiReducers'
 import { combineReducers, createStore } from 'redux'
 
 import { BucketStreamReducer } from './react-redux&middleware/redux/reducers/bucketStreamReducers'
@@ -6,6 +6,7 @@ import { ControlReducer } from './react-redux&middleware/redux/reducers/controlR
 import { DisplayReducer } from './react-redux&middleware/redux/reducers/displayReducers'
 import { SRecognitionReducer } from './react-redux&middleware/redux/reducers/sRecognitionReducers'
 import { TranscriptReducer } from './react-redux&middleware/redux/reducers/transcriptReducers'
+
 import { configureStore } from '@reduxjs/toolkit'
 import thunkMiddleware from 'redux-thunk'
 
@@ -20,6 +21,7 @@ const rootReducer = combineReducers({
    BucketStreamReducer,
    TranscriptReducer,
    SRecognitionReducer,
+   ScribearServerReducer
 })
 
 // export const store = createStore(rootReducer)

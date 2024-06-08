@@ -3,9 +3,7 @@ import React from 'react';
 import AppNavBar from '../components/navbars/appNavBar';
 import { RootState } from '../react-redux&middleware/redux/typesImports';
 import { RecogComponent } from '../components/api/recogComponent';
-import { Provider, useDispatch, useSelector} from 'react-redux';
-import { store } from '../store';
-import { useCallback, useEffect } from 'react';
+import { useSelector} from 'react-redux';
 
 
 /* todo:

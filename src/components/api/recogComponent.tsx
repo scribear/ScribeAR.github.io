@@ -3,10 +3,10 @@ import {
    ApiStatus,
    AzureStatus,
    ControlStatus,
-   DisplayStatus,
+   /* DisplayStatus, */
    SRecognition,
    STATUS,
-   WhisperStatus
+   /* WhisperStatus */
 } from '../../react-redux&middleware/redux/typesImports';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';

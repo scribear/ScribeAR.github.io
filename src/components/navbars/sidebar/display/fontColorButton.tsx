@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import {Button, FormatColorTextIcon } from '../../../../muiImports';
+import {Button } from '../../../../muiImports';
 import { RootState, DisplayStatus } from '../../../../react-redux&middleware/redux/typesImports';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -12,9 +12,9 @@ export default function FontColorWheelButton() {
     // console.log("the current color is:", color.textColor);
 
     const dispatch = useDispatch();
-    const position = useSelector((state: RootState) => {
-      return state.DisplayReducer as DisplayStatus;
-    });
+    // const position = useSelector((state: RootState) => {
+    //   return state.DisplayReducer as DisplayStatus;
+    // });
     const handleInputChange = (event) => {
       dispatch({ type: 'CHANGE_TEXT_COLOR', payload: event });
     }

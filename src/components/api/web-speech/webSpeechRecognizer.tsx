@@ -103,11 +103,11 @@ export class WebSpeechRecognizer implements Recognizer {
                     finalBlockNum++) {}
 
                 let newFinalBlocks = Array<TranscriptBlock>();
-                let newInProgressBlock = new TranscriptBlock;
+                let newInProgressBlock = new TranscriptBlock();
                 // Gather all new final blocks
                 for (let i = this.prevFinalBlockNum; i < finalBlockNum; i++) {
                     const result = event.results[i];
-                    let block = new TranscriptBlock;
+                    let block = new TranscriptBlock();
                     // Each result could have multiple alterantive transcription, arbitrarily choose first one
                     block.text = result[0].transcript;
                     newFinalBlocks.push(block);
@@ -135,7 +135,7 @@ export class WebSpeechRecognizer implements Recognizer {
     onError(callback: (e: Error) => void) {
         // Signals that the recognizer has encountered an error of some kind
         this.recognizer.onerror = (ev) => {
-            if (ev.error == 'no-speech') {
+            if (ev.error === 'no-speech') {
                 return;
             }
             console.log(`WebSpeech on error, event: ${ev}`);

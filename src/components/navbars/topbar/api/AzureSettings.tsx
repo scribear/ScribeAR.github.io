@@ -1,14 +1,9 @@
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { ApiStatus, AzureStatus, ControlStatus, PhraseList } from '../../../../react-redux&middleware/redux/typesImports';
-import { STATUS, API } from '../../../../react-redux&middleware/redux/types/apiEnums';
+import { AzureStatus,/* ApiStatus, ControlStatus, PhraseList */ } from '../../../../react-redux&middleware/redux/typesImports';
 import { RootState } from '../../../../store';
 
-import swal from 'sweetalert';
-import { Box, TextField, Menu, List, ListItem, IconButton, SettingsIcon, Paper, InputBase, ListItemText, ClearIcon } from '../../../../muiImports'
-
-import { testAzureTranslRecog } from '../../../api/azure/azureTranslRecog';
-
+import { Box, TextField, Menu, List, ListItem, IconButton, SettingsIcon } from '../../../../muiImports'
 
 
 /**

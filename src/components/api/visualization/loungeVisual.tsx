@@ -26,9 +26,9 @@ export const LoungeVisual = (props) => {
         return state.DisplayReducer as DisplayStatus;
     });
 
-    const control = useSelector((state: RootState) => {
-        return state.ControlReducer as ControlStatus;
-    });
+    // const control = useSelector((state: RootState) => {
+    //     return state.ControlReducer as ControlStatus;
+    // });
 
     color = theme.textColor;
     // showLabels = control.showLabels;
@@ -48,33 +48,33 @@ export const LoungeVisual = (props) => {
      * @description
      * Render audio author and title.
      */
-    const renderText = () => {
-        let cx = canvas.width / 2;
-        let cy = canvas.height / 2;
-        let correction = 10;
+    // const renderText = () => {
+    //     let cx = canvas.width / 2;
+    //     let cy = canvas.height / 2;
+    //     let correction = 10;
     
-        let title = ""
-        let author = "Unamed"
-        let font = ['12px', 'Helvetica']
+    //     let title = ""
+    //     let author = "Unamed"
+    //     let font = ['12px', 'Helvetica']
     
-        canvasCtx.fillStyle = color;
+    //     canvasCtx.fillStyle = color;
     
-        canvasCtx.textBaseline = 'top';
-        canvasCtx.fillText(author, cx + correction, cy);
-        canvasCtx.font = parseInt(font[0], 10) + 8 + 'px ' + font[1];
-        canvasCtx.textBaseline = 'bottom';
-        canvasCtx.fillText(title, cx + correction, cy);
-        canvasCtx.font = font.join(' ');
-    };
+    //     canvasCtx.textBaseline = 'top';
+    //     canvasCtx.fillText(author, cx + correction, cy);
+    //     canvasCtx.font = parseInt(font[0], 10) + 8 + 'px ' + font[1];
+    //     canvasCtx.textBaseline = 'bottom';
+    //     canvasCtx.fillText(title, cx + correction, cy);
+    //     canvasCtx.font = font.join(' ');
+    // };
     
     /**
      * @description
      * Render audio time.
      */
-    const renderTime = () => {
-        // let time = this.minutes + ':' + this.seconds;
-        // canvasCtx.fillText(time, canvas.width / 2 + 10, canvas.height / 2 + 40);
-    };
+    // const renderTime = () => {
+    //     // let time = this.minutes + ':' + this.seconds;
+    //     // canvasCtx.fillText(time, canvas.width / 2 + 10, canvas.height / 2 + 40);
+    // };
     
     /**
      * @description

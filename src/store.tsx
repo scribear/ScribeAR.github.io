@@ -1,5 +1,5 @@
 import { APIStatusReducer, AzureReducer, PhraseListReducer, StreamTextReducer, WhisperReducer,ScribearServerReducer } from './react-redux&middleware/redux/reducers/apiReducers'
-import { combineReducers, createStore } from 'redux'
+import { combineReducers } from 'redux'
 
 import { BucketStreamReducer } from './react-redux&middleware/redux/reducers/bucketStreamReducers'
 import { ControlReducer } from './react-redux&middleware/redux/reducers/controlReducers'

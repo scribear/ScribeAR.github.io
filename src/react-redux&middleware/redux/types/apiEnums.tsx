@@ -8,7 +8,8 @@ export const API = {
    NONE: 3,
    WHISPER: 4,
    STREAM_TEXT: 5,
-   SCRIBEAR_SERVER : 6
+   SCRIBEAR_SERVER : 6,
+   PLAYBACK : 7
 } as const;
 export type ApiType = typeof API[keyof typeof API];
 
@@ -20,7 +21,8 @@ export const API_Name = function(value: number) {
       case API.NONE: return "None";
       case API.WHISPER: return "In Browser Whisper";
       case API.STREAM_TEXT: return "StreamText";
-      case API.SCRIBEAR_SERVER: return "ScribeAR Server"
+      case API.SCRIBEAR_SERVER: return "ScribeAR Server";
+      case API.PLAYBACK: return "Playback";
       default: return `API ${value}`;
    }
 }

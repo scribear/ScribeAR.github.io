@@ -1,4 +1,5 @@
-import { APIStatusReducer, AzureReducer, PhraseListReducer, StreamTextReducer, WhisperReducer,ScribearServerReducer } from './react-redux&middleware/redux/reducers/apiReducers'
+import { APIStatusReducer, AzureReducer, PhraseListReducer, StreamTextReducer,
+    WhisperReducer,ScribearServerReducer,PlaybackReducer } from './react-redux&middleware/redux/reducers/apiReducers'
 import { combineReducers } from 'redux'
 
 import { BucketStreamReducer } from './react-redux&middleware/redux/reducers/bucketStreamReducers'
@@ -21,7 +22,8 @@ const rootReducer = combineReducers({
    BucketStreamReducer,
    TranscriptReducer,
    SRecognitionReducer,
-   ScribearServerReducer
+   ScribearServerReducer,
+   PlaybackReducer
 })
 
 // export const store = createStore(rootReducer)

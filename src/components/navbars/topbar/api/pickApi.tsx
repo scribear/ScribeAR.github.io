@@ -9,7 +9,8 @@ import {
    RootState,
    STATUS,
    StreamTextStatus,
-   ScribearServerStatus
+   ScribearServerStatus,
+   PlaybackStatus
 } from '../../../../react-redux&middleware/redux/typesImports';
 import { CancelIcon, CheckCircleIcon, Collapse, DoNotDisturbOnIcon, ErrorIcon, ExpandLess, ExpandMore, IconButton, ListItemButton, ListItemIcon, ListItemText, ThemeProvider, createTheme } from '../../../../muiImports'
 import { ListItem } from '@mui/material';
@@ -17,6 +18,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import AzureSettings from './AzureSettings';
 import StreamTextSettings from './StreamTextSettings';
+import PlaybackSettings from './PlaybackSettings';
 import WhisperDropdown from './WhisperDropdown';
 import swal from 'sweetalert';
 import { testAzureTranslRecog } from '../../../api/azure/azureTranslRecog';
@@ -95,6 +97,11 @@ export default function PickApi(props) {
       return state.ScribearServerReducer as ScribearServerStatus;
    })
 
+
+   const playbackStatus  = useSelector((state: RootState) => {
+      return state.PlaybackReducer as PlaybackStatus;
+   })
+
    const [state, setState] = React.useState({
       showAzureDropdown: false,
       showWhisperDropdown: false,
@@ -110,12 +117,13 @@ export default function PickApi(props) {
          localStorage.setItem("azureStatus", JSON.stringify(azureStatus));
          
          copyStatus.currentApi = API.AZURE_TRANSLATION;
-
+         // Ugh
          copyStatus.azureTranslStatus = STATUS.TRANSCRIBING;
          copyStatus.webspeechStatus = STATUS.AVAILABLE;
          copyStatus.azureConvoStatus = STATUS.AVAILABLE;
          copyStatus.whisperStatus = STATUS.AVAILABLE;
          copyStatus.streamTextStatus = STATUS.AVAILABLE;
+         copyStatus.playbackStatus = STATUS.AVAILABLE;
 
          swal({
                title: "Success!",
@@ -148,6 +156,11 @@ export default function PickApi(props) {
       return toggleDrawer("scribearServerStatus", API.SCRIBEAR_SERVER, false)(event)
    }
    
+   const switchToPlayback  = (event: React.KeyboardEvent | React.MouseEvent) => {
+      localStorage.setItem("playbackStatus", JSON.stringify(playbackStatus));
+      return toggleDrawer("playbackStatus", API.PLAYBACK, false)(event)
+   }
+   
 
    const toggleDrawer =
       (apiStat: string, api:ApiType, isArrow:boolean) =>
@@ -157,12 +170,14 @@ export default function PickApi(props) {
                      let copyStatus = Object.assign({}, apiStatus);
                      copyStatus.currentApi = api;
                      let apiName = "Webspeech";
+                     //Ugh
                      copyStatus.azureTranslStatus = STATUS.AVAILABLE;
                      copyStatus.webspeechStatus = STATUS.AVAILABLE;
                      copyStatus.azureConvoStatus = STATUS.AVAILABLE;
                      copyStatus.whisperStatus = STATUS.AVAILABLE;
                      copyStatus.streamTextStatus = STATUS.AVAILABLE;
                      copyStatus.scribearServerStatus = STATUS.AVAILABLE;
+                     copyStatus.playbackStatus = STATUS.AVAILABLE;
 
                      if (api === API.AZURE_TRANSLATION) {
                         apiName = "Microsoft Azure";
@@ -178,6 +193,9 @@ export default function PickApi(props) {
                      } else if (api === API.SCRIBEAR_SERVER) {
                         apiName = "ScribeAR Server";
                         copyStatus.scribearServerStatus  = STATUS.TRANSCRIBING
+                     }  else if (api === API.PLAYBACK) {
+                        apiName = "Playback";
+                        copyStatus.playbackStatus  = STATUS.TRANSCRIBING
                      }
                      console.log(88, copyStatus);
                      dispatch({type: 'CHANGE_API_STATUS', payload: copyStatus});
@@ -227,6 +245,17 @@ export default function PickApi(props) {
             </ListItemButton>
 
             <StreamTextSettings/>
+         </ListItem>
+
+         <ListItem>
+            <ListItemButton disableGutters onClick={switchToPlayback} >
+               <ListItemIcon>
+                  <IconStatus{...{currentApi: apiStatus.playbackStatus}}/>
+               </ListItemIcon>
+               <ListItemText primary="Playback" />
+            </ListItemButton>
+
+            <PlaybackSettings/>
          </ListItem>
 
          <ListItem>

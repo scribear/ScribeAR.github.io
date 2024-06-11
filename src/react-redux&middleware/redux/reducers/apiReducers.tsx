@@ -1,6 +1,6 @@
 import { API, STATUS } from '../types/apiEnums';
 import { ApiStatus, AzureStatus, PhraseList, PhraseListStatus } from "../typesImports";
-import { StreamTextStatus, WhisperStatus,ScribearServerStatus } from "../types/apiTypes";
+import { StreamTextStatus, WhisperStatus,ScribearServerStatus, PlaybackStatus } from "../types/apiTypes";
 
 const initialAPIStatusState: ApiStatus = {
   currentApi: API.WEBSPEECH,
@@ -10,6 +10,7 @@ const initialAPIStatusState: ApiStatus = {
   whisperStatus: STATUS.AVAILABLE,
   streamTextStatus: STATUS.AVAILABLE,
   scribearServerStatus : STATUS.AVAILABLE,
+  playbackStatus : STATUS.AVAILABLE
 }
 
 const initialPhraseList: PhraseList = {
@@ -39,6 +40,10 @@ const initialWhisperState: WhisperStatus = {
 const initialStreamTextState: StreamTextStatus = {
   streamTextEvent: "",
   startPosition: -1,
+}
+
+const initialPlaybackStatus: PlaybackStatus = {
+  captionFileContent: ""
 }
 
 const initialScribearServerState: ScribearServerStatus = {
@@ -74,6 +79,8 @@ const getLocalState = (name: string) => {
     return saveLocally("apiStatus", initialAPIStatusState);
   } else if (name === "azureStatus") {
     return saveLocally("azureStatus", initialAzureState);
+  } if (name === "playbackStatus") {
+    return saveLocally("playbackStatus", initialPlaybackStatus);
   } else if (name === "whisperStatus") {
     return saveLocally("whisperStatus", initialWhisperState);
   } else if (name === "streamTextStatus") {
@@ -125,9 +132,23 @@ export const StreamTextReducer = (state = getLocalState("streamTextStatus"), act
       return state;
   }
 }
-export const ScribearServerReducer = (state = getLocalState("whisperStatus"), action) => {
+export const ScribearServerReducer = (state = getLocalState("scribearServerStatus"), action) => {
   return state;
 }
+
+export const PlaybackReducer = (state = getLocalState("playbackStatus"), action) => {
+  
+  switch(action.type) {
+    case 'CHANGE_PLAYBACK_STATUS':
+      console.log("PlaybackReducer CHANGE_PLAYBACK_STATUS: status & action", state, action);
+      return { ...state, ...action.payload };
+      
+    default:
+      return state;
+  }
+}
+
+
 
 export const PhraseListReducer = (state = initialPhraseListState, action) => {
   switch (action.type) {

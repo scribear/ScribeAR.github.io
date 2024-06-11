@@ -13,8 +13,8 @@ export const STTRenderer = (transcript: string) : JSX.Element => {
       return state.DisplayReducer as DisplayStatus;
    });
 
-   let parts = transcript.split('<br>');
-   console.log("parts", parts)
+   // let parts = transcript.split('<br>');
+   // console.log("parts", parts)
 
 
    function initialVal(value) {
@@ -64,15 +64,17 @@ export const STTRenderer = (transcript: string) : JSX.Element => {
    //    button_line_num = ((line_num + 1) * text_size * 1.18);
    // }
    
-   let transcript_info = {
-      "text size": text_size, 
-      "line position": line_pos, 
-      "font color": displayStatus.textColor,
-      "word spacing": displayStatus.wordSpacing,
-      "lower bound": (line_pos * 6.25 + transformed_line_num),
-      "line height": displayStatus.lineHeight
-   }
-   console.log("caption info:", transcript_info)
+   if(false) {
+      let transcript_info = {
+         "text size": text_size, 
+         "line position": line_pos, 
+         "font color": displayStatus.textColor,
+         "word spacing": displayStatus.wordSpacing,
+         "lower bound": (line_pos * 6.25 + transformed_line_num),
+         "line height": displayStatus.lineHeight
+      };
+      console.log("caption info:", transcript_info);
+   }  
    let top = line_pos * 6.25
 
    const dispatch = useDispatch();

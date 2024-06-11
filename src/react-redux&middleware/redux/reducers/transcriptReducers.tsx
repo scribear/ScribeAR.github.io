@@ -15,16 +15,16 @@ import { MultiSpeakerTranscript, Transcript } from "../types/TranscriptTypes";
 export const TranscriptReducer = (state = new MultiSpeakerTranscript(), action : {type: string; payload: any;}) => {
    let copyState : MultiSpeakerTranscript = Object.assign({}, state);
    let transcript: Transcript = copyState.transcripts[0]; // We only support 1 speaker right now
-   console.log("Transcript Reducer, receiving dispatch", action);
+   // console.log("Transcript Reducer, receiving dispatch", action);
    switch (action.type) {
       case 'transcript/new_final_block':
          // Append a new final block to the transcript
-         console.log("Transcript Reducer, new final transcript block added", action.payload.block);
+         // console.log("Transcript Reducer, new final transcript block added", action.payload.block);
          transcript.addFinalBlock(action.payload);
          return copyState;
       case 'transcript/update_in_progress_block':
          // Modify in-progress block of the transcript
-         console.log("Transcript Reducer, in-progress block updated", action.payload.block);
+         // console.log("Transcript Reducer, in-progress block updated", action.payload.block);
          transcript.inProgressBlock = action.payload;
          return copyState;
       case 'RESET_TRANSCRIPT':

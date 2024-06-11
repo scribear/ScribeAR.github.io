@@ -3,6 +3,7 @@ import {
    ApiStatus,
    AzureStatus,
    ControlStatus,
+   ScribearServerStatus,
    /* DisplayStatus, */
    SRecognition,
    STATUS,
@@ -67,6 +68,11 @@ export const RecogComponent: React.FC = (props) => {
    const playbackStatus = useSelector((state: RootState) => {
       return state.PlaybackReducer as PlaybackStatus
    })
+
+   const scribearServerStatus = useSelector((state: RootState) => {
+      return state.ScribearServerReducer as ScribearServerStatus
+   })
+
    const apiStatus = useSelector((state: RootState) => {
       return state.APIStatusReducer as ApiStatus
    })
@@ -78,7 +84,7 @@ export const RecogComponent: React.FC = (props) => {
    })
 
    // if else for whisper transcript, apiStatus for 4=whisper and control status for listening
-   const transcript = useRecognition(sRecog, apiStatus, controlStatus, azureStatus, streamTextStatus, playbackStatus);
+   const transcript = useRecognition(sRecog, apiStatus, controlStatus, azureStatus, streamTextStatus, scribearServerStatus, playbackStatus);
    // console.log("Recog component received new transcript: ", transcript)
    return STTRenderer(transcript);
 };

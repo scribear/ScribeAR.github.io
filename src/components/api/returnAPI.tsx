@@ -7,6 +7,7 @@ import {
    ControlStatus,
    SRecognition,
    StreamTextStatus,
+   ScribearServerStatus
 } from '../../react-redux&middleware/redux/typesImports';
 import  {useEffect, useState } from 'react';
 import { batch, useDispatch, useSelector } from 'react-redux';
@@ -54,9 +55,9 @@ export const returnRecogAPI = (api : ApiStatus, control : ControlStatus, azure :
 */
 
 
-const createRecognizer = (currentApi: number, control: ControlStatus, azure: AzureStatus, streamTextConfig: StreamTextStatus, playbackStatus:PlaybackStatus): Recognizer => {
+const createRecognizer = (currentApi: number, control: ControlStatus, azure: AzureStatus, streamTextConfig: StreamTextStatus, scribearServerStatus: ScribearServerStatus,playbackStatus:PlaybackStatus): Recognizer => {
    if (currentApi === API.SCRIBEAR_SERVER) {
-      return new ScribearRecognizer(control.speechLanguage.CountryCode);
+      return new ScribearRecognizer(scribearServerStatus, control.speechLanguage.CountryCode);
    } else if (currentApi === API.PLAYBACK) {
       return new PlaybackRecognizer(playbackStatus);
    }
@@ -112,7 +113,7 @@ const updateTranscript = (dispatch: Dispatch) => (newFinalBlocks: Array<Transcri
  * @return transcripts, resetTranscript, recogHandler
  */
 export const useRecognition = (sRecog : SRecognition, api : ApiStatus, control : ControlStatus, 
-   azure : AzureStatus, streamTextConfig : StreamTextStatus, playbackStatus: PlaybackStatus) => {
+   azure : AzureStatus, streamTextConfig : StreamTextStatus, scribearServerStatus, playbackStatus: PlaybackStatus) => {
 
    const [recognizer, setRecognizer] = useState<Recognizer>();
    // TODO: Add a reset button to utitlize resetTranscript
@@ -131,7 +132,7 @@ export const useRecognition = (sRecog : SRecognition, api : ApiStatus, control :
       let newRecognizer: Recognizer | null;
       try{
          // Create new recognizer, and subscribe to its events
-         newRecognizer = createRecognizer(api.currentApi, control, azure, streamTextConfig, playbackStatus);
+         newRecognizer = createRecognizer(api.currentApi, control, azure, streamTextConfig, scribearServerStatus, playbackStatus);
          newRecognizer.onTranscribed(updateTranscript(dispatch));
          setRecognizer(newRecognizer)
 

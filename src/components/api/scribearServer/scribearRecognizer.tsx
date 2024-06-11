@@ -23,16 +23,18 @@ import { TranscriptBlock } from '../../../react-redux&middleware/redux/types/Tra
  * Wrapper for Microsoft Azure SpeechRecognizer class, implements Recognizer interface 
  */
 export class ScribearRecognizer implements Recognizer {
-    
+    private socket : WebSocket | null = null
+    private transcribedCallback : any
+    private language : string
     /**
      * Creates an Azure recognizer instance that listens to the default microphone
      * and expects speech in the given language 
      * @param audioSource Not implemented yet
      * @param language Expected language of the speech to be transcribed
      */
-    constructor(language) {
+    constructor(language:string) {
         console.log("ScribearRecognizer, new recognizer being created!")
-       
+        this.language = language;
     }
 
     /**
@@ -41,6 +43,28 @@ export class ScribearRecognizer implements Recognizer {
      */
     start() {
         console.log("ScribearRecognizer.start()");
+        if(this.socket) {return;}
+        
+        this.socket = new WebSocket("ws://localhost:1234");
+
+        // this.socket.onopen = (e)=> {...}
+        const inProgressBlock = new TranscriptBlock();
+        
+        this.socket.onmessage = (event)=> {
+            // Todo: extract type of message (inprogress v final) and the text from the message
+            const inProgress:boolean = event.data[0] === 'I'
+            var text:string = event.data.substring(1);
+
+            if(inProgress) {
+                inProgressBlock.text += text; // append
+                this.transcribedCallback([], inProgressBlock);
+            } else {
+                inProgressBlock.text = "" //reset in progress
+                const finalBlock = new TranscriptBlock();
+                finalBlock.text = text
+                this.transcribedCallback([finalBlock], inProgressBlock)
+            }
+        };
     }
 
     /**
@@ -49,6 +73,9 @@ export class ScribearRecognizer implements Recognizer {
      */
     stop() {
         console.log("ScribearRecognizer.stop()");
+        if(! this.socket) {return;}
+        this.socket.close();
+        this.socket = null;
     }
 
     /**
@@ -59,7 +86,7 @@ export class ScribearRecognizer implements Recognizer {
     onTranscribed(callback: (newFinalBlocks: Array<TranscriptBlock>, newInProgressBlock: TranscriptBlock) => void) {
         console.log("ScribearRecognizer.onTranscribed()");
         // "recognizing" event signals that the in-progress block has been updated
-       
+       this.transcribedCallback = callback;
     }
 
     /**

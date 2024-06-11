@@ -47,7 +47,7 @@ const initialPlaybackStatus: PlaybackStatus = {
 }
 
 const initialScribearServerState: ScribearServerStatus = {
-
+  scribearServerAddress: 'localhost:1234'
 }
 
 const saveLocally = (varName: string, value: any) => {
@@ -133,7 +133,13 @@ export const StreamTextReducer = (state = getLocalState("streamTextStatus"), act
   }
 }
 export const ScribearServerReducer = (state = getLocalState("scribearServerStatus"), action) => {
-  return state;
+  switch (action.type) {
+    case 'CHANGE_SCRIBEAR_SERVER_ADDRESS':
+      return { ...state, ...action.payload };
+    
+    default:
+      return state;
+  }
 }
 
 export const PlaybackReducer = (state = getLocalState("playbackStatus"), action) => {

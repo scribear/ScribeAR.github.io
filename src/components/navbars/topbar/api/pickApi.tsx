@@ -18,6 +18,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import AzureSettings from './AzureSettings';
 import StreamTextSettings from './StreamTextSettings';
+import ScribearServerSettings from './ScribearServerSettings'
 import PlaybackSettings from './PlaybackSettings';
 import WhisperDropdown from './WhisperDropdown';
 import swal from 'sweetalert';
@@ -243,8 +244,7 @@ export default function PickApi(props) {
                </ListItemIcon>
                <ListItemText primary="ScribeAR Server" />
             </ListItemButton>
-
-            <StreamTextSettings/>
+            <ScribearServerSettings/>
          </ListItem>
 
          <ListItem>

@@ -2,10 +2,9 @@ import React from 'react';
 
 import Desktop from './mode/Desktop';
 import WhisperFrame from './mode/WhisperFrame';
-import { Provider, useDispatch, useSelector} from 'react-redux';
+import { useSelector} from 'react-redux';
 import { RootState, DisplayStatus } from './react-redux&middleware/redux/typesImports';
 
-import ttt from '../public/test';
 import './App.css';
 
 function App() {

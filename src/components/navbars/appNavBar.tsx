@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { ApiStatus, RootState, DisplayStatus, ControlStatus, API } from '../../react-redux&middleware/redux/typesImports';
+import { useSelector } from 'react-redux';
+import { ApiStatus, RootState, DisplayStatus, ControlStatus } from '../../react-redux&middleware/redux/typesImports';
 import { createTheme, ThemeProvider, IconButton, MenuIcon, Drawer, Grid, AppBar, Toolbar } from '../../muiImports';
 
 import SideBar from './sidebar/sidebar'
@@ -57,7 +57,7 @@ export default function AppNavBar(props) {
         setState({ ...state, isOpen: open });
     };
 
-    const dispatch = useDispatch();
+    // const dispatch = useDispatch();
     let accent_color = displayStatus.secondaryColor;
     // if (typeof accent_color === 'undefined') {
     //     accent_color = "#3f51bf";

@@ -22,7 +22,7 @@ export default function PhrasePopUp(props) {
         shouldCollapse: true
     });
 
-    let phrases: string[] = Array();
+    // let phrases: string[] = [];
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
 
@@ -31,7 +31,7 @@ export default function PhrasePopUp(props) {
         console.log(fileName)
         console.log("state.phraseList.name: ")
         console.log(state.phraseList.name)
-        if (fileName == state.phraseList.name) {
+        if (fileName === state.phraseList.name) {
             automaticAddList()
         }
     };
@@ -45,9 +45,9 @@ export default function PhrasePopUp(props) {
     const handleClose = () => {
         setAnchorEl(null);
     };
-    const handleClickPhrase = (event: React.MouseEvent<HTMLElement>) => {
-        console.log(event)
-    }
+    // const handleClickPhrase = (event: React.MouseEvent<HTMLElement>) => {
+    //     console.log(event)
+    // }
 
     const handleEnter = (event) =>
     {
@@ -111,7 +111,7 @@ export default function PhrasePopUp(props) {
         // console.log(fileContent)
         // console.log(typeof fileContent)
         // console.log("HAHAHAHAHAHAHAHA!")
-        if (fileContent.length != 0) {
+        if (fileContent.length !== 0) {
             // Split the string into an array of words
             let words: string[] = fileContent.split('\n');
             console.log(words)
@@ -127,7 +127,7 @@ export default function PhrasePopUp(props) {
         }
     }
 
-    if (state.phraseList.availableSpace == -1) {
+    if (state.phraseList.availableSpace === -1) {
         return (null)
     }
     const handleChangePhraseName = (event) => {
@@ -155,7 +155,7 @@ export default function PhrasePopUp(props) {
         <div>
             
             <ListItem style=
-                {props.currentList == props.currentPhraseList.name ? { backgroundColor: '#03bafc' } : { backgroundColor: 'white' }}>
+                {props.currentList === props.currentPhraseList.name ? { backgroundColor: '#03bafc' } : { backgroundColor: 'white' }}>
                 <ListItemText primary={state.phraseList.name} />
                 <IconButton onClick={handleClick}>
                     <EditIcon />

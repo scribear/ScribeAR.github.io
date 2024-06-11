@@ -1,9 +1,9 @@
 import React, { useEffect, useRef } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import { RootState } from '../../../store';
 import { 
-   DisplayStatus, AzureStatus, ControlStatus, ApiStatus, WhisperStatus
+   DisplayStatus
 } from '../../../react-redux&middleware/redux/typesImports';
 // import { computeMelLogSpectrogram } from '../../../ml/mel_log_spectrogram';
 import { gruInference } from '../../../ml/inference';
@@ -12,16 +12,16 @@ const { computeMelLogSpectrogram } = require('../../../ml/mel_log_spectrogram');
 
 
 const FFT_SIZE = 1024;
-const HOP_LENGTH = 256;
-const WIN_LENGTH = 1024;
-const N_MEL_CHANNELS = 80;
+// const HOP_LENGTH = 256;
+// const WIN_LENGTH = 1024;
+// const N_MEL_CHANNELS = 80;
 const SAMPLING_RATE = 22050;
-const MEL_FMIN = 0;
-const MEL_FMAX = 8000.0;
-const MAX_WAV_VALUE = 32768.0;
-const MIN_LOG_VALUE = -11.52;
-const MAX_LOG_VALUE = 1.2;
-const SILENCE_THRESHOLD_DB = -10;
+// const MEL_FMIN = 0;
+// const MEL_FMAX = 8000.0;
+// const MAX_WAV_VALUE = 32768.0;
+// const MIN_LOG_VALUE = -11.52;
+// const MAX_LOG_VALUE = 1.2;
+// const SILENCE_THRESHOLD_DB = -10;
 const N_FRAMES = 40;
 
 const audioContext = new (window.AudioContext || window.webkitAudioContext) ({

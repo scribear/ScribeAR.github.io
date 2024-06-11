@@ -1,12 +1,7 @@
-import React, { useCallback, useMemo, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React from 'react';
 import * as speechSDK from 'microsoft-cognitiveservices-speech-sdk';
-import { 
-   TranslationRecognitionResult, RecognitionResult,
-} from 'microsoft-cognitiveservices-speech-sdk';
 
-import { RootState } from '../../../store';
-import { ControlStatus, AzureStatus, ApiStatus, PhraseList, STATUS } from '../../../react-redux&middleware/redux/typesImports';
+import { ControlStatus, AzureStatus,STATUS } from '../../../react-redux&middleware/redux/typesImports';
 import { makeEventBucket } from '../../../react-redux&middleware/react-middleware/thunkMiddleware';
 
 

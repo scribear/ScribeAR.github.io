@@ -1,7 +1,6 @@
 import { Recognizer } from '../recognizer';
 import { TranscriptBlock } from '../../../react-redux&middleware/redux/types/TranscriptTypes';
 import makeWhisper from './libstream';
-import { string } from 'mathjs';
 import { loadRemote } from './indexedDB'
 import { SIPOAudioBuffer } from './sipo-audio-buffer';
 /**
@@ -185,7 +184,7 @@ export class WhisperRecognizer implements Recognizer {
      * Throws exception if recognizer fails to start
      */
     start() {
-        if (this.whisper == null || this.model_index == -1) {
+        if (this.whisper == null || this.model_index === -1) {
             return;
         }
         this.whisper.setStatus("");
@@ -197,7 +196,7 @@ export class WhisperRecognizer implements Recognizer {
      * Throws exception if recognizer fails to stop
      */
     stop() {
-        if (this.whisper == null || this.model_index == -1) {
+        if (this.whisper == null || this.model_index === -1) {
             return;
         }
         this.whisper.set_status("paused");

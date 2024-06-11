@@ -3,7 +3,7 @@ import { RootState } from '../../../../store';
 import { useDispatch, useSelector } from 'react-redux';
 import { ControlStatus } from '../../../../react-redux&middleware/redux/typesImports';
 import Theme from '../../../theme'
-import { PauseIcon, Button, PlayArrowIcon, createTheme, ThemeProvider, Switch } from '../../../../muiImports'
+import {  ThemeProvider, Switch } from '../../../../muiImports'
 
 
    export default function ShowFrequency() {

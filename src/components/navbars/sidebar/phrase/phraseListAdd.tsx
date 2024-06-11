@@ -9,13 +9,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import axios, { AxiosError } from 'axios';
 import { ThunkDispatch } from 'redux-thunk';
 import { Action } from 'redux';
-import getWordList from './phraseList';
-import { createStore, applyMiddleware } from 'redux';
-import thunkMiddleware from 'redux-thunk';
-import StarIcon from '@mui/icons-material/Star';
 import HomeIcon from '@mui/icons-material/Home';
 import PublicIcon from '@mui/icons-material/Public';
-import { useState } from 'react';
 
 
 /* todo:
@@ -79,17 +74,17 @@ export default function CustomizedMenus() {
     }
     return originalDispatch(action);
   };
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+//  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const phraseListStatus = useSelector((state: RootState) => {
     return state.PhraseListReducer as PhraseListStatus;
   });
-  const [state, setState] = React.useState({
-    currentList: phraseListStatus.currentPhraseList.name,
-    shouldCollapse: false
+  // const [state, setState] = React.useState({
+  //   currentList: phraseListStatus.currentPhraseList.name,
+  //   shouldCollapse: false
 
-  });
+  // });
 
-  let phrases: string[] = Array();
+  let phrases: string[] = [];
   for (let entry of Array.from(phraseListStatus.phraseListMap.entries())) {
     phrases.push(entry[0])
   }
@@ -101,21 +96,21 @@ export default function CustomizedMenus() {
     pushed_option: "custom" // new
   }
   
-  const handleClickItem = (event) => {
-    dispatch({ type: 'CHANGE_PHRASE_LIST', payload: phraseListStatus.phraseListMap.get(event.target.innerText) })
-    let innerText;
-    if (innerText = phraseListStatus.phraseListMap.get(event.target.innerText)) {
-      dispatch({ type: 'CHANGE_LIST', payload: innerText.phrases })
-    }
-    setState({ ...state, currentList: event.target.innerText})  
-    setAnchorEl(null);
-  }
+  // const handleClickItem = (event) => {
+  //   dispatch({ type: 'CHANGE_PHRASE_LIST', payload: phraseListStatus.phraseListMap.get(event.target.innerText) })
+  //   let innerText;
+  //   if (innerText = phraseListStatus.phraseListMap.get(event.target.innerText)) {
+  //     dispatch({ type: 'CHANGE_LIST', payload: innerText.phrases })
+  //   }
+  //   setState({ ...state, currentList: event.target.innerText})  
+  //   setAnchorEl(null);
+  // }
 
-  const toggleDrawer =
-    (head: string) =>
-      (event: React.KeyboardEvent | React.MouseEvent) => {
-        setState({ ...state, shouldCollapse: !state.shouldCollapse })
-      }
+  // const toggleDrawer =
+  //   (head: string) =>
+  //     (event: React.KeyboardEvent | React.MouseEvent) => {
+  //       setState({ ...state, shouldCollapse: !state.shouldCollapse })
+  //     }
 
   // // Get the contents of a file from the GitHub repository
   // async function getFileContent(filename, repo, owner, branch, token) {
@@ -206,7 +201,7 @@ export default function CustomizedMenus() {
   }  
 
   const clickAddList = async () => {
-    const result = await Swal.fire({
+   await Swal.fire({
       title: 'Phase Recognition: Import Domain Lists',
       html: `
         <div style="display: flex; justify-content: space-between;">

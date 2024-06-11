@@ -84,7 +84,7 @@ export default function ScribearServerSettings(props) {
                         label="ScribeAR Server Address"
                         variant="outlined"
                         inputProps={{
-                           placeholder: 'Enter ScribeAR Server Address e.g. localhost:1234',
+                           placeholder: 'Enter ScribeAR Server Address e.g. ws://localhost:1234',
                         }}
                         style={{ width: '100%' }}
                      />

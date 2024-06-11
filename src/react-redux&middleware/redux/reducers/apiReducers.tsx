@@ -47,7 +47,7 @@ const initialPlaybackStatus: PlaybackStatus = {
 }
 
 const initialScribearServerState: ScribearServerStatus = {
-  scribearServerAddress: 'localhost:1234'
+  scribearServerAddress: 'ws://localhost:1234'
 }
 
 const saveLocally = (varName: string, value: any) => {

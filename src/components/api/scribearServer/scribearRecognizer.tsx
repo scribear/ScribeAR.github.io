@@ -1,5 +1,6 @@
 import { Recognizer } from '../recognizer';
 import { TranscriptBlock } from '../../../react-redux&middleware/redux/types/TranscriptTypes';
+import { ScribearServerStatus } from '../../../react-redux&middleware/redux/typesImports';
 
 
 /**
@@ -23,6 +24,7 @@ import { TranscriptBlock } from '../../../react-redux&middleware/redux/types/Tra
  * Wrapper for Microsoft Azure SpeechRecognizer class, implements Recognizer interface 
  */
 export class ScribearRecognizer implements Recognizer {
+    private scribearServerStatus : ScribearServerStatus
     private socket : WebSocket | null = null
     private transcribedCallback : any
     private language : string
@@ -32,9 +34,10 @@ export class ScribearRecognizer implements Recognizer {
      * @param audioSource Not implemented yet
      * @param language Expected language of the speech to be transcribed
      */
-    constructor(language:string) {
+    constructor(scribearServerStatus: ScribearServerStatus, language:string) {
         console.log("ScribearRecognizer, new recognizer being created!")
         this.language = language;
+        this.scribearServerStatus = scribearServerStatus;
     }
 
     /**
@@ -45,7 +48,7 @@ export class ScribearRecognizer implements Recognizer {
         console.log("ScribearRecognizer.start()");
         if(this.socket) {return;}
         
-        this.socket = new WebSocket("ws://localhost:1234");
+        this.socket = new WebSocket(this.scribearServerStatus.scribearServerAddress);
 
         // this.socket.onopen = (e)=> {...}
         const inProgressBlock = new TranscriptBlock();

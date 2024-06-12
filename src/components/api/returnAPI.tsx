@@ -73,8 +73,7 @@ const getRecognizer = (currentApi: number, control: ControlStatus, azure: AzureS
       // Placeholder - this is just WebSpeech for now
       return new StreamTextRecognizer(streamTextConfig.streamTextEvent, 'en', streamTextConfig.startPosition);
    } else if (currentApi === API.WHISPER) {
-      let recog = new WhisperRecognizer(null, control.speechLanguage.CountryCode, 4);
-      return recog;
+      return new WhisperRecognizer(null, control.speechLanguage.CountryCode, 4);
    } else {
       throw new Error(`Unexpcted API_CODE: ${currentApi}`);
    }

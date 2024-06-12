@@ -28,6 +28,7 @@ export class WhisperRecognizer implements Recognizer {
      * Instance of the whisper wasm module, and its variables
      */
     private whisper: any = null;
+    private model_name: string = "";
     private model_index: Number = -1;
     private language: string = "en";
     private num_threads: number;
@@ -44,6 +45,7 @@ export class WhisperRecognizer implements Recognizer {
     constructor(audioSource: any, language: string, num_threads: number = 4, model: string = "tiny-en-q5_1") {
         this.num_threads = num_threads;
         this.language = language;
+        this.model_name = model;
 
         const num_chunks = this.kWindowLength * this.kSampleRate / this.kChunkLength;
         this.audio_buffer = new SIPOAudioBuffer(num_chunks, this.kChunkLength);
@@ -51,12 +53,14 @@ export class WhisperRecognizer implements Recognizer {
         this.context = new AudioContext({
             sampleRate: this.kSampleRate,
         });
-        let source;
-        let that = this;
-        // Create whisper instance and fetch its ggml model
-        // Then populate the audio context as such:
-        // Microphone stream => raw recorder
-        makeWhisper({
+    }
+
+    /**
+     * Async load the WASM module, ggml model, and Audio Worklet needed for whisper to work
+     */
+    public async loadWhisper() {
+        // Load wasm and ggml
+        this.whisper = await makeWhisper({
             print: this.print,
             printErr: this.printDebug,
             setStatus: function(text) {
@@ -64,38 +68,32 @@ export class WhisperRecognizer implements Recognizer {
             },
             monitorRunDependencies: function(left) {
             }
-        }).then((result) => {
-            that.whisper = result;
-            return that.load_model(model);
-        }).then(() => {
-            that.model_index = that.whisper.init('whisper.bin');
-            console.log("Whisper: Done instantiating whisper", that.whisper, that.model_index);
-
-            return navigator.mediaDevices.getUserMedia({audio: true, video: false})
-        }).then((stream) => {
-            source = that.context.createMediaStreamSource(stream);
-            return that.context.audioWorklet.addModule(process.env.PUBLIC_URL + "/raw-recorder.js");
-        }).then(() => {
-            let raw_recorder = new AudioWorkletNode(that.context, "raw-recorder");
-            source.connect(raw_recorder);
-
-            raw_recorder.port.onmessage = (e) => {
-                const audio_chunk = new Float32Array(e.data);
-                that.audio_buffer.push(audio_chunk);
-                if (that.audio_buffer.isFull()) {
-                    console.log("Updating audio of wasm module");
-                    that.whisper.set_audio(that.model_index, that.audio_buffer.getAll());
-                    that.audio_buffer.clear();
-                }
-            }
-    
-            console.log("Whisper: Done setting up audio context");
         })
+        await this.load_model(this.model_name);
+        this.model_index = this.whisper.init('whisper.bin');
+        console.log("Whisper: Done instantiating whisper", this.whisper, this.model_index);
+
+        // Set up audio source
+        let mic_stream = await navigator.mediaDevices.getUserMedia({audio: true, video: false});
+        let source = this.context.createMediaStreamSource(mic_stream);
         
+        // Set up PCM audio recorder
+        await this.context.audioWorklet.addModule(process.env.PUBLIC_URL + "/raw-recorder.js");
+        let raw_recorder = new AudioWorkletNode(this.context, "raw-recorder");
+        source.connect(raw_recorder);
+        let that = this;
+        raw_recorder.port.onmessage = (e) => {
+            const audio_chunk = new Float32Array(e.data);
+            that.audio_buffer.push(audio_chunk);
+            if (that.audio_buffer.isFull()) {
+                that.whisper.set_audio(that.model_index, that.audio_buffer.getAll());
+                that.audio_buffer.clear();
+            }
+        }
+        console.log("Whisper: Done setting up audio context");
     }
 
     private print = (text: string) => {
-        console.warn("Getting new transcript!");
         if (this.transcribed_callback != null) {
             let block = new TranscriptBlock();
             block.text = text;
@@ -185,11 +183,17 @@ export class WhisperRecognizer implements Recognizer {
      * Throws exception if recognizer fails to start
      */
     start() {
+        console.log("trying to start whisper");
+        let that = this;
         if (this.whisper == null || this.model_index == -1) {
-            return;
+            this.loadWhisper().then(() => {
+                that.whisper.setStatus("");
+                that.context.resume();
+            })
+        } else {
+            this.whisper.setStatus("");
+            this.context.resume();
         }
-        this.whisper.setStatus("");
-        this.context.resume();
     }
 
     /**

@@ -55,44 +55,6 @@ export class WhisperRecognizer implements Recognizer {
         });
     }
 
-    /**
-     * Async load the WASM module, ggml model, and Audio Worklet needed for whisper to work
-     */
-    public async loadWhisper() {
-        // Load wasm and ggml
-        this.whisper = await makeWhisper({
-            print: this.print,
-            printErr: this.printDebug,
-            setStatus: function(text) {
-                this.printErr('js: ' + text);
-            },
-            monitorRunDependencies: function(left) {
-            }
-        })
-        await this.load_model(this.model_name);
-        this.model_index = this.whisper.init('whisper.bin');
-        console.log("Whisper: Done instantiating whisper", this.whisper, this.model_index);
-
-        // Set up audio source
-        let mic_stream = await navigator.mediaDevices.getUserMedia({audio: true, video: false});
-        let source = this.context.createMediaStreamSource(mic_stream);
-        
-        // Set up PCM audio recorder
-        await this.context.audioWorklet.addModule(process.env.PUBLIC_URL + "/raw-recorder.js");
-        let raw_recorder = new AudioWorkletNode(this.context, "raw-recorder");
-        source.connect(raw_recorder);
-        let that = this;
-        raw_recorder.port.onmessage = (e) => {
-            const audio_chunk = new Float32Array(e.data);
-            that.audio_buffer.push(audio_chunk);
-            if (that.audio_buffer.isFull()) {
-                that.whisper.set_audio(that.model_index, that.audio_buffer.getAll());
-                that.audio_buffer.clear();
-            }
-        }
-        console.log("Whisper: Done setting up audio context");
-    }
-
     private print = (text: string) => {
         if (this.transcribed_callback != null) {
             let block = new TranscriptBlock();
@@ -115,6 +77,39 @@ export class WhisperRecognizer implements Recognizer {
         }
         this.whisper.FS_createDataFile("/", fname, buf, true, true);
         this.printDebug('storeFS: stored model: ' + fname + ' size: ' + buf.length);
+    }
+
+
+    /**
+     * Async load the WASM module, ggml model, and Audio Worklet needed for whisper to work
+     */
+    public async loadWhisper() {
+        // Load wasm and ggml
+        this.whisper = await makeWhisper({
+            print: this.print,
+            printErr: this.printDebug,
+            setStatus: function(text) {
+                this.printErr('js: ' + text);
+            },
+            monitorRunDependencies: function(left) {
+            }
+        })
+        await this.load_model(this.model_name);
+        this.model_index = this.whisper.init('whisper.bin');
+
+        console.log("Whisper: Done instantiating whisper", this.whisper, this.model_index);
+
+        // Set up audio source
+        let mic_stream = await navigator.mediaDevices.getUserMedia({audio: true, video: false});
+        let source = this.context.createMediaStreamSource(mic_stream);
+        
+        // Set up PCM audio recorder
+        await this.context.audioWorklet.addModule(process.env.PUBLIC_URL + "/raw-recorder.js");
+        let raw_recorder = new AudioWorkletNode(this.context, "raw-recorder");
+        source.connect(raw_recorder);
+        raw_recorder.port.onmessage = this.process_recorder_message.bind(this);
+
+        console.log("Whisper: Done setting up audio context");
     }
 
     private async load_model(model: string) {
@@ -176,6 +171,23 @@ export class WhisperRecognizer implements Recognizer {
                 that.printDebug,
             );
         })
+    }
+
+    /**
+     * Helper method that stores audio chunks from the raw recorder in buffer
+     * @param message Message object containing an audio chunk
+     */
+    private process_recorder_message(message: MessageEvent) {
+        const audio_chunk = new Float32Array(message.data);
+        this.audio_buffer.push(audio_chunk);
+        if (this.audio_buffer.isFull()) {
+            this.whisper.set_audio(this.model_index, this.audio_buffer.getAll());
+            this.audio_buffer.clear();
+        }
+    }
+
+    private process_analyzer_result(features: any) {
+
     }
 
     /**

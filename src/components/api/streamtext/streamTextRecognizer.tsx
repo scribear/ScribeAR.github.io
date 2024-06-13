@@ -1,5 +1,3 @@
-import * as speechSDK from 'microsoft-cognitiveservices-speech-sdk';
-
 import { Recognizer } from '../recognizer';
 import { TranscriptBlock } from '../../../react-redux&middleware/redux/types/TranscriptTypes';
 
@@ -27,6 +25,7 @@ export class StreamTextRecognizer implements Recognizer {
     private language: string
     private lastPosition: number
     private session: any
+    private transcribedCallback: any
 
     /**
      * Creates an StreamText recognizer instance that listens to an ongoing event
@@ -51,6 +50,33 @@ export class StreamTextRecognizer implements Recognizer {
      * Throws exception if recognizer fails to start
      */
     start() {
+        if(this.session) {
+            return;
+        }
+        // "recognizing" event signals that the in-progress block has been updated
+        // event.result.text is new in-progress block's text
+        try {
+            let newInProgressBlock = new TranscriptBlock();
+            this.session = setInterval(() => {
+                const searchParams = new URLSearchParams({event: this.event, last: this.lastPosition.toString(), language:this.language});
+
+                let api = `https://www.streamtext.net/captions?${searchParams.toString()}`
+                //console.log(api)
+                fetch(api).then(
+                    response => response.json()
+                ).then(
+                    json => {
+                        this.lastPosition = json.lastPosition
+                        newInProgressBlock.text += json.content
+                        if(this.transcribedCallback && this.session) {
+                            this.transcribedCallback([], newInProgressBlock);
+                        }
+                    }
+                )
+            }, 1000);
+        } catch (e) {
+            throw new Error(`Could not add callback to StreamText recognizer, error: ${e}`)
+        }
     }
 
     /**
@@ -59,6 +85,7 @@ export class StreamTextRecognizer implements Recognizer {
      */
     stop() {
         clearInterval(this.session);
+        this.session = null;
     }
 
     /**
@@ -67,26 +94,7 @@ export class StreamTextRecognizer implements Recognizer {
      * @param callback A callback function called with the updates to the transcript
      */
     onTranscribed(callback: (newFinalBlocks: Array<TranscriptBlock>, newInProgressBlock: TranscriptBlock) => void) {
-        // "recognizing" event signals that the in-progress block has been updated
-        // event.result.text is new in-progress block's text
-        try {
-            let newInProgressBlock = new TranscriptBlock;
-            this.session = setInterval(() => {
-                let api = `https://www.streamtext.net/captions?event=${this.event}&last=${this.lastPosition}&language=${this.language}`
-                console.log(api)
-                fetch(api).then(
-                    response => response.json()
-                ).then(
-                    json => {
-                        this.lastPosition = json.lastPosition
-                        newInProgressBlock.text += json.content
-                        callback([], newInProgressBlock)
-                    }
-                )
-            }, 1000);
-        } catch (e) {
-            throw new Error(`Could not add callback to StreamText recognizer, error: ${e}`)
-        }
+       this.transcribedCallback = callback;
     }
 
     /**

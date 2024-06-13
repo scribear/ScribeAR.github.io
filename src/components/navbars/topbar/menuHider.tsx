@@ -1,5 +1,5 @@
-import React,{ useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import React from 'react'
+import {  useDispatch } from 'react-redux'
 import { IconButton, LockIcon, LockOpenIcon } from '../../../muiImports'
 export default function MenuHider(props){
     const dispatch = useDispatch();

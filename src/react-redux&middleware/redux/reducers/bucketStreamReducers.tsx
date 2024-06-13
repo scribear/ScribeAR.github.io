@@ -2,11 +2,10 @@ import {
     AudioEventBucket, 
     HTML5STTEventBucket, 
     AzureSTTEventBucket, 
-    UserActionEventBucket, 
+    // UserActionEventBucket, 
     AudioStream, 
     HTML5STTStream, 
     AzureSTTStream, 
-    UserActionStream, 
     MainStream, 
     MainStreamMap, 
 } from "../types/bucketStreamTypes";
@@ -40,13 +39,13 @@ const defaultMainStream = (curTime? : number) => {
         endTime: 0,
         // eventType: 'Audio', // "Audio" | "AzureSTT" | "HTML5STT" | "UserAction",
     }
-    const userActionBucket : UserActionEventBucket = {
-        startTime: curTime,
-        endTime: 0,
-        // eventType: 'Audio', // "Audio" | "AzureSTT" | "HTML5STT" | "UserAction",
-        // targetElem: ,
-        // action: ,
-    }
+    // const userActionBucket : UserActionEventBucket = {
+    //     startTime: curTime,
+    //     endTime: 0,
+    //     // eventType: 'Audio', // "Audio" | "AzureSTT" | "HTML5STT" | "UserAction",
+    //     // targetElem: ,
+    //     // action: ,
+    // }
 
     // const initialAudioStream : AudioStream = Array<AudioEventBucket>();
     // const initialHTML5STTStream : HTML5STTStream = Array<HTML5STTEventBucket>();
@@ -55,7 +54,7 @@ const defaultMainStream = (curTime? : number) => {
     const audioStream : AudioStream = [audioBucket];
     const html5STTStream : HTML5STTStream = [html5Bucket];
     const azureSTTStream : AzureSTTStream = [azureBucket];
-    const userActionStream : UserActionStream = [userActionBucket];
+    //const userActionStream : UserActionStream = [userActionBucket];
 
     const mainStream : MainStream = {
         startTime: curTime,
@@ -109,7 +108,7 @@ export const BucketStreamReducer = (state = defaultMainStreamMap(), action : {ty
             // make a AudioEventBucket; append it to state.AudioStream
             let curAudioStream : AudioStream = copyState.map.get(state.curMSST)!.AudioStream!;
 
-            if (curAudioStream.length == 0) {throw "AudioStream length 0!"};
+            if (curAudioStream.length === 0) throw new Error("AudioStream length 0!");
             curAudioStream[curAudioStream.length - 1]!.endTime = action.payload.curTime;
             curAudioStream[curAudioStream.length - 1]!.volume = action.payload.volume;
             curAudioStream[curAudioStream.length - 1]!.typeOfData = action.payload.typeOfData;
@@ -138,7 +137,7 @@ export const BucketStreamReducer = (state = defaultMainStreamMap(), action : {ty
             let curHTML5Stream : HTML5STTStream = copyState.map.get(state.curMSST)!.HTML5STTStream!;
 
             // we first complete the last bucket in the current stream
-            if (curHTML5Stream.length === 0) { throw("HTML5Stream length 0!"); };
+            if (curHTML5Stream.length === 0) { throw new Error("HTML5Stream length 0!"); };
             curHTML5Stream[curHTML5Stream.length - 1]!.endTime = action.payload.curTime;
             curHTML5Stream[curHTML5Stream.length - 1]!.finalTranscript = action.payload.fArr;
             curHTML5Stream[curHTML5Stream.length - 1]!.notFinalTranscript = action.payload.nfArr;

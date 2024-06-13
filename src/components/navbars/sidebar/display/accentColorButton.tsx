@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import {Button, FormatColorTextIcon } from '../../../../muiImports';
+import {Button } from '../../../../muiImports';
 import { RootState, DisplayStatus } from '../../../../react-redux&middleware/redux/typesImports';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -9,9 +9,9 @@ export default function AccentColorButton() {
     });
     const [selectedColor, setSelectedColor] = useState(color.secondaryColor);
     const dispatch = useDispatch();
-    const position = useSelector((state: RootState) => {
-      return state.DisplayReducer as DisplayStatus;
-    });
+    // const position = useSelector((state: RootState) => {
+    //   return state.DisplayReducer as DisplayStatus;
+    // });
     const handleInputChange = (event) => {
       dispatch({ type: 'CHANGE_SECONDARY_THEME', payload: event });
     }

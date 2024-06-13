@@ -1,15 +1,11 @@
 import * as React from 'react';
 
-import { API, STATUS } from '../../../../react-redux&middleware/redux/types/apiEnums';
-import { ApiStatus, AzureStatus, ControlStatus, PhraseList } from '../../../../react-redux&middleware/redux/typesImports';
-import { Box, ClearIcon, IconButton, InputBase, List, ListItem, ListItemText, Menu, Paper, SettingsIcon, TextField } from '../../../../muiImports'
+import { Box,  IconButton, List, ListItem, Menu, SettingsIcon, TextField } from '../../../../muiImports'
 import { useDispatch, useSelector } from 'react-redux';
-import {useEffect, useState} from 'react'
+import {useEffect} from 'react'
 
 import { RootState } from '../../../../store';
 import { StreamTextStatus } from '../../../../react-redux&middleware/redux/types/apiTypes';
-import swal from 'sweetalert';
-import { testAzureTranslRecog } from '../../../api/azure/azureTranslRecog';
 
 /**
  * Pop-up settings menu for the Stream recognizer

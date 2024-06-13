@@ -20,6 +20,8 @@ export type ApiStatus = {
    azureConvoStatus: StatusType;
    whisperStatus: StatusType;
    streamTextStatus: StatusType;
+   scribearServerStatus: StatusType;
+   playbackStatus: StatusType;
 }
 /**
  * AzureStatus currently has only the login information.
@@ -49,7 +51,7 @@ export type PhraseListStatus = {
 }
 
 export type WhisperStatus = {
-   whiserPhrases: string
+   whisperPhrases: string
    tinyModel: string
    baseModel: string
 }
@@ -57,4 +59,12 @@ export type WhisperStatus = {
 export type StreamTextStatus = {
    streamTextEvent: string
    startPosition: number
+}
+export type PlaybackStatus = {
+   captionFileContent : string
+}
+
+export type ScribearServerStatus = {
+   scribearServerAddress : string
+   // Many IP (or hostname) and port in the future
 }

@@ -64,7 +64,7 @@ export default function installCOIServiceWorker () {
         (() => {
             const reloadedBySelf = window.sessionStorage.getItem("coiReloadedBySelf");
             window.sessionStorage.removeItem("coiReloadedBySelf");
-            const coepDegrading = (reloadedBySelf == "coepdegrade");
+            const coepDegrading = (reloadedBySelf === "coepdegrade");
 
             // You can customize the behavior of this script through a global `coi` variable.
             const coi = {

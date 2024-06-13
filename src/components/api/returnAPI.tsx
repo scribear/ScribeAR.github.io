@@ -1,20 +1,16 @@
-import * as sdk from 'microsoft-cognitiveservices-speech-sdk'
+// import * as sdk from 'microsoft-cognitiveservices-speech-sdk'
 import installCOIServiceWorker from './coi-serviceworker'
-import { API, ApiType, STATUS, StatusType } from '../../react-redux&middleware/redux/typesImports';
+import { API, PlaybackStatus} from '../../react-redux&middleware/redux/typesImports';
 import {
    ApiStatus,
    AzureStatus,
    ControlStatus,
-   DisplayStatus,
    SRecognition,
-   ScribeHandler,
-   ScribeRecognizer,
    StreamTextStatus,
+   ScribearServerStatus
 } from '../../react-redux&middleware/redux/typesImports';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import  {useEffect, useState } from 'react';
 import { batch, useDispatch, useSelector } from 'react-redux';
-import { getAzureTranslRecog, testAzureTranslRecog, useAzureTranslRecog } from './azure/azureTranslRecog';
-import  { getWebSpeechRecog, useWebSpeechRecog } from './web-speech/webSpeechRecog';
 
 import { AzureRecognizer } from './azure/azureRecognizer';
 import { Dispatch } from 'redux';
@@ -22,12 +18,12 @@ import { Recognizer } from './recognizer';
 import { RootState } from '../../store';
 import { StreamTextRecognizer } from './streamtext/streamTextRecognizer';
 import { TranscriptBlock } from '../../react-redux&middleware/redux/types/TranscriptTypes';
-import { TranscriptReducer } from '../../react-redux&middleware/redux/reducers/transcriptReducers';
 import { WebSpeechRecognizer } from './web-speech/webSpeechRecognizer';
 import { WhisperRecognizer } from './whisper/whisperRecognizer';
-import { intent_inference } from '../../ml/inference';
-import { loadTokenizer } from '../../ml/bert_tokenizer';
+import { PlaybackRecognizer } from './playback/playbackRecognizer';
 
+import { ScribearRecognizer } from './scribearServer/scribearRecognizer';
+// import { PlaybackReducer } from '../../react-redux&middleware/redux/reducers/apiReducers';
 // controls what api to send and what to do when error handling.
 
 // NOTES: this needs to do everything I think. Handler should be returned which allows
@@ -59,8 +55,12 @@ export const returnRecogAPI = (api : ApiStatus, control : ControlStatus, azure :
 */
 
 
-const getRecognizer = (currentApi: number, control: ControlStatus, azure: AzureStatus, streamTextConfig: StreamTextStatus): Recognizer => {
-
+const createRecognizer = (currentApi: number, control: ControlStatus, azure: AzureStatus, streamTextConfig: StreamTextStatus, scribearServerStatus: ScribearServerStatus,playbackStatus:PlaybackStatus): Recognizer => {
+   if (currentApi === API.SCRIBEAR_SERVER) {
+      return new ScribearRecognizer(scribearServerStatus, control.speechLanguage.CountryCode);
+   } else if (currentApi === API.PLAYBACK) {
+      return new PlaybackRecognizer(playbackStatus);
+   }
    if (currentApi === API.WEBSPEECH) {
       return new WebSpeechRecognizer(null, control.speechLanguage.CountryCode);
    } else if (currentApi === API.AZURE_TRANSLATION) {
@@ -88,7 +88,7 @@ const getRecognizer = (currentApi: number, control: ControlStatus, azure: AzureS
  * @param dispatch A Redux dispatch function
  */
 const updateTranscript = (dispatch: Dispatch) => (newFinalBlocks: Array<TranscriptBlock>, newInProgressBlock: TranscriptBlock): void => {
-   console.log(`Updating transcript using these blocks: `, newFinalBlocks, newInProgressBlock)
+   // console.log(`Updating transcript using these blocks: `, newFinalBlocks, newInProgressBlock)
    // batch makes these dispatches only cause one re-rendering
    batch(() => {
       for (const block of newFinalBlocks) {
@@ -111,7 +111,8 @@ const updateTranscript = (dispatch: Dispatch) => (newFinalBlocks: Array<Transcri
  * 
  * @return transcripts, resetTranscript, recogHandler
  */
-export const useRecognition = (sRecog : SRecognition, api : ApiStatus, control : ControlStatus, azure : AzureStatus, streamTextConfig : StreamTextStatus) => {
+export const useRecognition = (sRecog : SRecognition, api : ApiStatus, control : ControlStatus, 
+   azure : AzureStatus, streamTextConfig : StreamTextStatus, scribearServerStatus, playbackStatus: PlaybackStatus) => {
 
    const [recognizer, setRecognizer] = useState<Recognizer>();
    // TODO: Add a reset button to utitlize resetTranscript
@@ -130,7 +131,7 @@ export const useRecognition = (sRecog : SRecognition, api : ApiStatus, control :
       let newRecognizer: Recognizer | null;
       try{
          // Create new recognizer, and subscribe to its events
-         newRecognizer = getRecognizer(api.currentApi, control, azure, streamTextConfig);
+         newRecognizer = createRecognizer(api.currentApi, control, azure, streamTextConfig, scribearServerStatus, playbackStatus);
          newRecognizer.onTranscribed(updateTranscript(dispatch));
          setRecognizer(newRecognizer)
 
@@ -147,7 +148,7 @@ export const useRecognition = (sRecog : SRecognition, api : ApiStatus, control :
          // Stop current recognizer when switching to another one, if possible
          newRecognizer?.stop();
       }
-   }, [api.currentApi]);
+   }, [api.currentApi, azure, control, streamTextConfig, playbackStatus]);
 
    // Start / stop recognizer, if listening toggled
    useEffect(() => {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState  } from 'react';
 import { List, ListItem, Button } from '../../../../muiImports'
 
 
@@ -8,8 +8,8 @@ export default function WhisperDropdown(props) {
   // const [isClearCache, setIsClearCache] = useState<boolean>(false);
   const [isDownloadTiny, setIsDownloadTiny] = useState<boolean>(false);
   const [isDownloadBase, setIsDownloadBase] = useState<boolean>(false);
-  const [progress, setProgress] = useState(null);
-  const [showModal, setShowModal] = useState(false);
+  // const [progress, setProgress] = useState(null);
+  // const [showModal, setShowModal] = useState(false);
 
 
     const handleTinyDownload = () => {

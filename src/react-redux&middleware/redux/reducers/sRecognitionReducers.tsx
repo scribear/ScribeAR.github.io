@@ -1,5 +1,4 @@
-import { useDispatch } from "react-redux";
-import { SRecognition, API, STATUS } from "../typesImports";
+import { SRecognition, STATUS } from "../typesImports";
 
 
 const defaultSRecognition = () : SRecognition => {

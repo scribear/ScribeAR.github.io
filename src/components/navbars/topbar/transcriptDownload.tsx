@@ -1,17 +1,17 @@
-import { FileDownloadIcon, ThemeProvider, IconButton, Tooltip  } from '../../../muiImports';
-import { useDispatch, useSelector } from 'react-redux';
+import { FileDownloadIcon, IconButton  } from '../../../muiImports';
+import { useSelector } from 'react-redux';
 import { RootState } from '../../../store';
-import { ControlStatus } from '../../../react-redux&middleware/redux/typesImports';
-import Theme from '../../theme'
+//import { ControlStatus } from '../../../react-redux&middleware/redux/typesImports';
+//import Theme from '../../theme'
 import * as React from 'react';
 import { MultiSpeakerTranscript } from '../../../react-redux&middleware/redux/types/TranscriptTypes';
 
 export default function TranscriptDownload() {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   
-  let controlStatus = useSelector((state: RootState) => {
-    return state.ControlReducer as ControlStatus;
-  });
+  // let controlStatus = useSelector((state: RootState) => {
+  //   return state.ControlReducer as ControlStatus;
+  // });
 
   let transcriptStatus = useSelector((state: RootState) => {
     return state.TranscriptReducer as MultiSpeakerTranscript;
@@ -30,7 +30,7 @@ export default function TranscriptDownload() {
     window.URL.revokeObjectURL(url);
   }
 
-  const {myTheme} = Theme()
+  //const {myTheme} = Theme()
 
   return (
     <div>

@@ -1,7 +1,3 @@
-import { InvalidOperationError } from 'microsoft-cognitiveservices-speech-sdk/distrib/lib/src/common/Error';
-import { STATUS, API, ApiType } from './apiEnums';
-import sdk from 'microsoft-cognitiveservices-speech-sdk';
-
 
 export type Word = {
    value: string;
@@ -96,7 +92,7 @@ export class MultiSpeakerTranscript {
    /**
     * A list of single-speaker transcripts
     */
-   transcripts: Array<Transcript> = [new Transcript];
+   transcripts: Array<Transcript> = [new Transcript()];
 }
 
 

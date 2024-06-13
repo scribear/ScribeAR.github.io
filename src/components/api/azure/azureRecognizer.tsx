@@ -86,12 +86,12 @@ export class AzureRecognizer implements Recognizer {
         // event.result.text is new in-progress block's text
         try {
             this.recognizer.recognizing = (sender, event) => {
-                const newInProgressBlock = new TranscriptBlock;
+                const newInProgressBlock = new TranscriptBlock();
                 newInProgressBlock.text = event.result.text;
                 callback([], newInProgressBlock);
             }
             this.recognizer.recognized = (sender, event) => {
-                if (event.result.reason == speechSDK.ResultReason.NoMatch) {
+                if (event.result.reason === speechSDK.ResultReason.NoMatch) {
                     // Spurious "recognized" event can be triggered with empty transcript text
                     // Possibly an Azure bug
                     return; 
@@ -99,9 +99,9 @@ export class AzureRecognizer implements Recognizer {
                 // "recognized" signals that the current in-progress block is finalized
                 // event.result.text is the finalized block's text
                 // In-progress block should also be cleared
-                const newFinalBlock = new TranscriptBlock;
+                const newFinalBlock = new TranscriptBlock();
                 newFinalBlock.text = event.result.text;
-                const newInProgressBlock = new TranscriptBlock;
+                const newInProgressBlock = new TranscriptBlock();
                 callback([newFinalBlock], newInProgressBlock);
             }
         } catch (e) {

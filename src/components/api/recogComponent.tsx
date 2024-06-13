@@ -3,24 +3,25 @@ import {
    ApiStatus,
    AzureStatus,
    ControlStatus,
-   DisplayStatus,
+   ScribearServerStatus,
+   /* DisplayStatus, */
    SRecognition,
    STATUS,
-   WhisperStatus
+   /* WhisperStatus */
 } from '../../react-redux&middleware/redux/typesImports';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { RootState } from '../../store';
 import { STTRenderer } from '../sttRenderer';
-import { StreamTextStatus } from '../../react-redux&middleware/redux/types/apiTypes';
+import { PlaybackStatus, StreamTextStatus } from '../../react-redux&middleware/redux/types/apiTypes';
 import Swal from 'sweetalert2';
 import { useRecognition } from './returnAPI';
 
 export const RecogComponent: React.FC = (props) => {
 
    useEffect(() => {
-      if (apiStatus.currentApi == API.AZURE_TRANSLATION) {
+      if (apiStatus.currentApi === API.AZURE_TRANSLATION) {
          Swal.fire({
             title: `It appears you were using Azure recognizer last time, would you like to switch to that?`,
             icon: 'info',
@@ -28,14 +29,19 @@ export const RecogComponent: React.FC = (props) => {
             showDenyButton: true,
             confirmButtonText: 'Yes!',
             }).then((result) => {
+              
                if (result.isConfirmed) {
                   Swal.fire('Switching to Azure', '', 'success')
                   let copyStatus = Object.assign({}, apiStatus);
+                   // Urgh.
                   copyStatus.currentApi = API.AZURE_TRANSLATION;
                   copyStatus.webspeechStatus = STATUS.AVAILABLE;
                   copyStatus.whisperStatus = STATUS.AVAILABLE;
                   copyStatus.azureConvoStatus = STATUS.AVAILABLE;
+                  copyStatus.streamTextStatus = STATUS.AVAILABLE;
+                  copyStatus.playbackStatus = STATUS.AVAILABLE;
                   copyStatus.azureTranslStatus = STATUS.TRANSCRIBING;
+
                   dispatch({type: 'CHANGE_API_STATUS', payload: copyStatus})
                } else {
                   let copyStatus = Object.assign({}, apiStatus);
@@ -44,6 +50,8 @@ export const RecogComponent: React.FC = (props) => {
                   copyStatus.whisperStatus = STATUS.AVAILABLE;
                   copyStatus.azureConvoStatus = STATUS.AVAILABLE;
                   copyStatus.azureTranslStatus = STATUS.AVAILABLE;
+                  copyStatus.streamTextStatus = STATUS.AVAILABLE;
+                  copyStatus.playbackStatus = STATUS.AVAILABLE;
                   dispatch({type: 'CHANGE_API_STATUS', payload: copyStatus})
                }
             })
@@ -57,6 +65,14 @@ export const RecogComponent: React.FC = (props) => {
    const streamTextStatus = useSelector((state: RootState) => {
       return state.StreamTextReducer as StreamTextStatus
    })
+   const playbackStatus = useSelector((state: RootState) => {
+      return state.PlaybackReducer as PlaybackStatus
+   })
+
+   const scribearServerStatus = useSelector((state: RootState) => {
+      return state.ScribearServerReducer as ScribearServerStatus
+   })
+
    const apiStatus = useSelector((state: RootState) => {
       return state.APIStatusReducer as ApiStatus
    })
@@ -68,7 +84,7 @@ export const RecogComponent: React.FC = (props) => {
    })
 
    // if else for whisper transcript, apiStatus for 4=whisper and control status for listening
-   const transcript = useRecognition(sRecog, apiStatus, controlStatus, azureStatus, streamTextStatus);
-   console.log("Recog component received new transcript: ", transcript)
+   const transcript = useRecognition(sRecog, apiStatus, controlStatus, azureStatus, streamTextStatus, scribearServerStatus, playbackStatus);
+   // console.log("Recog component received new transcript: ", transcript)
    return STTRenderer(transcript);
 };

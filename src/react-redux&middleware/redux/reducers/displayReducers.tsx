@@ -1,8 +1,8 @@
 import { DisplayStatus } from "../typesImports";
-enum COLOR {
-  "BLACK",
-  "WHITE",
-}
+// enum COLOR {
+//   "BLACK",
+//   "WHITE",
+// }
 const  initialState : DisplayStatus = {
   textSize: 4,
   primaryColor: '#000000',

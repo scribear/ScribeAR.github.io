@@ -11,6 +11,7 @@
     "@mui/icons-material": "^5.11.16",
     "@mui/material": "^5.2.7",
     "@reduxjs/toolkit": "^1.9.3",
+    "@ricky0123/vad-web": "^0.0.18",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^12.1.5",
     "@testing-library/user-event": "^13.5.0",

@@ -3,6 +3,7 @@ import { TranscriptBlock } from '../../../react-redux&middleware/redux/types/Tra
 import makeWhisper from './libstream';
 import { loadRemote } from './indexedDB'
 import { SIPOAudioBuffer } from './sipo-audio-buffer';
+import { MicVAD } from '@ricky0123/vad-web';
 /**
  * Wrapper for Web Assembly implementation of whisper.cpp
  */
@@ -31,6 +32,11 @@ export class WhisperRecognizer implements Recognizer {
     private model_index: Number = -1;
     private language: string = "en";
     private num_threads: number;
+
+    /**
+     * The VAD module used to start and stop recording
+     */
+    private vad: MicVAD | null = null;
 
     private transcribed_callback: ((newFinalBlocks: Array<TranscriptBlock>, newInProgressBlock: TranscriptBlock) => void) | null = null;
 
@@ -109,6 +115,16 @@ export class WhisperRecognizer implements Recognizer {
         raw_recorder.port.onmessage = this.process_recorder_message.bind(this);
 
         console.log("Whisper: Done setting up audio context");
+
+        // HACK: VAD files were manually copied into the public folder
+        // TODO: add copy commands to the build script
+        this.vad = await MicVAD.new({
+            workletURL: process.env.PUBLIC_URL + "/vad/vad.worklet.bundle.min.js",
+            modelURL: process.env.PUBLIC_URL + "/vad/silero_vad.onnx",
+            onSpeechEnd: this.on_speech_end.bind(this),
+            redemptionFrames: 4,
+        })
+        
     }
 
     private async load_model(model: string) {
@@ -180,13 +196,14 @@ export class WhisperRecognizer implements Recognizer {
         const audio_chunk = new Float32Array(message.data);
         this.audio_buffer.push(audio_chunk);
         if (this.audio_buffer.isFull()) {
-            this.whisper.set_audio(this.model_index, this.audio_buffer.getAll());
+            // this.whisper.set_audio(this.model_index, this.audio_buffer.getAll());
             this.audio_buffer.clear();
         }
     }
 
-    private process_analyzer_result(features: any) {
-
+    private on_speech_end(audio: Float32Array) {
+        console.log("Whisper VAD: speech ended, audio length (s):", audio.length / this.kSampleRate);
+        this.whisper.set_audio(this.model_index, audio);
     }
 
     /**
@@ -197,13 +214,16 @@ export class WhisperRecognizer implements Recognizer {
         console.log("trying to start whisper");
         let that = this;
         if (this.whisper == null || this.model_index == -1) {
+            console.warn("Cannot find whisper instance, instantiating one...", this.whisper, this.model_index);
             this.loadWhisper().then(() => {
                 that.whisper.setStatus("");
                 that.context.resume();
+                that.vad?.start();
             })
         } else {
             this.whisper.setStatus("");
             this.context.resume();
+            that.vad?.start();
         }
     }
 
@@ -217,6 +237,7 @@ export class WhisperRecognizer implements Recognizer {
         }
         this.whisper.set_status("paused");
         this.context.suspend();
+        this.vad?.pause();
     }
 
     /**

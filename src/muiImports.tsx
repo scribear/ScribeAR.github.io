@@ -12,7 +12,8 @@ import Box from '@mui/material/Box';
 import MicIcon from '@mui/icons-material/Mic';
 import Tooltip from '@mui/material/Tooltip';
 import MenuIcon from '@mui/icons-material/Menu';
-import { Lock, LockOpen } from '@mui/icons-material';
+import LockIcon from '@material-ui/icons/Lock';
+import LockOpenIcon from '@material-ui/icons/LockOpen';
 import FullscreenIcon from '@mui/icons-material/Fullscreen';
 import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
 import ListItem from '@mui/material/ListItem';
@@ -100,8 +101,8 @@ export {
     MicIcon,
     AddIcon,
     MenuIcon,
-    Lock,
-    LockOpen,
+    LockIcon,
+    LockOpenIcon,
     FullscreenIcon,
     ListItem,
     FullscreenExitIcon,    

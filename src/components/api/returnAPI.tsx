@@ -148,7 +148,7 @@ export const useRecognition = (sRecog : SRecognition, api : ApiStatus, control :
          // Stop current recognizer when switching to another one, if possible
          newRecognizer?.stop();
       }
-   }, [api.currentApi, azure, control, streamTextConfig, playbackStatus]);
+   }, [api.currentApi, azure, streamTextConfig, playbackStatus]);
 
    // Start / stop recognizer, if listening toggled
    useEffect(() => {

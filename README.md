@@ -17,6 +17,10 @@ permalink: /index.html
 
 Download Node.js at nodejs.org. Node comes with npm (Node Package Manager), which we will use for running code on your machine and deploying it to Github Pages. Make sure node and npm are in your `PATH` and then run `node -v` and `npm -v`.
 
+If both `node -v` and `npm -v` return version numbers, install all dependencies by running `npm install`
+
+Then, run start up your local instance through `npm run start`
+
 Here are some relevant files worth knowing about. These files are present in any React repository. Most of them are initialized automatically with the command `npx create-react-app`.
 * `.gitignore` lists files that won't be committed to Git. You will likely never touch any of the files listed there (except for `notes.txt`, which you may create in your local directory to keep any personal notes).
 * `node_modules` handles the backend for us. This folder is huge and that’s why we don’t commit it to Git (i.e. it's listed in `.gitignore`). Don’t touch `node_modules` directly unless you know what you’re doing.

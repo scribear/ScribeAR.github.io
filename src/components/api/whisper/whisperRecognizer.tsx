@@ -3,6 +3,9 @@ import { TranscriptBlock } from '../../../react-redux&middleware/redux/types/Tra
 import makeWhisper from './libstream';
 import { loadRemote } from './indexedDB'
 import { SIPOAudioBuffer } from './sipo-audio-buffer';
+import RecordRTC, {StereoAudioRecorder} from 'recordrtc';
+import WavDecoder from 'wav-decoder';
+
 /**
  * Wrapper for Web Assembly implementation of whisper.cpp
  */
@@ -100,14 +103,33 @@ export class WhisperRecognizer implements Recognizer {
 
         // Set up audio source
         let mic_stream = await navigator.mediaDevices.getUserMedia({audio: true, video: false});
-        let source = this.context.createMediaStreamSource(mic_stream);
-        
-        // Set up PCM audio recorder
-        await this.context.audioWorklet.addModule(process.env.PUBLIC_URL + "/raw-recorder.js");
-        let raw_recorder = new AudioWorkletNode(this.context, "raw-recorder");
-        source.connect(raw_recorder);
-        raw_recorder.port.onmessage = this.process_recorder_message.bind(this);
+        // let source = this.context.createMediaStreamSource(mic_stream);
 
+        const recorder = new RecordRTC(mic_stream, {
+            type: 'audio',
+            mimeType: 'audio/wav',
+            desiredSampRate: this.kSampleRate,
+            timeSlice: 1_000,
+            ondataavailable: async (blob: Blob) => {
+                // Convert wav chunk to PCM
+                const array_buffer = await blob.arrayBuffer();
+                const {channelData} = await WavDecoder.decode(array_buffer);
+                // Should be 16k, float32, stereo pcm data
+                // Just get 1 channel
+                const pcm_data = channelData[0];
+
+                // Feed process_recorder_message audio in 128 sample chunks
+                for (let i = 0; i < pcm_data.length - 127; i+= 128) {
+                    const audio_chunk = pcm_data.subarray(i, i + 128)
+
+                    this.process_recorder_message(audio_chunk);
+                }
+            },
+            recorderType: StereoAudioRecorder,
+            numberOfAudioChannels: 1,
+          });
+
+        recorder.startRecording();
         console.log("Whisper: Done setting up audio context");
     }
 
@@ -174,10 +196,9 @@ export class WhisperRecognizer implements Recognizer {
 
     /**
      * Helper method that stores audio chunks from the raw recorder in buffer
-     * @param message Message object containing an audio chunk
+     * @param audio_chunk Float32Array containing an audio chunk
      */
-    private process_recorder_message(message: MessageEvent) {
-        const audio_chunk = new Float32Array(message.data);
+    private process_recorder_message(audio_chunk: Float32Array) {
         this.audio_buffer.push(audio_chunk);
         if (this.audio_buffer.isFull()) {
             this.whisper.set_audio(this.model_index, this.audio_buffer.getAll());

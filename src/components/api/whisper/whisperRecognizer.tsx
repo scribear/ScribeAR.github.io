@@ -25,7 +25,8 @@ export class WhisperRecognizer implements Recognizer {
      */
     private context: AudioContext;
     private audio_buffer: SIPOAudioBuffer;
-    
+    private recorder: RecordRTC;
+
     /**
      * Instance of the whisper wasm module, and its variables
      */
@@ -105,7 +106,7 @@ export class WhisperRecognizer implements Recognizer {
         let mic_stream = await navigator.mediaDevices.getUserMedia({audio: true, video: false});
         // let source = this.context.createMediaStreamSource(mic_stream);
 
-        const recorder = new RecordRTC(mic_stream, {
+        this.recorder = new RecordRTC(mic_stream, {
             type: 'audio',
             mimeType: 'audio/wav',
             desiredSampRate: this.kSampleRate,
@@ -129,7 +130,7 @@ export class WhisperRecognizer implements Recognizer {
             numberOfAudioChannels: 1,
           });
 
-        recorder.startRecording();
+        this.recorder.startRecording();
         console.log("Whisper: Done setting up audio context");
     }
 
@@ -238,6 +239,7 @@ export class WhisperRecognizer implements Recognizer {
         }
         this.whisper.set_status("paused");
         this.context.suspend();
+        this.recorder.stopRecording();
     }
 
     /**

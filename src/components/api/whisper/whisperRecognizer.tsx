@@ -6,6 +6,17 @@ import { SIPOAudioBuffer } from './sipo-audio-buffer';
 import RecordRTC, {StereoAudioRecorder} from 'recordrtc';
 import WavDecoder from 'wav-decoder';
 
+// https://stackoverflow.com/questions/4554252/typed-arrays-in-gecko-2-float32array-concatenation-and-expansion
+function Float32Concat(first, second) {
+    const firstLength = first.length;
+    const result = new Float32Array(firstLength + second.length);
+
+    result.set(first);
+    result.set(second, firstLength);
+
+    return result;
+}
+
 /**
  * Wrapper for Web Assembly implementation of whisper.cpp
  */
@@ -106,18 +117,23 @@ export class WhisperRecognizer implements Recognizer {
         let mic_stream = await navigator.mediaDevices.getUserMedia({audio: true, video: false});
         // let source = this.context.createMediaStreamSource(mic_stream);
 
+        let last_suffix = new Float32Array(0);
         this.recorder = new RecordRTC(mic_stream, {
             type: 'audio',
             mimeType: 'audio/wav',
             desiredSampRate: this.kSampleRate,
-            timeSlice: 1_000,
+            timeSlice: 250,
             ondataavailable: async (blob: Blob) => {
                 // Convert wav chunk to PCM
                 const array_buffer = await blob.arrayBuffer();
                 const {channelData} = await WavDecoder.decode(array_buffer);
                 // Should be 16k, float32, stereo pcm data
                 // Just get 1 channel
-                const pcm_data = channelData[0];
+                let pcm_data = channelData[0];
+
+                // Prepend previous suffix and update with current suffix
+                pcm_data = Float32Concat(last_suffix, pcm_data);
+                last_suffix = pcm_data.slice(-(pcm_data.length % 128))
 
                 // Feed process_recorder_message audio in 128 sample chunks
                 for (let i = 0; i < pcm_data.length - 127; i+= 128) {
@@ -125,6 +141,7 @@ export class WhisperRecognizer implements Recognizer {
 
                     this.process_recorder_message(audio_chunk);
                 }
+
             },
             recorderType: StereoAudioRecorder,
             numberOfAudioChannels: 1,

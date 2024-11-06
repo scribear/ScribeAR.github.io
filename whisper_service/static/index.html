@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Real-time voice transcription test</title>
+</head>
+<body>
+<h2>Real-time voice transcription test</h2>
+<button onclick="startRecording()" id="startButton">Start Recording</button>
+<button onclick="stopRecording()" id="stopButton">Stop Recording</button>
+<textarea id="responseText" rows="10" cols="50" style="display:block; margin-top:20px;"></textarea>
+
+<script>
+
+
+    let mediaStream = null;
+    let audioContext = null;
+    let socket = null;
+    let workletNode = null;
+
+    const startButton = document.getElementById('startButton');
+    const stopButton = document.getElementById('stopButton');
+    const transcriptionArea = document.getElementById('responseText');
+
+    function createWebSocket() {
+        socket = new WebSocket(`ws://localhost:43007`);
+        socket.binaryType = 'arraybuffer';
+
+        socket.onopen = () => {
+            console.log('WebSocket connection opened');
+        };
+
+        socket.onclose = () => {
+            console.log('WebSocket connection closed');
+        };
+
+        socket.onerror = (error) => {
+            console.error('WebSocket error:', error);
+        };
+
+        socket.onmessage = (event) => {
+
+            let result = event.data
+
+            if(transcriptionArea.value==''){
+                result = result.trim();
+            }
+
+            transcriptionArea.value += result
+        };
+    }
+
+    async function startRecording() {
+        createWebSocket();
+
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            audioContext = new AudioContext({latencyHint: 'interactive'});
+
+            await audioContext.audioWorklet.addModule('static/voice-processor.js');
+            workletNode = new AudioWorkletNode(audioContext, 'voice-processor');
+            workletNode.port.postMessage({ sampleRate: audioContext.sampleRate });
+
+            workletNode.port.onmessage = (event) => {
+                const outputData = event.data.buffer;
+
+                if (socket && socket.readyState === WebSocket.OPEN) {
+                    socket.send(outputData);
+                }
+            };
+
+            mediaStream = audioContext.createMediaStreamSource(stream);
+            mediaStream.connect(workletNode);
+            workletNode.connect(audioContext.destination);
+
+            startButton.disabled = true;
+            stopButton.disabled = false;
+        } catch (err) {
+            console.error('Error accessing media devices.', err);
+        }
+    }
+
+    function stopRecording() {
+        if (audioContext) {
+            audioContext.close();
+            audioContext = null;
+        }
+
+        if (socket) {
+            socket.close();
+            socket = null;
+        }
+
+        startButton.disabled = false;
+        stopButton.disabled = true;
+    }
+
+
+</script>
+
+</body>
+</html>

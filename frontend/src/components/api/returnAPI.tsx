@@ -112,7 +112,7 @@ const updateTranscript = (dispatch: Dispatch) => (newFinalBlocks: Array<Transcri
  * @return transcripts, resetTranscript, recogHandler
  */
 export const useRecognition = (sRecog : SRecognition, api : ApiStatus, control : ControlStatus, 
-   azure : AzureStatus, streamTextConfig : StreamTextStatus, scribearServerStatus, playbackStatus: PlaybackStatus) => {
+   azure : AzureStatus, streamTextConfig : StreamTextStatus, scribearServerStatus: ScribearServerStatus, playbackStatus: PlaybackStatus) => {
 
    const [recognizer, setRecognizer] = useState<Recognizer>();
    // TODO: Add a reset button to utitlize resetTranscript

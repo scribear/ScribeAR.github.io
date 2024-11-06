@@ -1,0 +1,43 @@
+{
+  "name": "scribear-backend",
+  "version": "0.0.0",
+  "main": "build/index.js",
+  "type": "commonjs",
+  "scripts": {
+    "lint": "gts lint",
+    "clean": "gts clean",
+    "fix": "gts fix",
+    "posttest": "npm run lint",
+    "dev": "tsc-watch --onSuccess 'node ./build/src/index.js'",
+    "test": "jest",
+    "build": "tsc",
+    "prestart": "npm run build",
+    "start": "node ./build/src/index.js"
+  },
+  "author": "bwu1324",
+  "license": "MIT",
+  "description": "",
+  "engines": {
+    "node": "^20.0.0"
+  },
+  "devDependencies": {
+    "@types/jest": "29.5.13",
+    "@types/node": "22.7.5",
+    "@types/ws": "8.5.12",
+    "gts": "5.3.1",
+    "jest": "29.7.0",
+    "pino-pretty": "11.3.0",
+    "ts-jest": "29.2.5",
+    "typed-emitter": "2.1.0",
+    "typescript": "5.1.6"
+  },
+  "dependencies": {
+    "@fastify/websocket": "11.0.1",
+    "axios": "1.7.7",
+    "dotenv": "16.4.5",
+    "fastify": "5.0.0",
+    "pino": "9.5.0",
+    "tsc-watch": "6.2.0",
+    "ws": "8.18.0"
+  }
+}

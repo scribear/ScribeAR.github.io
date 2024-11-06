@@ -199,7 +199,7 @@ export const LoungeVisual = (props) => {
             // sampleRate: 51200 // change to 51200 so that eachDataFreq will be 50
             // sampleRate: 38400 // 19200 max
             // sampleRate: 40960 // 20480 max
-            sampleRate: 32000 // 16000 max
+            // sampleRate: 32000 // 16000 max
         });
         let analyserOptions : AnalyserOptions = { // visual largely affected by fftSize and minDecibels. Roughly direct relationship 
             "fftSize": 512, // fftSize / 2 is the length of the dataArray. Less: Data are Crunched: Large: the Opposite

@@ -36,7 +36,7 @@ export class WhisperRecognizer implements Recognizer {
      */
     private context: AudioContext;
     private audio_buffer: SIPOAudioBuffer;
-    private recorder: RecordRTC;
+    private recorder?: RecordRTC;
 
     /**
      * Instance of the whisper wasm module, and its variables
@@ -256,7 +256,7 @@ export class WhisperRecognizer implements Recognizer {
         }
         this.whisper.set_status("paused");
         this.context.suspend();
-        this.recorder.stopRecording();
+        this.recorder?.stopRecording();
     }
 
     /**

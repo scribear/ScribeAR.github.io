@@ -480,7 +480,7 @@ export default function CustomizedMenus() {
     return (
       <div>
         <List
-          sx={{ width: '20vw', bgcolor: 'background.paper' }}
+          sx={{ width: { xs: '90vw', sm: '50vw', md: '30vw', lg: '20vw' }, bgcolor: 'background.paper' }}
           component="div"
           aria-labelledby="nested-list-subheader"
         >

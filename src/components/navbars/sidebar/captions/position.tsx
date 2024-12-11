@@ -4,6 +4,7 @@ import Slider, { SliderThumb } from '@mui/material/Slider';
 import { Grid, makeStyles, Typography } from '../../../../muiImports'
 import { RootState, DisplayStatus } from '../../../../react-redux&middleware/redux/typesImports';
 import { useDispatch, useSelector } from 'react-redux';
+/*
 const useStyles = makeStyles({
   slider: {
     width: '16vw',
@@ -13,6 +14,17 @@ const useStyles = makeStyles({
     width: '2.5vw',
     marginLeft: '1vw'
   }
+});*/
+
+const useStyles = makeStyles({
+  slider: {
+    width: '60%',
+    margin: 'auto',
+  },
+  textBox: {
+    width: '90%',
+    margin: '0 auto',
+  },
 });
 
 export default function PlusMinus(props) {

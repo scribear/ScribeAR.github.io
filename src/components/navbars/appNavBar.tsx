@@ -62,15 +62,15 @@ export default function AppNavBar(props) {
     // if (typeof accent_color === 'undefined') {
     //     accent_color = "#3f51bf";
     //     dispatch({type: 'CHANGE_SECONDARY_THEME', payload: accent_color});
-    // }
-    // console.log("Accent Color: ", accent_color);
+    // }<Toolbar style={{ backgroundColor: accent_color, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', padding: '0 10px', }}>
+    // console.log("Accent Color: ", accent_color); <Toolbar style={{ backgroundColor: accent_color, width: '100%', maxHeight: '10vh', paddingLeft: '10px' }}>
 
     return (
         <AppBar position="fixed" id="topbar-wrapper" onMouseOut={changeVisibility} onMouseOver={changeVisibilityOver} style={{ transition: '0.6s' }}>
             <Grid container spacing={2} alignItems="center"  >
-                <Toolbar style={{ backgroundColor: accent_color, width: '100%', maxHeight: '10vh', paddingLeft: '20px' }}>
+                <Toolbar style={{ backgroundColor: accent_color, width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', padding: '10px' }}>
                     <Grid item xs={6}>
-                        <Grid container spacing={1} alignItems="center"  >
+                        <Grid container spacing={1} alignItems="center"  wrap="wrap">
                             <Grid item>
                                 <IconButton onClick={toggleDrawer(true)}>
                                     <ThemeProvider theme={myTheme}>
@@ -78,11 +78,11 @@ export default function AppNavBar(props) {
                                     </ThemeProvider>
                                 </IconButton>
                                 <Drawer disableEnforceFocus open={state.isOpen} onClose={toggleDrawer(false)}>
-                                    <SideBar isRecording={props.isRecording} />
+                                    <SideBar isRecording={props.isRecording} onClose={toggleDrawer(false)}/>
                                 </Drawer>
                             </Grid>
                             <Grid item>
-                                <h2 style={{ textAlign: "left", paddingLeft: '20px' }}>ScribeAR</h2>
+                                <h3 style={{ textAlign: "left", paddingLeft: '10px' }}>ScribeAR</h3>
                             </Grid>
                         </Grid>
                     </Grid>

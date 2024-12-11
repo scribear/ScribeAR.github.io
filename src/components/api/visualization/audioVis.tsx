@@ -38,9 +38,14 @@ export const AudioVis: React.FC = (props) => {
          )
       } else if (controlStatus.showMFCC === true) {
          return (
+            // <Draggable id="fullVisual">
+            //    <Resizable size="290px">
+            //       <MFCCVisual></MFCCVisual>
+            //    </Resizable>
+            // </Draggable>
             <Draggable id="fullVisual">
                <Resizable size="290px">
-                  <MFCCVisual></MFCCVisual>
+                  <MFCCVisual visualWidth={290} visualHeight={290} />
                </Resizable>
             </Draggable>
          )
@@ -63,3 +68,4 @@ export const AudioVis: React.FC = (props) => {
       </div>
    );
 }
+

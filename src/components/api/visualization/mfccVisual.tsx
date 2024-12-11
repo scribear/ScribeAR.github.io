@@ -1,23 +1,14 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { DisplayStatus } from '../../../react-redux&middleware/redux/typesImports';
 import { RootState } from '../../../store';
 import Meyda from 'meyda';
 import { MeydaAnalyzer } from 'meyda/dist/esm/meyda-wa';
 
-
-var audioContext: AudioContext;
-var analyser: MeydaAnalyzer;
-var source: MediaStreamAudioSourceNode;
-var rafId: number;
-var canvas: HTMLCanvasElement;
-var canvasCtx: CanvasRenderingContext2D;
-
 const LOUDNESS_THRESHOLD = 15;
 const HISTORY_LENGTH = 80;
 const MFCC_COEFFICIENTS = 25;
 const FFT_SIZE = 512;
-var history_write_index = 0;
 
 class Moment {
   mfcc: Float32Array;
@@ -29,93 +20,93 @@ class Moment {
   }
 }
 
-var history: Moment[] = new Array(HISTORY_LENGTH);
-for (var i = 0; i < HISTORY_LENGTH; i++) {
-  history[i] = new Moment();
-}
+let audioContext: AudioContext;
+let analyser: MeydaAnalyzer;
+let source: MediaStreamAudioSourceNode;
+let rafId: number;
 
-var theme: DisplayStatus;
+const history: Moment[] = Array.from({ length: HISTORY_LENGTH }, () => new Moment());
+let history_write_index = 0;
 
 export function MFCCVisual(props: any) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-
-  theme = useSelector((state: RootState) => {
-    return state.DisplayReducer as DisplayStatus;
-  });
+  const theme = useSelector((state: RootState) => state.DisplayReducer as DisplayStatus);
 
   useEffect(() => {
     audioContext = new (window.AudioContext || window.webkitAudioContext)();
 
-    navigator.mediaDevices.getUserMedia({
-      audio: true,
-      video: false
-    }).then(newMediaStream => {
-      source = audioContext.createMediaStreamSource(newMediaStream);
+    navigator.mediaDevices
+      .getUserMedia({ audio: true, video: false })
+      .then((mediaStream) => {
+        source = audioContext.createMediaStreamSource(mediaStream);
 
-      analyser = Meyda.createMeydaAnalyzer({
-        audioContext: audioContext,
-        source: source,
-        bufferSize: FFT_SIZE,
-        numberOfMFCCCoefficients: MFCC_COEFFICIENTS,
-        featureExtractors: [
-          'loudness',
-          'spectralCentroid',
-          'mfcc',
-        ],
-        callback: (features: {
-          loudness: { specific: Float32Array, total: number },
-          spectralCentroid: number,
-          mfcc: Float32Array,
-        }) => {
-          if (features.loudness.total >= LOUDNESS_THRESHOLD) {
-            history[history_write_index].mfcc.set(features.mfcc);
-            history[history_write_index].centroid = features.spectralCentroid;
-            history_write_index = (history_write_index + 1) % HISTORY_LENGTH;
-          }
-        }
+        analyser = Meyda.createMeydaAnalyzer({
+          audioContext,
+          source,
+          bufferSize: FFT_SIZE,
+          numberOfMFCCCoefficients: MFCC_COEFFICIENTS,
+          featureExtractors: ['loudness', 'spectralCentroid', 'mfcc'],
+          callback: (features) => {
+            if (features.loudness.total >= LOUDNESS_THRESHOLD) {
+              history[history_write_index].mfcc.set(features.mfcc);
+              history[history_write_index].centroid = features.spectralCentroid;
+              history_write_index = (history_write_index + 1) % HISTORY_LENGTH;
+            }
+          },
+        });
+
+        analyser.start();
       });
 
-      analyser.start();
-    });
-
     rafId = requestAnimationFrame(draw);
-
-    // setup canvas
-    canvas = canvasRef.current!;
-    canvasCtx = canvas.getContext('2d')!;
 
     return () => {
       cancelAnimationFrame(rafId);
       analyser.stop();
       source.disconnect();
-    }
+    };
   }, []);
 
-  const draw = () => { // the draw function
+  const draw = () => {
     requestAnimationFrame(draw);
-
-    canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
-
-    const sliceWidth = canvas.width / MFCC_COEFFICIENTS;
-    const sliceHeight = canvas.height / HISTORY_LENGTH;
-    history.forEach((moment, index) => {
-      const row = (HISTORY_LENGTH - history_write_index + index) % HISTORY_LENGTH;
-      console.log(moment.centroid);
-      const centroid = Math.round(720 * moment.centroid / FFT_SIZE);
-      moment.mfcc.forEach((data, col) => {
+  
+    const canvas = canvasRef.current!;
+    const canvasCtx = canvas.getContext('2d')!;
+  
+    // Set dull white background
+    canvasCtx.fillStyle = '#D3D3D3';
+    canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
+  
+    const sliceWidth = canvas.width / HISTORY_LENGTH;
+    const sliceHeight = canvas.height / MFCC_COEFFICIENTS;
+  
+    for (let i = 0; i < HISTORY_LENGTH; i++) {
+      const historyIndex = (history_write_index - i + HISTORY_LENGTH) % HISTORY_LENGTH; // Map newest to right
+      const x = canvas.width - sliceWidth * (i + 1); // Calculate position from right to left
+      const moment = history[historyIndex];
+  
+      moment.mfcc.forEach((data, row) => {
+        //const intensity = Math.min(data / 20, 1); // Normalize MFCC value
+        //const brightness = intensity * 255; // Map intensity to brightness
+  
+        // Grayscale color mapping
+        ///canvasCtx.fillStyle = `rgb(${brightness}, ${brightness}, ${brightness})`;
         const intensity = data / 255;
-        canvasCtx.fillStyle = `hsl(${centroid}deg 100% 50% / ${intensity})`;
+        const centroid = Math.round((720 * moment.centroid) / FFT_SIZE);
+        canvasCtx.fillStyle = `hsl(${centroid}deg 100% 60% / ${Math.min(intensity * 10, 1)})`;
+  
+        // Draw rectangle for each coefficient
         canvasCtx.fillRect(
-          col * sliceWidth,
+          x,
           row * sliceHeight,
           sliceWidth,
           sliceHeight
         );
       });
-    });
-  }
+    }
+  };
+  
+  
 
-  return <canvas width={props.visualWidth}
-    height={props.visualHeight}
-    ref={canvasRef} />
+  return <canvas width={props.visualWidth} height={props.visualHeight} ref={canvasRef} />;
 }

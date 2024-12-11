@@ -12,7 +12,7 @@ export default function TopBar(props) {
 
     return (
         <div>
-            <Grid container direction="row" justifyContent="flex-end" alignItems="center">
+            <Grid container direction="row" justifyContent="flex-end" alignItems="center" wrap="wrap">
                 <Grid item>
                     <ApiDropdown theme={props.theme} apiDisplayName={props.apiDisplayName}/>
                 </Grid>

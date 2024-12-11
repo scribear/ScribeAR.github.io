@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { IconButton,  ListItemText, ListItem, ListItemIcon,  ExpandMore,  ExpandLess,  List,  EqualizerIcon,  DetailsIcon, Divider, SubtitlesIcon } from '../../../muiImports'
+import CloseIcon from '@mui/icons-material/Close';
 import DisplayMenu from './display/menu';
 import LangMenu from './language/menu';
 import PhraseMenu from './phrase/menu';
@@ -40,8 +41,11 @@ export default function SideBar(props) {
 
   return (
     <div>
+      <IconButton onClick={props.onClose} style={{position: "absolute", top: "10px", right: "10px", zIndex: 1000, }}>
+      <CloseIcon />
+    </IconButton>
       <h2 className="d-table-cell tar2" style={{textAlign: "left", paddingLeft: "20px", transition:'.6s'}}>Menu</h2>
-      <List sx={{ width: '20vw', bgcolor: 'background.paper' }} component="nav" aria-labelledby="nested-list-subheader" >
+      <List sx={{ width: { xs: '100vw', sm: '50vw', md: '40vw', lg: '30vw' }, bgcolor: 'background.paper' }} component="nav" aria-labelledby="nested-list-subheader" >
         <LangMenu open={state.lang} isRecording={props.isRecording} listItemHeader={listItemHeader} />
         <Divider/>
         

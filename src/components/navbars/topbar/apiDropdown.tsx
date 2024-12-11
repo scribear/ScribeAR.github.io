@@ -35,7 +35,7 @@ export default function ApiDropdown(props) {
         PaperProps={{
           elevation: 0,
           sx: {
-            width: '20vw',
+            width: { xs: '80vw', sm: '40vw', md: '30vw' },
             overflow: 'invisible',
             filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
             mt: 1.5,

@@ -1,33 +1,33 @@
 import { Recognizer } from '../recognizer';
 import { TranscriptBlock } from '../../../react-redux&middleware/redux/types/TranscriptTypes';
 import { ScribearServerStatus } from '../../../react-redux&middleware/redux/typesImports';
+import RecordRTC, {StereoAudioRecorder} from 'recordrtc';
 
 
-/**
- * 
- * Whenever the block is updated but still in-progress, a recognizing event is triggered. Whenever the block
- * becomes final, a recognized event is triggered.
- * 
- * A recognized event is also triggered when the stop signal is received, as the block is forced
- * to be finalized before stopping the recognizer. This is followed by a **spurious** recognized event
- * that yields an empty string
- * 
- * The block obeys these invariants:
- * 
- * 1. If in event k the block is final, in event k+1 the block will be in-progress and transcribing the next segment of speech
- * 2. If in event k it's in-progress instead, it could still be in-progress in k+1, transcribing the same segment of speech
- * 3. The block is empty when the recognizer starts / restarts
- * 3. The block is guaranteed to be final in the last recognized event immediately before the recognizer stops
- */
+enum BackendTranscriptBlockType {
+    Final = 0,
+    InProgress = 1,
+}
 
-/**
- * Wrapper for Microsoft Azure SpeechRecognizer class, implements Recognizer interface 
- */
+type BackendTranscriptBlock = {
+    type: BackendTranscriptBlockType;
+    start: number;
+    end: number;
+    text: string;
+};
+
+
+
 export class ScribearRecognizer implements Recognizer {
     private scribearServerStatus : ScribearServerStatus
     private socket : WebSocket | null = null
     private transcribedCallback : any
     private language : string
+    private recorder?: RecordRTC;
+    private kSampleRate = 16000;
+
+
+
     /**
      * Creates an Azure recognizer instance that listens to the default microphone
      * and expects speech in the given language 
@@ -38,6 +38,25 @@ export class ScribearRecognizer implements Recognizer {
         console.log("ScribearRecognizer, new recognizer being created!")
         this.language = language;
         this.scribearServerStatus = scribearServerStatus;
+        this._startRecording();
+    }
+
+    private async _startRecording() {
+        let mic_stream = await navigator.mediaDevices.getUserMedia({audio: true, video: false});
+
+        this.recorder = new RecordRTC(mic_stream, {
+            type: 'audio',
+            mimeType: 'audio/wav',
+            desiredSampRate: this.kSampleRate,
+            timeSlice: 1_000,
+            ondataavailable: async (blob: Blob) => {
+                this.socket?.send(blob);
+            },
+            recorderType: StereoAudioRecorder,
+            numberOfAudioChannels: 1,
+          });
+
+        this.recorder.startRecording();
     }
 
     /**
@@ -47,19 +66,21 @@ export class ScribearRecognizer implements Recognizer {
     start() {
         console.log("ScribearRecognizer.start()");
         if(this.socket) {return;}
-        
+
         this.socket = new WebSocket(this.scribearServerStatus.scribearServerAddress);
 
         // this.socket.onopen = (e)=> {...}
         const inProgressBlock = new TranscriptBlock();
         
         this.socket.onmessage = (event)=> {
+            const server_block: BackendTranscriptBlock = JSON.parse(event.data);
+
             // Todo: extract type of message (inprogress v final) and the text from the message
-            const inProgress:boolean = event.data[0] === 'I'
-            var text:string = event.data.substring(1);
+            const inProgress = server_block.type === BackendTranscriptBlockType.InProgress;
+            const text = server_block.text;
 
             if(inProgress) {
-                inProgressBlock.text += text; // append
+                inProgressBlock.text = text; // replace text
                 this.transcribedCallback([], inProgressBlock);
             } else {
                 inProgressBlock.text = "" //reset in progress
@@ -76,6 +97,7 @@ export class ScribearRecognizer implements Recognizer {
      */
     stop() {
         console.log("ScribearRecognizer.stop()");
+        this.recorder?.stopRecording();
         if(! this.socket) {return;}
         this.socket.close();
         this.socket = null;

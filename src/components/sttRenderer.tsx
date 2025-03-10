@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { RootState } from '../store';
@@ -89,31 +89,29 @@ export const STTRenderer = (transcript: string) : JSX.Element => {
    if (row_change) {handleRowNumberBound(line_num);}
    row_change = 0;
 
-   const [showButton, setShowButton] = useState(false);
-   
-   const capts = document.getElementById('captionsSpace')
-   
-   // autoscroll to bottom
-   if (capts && !showButton) {
-      capts.scrollTop = capts.scrollHeight - capts.clientHeight
+   const transcriptContainerRef = useRef<HTMLDivElement>(null);
+   const [autoScroll, setAutoScroll] = useState(true); 
+
+   useEffect(() => {
+      if (transcriptContainerRef.current && autoScroll) {
+         transcriptContainerRef.current.scrollTop = transcriptContainerRef.current.scrollHeight;
+      }
+   }, [transcript, autoScroll]);
+
+   const handleScroll = () => {
+      if (!transcriptContainerRef.current) return;
+
+      // Check if we are scrolled close (within 1 line of text) to the bottom
+      const isScrolledToBottom = 
+         transcriptContainerRef.current.scrollHeight - transcriptContainerRef.current.scrollTop < transcriptContainerRef.current.clientHeight + text_size;
+      
+      // Autoscroll if we are at the bottom, otherwise, disable auto scrolling
+      setAutoScroll(isScrolledToBottom);
    }
 
    const handleClick = () => {
-      // setAllowScroll(!allowScroll);
-      setShowButton(false);
+      setAutoScroll(true);
    }
-
-   const handleScroll = () => {
-      // we scroll up, the scrolldown button appears, and we disable auto scroll down.
-      if ((!showButton) && capts && (capts.scrollTop + capts.clientHeight < capts.scrollHeight - 5)) {
-         setShowButton(true);
-      }
-      // we manually scroll down, the scrolldown button should disappear, and should trigger automatic scroll down.
-      else if ((showButton) && capts && (capts.scrollTop + capts.clientHeight >= capts.scrollHeight - 5)) {
-         setShowButton(false);
-      }
-   }
-
 
    /**
     * 6.25 comes from 100 / 16. 
@@ -125,7 +123,7 @@ export const STTRenderer = (transcript: string) : JSX.Element => {
       <div>
          <AudioVis></AudioVis>
          <ul >
-            <h3 className="captions" onScroll={handleScroll}
+            <h3 className="captions" ref={transcriptContainerRef} onScroll={handleScroll}
                id = "captionsSpace" 
                style = {{
                   position: 'fixed', width: '90%', 
@@ -159,7 +157,7 @@ export const STTRenderer = (transcript: string) : JSX.Element => {
             </h3>
             } */}
 
-            {showButton && 
+            {!autoScroll && 
             <button
             onClick={handleClick}
             style = {{

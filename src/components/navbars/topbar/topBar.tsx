@@ -36,7 +36,7 @@ import {
 
             {/* Only display if there is enough space */}
             {<Listening listening={props.listening} iconSize={iconSize} />}
-            {!isMobile && <MenuHider menuVisible={props.menuVisible} iconSize={iconSize} />}
+            {/* {!isMobile && <MenuHider menuVisible={props.menuVisible} iconSize={iconSize} />} */}
             {<TranscriptDownload />}
             { <Fullscreen iconSize={iconSize} />}
             {!isMobile && <QRCodeScreen />}

@@ -18,6 +18,10 @@ import SideBar from './sidebar/sidebar';
 import TopBar from './topbar/topBar';
 import { API_Name } from '../../react-redux&middleware/redux/types/apiEnums';
 
+import {
+  useTheme
+} from '@mui/material';
+
 const currTheme = createTheme({
     palette: {
         primary: {
@@ -34,9 +38,9 @@ export default function AppNavBar(props) {
     const controlStatus = useSelector((state: RootState) => state.ControlReducer as ControlStatus);
 
     const apiDisplayName = API_Name(apiStatus.currentApi);
-    const accentColor = displayStatus.secondaryColor || '#3f51bf';
+    const accentColor = displayStatus.secondaryColor;
 
-    // const theme = useTheme();
+    const theme = useTheme();
     // const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
     const toggleDrawer = (open: boolean) => (event: React.MouseEvent | React.KeyboardEvent) => {
@@ -48,7 +52,7 @@ export default function AppNavBar(props) {
     console.log(apiStatus.currentApi)
 
     return (
-        <ThemeProvider theme={currTheme}>
+        <ThemeProvider theme={theme}>
             <AppBar position="fixed" id="topbar-wrapper" sx={{ transition: '0.6s', backgroundColor: accentColor }}>
                 <Toolbar sx={{ width: '100%', minHeight: 56, color: 'white' }}>
                     <Grid container alignItems="center" justifyContent="space-between">
@@ -78,7 +82,7 @@ export default function AppNavBar(props) {
                                 }}
                             >
                                 <TopBar
-                                    theme={currTheme}
+                                    theme={theme}
                                     apiDisplayName={apiDisplayName}
                                     listening={controlStatus.listening}
                                     menuVisible={displayStatus.menuVisible}

@@ -12,7 +12,7 @@ export default function QRCodeComponent() {
         getLocalIpAddress().then((ip) => {
             setLocalIp(ip);
             console.log(ip);
-            fetch(`http://localhost:8000/accessToken`)
+            fetch(`http://localhost:8080/accessToken`)
                 .then(response => response.json())
                 .then(data => setAccessToken(data.accessToken))
                 .catch(error => console.error("Failed to fetch access token:", error));
@@ -57,17 +57,17 @@ export default function QRCodeComponent() {
                         3. If the QR code is not working, type in:
                     </Typography>
                     <Typography variant="body1" style={{ fontWeight: "bold", wordBreak: "break-all" }}>
-                        {`http://${localIp}:3000?mode=student&server=scribear-server&serverAddress=ws://${localIp}:8000/sink${accessToken ? `&accessToken=${accessToken}` : ''}`}
+                        {`http://${localIp}:3000?mode=student&server=scribear-server&serverAddress=ws://${localIp}:8080/sink${accessToken ? `&accessToken=${accessToken}` : ''}`}
                     </Typography>
                     <div style={{ marginTop: 20 }}>
                         {accessToken ? (
                             <QRCode 
-                                value={`http://${localIp}:3000?mode=student&server=scribear-server&serverAddress=ws://${localIp}:8000/sink&accessToken=${accessToken}`} 
+                                value={`http://${localIp}:3000?mode=student&server=scribear-server&serverAddress=ws://${localIp}:8080/sink&accessToken=${accessToken}`} 
                                 size={200} 
                             />
                         ) : (
                             <QRCode 
-                                value={`http://${localIp}:3000?mode=student&server=scribear-server&serverAddress=ws://${localIp}:8000/sink`} 
+                                value={`http://${localIp}:3000?mode=student&server=scribear-server&serverAddress=ws://${localIp}:8080/sink`} 
                                 size={200} 
                             />
                         )}

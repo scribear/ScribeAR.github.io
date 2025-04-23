@@ -59,7 +59,7 @@ export default function ApiDropdown(props) {
   // Automatically use scribear server as sink when in student mode or as sourcesink if in kiosk mode
   useEffect(() => {
     if (mode === 'kiosk') {
-      switchToScribeARServer(`ws:${serverAddress}/sourcesink`);
+      switchToScribeARServer(`ws://${serverAddress}/sourcesink`);
     } else if (mode === 'student' && accessToken) {
       console.log("Sending startSession POST with accessToken:", accessToken);
       fetch(`http://${serverAddress}/startSession`, {

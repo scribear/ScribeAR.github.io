@@ -1,22 +1,23 @@
 import React, { useEffect, useState } from "react";
 import QRCode from "react-qr-code";
-import getLocalIpAddress from './api/getip';
 import { Button, Typography, Drawer } from '@mui/material';
 
 export default function QRCodeComponent() {
-    const [localIp, setLocalIp] = useState<string>("Loading...");
+    const [scribearURL, setScribearURL] = useState<string>('Loading...');
+    const [nodeServerAddress, setNodeServerAddress] = useState<string>("Loading...");
     const [accessToken, setAccessToken] = useState<string | null>(null);
     const [qrOpen, setQrOpen] = useState(false);
-    
+
     useEffect(() => {
-        getLocalIpAddress().then((ip) => {
-            setLocalIp(ip);
-            console.log(ip);
-            fetch(`http://localhost:8080/accessToken`)
-                .then(response => response.json())
-                .then(data => setAccessToken(data.accessToken))
-                .catch(error => console.error("Failed to fetch access token:", error));
-        });
+        setScribearURL(window.location.protocol + "//" + window.location.host);
+
+        fetch(`http://localhost:8080/accessToken`)
+            .then(response => response.json())
+            .then(data => {
+                setNodeServerAddress(data.serverAddress);
+                setAccessToken(data.accessToken);
+            })
+            .catch(error => console.error("Failed to fetch access token:", error));
     }, []);
 
     const urlParams = new URLSearchParams(window.location.search);
@@ -57,17 +58,17 @@ export default function QRCodeComponent() {
                         3. If the QR code is not working, type in:
                     </Typography>
                     <Typography variant="body1" style={{ fontWeight: "bold", wordBreak: "break-all" }}>
-                        {`http://${localIp}:3000?mode=student&server=scribear-server&serverAddress=ws://${localIp}:8080/sink${accessToken ? `&accessToken=${accessToken}` : ''}`}
+                        {`${scribearURL}?mode=student&server=scribear-server&serverAddress=ws://${nodeServerAddress}/sink${accessToken ? `&accessToken=${accessToken}` : ''}`}
                     </Typography>
                     <div style={{ marginTop: 20 }}>
                         {accessToken ? (
                             <QRCode 
-                                value={`http://${localIp}:3000?mode=student&server=scribear-server&serverAddress=ws://${localIp}:8080/sink&accessToken=${accessToken}`} 
+                                value={`${scribearURL}?mode=student&server=scribear-server&serverAddress=ws://${nodeServerAddress}/sink&accessToken=${accessToken}`} 
                                 size={200} 
                             />
                         ) : (
                             <QRCode 
-                                value={`http://${localIp}:3000?mode=student&server=scribear-server&serverAddress=ws://${localIp}:8080/sink`} 
+                                value={`${scribearURL}?mode=student&server=scribear-server&serverAddress=ws://${nodeServerAddress}/sink`} 
                                 size={200} 
                             />
                         )}

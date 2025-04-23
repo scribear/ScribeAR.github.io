@@ -63,7 +63,7 @@ export default function AppNavBar(props) {
                                     <MenuIcon />
                                 </IconButton>
                                 <Drawer anchor="left" open={isDrawerOpen} onClose={toggleDrawer(false)}>
-                                    <SideBar isRecording={props.isRecording} />
+                                    <SideBar isRecording={props.isRecording} onClose={toggleDrawer(false)} />
                                 </Drawer>
                                 <Typography variant="h6" noWrap sx={{ color: 'white', paddingLeft: 2 }}>
                                     ScribeAR

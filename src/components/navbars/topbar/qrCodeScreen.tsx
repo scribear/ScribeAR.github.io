@@ -19,7 +19,7 @@ export default function QRCodeComponent() {
         if (!isKioskMode) return;
 
         setLoading(true);
-        setScribearURL(window.location.protocol + "//" + window.location.host);
+        setScribearURL(window.location.protocol + "//" + window.location.host + window.location.pathname);
 
         let updateAccessTokenTimeout;
         function updateAccessToken() {

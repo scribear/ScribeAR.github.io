@@ -58,17 +58,17 @@ export default function QRCodeComponent() {
                         3. If the QR code is not working, type in:
                     </Typography>
                     <Typography variant="body1" style={{ fontWeight: "bold", wordBreak: "break-all" }}>
-                        {`${scribearURL}?mode=student&server=scribear-server&serverAddress=ws://${nodeServerAddress}/sink${accessToken ? `&accessToken=${accessToken}` : ''}`}
+                        {`${scribearURL}?mode=student&serverAddress=${nodeServerAddress}${accessToken ? `&accessToken=${accessToken}` : ''}`}
                     </Typography>
                     <div style={{ marginTop: 20 }}>
                         {accessToken ? (
                             <QRCode 
-                                value={`${scribearURL}?mode=student&server=scribear-server&serverAddress=ws://${nodeServerAddress}/sink&accessToken=${accessToken}`} 
+                                value={`${scribearURL}?mode=student&serverAddress=${nodeServerAddress}&accessToken=${accessToken}`} 
                                 size={200} 
                             />
                         ) : (
                             <QRCode 
-                                value={`${scribearURL}?mode=student&server=scribear-server&serverAddress=ws://${nodeServerAddress}/sink`} 
+                                value={`${scribearURL}?mode=student&serverAddress=${nodeServerAddress}`} 
                                 size={200} 
                             />
                         )}

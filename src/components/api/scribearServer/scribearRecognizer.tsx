@@ -38,7 +38,6 @@ export class ScribearRecognizer implements Recognizer {
         console.log("ScribearRecognizer, new recognizer being created!")
         this.language = language;
         this.scribearServerStatus = scribearServerStatus;
-        this._startRecording();
     }
 
     private async _startRecording() {
@@ -66,6 +65,11 @@ export class ScribearRecognizer implements Recognizer {
     start() {
         console.log("ScribearRecognizer.start()");
         if(this.socket) {return;}
+
+        const scribearURL = new URL(this.scribearServerStatus.scribearServerAddress)
+        if (scribearURL.pathname != '/sink') {
+            this._startRecording();
+        }
 
         this.socket = new WebSocket(this.scribearServerStatus.scribearServerAddress);
 

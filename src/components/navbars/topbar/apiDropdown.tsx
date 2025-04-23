@@ -1,11 +1,7 @@
 import * as React from 'react';
 import { useEffect } from "react";
 import { Box, Menu, ExpandLess, ExpandMore, ThemeProvider, IconButton, Tooltip } from '../../../muiImports';
-import {
-  createTheme,
-  useMediaQuery,
-  useTheme
-} from '@mui/material';
+import { createTheme, useMediaQuery } from '@mui/material';
 
 import PickApi from './api/pickApi';
 import {
@@ -15,8 +11,7 @@ import {
   STATUS
 } from "../../../react-redux&middleware/redux/typesImports";
 import { useDispatch, useSelector } from "react-redux";
-// import Theme from '../../theme';
-import { ScribearServerStatus,/* ApiStatus, ControlStatus, PhraseList */ } from '../../../react-redux&middleware/redux/typesImports';
+import { ScribearServerStatus } from '../../../react-redux&middleware/redux/typesImports';
 
 const currTheme = createTheme({
     palette: {
@@ -31,118 +26,71 @@ export default function ApiDropdown(props) {
   const open = Boolean(anchorEl);
   const dispatch = useDispatch();
 
-
   const urlParams = new URLSearchParams(window.location.search);
-  const serverParam = urlParams.get('server');
+  const mode = urlParams.get('mode');
   const serverAddress = urlParams.get('serverAddress');
   const accessToken = urlParams.get('accessToken');
-  const [sessionToken, setSessionToken] = React.useState<string | null>(null);
+
+  const apiStatus = useSelector((state: RootState) => state.APIStatusReducer as ApiStatus);
+  const scribearServerStatus = useSelector((state: RootState) => {
+    return state.ScribearServerReducer as ScribearServerStatus
+  })
+
+  function switchToScribeARServer(sessionToken) {
+    // Set new scribear server address
+    const scribearServerAddress = `ws://${serverAddress}/sink?sessionToken=${encodeURIComponent(sessionToken)}`;
+    let copyScribearServerStatus = Object.assign({}, scribearServerStatus);
+    copyScribearServerStatus.scribearServerAddress = scribearServerAddress
+
+    dispatch({type: 'CHANGE_SCRIBEAR_SERVER_ADDRESS', payload: copyScribearServerStatus});
+
+    // Switch to scribear server
+    let copyStatus = Object.assign({}, apiStatus);
+    copyStatus.currentApi = API.SCRIBEAR_SERVER;
+    copyStatus.webspeechStatus = STATUS.AVAILABLE;
+    copyStatus.azureConvoStatus = STATUS.AVAILABLE;
+    copyStatus.whisperStatus = STATUS.AVAILABLE;
+    copyStatus.streamTextStatus = STATUS.AVAILABLE;
+    copyStatus.playbackStatus = STATUS.AVAILABLE;
+    copyStatus.scribearServerStatus = STATUS.TRANSCRIBING;
+
+    dispatch({type: 'CHANGE_API_STATUS', payload: copyStatus});
+  }
 
   useEffect(() => {
+    // Don't automatically use scribear server if not in student mode
+    if (mode !== 'student') return;
+
     if (accessToken) {
       console.log("Sending startSession POST with accessToken:", accessToken);
-      fetch('http://localhost:8080/startSession', {
+      fetch(`http://${serverAddress}/startSession`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({ accessToken })
       })
-      .then(response => response.json())
-      .then(data => {
-        setSessionToken(data.sessionToken); //updates the state
-        console.log('Session token:', data.sessionToken);
-        // If you want to persist it:
-        // localStorage.setItem('sessionToken', sessionToken);
-      })
-      .catch(error => {
-        console.error('Error starting session:', error);
-      });
+        .then(response => response.json())
+        .then(data => {
+          console.log('Session token:', data.sessionToken);
+
+          switchToScribeARServer(data.sessionToken);
+        })
+        .catch(error => {
+          console.error('Error starting session:', error);
+        });
     }
   }, [accessToken]);
-  const scribearServerStatus = useSelector((state: RootState) => {
-        return state.ScribearServerReducer as ScribearServerStatus;
-     })
-     const [scribearServerStatusBuf, setscribearServerStatusBuf] = React.useState(scribearServerStatus)
 
-  let selectedApi;
-  // console.log(serverParam)
-  if (serverParam === 'scribear-server') {
-    selectedApi = 'ScribearServer';
-  } else {
-    selectedApi = 'WebSpeech'; // Default if no server is specified
-  }
-  const apiStatus = useSelector((state: RootState) => state.APIStatusReducer as ApiStatus);
-  // const theme = useTheme();
   const isMobile = useMediaQuery(currTheme.breakpoints.down('sm'));
 
-  useEffect(() => {
-    if (sessionToken && serverAddress) {
-      const updatedAddress = `${serverAddress}?sessionToken=${encodeURIComponent(sessionToken)}`;
-      console.log("Updated server address with session token:", updatedAddress);
-      setscribearServerStatusBuf(prev => ({ ...prev, scribearServerAddress: updatedAddress }));
-    }
-  }, [sessionToken, serverAddress]);
-
-  useEffect(() => {
-      if (scribearServerStatusBuf.scribearServerAddress) {
-          console.log("Dispatching updated address:", scribearServerStatusBuf);
-          dispatch({ type: 'CHANGE_SCRIBEAR_SERVER_ADDRESS', payload: scribearServerStatusBuf });
-      }
-  }, [scribearServerStatusBuf, dispatch]);
-
-
-  useEffect(() => {
-    let copyStatus = { ...apiStatus };
-
-    switch (selectedApi) {
-      case "ScribearServer":
-        copyStatus.currentApi = API.SCRIBEAR_SERVER;
-        copyStatus.webspeechStatus = STATUS.AVAILABLE;
-        copyStatus.azureConvoStatus = STATUS.AVAILABLE;
-        copyStatus.whisperStatus = STATUS.AVAILABLE;
-        copyStatus.streamTextStatus = STATUS.AVAILABLE;
-        copyStatus.playbackStatus = STATUS.AVAILABLE;
-        copyStatus.scribearServerStatus = STATUS.TRANSCRIBING;
-        console.log(serverAddress)
-        if (serverAddress) {
-          console.log("Updating serverAddress:", serverAddress);
-          setscribearServerStatusBuf(prev => ({ ...prev, scribearServerAddress: serverAddress }));
-        }
-        localStorage.setItem("scribearServerStatus", JSON.stringify(copyStatus.scribearServerStatus));
-        break;
-
-      default:
-        copyStatus.currentApi = API.WEBSPEECH; // Default to WebSpeech
-        copyStatus.webspeechStatus = STATUS.AVAILABLE;
-        copyStatus.azureConvoStatus = STATUS.AVAILABLE;
-        copyStatus.scribearServerStatus = STATUS.AVAILABLE;
-        copyStatus.streamTextStatus = STATUS.AVAILABLE;
-        copyStatus.playbackStatus = STATUS.AVAILABLE;
-        copyStatus.webspeechStatus = STATUS.TRANSCRIBING;
-    }
-
-    // Dispatch to update Redux state
-    dispatch({ type: "CHANGE_API_STATUS", payload: copyStatus });
-
-    // Notify user of API switch
-    // swal({
-    //   title: "API Switched",
-    //   text: `Switched to ${selectedApi}`,
-    //   icon: "success",
-    //   timer: 1500,
-    // });
-
-  }, [dispatch, selectedApi, serverAddress]); // Runs when the page loads
-
-  
-  // const { myTheme } = Theme()
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
   };
+
   // Make this a dropdown menu with the current api as the menu title
   return (
     <React.Fragment>

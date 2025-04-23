@@ -81,7 +81,7 @@ export default function ApiDropdown(props) {
           console.error('Error starting session:', error);
         });
     }
-  }, [accessToken]);
+  }, [mode, serverAddress, accessToken]);
 
   const isMobile = useMediaQuery(currTheme.breakpoints.down('sm'));
 

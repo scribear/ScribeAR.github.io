@@ -135,7 +135,9 @@ export const StreamTextReducer = (state = getLocalState("streamTextStatus"), act
 export const ScribearServerReducer = (state = getLocalState("scribearServerStatus"), action) => {
   switch (action.type) {
     case 'CHANGE_SCRIBEAR_SERVER_ADDRESS':
-      return { ...state, ...action.payload };
+      const newState =  { ...state, ...action.payload };
+      saveLocally('scribearServerStatus', newState);
+      return newState;
     
     default:
       return state;

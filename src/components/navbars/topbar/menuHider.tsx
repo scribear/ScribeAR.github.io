@@ -6,6 +6,7 @@ export default function MenuHider(props){
 
     return (
         <div>
+
             <Tooltip title={props.menuVisible ? "Lock Menu (Hide Options)" : "Unlock Menu (Show Options)"}>
                 <IconButton
                         className="c2"
@@ -16,6 +17,7 @@ export default function MenuHider(props){
                                 <LockOpenIcon fontSize="large" />)}
                 </IconButton>
             </Tooltip>
+
         </div>
     )
 }

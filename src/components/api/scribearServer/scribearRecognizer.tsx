@@ -22,10 +22,10 @@ export class ScribearRecognizer implements Recognizer {
     private scribearServerStatus : ScribearServerStatus
     private socket : WebSocket | null = null
     private transcribedCallback : any
+    private errorCallback?: (e: Error) => void;
     private language : string
     private recorder?: RecordRTC;
     private kSampleRate = 16000;
-
 
 
     /**
@@ -38,7 +38,6 @@ export class ScribearRecognizer implements Recognizer {
         console.log("ScribearRecognizer, new recognizer being created!")
         this.language = language;
         this.scribearServerStatus = scribearServerStatus;
-        this._startRecording();
     }
 
     private async _startRecording() {
@@ -67,6 +66,11 @@ export class ScribearRecognizer implements Recognizer {
         console.log("ScribearRecognizer.start()");
         if(this.socket) {return;}
 
+        const scribearURL = new URL(this.scribearServerStatus.scribearServerAddress)
+        if (scribearURL.pathname != '/sink') {
+            this._startRecording();
+        }
+
         this.socket = new WebSocket(this.scribearServerStatus.scribearServerAddress);
 
         // this.socket.onopen = (e)=> {...}
@@ -87,6 +91,21 @@ export class ScribearRecognizer implements Recognizer {
                 const finalBlock = new TranscriptBlock();
                 finalBlock.text = text
                 this.transcribedCallback([finalBlock], inProgressBlock)
+            }
+        };
+
+        this.socket.onerror = (event) => {
+            const error = new Error("WebSocket error");
+            console.error("WebSocket error event:", event);
+            this.errorCallback?.(error);
+        };
+        
+        this.socket.onclose = (event) => {
+            console.warn(`WebSocket closed: code=${event.code}, reason=${event.reason}`);
+            this.socket = null;
+            if (event.code !== 1000) { // 1000 = normal closure
+                const error = new Error(`WebSocket closed unexpectedly: code=${event.code}`);
+                this.errorCallback?.(error);
             }
         };
     }
@@ -120,7 +139,8 @@ export class ScribearRecognizer implements Recognizer {
      * @param callback A callback function called with the error object when the event is triggered
      */
     onError(callback: (e: Error) => void) {
-        console.log("ServerRecognizer.onError()");
+        console.log("ScribearRecognizer.onError()");
+        this.errorCallback = callback;
     }
 
 

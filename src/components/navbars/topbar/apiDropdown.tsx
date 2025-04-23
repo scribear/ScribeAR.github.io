@@ -1,20 +1,97 @@
 import * as React from 'react';
+import { useEffect } from "react";
 import { Box, Menu, ExpandLess, ExpandMore, ThemeProvider, IconButton, Tooltip } from '../../../muiImports';
+import { createTheme, useMediaQuery } from '@mui/material';
 
 import PickApi from './api/pickApi';
-// import Theme from '../../theme';
+import {
+  API,
+  ApiStatus,
+  RootState,
+  STATUS
+} from "../../../react-redux&middleware/redux/typesImports";
+import { useDispatch, useSelector } from "react-redux";
+import { ScribearServerStatus } from '../../../react-redux&middleware/redux/typesImports';
 
+const currTheme = createTheme({
+    palette: {
+        primary: {
+            main: '#ffffff'
+        }
+    },
+});
 
 export default function ApiDropdown(props) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  // const { myTheme } = Theme()
+  const dispatch = useDispatch();
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const mode = urlParams.get('mode');
+  const serverAddress = urlParams.get('serverAddress');
+  const accessToken = urlParams.get('accessToken');
+
+  const apiStatus = useSelector((state: RootState) => state.APIStatusReducer as ApiStatus);
+  const scribearServerStatus = useSelector((state: RootState) => {
+    return state.ScribearServerReducer as ScribearServerStatus
+  })
+
+  function switchToScribeARServer(scribearServerAddress: string) {
+      // Set new scribear server address
+      let copyScribearServerStatus = Object.assign({}, scribearServerStatus);
+      copyScribearServerStatus.scribearServerAddress = scribearServerAddress
+  
+      dispatch({type: 'CHANGE_SCRIBEAR_SERVER_ADDRESS', payload: copyScribearServerStatus});
+      
+    // Switch to scribear server
+    let copyStatus = Object.assign({}, apiStatus);
+    copyStatus.currentApi = API.SCRIBEAR_SERVER;
+    copyStatus.webspeechStatus = STATUS.AVAILABLE;
+    copyStatus.azureConvoStatus = STATUS.AVAILABLE;
+    copyStatus.whisperStatus = STATUS.AVAILABLE;
+    copyStatus.streamTextStatus = STATUS.AVAILABLE;
+    copyStatus.playbackStatus = STATUS.AVAILABLE;
+    copyStatus.scribearServerStatus = STATUS.TRANSCRIBING;
+
+    dispatch({type: 'CHANGE_API_STATUS', payload: copyStatus});
+  }
+
+  // Automatically use scribear server as sink when in student mode or as sourcesink if in kiosk mode
+  useEffect(() => {
+    if (mode === 'kiosk') {
+      switchToScribeARServer(`ws://${serverAddress}/sourcesink`);
+    } else if (mode === 'student' && accessToken) {
+      console.log("Sending startSession POST with accessToken:", accessToken);
+      fetch(`http://${serverAddress}/startSession`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ accessToken })
+      })
+        .then(response => response.json())
+        .then(data => {
+          console.log('Session token:', data.sessionToken);
+
+          const scribearServerAddress = `ws://${serverAddress}/sink?sessionToken=${encodeURIComponent(data.sessionToken)}`;
+
+          switchToScribeARServer(scribearServerAddress);
+        })
+        .catch(error => {
+          console.error('Error starting session:', error);
+        });
+    }
+  }, [mode, serverAddress, accessToken]);
+
+  const isMobile = useMediaQuery(currTheme.breakpoints.down('sm'));
+
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
   };
+
   // Make this a dropdown menu with the current api as the menu title
   return (
     <React.Fragment>
@@ -22,7 +99,7 @@ export default function ApiDropdown(props) {
         {props.apiDisplayName}
         <Tooltip title="API choice">
           <IconButton onClick={handleClick}>
-            <ThemeProvider theme={props.theme}>
+            <ThemeProvider theme={currTheme}>
               {open ? <ExpandLess color="primary" fontSize="large" /> : <ExpandMore color="primary" fontSize="large" />}
             </ThemeProvider>
           </IconButton>
@@ -35,7 +112,7 @@ export default function ApiDropdown(props) {
         PaperProps={{
           elevation: 0,
           sx: {
-            width: { xs: '80vw', sm: '40vw', md: '30vw' },
+            width: isMobile ? '75%' : '30vw',
             overflow: 'invisible',
             filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
             mt: 1.5,
@@ -62,7 +139,7 @@ export default function ApiDropdown(props) {
         transformOrigin={{ horizontal: 'center', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'center', vertical: 'bottom' }}
       >
-        <PickApi />
+        <PickApi/>
       </Menu>
     </React.Fragment>
   );

@@ -8,20 +8,42 @@ export default function QRCodeComponent() {
     const [accessToken, setAccessToken] = useState<string | null>(null);
     const [qrOpen, setQrOpen] = useState(false);
 
+    const urlParams = new URLSearchParams(window.location.search);
+    const isKioskMode = urlParams.get('mode') === 'kiosk';
+    const isStudentMode = urlParams.get('mode') === 'student';
+
     useEffect(() => {
+        if (!isKioskMode) return;
+
         setScribearURL(window.location.protocol + "//" + window.location.host);
 
-        fetch(`http://localhost:8080/accessToken`)
-            .then(response => response.json())
-            .then(data => {
-                setNodeServerAddress(data.serverAddress);
-                setAccessToken(data.accessToken);
-            })
-            .catch(error => console.error("Failed to fetch access token:", error));
+        let updateAccessTokenTimeout;
+        function updateAccessToken() {
+            fetch(`http://localhost:8080/accessToken`)
+                .then(response => response.json())
+                .then(data => {
+                    setNodeServerAddress(data.serverAddress);
+                    setAccessToken(data.accessToken);
+
+                    // When current token will expire
+                    const expires = new Date(data.expires);
+                    const millisecondToExpiry = expires.getTime() - new Date().getTime();
+
+                    updateAccessTokenTimeout = setTimeout(() => {
+                        updateAccessToken()
+                    }, millisecondToExpiry - 10_000); // Refresh 10 seconds earlier than expiry
+                })
+                .catch(error => console.error("Failed to fetch access token:", error));
+        }
+        updateAccessToken();
+
+
+        return () => {
+            clearTimeout(updateAccessTokenTimeout)
+        }
     }, []);
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const isStudentMode = urlParams.get('mode') === 'student';
+    if (!isKioskMode) return <></>;
 
     return (
         <>

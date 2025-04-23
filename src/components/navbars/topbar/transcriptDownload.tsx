@@ -1,4 +1,4 @@
-import { FileDownloadIcon, IconButton  } from '../../../muiImports';
+import { FileDownloadIcon, IconButton, Tooltip  } from '../../../muiImports';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store';
 //import { ControlStatus } from '../../../react-redux&middleware/redux/typesImports';
@@ -34,9 +34,11 @@ export default function TranscriptDownload() {
 
   return (
     <div>
-      <IconButton className = "c2" color = "inherit" onClick = {handleClick}>
-        <FileDownloadIcon fontSize="large"/>
-      </IconButton>
+      <Tooltip title="Download Transcript">
+        <IconButton className = "c2" color = "inherit" onClick = {handleClick}>
+          <FileDownloadIcon fontSize="large"/>
+        </IconButton>
+      </Tooltip>
     </div>
   );
 }

@@ -1,5 +1,6 @@
-import {FullscreenIcon, FullscreenExitIcon, createTheme, ThemeProvider, IconButton } from "../../../muiImports"
+import { FullscreenIcon, FullscreenExitIcon, createTheme, ThemeProvider, IconButton, Tooltip } from "../../../muiImports"
 import * as React from 'react';
+
 
 const currTheme = createTheme({
     palette: {
@@ -25,13 +26,15 @@ export default function Fullscreen(props) {
         }
         setState({ ...state, isFullScreen: !state.isFullScreen })
     }
-    
+
     return (
-        <div style ={{position: 'relative'}}>
+        <div style={{ position: 'relative' }}>
             <ThemeProvider theme={currTheme}>
-                <IconButton onClick={toggleDrawer} color="primary" >
-                    {state.isFullScreen ? <FullscreenExitIcon fontSize="large" /> : <FullscreenIcon fontSize="large" />}
-                </IconButton>
+                <Tooltip title={state.isFullScreen ? "Exit full screen" : "Makes application full screen"}>
+                    <IconButton onClick={toggleDrawer} color="primary" >
+                        {state.isFullScreen ? <FullscreenExitIcon fontSize="large" /> : <FullscreenIcon fontSize="large" />}
+                    </IconButton>
+                </Tooltip>
             </ThemeProvider>
         </div>
     );

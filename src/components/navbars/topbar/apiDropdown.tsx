@@ -36,14 +36,13 @@ export default function ApiDropdown(props) {
     return state.ScribearServerReducer as ScribearServerStatus
   })
 
-  function switchToScribeARServer(sessionToken) {
-    // Set new scribear server address
-    const scribearServerAddress = `ws://${serverAddress}/sink?sessionToken=${encodeURIComponent(sessionToken)}`;
-    let copyScribearServerStatus = Object.assign({}, scribearServerStatus);
-    copyScribearServerStatus.scribearServerAddress = scribearServerAddress
-
-    dispatch({type: 'CHANGE_SCRIBEAR_SERVER_ADDRESS', payload: copyScribearServerStatus});
-
+  function switchToScribeARServer(scribearServerAddress: string) {
+      // Set new scribear server address
+      let copyScribearServerStatus = Object.assign({}, scribearServerStatus);
+      copyScribearServerStatus.scribearServerAddress = scribearServerAddress
+  
+      dispatch({type: 'CHANGE_SCRIBEAR_SERVER_ADDRESS', payload: copyScribearServerStatus});
+      
     // Switch to scribear server
     let copyStatus = Object.assign({}, apiStatus);
     copyStatus.currentApi = API.SCRIBEAR_SERVER;
@@ -57,11 +56,11 @@ export default function ApiDropdown(props) {
     dispatch({type: 'CHANGE_API_STATUS', payload: copyStatus});
   }
 
+  // Automatically use scribear server as sink when in student mode or as sourcesink if in kiosk mode
   useEffect(() => {
-    // Don't automatically use scribear server if not in student mode
-    if (mode !== 'student') return;
-
-    if (accessToken) {
+    if (mode === 'kiosk') {
+      switchToScribeARServer(`ws:${serverAddress}/sourcesink`);
+    } else if (mode === 'student' && accessToken) {
       console.log("Sending startSession POST with accessToken:", accessToken);
       fetch(`http://${serverAddress}/startSession`, {
         method: 'POST',
@@ -74,7 +73,9 @@ export default function ApiDropdown(props) {
         .then(data => {
           console.log('Session token:', data.sessionToken);
 
-          switchToScribeARServer(data.sessionToken);
+          const scribearServerAddress = `ws://${serverAddress}/sink?sessionToken=${encodeURIComponent(data.sessionToken)}`;
+
+          switchToScribeARServer(scribearServerAddress);
         })
         .catch(error => {
           console.error('Error starting session:', error);

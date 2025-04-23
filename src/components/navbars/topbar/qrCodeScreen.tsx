@@ -12,6 +12,7 @@ export default function QRCodeComponent() {
 
     const urlParams = new URLSearchParams(window.location.search);
     const isKioskMode = urlParams.get('mode') === 'kiosk';
+    const serverAddress = urlParams.get('serverAddress');
     const isStudentMode = urlParams.get('mode') === 'student';
 
     useEffect(() => {
@@ -22,7 +23,7 @@ export default function QRCodeComponent() {
 
         let updateAccessTokenTimeout;
         function updateAccessToken() {
-            fetch(`http://localhost:8080/accessToken`)
+            fetch(`http://${serverAddress}/accessToken`)
                 .then(response => response.json())
                 .then(data => {
                     setNodeServerAddress(data.serverAddress);

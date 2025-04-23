@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useDispatch, useSelector } from "react-redux";
 
 import {
    API,
@@ -14,7 +15,6 @@ import {
 } from '../../../../react-redux&middleware/redux/typesImports';
 import { CancelIcon, CheckCircleIcon, Collapse, DoNotDisturbOnIcon, ErrorIcon, ExpandLess, ExpandMore, IconButton, ListItemButton, ListItemIcon, ListItemText, ThemeProvider, createTheme } from '../../../../muiImports'
 import { ListItem } from '@mui/material';
-import { useDispatch, useSelector } from 'react-redux';
 
 import AzureSettings from './AzureSettings';
 import StreamTextSettings from './StreamTextSettings';
@@ -170,7 +170,7 @@ export default function PickApi(props) {
                   if (!isArrow) {
                      let copyStatus = Object.assign({}, apiStatus);
                      copyStatus.currentApi = api;
-                     let apiName = "Webspeech";
+                     let apiName = "";
                      //Ugh
                      copyStatus.azureTranslStatus = STATUS.AVAILABLE;
                      copyStatus.webspeechStatus = STATUS.AVAILABLE;

@@ -6,7 +6,7 @@ export default function MenuHider(props){
 
     return (
         <div>
-            <IconButton className = "c2" color = "inherit" onClick = {()=>dispatch({type: 'HIDE_MENU'})}>
+            <IconButton  color = "primary" onClick = {()=>dispatch({type: 'HIDE_MENU'})}>
                 {props.menuVisible ? <LockIcon fontSize="large"/> : <LockOpenIcon fontSize="large"/>}
             </IconButton>
         </div>

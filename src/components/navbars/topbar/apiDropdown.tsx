@@ -26,22 +26,26 @@ export default function ApiDropdown(props) {
   const open = Boolean(anchorEl);
   const dispatch = useDispatch();
 
-  const urlParams = new URLSearchParams(window.location.search);
-  const mode = urlParams.get('mode');
-  const serverAddress = urlParams.get('serverAddress');
-  const accessToken = urlParams.get('accessToken');
-
   const apiStatus = useSelector((state: RootState) => state.APIStatusReducer as ApiStatus);
   const scribearServerStatus = useSelector((state: RootState) => {
     return state.ScribearServerReducer as ScribearServerStatus
   })
 
-  function switchToScribeARServer(scribearServerAddress: string) {
+  const urlParams = new URLSearchParams(window.location.search);
+  const mode = urlParams.get('mode');
+  const kioskServerAddress = urlParams.get('kioskServerAddress');
+  const serverAddress = urlParams.get('serverAddress');
+  const accessToken = urlParams.get('accessToken');
+  const sourceToken = urlParams.get('sourceToken');
+
+  // Automatically use scribear server as sink when in student mode or as sourcesink if in kiosk mode
+  useEffect(() => {
+    function switchToScribeARServer(scribearServerAddress: string) {
       // Set new scribear server address
       let copyScribearServerStatus = Object.assign({}, scribearServerStatus);
       copyScribearServerStatus.scribearServerAddress = scribearServerAddress
   
-      dispatch({type: 'CHANGE_SCRIBEAR_SERVER_ADDRESS', payload: copyScribearServerStatus});
+      dispatch({type: 'CHANGE_SCRIBEAR_SERVER_ADDRESS', payload: {scribearServerAddress}});
       
     // Switch to scribear server
     let copyStatus = Object.assign({}, apiStatus);
@@ -56,10 +60,8 @@ export default function ApiDropdown(props) {
     dispatch({type: 'CHANGE_API_STATUS', payload: copyStatus});
   }
 
-  // Automatically use scribear server as sink when in student mode or as sourcesink if in kiosk mode
-  useEffect(() => {
     if (mode === 'kiosk') {
-      switchToScribeARServer(`ws://${serverAddress}/sourcesink`);
+      switchToScribeARServer(`ws://${kioskServerAddress}/sourcesink?sourceToken=${sourceToken}`);
     } else if (mode === 'student') {
       console.log("Sending startSession POST with accessToken:", accessToken);
       fetch(`http://${serverAddress}/startSession`, {
@@ -81,7 +83,7 @@ export default function ApiDropdown(props) {
           console.error('Error starting session:', error);
         });
     }
-  }, [mode, serverAddress, accessToken]);
+  }, [accessToken, dispatch, mode, kioskServerAddress, serverAddress, sourceToken]);
 
   const isMobile = useMediaQuery(currTheme.breakpoints.down('sm'));
 

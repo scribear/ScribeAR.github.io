@@ -12,9 +12,10 @@ export default function QRCodeComponent() {
 
     const urlParams = new URLSearchParams(window.location.search);
     const isKioskMode = urlParams.get('mode') === 'kiosk';
-    const serverAddress = urlParams.get('serverAddress');
+    const sourceServerAddress = urlParams.get('sourceServerAddress');
     const isStudentMode = urlParams.get('mode') === 'student';
     const scribearURLParam = urlParams.get('scribearURL');
+    const sourceToken = urlParams.get('sourceToken');
 
     useEffect(() => {
         if (!isKioskMode) return;
@@ -28,9 +29,19 @@ export default function QRCodeComponent() {
 
         let updateAccessTokenTimeout;
         function updateAccessToken() {
-            fetch(`http://${serverAddress}/accessToken`)
+            fetch(`http://${sourceServerAddress}/accessToken`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ sourceToken })
+            })
                 .then(response => response.json())
                 .then(data => {
+                    if (!data.accessToken) {
+                        throw Error('Unsuccessful request:' + JSON.stringify(data));
+                    }
+
                     setNodeServerAddress(data.serverAddress);
                     setAccessToken(data.accessToken);
                     setSuccessful(true);
@@ -46,6 +57,10 @@ export default function QRCodeComponent() {
                 .catch(error => {
                     setSuccessful(false);
                     console.error("Failed to fetch access token:", error)
+
+                    updateAccessTokenTimeout = setTimeout(() => {
+                        updateAccessToken()
+                    }, 30_000);
                 })
                 .finally(() => setLoading(false));
         }
@@ -55,7 +70,7 @@ export default function QRCodeComponent() {
         return () => {
             clearTimeout(updateAccessTokenTimeout)
         }
-    }, []);
+    }, [isKioskMode, scribearURLParam, sourceServerAddress, sourceToken]);
 
     if (!isKioskMode) return <></>;
 

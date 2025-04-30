@@ -14,12 +14,17 @@ export default function QRCodeComponent() {
     const isKioskMode = urlParams.get('mode') === 'kiosk';
     const serverAddress = urlParams.get('serverAddress');
     const isStudentMode = urlParams.get('mode') === 'student';
+    const scribearURLParam = urlParams.get('scribearURL');
 
     useEffect(() => {
         if (!isKioskMode) return;
 
         setLoading(true);
-        setScribearURL(window.location.protocol + "//" + window.location.host + window.location.pathname);
+        if (scribearURLParam) {
+            setScribearURL(scribearURLParam);
+        } else {
+            setScribearURL(window.location.protocol + "//" + window.location.host + window.location.pathname);
+        }
 
         let updateAccessTokenTimeout;
         function updateAccessToken() {

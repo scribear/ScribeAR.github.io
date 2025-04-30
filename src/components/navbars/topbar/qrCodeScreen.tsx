@@ -12,7 +12,7 @@ export default function QRCodeComponent() {
 
     const urlParams = new URLSearchParams(window.location.search);
     const isKioskMode = urlParams.get('mode') === 'kiosk';
-    const sourceServerAddress = urlParams.get('sourceServerAddress');
+    const kioskServerAddress = urlParams.get('kioskServerAddress');
     const isStudentMode = urlParams.get('mode') === 'student';
     const scribearURLParam = urlParams.get('scribearURL');
     const sourceToken = urlParams.get('sourceToken');
@@ -29,7 +29,7 @@ export default function QRCodeComponent() {
 
         let updateAccessTokenTimeout;
         function updateAccessToken() {
-            fetch(`http://${sourceServerAddress}/accessToken`, {
+            fetch(`http://${kioskServerAddress}/accessToken`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -70,7 +70,7 @@ export default function QRCodeComponent() {
         return () => {
             clearTimeout(updateAccessTokenTimeout)
         }
-    }, [isKioskMode, scribearURLParam, sourceServerAddress, sourceToken]);
+    }, [isKioskMode, scribearURLParam, kioskServerAddress, sourceToken]);
 
     if (!isKioskMode) return <></>;
 

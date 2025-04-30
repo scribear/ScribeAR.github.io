@@ -60,7 +60,7 @@ export default function ApiDropdown(props) {
   useEffect(() => {
     if (mode === 'kiosk') {
       switchToScribeARServer(`ws://${serverAddress}/sourcesink`);
-    } else if (mode === 'student' && accessToken) {
+    } else if (mode === 'student') {
       console.log("Sending startSession POST with accessToken:", accessToken);
       fetch(`http://${serverAddress}/startSession`, {
         method: 'POST',

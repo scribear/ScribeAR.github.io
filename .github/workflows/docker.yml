@@ -1,4 +1,4 @@
-name: node-server CI
+name: build docker container
 
 on:
   push:

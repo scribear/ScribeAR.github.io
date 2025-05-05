@@ -3,21 +3,40 @@ import type { RootState } from '../typesImports'
 
 const initialState: ModelSelection = { options: [], selected: null }
 
+
+const saveLocally = (key: string, value: any) => {
+  localStorage.setItem(key, JSON.stringify(value));
+}
+const getLocalState = (key: string) => {
+  const localState = localStorage.getItem(key);
+
+  if (localState) {
+    return Object.assign(initialState, JSON.parse(localState));
+  }
+
+  return initialState;
+}
+
 export const ModelSelectionReducer = (
-  state = initialState,
+  state = getLocalState('modelSelection'),
   action
 ) => {
+  let newState;
   switch (action.type) {
     case 'SET_MODEL_OPTIONS':
-      return {
+      newState = {
         ...state,
         options: action.payload as ModelOptions
       }
+      saveLocally('modelSelection', newState)
+      return newState;
     case 'SET_SELECTED_MODEL':
-      return {
+      newState = {
         ...state,
         selected: action.payload as SelectedOption
       }
+      saveLocally('modelSelection', newState)
+      return newState;
     default:
       return state
   }

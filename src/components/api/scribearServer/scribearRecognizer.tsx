@@ -25,12 +25,15 @@ export class ScribearRecognizer implements Recognizer {
     private scribearServerStatus: ScribearServerStatus
     private selectedModelOption: SelectedOption
     private socket: WebSocket | null = null
+    private ready = false;
     private transcribedCallback: any
     private errorCallback?: (e: Error) => void;
     private language: string
     private recorder?: RecordRTC;
     private kSampleRate = 16000;
 
+    urlParams = new URLSearchParams(window.location.search);
+    mode = this.urlParams.get('mode');
 
     /**
      * Creates an Azure recognizer instance that listens to the default microphone
@@ -77,18 +80,20 @@ export class ScribearRecognizer implements Recognizer {
             this._startRecording();
         }
 
-        const socket = new WebSocket(this.scribearServerStatus.scribearServerAddress);
+        this.socket = new WebSocket(this.scribearServerStatus.scribearServerAddress);
 
-        socket.onopen = (event) => {
-            socket.send(JSON.stringify({
+        this.socket.onopen = (event) => {
+            this.socket?.send(JSON.stringify({
                 api_key: this.scribearServerStatus.scribearServerKey,
                 sourceToken: this.scribearServerStatus.scribearServerKey,
                 sessionToken: this.scribearServerStatus.scribearServerSessionToken,
             }));
         }
 
-        socket.onmessage = (event) => {
-            if (!this.scribearServerStatus.scribearServerSessionToken) {
+        const inProgressBlock = new TranscriptBlock();
+
+        this.socket.onmessage = (event) => {
+            if (!this.ready && this.mode !== 'student') {
                 const message = JSON.parse(event.data);
                 console.log(message);
                 if (message['error'] || !Array.isArray(message)) return;
@@ -96,51 +101,43 @@ export class ScribearRecognizer implements Recognizer {
                 store.dispatch(setModelOptions(message));
 
                 if (this.selectedModelOption) {
-                    socket.send(JSON.stringify(this.selectedModelOption));
-                } else {
-                    return;
+                    this.socket?.send(JSON.stringify(this.selectedModelOption));
+                    this.ready = true;
                 }
+                return;
             }
 
-            this.socket = socket;
+            const server_block: BackendTranscriptBlock = JSON.parse(event.data);
 
-            const inProgressBlock = new TranscriptBlock();
+            // Todo: extract type of message (inprogress v final) and the text from the message
+            const inProgress = server_block.type === BackendTranscriptBlockType.InProgress;
+            const text = server_block.text;
 
-            this.socket.onmessage = (event) => {
-                const server_block: BackendTranscriptBlock = JSON.parse(event.data);
+            if (inProgress) {
+                inProgressBlock.text = text; // replace text
+                this.transcribedCallback([], inProgressBlock);
+            } else {
+                inProgressBlock.text = "" //reset in progress
+                const finalBlock = new TranscriptBlock();
+                finalBlock.text = text
+                this.transcribedCallback([finalBlock], inProgressBlock)
+            }
+        };
 
-                // Todo: extract type of message (inprogress v final) and the text from the message
-                const inProgress = server_block.type === BackendTranscriptBlockType.InProgress;
-                const text = server_block.text;
+        this.socket.onerror = (event) => {
+            const error = new Error("WebSocket error");
+            console.error("WebSocket error event:", event);
+            this.errorCallback?.(error);
+        };
 
-                if (inProgress) {
-                    inProgressBlock.text = text; // replace text
-                    this.transcribedCallback([], inProgressBlock);
-                } else {
-                    inProgressBlock.text = "" //reset in progress
-                    const finalBlock = new TranscriptBlock();
-                    finalBlock.text = text
-                    this.transcribedCallback([finalBlock], inProgressBlock)
-                }
-            };
-
-            this.socket.onerror = (event) => {
-                const error = new Error("WebSocket error");
-                console.error("WebSocket error event:", event);
+        this.socket.onclose = (event) => {
+            console.warn(`WebSocket closed: code=${event.code}, reason=${event.reason}`);
+            this.socket = null;
+            if (event.code !== 1000) { // 1000 = normal closure
+                const error = new Error(`WebSocket closed unexpectedly: code=${event.code}`);
                 this.errorCallback?.(error);
-            };
-
-            this.socket.onclose = (event) => {
-                console.warn(`WebSocket closed: code=${event.code}, reason=${event.reason}`);
-                this.socket = null;
-                if (event.code !== 1000) { // 1000 = normal closure
-                    const error = new Error(`WebSocket closed unexpectedly: code=${event.code}`);
-                    this.errorCallback?.(error);
-                }
-            };
-        }
-
-
+            }
+        };
     }
 
     /**

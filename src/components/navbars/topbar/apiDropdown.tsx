@@ -40,11 +40,12 @@ export default function ApiDropdown(props) {
 
   // Automatically use scribear server as sink when in student mode or as sourcesink if in kiosk mode
   useEffect(() => {
-    function switchToScribeARServer(scribearServerAddress: string, token: string) {
+    function switchToScribeARServer(scribearServerAddress: string, token: string | undefined) {
       // Set new scribear server address
       let copyScribearServerStatus = Object.assign({}, scribearServerStatus);
       copyScribearServerStatus.scribearServerAddress = scribearServerAddress
-      copyScribearServerStatus.scribearServerKey = token
+      copyScribearServerStatus.scribearServerKey = sourceToken as string;
+      copyScribearServerStatus.scribearServerSessionToken = token
 
       dispatch({ type: 'CHANGE_SCRIBEAR_SERVER_ADDRESS', payload: copyScribearServerStatus });
 
@@ -62,7 +63,7 @@ export default function ApiDropdown(props) {
     }
 
     if (mode === 'kiosk') {
-      switchToScribeARServer(`ws://${kioskServerAddress}/sourcesink`, sourceToken as string);
+      switchToScribeARServer(`ws://${kioskServerAddress}/sourcesink`, undefined);
     } else if (mode === 'student') {
       console.log("Sending startSession POST with accessToken:", accessToken);
       fetch(`http://${serverAddress}/startSession`, {
@@ -76,7 +77,7 @@ export default function ApiDropdown(props) {
         .then(data => {
           console.log('Session token:', data.sessionToken);
 
-          const scribearServerAddress = `ws://${serverAddress}/sink?sessionToken=${encodeURIComponent(data.sessionToken)}`;
+          const scribearServerAddress = `ws://${serverAddress}/sink`;
 
           switchToScribeARServer(scribearServerAddress, data.sessionToken);
         })

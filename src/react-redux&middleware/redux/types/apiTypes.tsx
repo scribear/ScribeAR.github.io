@@ -67,5 +67,6 @@ export type PlaybackStatus = {
 export type ScribearServerStatus = {
    scribearServerAddress: string
    scribearServerKey: string
+   scribearServerSessionToken: string | undefined
    // Many IP (or hostname) and port in the future
 }

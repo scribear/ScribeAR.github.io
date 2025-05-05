@@ -83,21 +83,23 @@ export class ScribearRecognizer implements Recognizer {
             socket.send(JSON.stringify({
                 api_key: this.scribearServerStatus.scribearServerKey,
                 sourceToken: this.scribearServerStatus.scribearServerKey,
-                sessionToken: this.scribearServerStatus.scribearServerKey
+                sessionToken: this.scribearServerStatus.scribearServerSessionToken,
             }));
         }
 
         socket.onmessage = (event) => {
-            const message = JSON.parse(event.data);
-            console.log(message);
-            if (message['error'] || !Array.isArray(message)) return;
+            if (!this.scribearServerStatus.scribearServerSessionToken) {
+                const message = JSON.parse(event.data);
+                console.log(message);
+                if (message['error'] || !Array.isArray(message)) return;
 
-            store.dispatch(setModelOptions(message));
+                store.dispatch(setModelOptions(message));
 
-            if (this.selectedModelOption) {
-                socket.send(JSON.stringify(this.selectedModelOption));
-            } else {
-                return;
+                if (this.selectedModelOption) {
+                    socket.send(JSON.stringify(this.selectedModelOption));
+                } else {
+                    return;
+                }
             }
 
             this.socket = socket;

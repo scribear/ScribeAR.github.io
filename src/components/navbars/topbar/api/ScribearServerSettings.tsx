@@ -104,10 +104,10 @@ export default function ScribearServerSettings(props) {
                         onChange={updateReact}
                         value={scribearServerStatusBuf.scribearServerKey}
                         id="scribearServerKey"
-                        label="ScribeAR Server API Key / Source Token"
+                        label="ScribeAR Server API Key / Token"
                         variant="outlined"
                         inputProps={{
-                           placeholder: 'Enter ScribeAR API Key or Source Token',
+                           placeholder: 'Enter ScribeAR API Key or Token',
                         }}
                         style={{ width: '100%' }}
                      />

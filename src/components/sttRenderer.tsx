@@ -8,10 +8,24 @@ import { KeyboardDoubleArrowDownIcon } from '../muiImports';
 
 
 export const STTRenderer = (transcript: string) : JSX.Element => {
-
+   const dispatch = useDispatch();
    const displayStatus = useSelector((state: RootState) => {
       return state.DisplayReducer as DisplayStatus;
    });
+
+   const urlParams = new URLSearchParams(window.location.search);
+   const isKioskMode = urlParams.get('mode') === 'kiosk';
+   const isStudentMode = urlParams.get('mode') === 'student';
+
+   useEffect(() => {
+      if (isKioskMode && !isStudentMode) {
+         dispatch({ type: 'FLIP_SHOWQRCODE' });
+      }
+   }, [isKioskMode, isStudentMode, dispatch]);
+
+   // const displayStatus = useSelector((state: RootState) => {
+   //    return state.DisplayReducer as DisplayStatus;
+   // });
 
    // let parts = transcript.split('<br>');
    // console.log("parts", parts)
@@ -77,7 +91,6 @@ export const STTRenderer = (transcript: string) : JSX.Element => {
    }  
    let top = line_pos * 6.25
 
-   const dispatch = useDispatch();
    const handleLinePositionBound = (event) => {
       dispatch({ type: 'SET_POS', payload: event })
    }

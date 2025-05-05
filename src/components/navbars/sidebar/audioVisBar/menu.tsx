@@ -6,6 +6,12 @@ import ShowTimeData from './showTimeData';
 import ShowMFCC from './showMFCC';
 import ShowSpeaker from './showSpeaker';
 import ShowIntent from './showIntent';
+import ShowQRCode from './showQRCode';
+
+const urlParams = new URLSearchParams(window.location.search);
+
+const isKioskMode = urlParams.get('mode') === 'kiosk';
+const isStudentMode = urlParams.get('mode') === 'student';
 
 
 export default function VisualizationMenu(props) {
@@ -24,6 +30,12 @@ export default function VisualizationMenu(props) {
                   <ListItemText primary="Show Labels" />
                   <ShowLabels />
                </ListItem> */}
+               {isKioskMode && !isStudentMode && (
+                  <ListItem sx={{ pl: 4 }}>
+                     <ListItemText primary="Show QR Code" />
+                     <ShowQRCode />
+                  </ListItem>
+               )}
                <ListItem sx={{ pl: 4 }}>
                   <ListItemText primary="Show Time Data" />
                   <ShowTimeData />

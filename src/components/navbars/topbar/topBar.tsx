@@ -39,7 +39,7 @@ import {
             {/* {!isMobile && <MenuHider menuVisible={props.menuVisible} iconSize={iconSize} />} */}
             {<TranscriptDownload />}
             { <Fullscreen iconSize={iconSize} />}
-            {!isMobile && <QRCodeScreen />}
+            {/* {!isMobile && <QRCodeScreen />} */}
         </Box>
     );
 }

@@ -12,6 +12,7 @@ import { Draggable } from './DraggableFC';
 import { Resizable } from './Resizable';
 import { MFCCVisual } from './mfccVisual';
 import SpeakerShow from './speakerShow';
+import { QRCodeVisual } from './QRCodeVisual';
 
 
 export const AudioVis: React.FC = (props) => {
@@ -63,6 +64,14 @@ export const AudioVis: React.FC = (props) => {
          {controlStatus.showSpeaker ? (
             <Draggable id="speakerShow" left="250">
                <SpeakerShow />
+            </Draggable>
+         ) : null}
+
+         {controlStatus.showQRCode ? (
+            <Draggable id="qrCode" left="250">
+               <Resizable size={{ width: 500, height: 250 }}>
+                  <QRCodeVisual visualWidth={''} visualHeight={''} /> 
+               </Resizable>
             </Draggable>
          ) : null}
       </div>

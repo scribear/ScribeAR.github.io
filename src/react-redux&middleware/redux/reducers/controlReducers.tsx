@@ -18,6 +18,7 @@ const initialControlState : ControlStatus = {
   speechLanguage: {label: "English (United States)",	CountryCode: "en-US"},
   textLanguage: {label: "English",	CountryCode: "en"},
   showFrequency: false,
+  showQRCode: false,
   showTimeData: false,
   showMFCC: false,
   showSpeaker: false,
@@ -33,6 +34,8 @@ export function ControlReducer(state = initialControlState, action) {
       return { ...state, showFrequency: !state.showFrequency, showTimeData: false, showMFCC: false };
     case 'FLIP_SHOWTIMEDATA': // also set showFrequency false
       return { ...state, showFrequency: false, showTimeData: !state.showTimeData, showMFCC: false };
+    case 'FLIP_SHOWQRCODE': // <-- NEW: for QR Code
+      return { ...state, showQRCode: !state.showQRCode };
     case 'FLIP_SHOWMFCC':
       return { ...state, showFrequency: false, showTimeData: false, showMFCC: !state.showMFCC };
     case 'control/flip_showSpeaker':

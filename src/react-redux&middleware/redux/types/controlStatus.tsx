@@ -12,6 +12,7 @@ export type ControlStatus = {
    speechLanguage: LanguageList
    textLanguage: LanguageList
    showFrequency: boolean
+   showQRCode: boolean;
    showTimeData: boolean
    showMFCC: boolean
    showSpeaker: boolean

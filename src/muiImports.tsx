@@ -54,7 +54,7 @@ import SubtitlesIcon from '@mui/icons-material/Subtitles';
 import FormatColorTextIcon from '@mui/icons-material/FormatColorText';
 import Autocomplete from '@mui/material/Autocomplete';
 import { Switch } from '@mui/material';
-
+import MemoryIcon from '@mui/icons-material/Memory';
 export {
     createTheme,
     Autocomplete,
@@ -114,4 +114,5 @@ export {
     FormatColorTextIcon,
     ArchitectureIcon,
     Switch,
+    MemoryIcon
 }

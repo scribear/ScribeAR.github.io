@@ -1,12 +1,15 @@
 import { API, ApiType, STATUS, StatusType } from './types/apiEnums';
-import { ApiStatus, AzureStatus, PhraseList, PhraseListStatus, 
-   StreamTextStatus, WhisperStatus, ScribearServerStatus, PlaybackStatus } from './types/apiTypes';
+import {
+   ApiStatus, AzureStatus, PhraseList, PhraseListStatus,
+   StreamTextStatus, WhisperStatus, ScribearServerStatus, PlaybackStatus
+} from './types/apiTypes';
 import { ControlStatus, LanguageList } from "./types/controlStatus";
 import { SRecognition, ScribeHandler, ScribeRecognizer } from "./types/sRecognition";
 import { Sentence, Word } from "./types/TranscriptTypes";
 
 import { DisplayStatus } from "./types/displayStatus";
 import { MainStream } from "./types/bucketStreamTypes";
+import type { ModelSelection } from './types/modelSelection';
 
 export type {
    ApiStatus,
@@ -44,9 +47,10 @@ export type RootState = {
    AzureReducer: AzureStatus
    ControlReducer: ControlStatus
    PhraseListReducer: PhraseListStatus
-   initialStreams : MainStream
+   initialStreams: MainStream
    WhisperReducer: WhisperStatus
    StreamTextReducer: StreamTextStatus
-   ScribearServerReducer : ScribearServerStatus
-   PlaybackReducer : PlaybackStatus
+   ScribearServerReducer: ScribearServerStatus
+   PlaybackReducer: PlaybackStatus,
+   ModelSelectionReducer: ModelSelection
 }

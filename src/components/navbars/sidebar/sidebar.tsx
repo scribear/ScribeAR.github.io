@@ -6,10 +6,12 @@ import LangMenu from './language/menu';
 import PhraseMenu from './phrase/menu';
 import VisualizationMenu from './audioVisBar/menu';
 import CaptionsMenu from './captions/menu';
+import ModelMenu from './model/menu';
 
 
 export default function SideBar(props) {
   const [state, setState] = React.useState({
+    model: false,
     display: false,
     lang: true,
     visualization: false,
@@ -48,7 +50,10 @@ export default function SideBar(props) {
       <List sx={{ width: { xs: '100vw', sm: '50vw', md: '40vw', lg: '30vw' }, bgcolor: 'background.paper' }} component="nav" aria-labelledby="nested-list-subheader" >
         <LangMenu open={state.lang} isRecording={props.isRecording} listItemHeader={listItemHeader} />
         <Divider/>
-        
+
+        <ModelMenu open={state.model} listItemHeader={listItemHeader} />
+        <Divider/>
+
         <DisplayMenu open={state.display} listItemHeader={listItemHeader} />
         <Divider/>
         

@@ -1,6 +1,6 @@
 // import * as sdk from 'microsoft-cognitiveservices-speech-sdk'
 import installCOIServiceWorker from './coi-serviceworker'
-import { API, PlaybackStatus} from '../../react-redux&middleware/redux/typesImports';
+import { API, PlaybackStatus } from '../../react-redux&middleware/redux/typesImports';
 import {
    ApiStatus,
    AzureStatus,
@@ -9,7 +9,7 @@ import {
    StreamTextStatus,
    ScribearServerStatus
 } from '../../react-redux&middleware/redux/typesImports';
-import  {useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { batch, useDispatch, useSelector } from 'react-redux';
 
 import { AzureRecognizer } from './azure/azureRecognizer';
@@ -23,6 +23,7 @@ import { WhisperRecognizer } from './whisper/whisperRecognizer';
 import { PlaybackRecognizer } from './playback/playbackRecognizer';
 
 import { ScribearRecognizer } from './scribearServer/scribearRecognizer';
+import type { SelectedOption } from '../../react-redux&middleware/redux/types/modelSelection';
 // import { PlaybackReducer } from '../../react-redux&middleware/redux/reducers/apiReducers';
 // controls what api to send and what to do when error handling.
 
@@ -55,9 +56,9 @@ export const returnRecogAPI = (api : ApiStatus, control : ControlStatus, azure :
 */
 
 
-const createRecognizer = (currentApi: number, control: ControlStatus, azure: AzureStatus, streamTextConfig: StreamTextStatus, scribearServerStatus: ScribearServerStatus,playbackStatus:PlaybackStatus): Recognizer => {
+const createRecognizer = (currentApi: number, control: ControlStatus, azure: AzureStatus, streamTextConfig: StreamTextStatus, scribearServerStatus: ScribearServerStatus, selectedModelOption: SelectedOption, playbackStatus: PlaybackStatus): Recognizer => {
    if (currentApi === API.SCRIBEAR_SERVER) {
-      return new ScribearRecognizer(scribearServerStatus, control.speechLanguage.CountryCode);
+      return new ScribearRecognizer(scribearServerStatus, selectedModelOption, control.speechLanguage.CountryCode);
    } else if (currentApi === API.PLAYBACK) {
       return new PlaybackRecognizer(playbackStatus);
    }
@@ -65,7 +66,7 @@ const createRecognizer = (currentApi: number, control: ControlStatus, azure: Azu
       return new WebSpeechRecognizer(null, control.speechLanguage.CountryCode);
    } else if (currentApi === API.AZURE_TRANSLATION) {
       return new AzureRecognizer(null, control.speechLanguage.CountryCode, azure);
-   } 
+   }
    else if (currentApi === API.AZURE_CONVERSATION) {
       throw new Error("Not implemented");
    }
@@ -92,9 +93,9 @@ const updateTranscript = (dispatch: Dispatch) => (newFinalBlocks: Array<Transcri
    // batch makes these dispatches only cause one re-rendering
    batch(() => {
       for (const block of newFinalBlocks) {
-         dispatch({type: "transcript/new_final_block", payload: block});
+         dispatch({ type: "transcript/new_final_block", payload: block });
       }
-      dispatch({type: 'transcript/update_in_progress_block', payload: newInProgressBlock});
+      dispatch({ type: 'transcript/update_in_progress_block', payload: newInProgressBlock });
    })
 }
 
@@ -111,8 +112,8 @@ const updateTranscript = (dispatch: Dispatch) => (newFinalBlocks: Array<Transcri
  * 
  * @return transcripts, resetTranscript, recogHandler
  */
-export const useRecognition = (sRecog : SRecognition, api : ApiStatus, control : ControlStatus, 
-   azure : AzureStatus, streamTextConfig : StreamTextStatus, scribearServerStatus, playbackStatus: PlaybackStatus) => {
+export const useRecognition = (sRecog: SRecognition, api: ApiStatus, control: ControlStatus,
+   azure: AzureStatus, streamTextConfig: StreamTextStatus, scribearServerStatus, selectedModelOption: SelectedOption, playbackStatus: PlaybackStatus) => {
 
    const [recognizer, setRecognizer] = useState<Recognizer>();
    // TODO: Add a reset button to utitlize resetTranscript
@@ -129,9 +130,9 @@ export const useRecognition = (sRecog : SRecognition, api : ApiStatus, control :
       console.log("UseRecognition, switching to new recognizer: ", api.currentApi);
 
       let newRecognizer: Recognizer | null;
-      try{
+      try {
          // Create new recognizer, and subscribe to its events
-         newRecognizer = createRecognizer(api.currentApi, control, azure, streamTextConfig, scribearServerStatus, playbackStatus);
+         newRecognizer = createRecognizer(api.currentApi, control, azure, streamTextConfig, scribearServerStatus, selectedModelOption, playbackStatus);
          newRecognizer.onTranscribed(updateTranscript(dispatch));
          setRecognizer(newRecognizer)
 
@@ -148,7 +149,7 @@ export const useRecognition = (sRecog : SRecognition, api : ApiStatus, control :
          // Stop current recognizer when switching to another one, if possible
          newRecognizer?.stop();
       }
-   }, [api.currentApi, azure, control, streamTextConfig, playbackStatus, scribearServerStatus]);
+   }, [api.currentApi, azure, control, streamTextConfig, playbackStatus, scribearServerStatus, selectedModelOption]);
 
    // Start / stop recognizer, if listening toggled
    useEffect(() => {
@@ -173,7 +174,7 @@ export const useRecognition = (sRecog : SRecognition, api : ApiStatus, control :
    }, [azure.phrases]);
 
    // TODO: whisper's transcript is not in redux store but only in sessionStorage at the moment.
-   let transcript : string = useSelector((state: RootState) => {
+   let transcript: string = useSelector((state: RootState) => {
       return state.TranscriptReducer.transcripts[0].toString()
    });
    // if (api.currentApi === API.WHISPER) { 

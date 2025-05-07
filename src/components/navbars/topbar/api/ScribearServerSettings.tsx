@@ -88,6 +88,29 @@ export default function ScribearServerSettings(props) {
                         }}
                         style={{ width: '100%' }}
                      />
+                     </Box>
+               </ListItem>
+               <ListItem sx={{ pl: 4 }}>
+                  <Box
+                     component="form"
+                     sx={{ width: '50vw',
+                           '& > :not(style)': { pr: '1vw', width: '15vw' },
+                     }}
+                     noValidate
+                     autoComplete="off"
+                     onSubmit={closePopup} // Prevent default submission behavior of refreshing page
+                  >
+                     <TextField
+                        onChange={updateReact}
+                        value={scribearServerStatusBuf.scribearServerKey}
+                        id="scribearServerKey"
+                        label="ScribeAR Server API Key / Token"
+                        variant="outlined"
+                        inputProps={{
+                           placeholder: 'Enter ScribeAR API Key or Token',
+                        }}
+                        style={{ width: '100%' }}
+                     />
                   </Box>
                </ListItem>
               

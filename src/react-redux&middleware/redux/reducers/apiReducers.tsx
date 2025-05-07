@@ -1,6 +1,6 @@
 import { API, STATUS } from '../types/apiEnums';
 import { ApiStatus, AzureStatus, PhraseList, PhraseListStatus } from "../typesImports";
-import { StreamTextStatus, WhisperStatus,ScribearServerStatus, PlaybackStatus } from "../types/apiTypes";
+import { StreamTextStatus, WhisperStatus, ScribearServerStatus, PlaybackStatus } from "../types/apiTypes";
 
 const initialAPIStatusState: ApiStatus = {
   currentApi: API.WEBSPEECH,
@@ -9,8 +9,8 @@ const initialAPIStatusState: ApiStatus = {
   azureConvoStatus: STATUS.AVAILABLE,
   whisperStatus: STATUS.AVAILABLE,
   streamTextStatus: STATUS.AVAILABLE,
-  scribearServerStatus : STATUS.AVAILABLE,
-  playbackStatus : STATUS.AVAILABLE
+  scribearServerStatus: STATUS.AVAILABLE,
+  playbackStatus: STATUS.AVAILABLE
 }
 
 const initialPhraseList: PhraseList = {
@@ -47,7 +47,9 @@ const initialPlaybackStatus: PlaybackStatus = {
 }
 
 const initialScribearServerState: ScribearServerStatus = {
-  scribearServerAddress: 'ws://localhost:1234'
+  scribearServerAddress: 'ws://localhost:8080/sourcesink',
+  scribearServerKey: '',
+  scribearServerSessionToken: undefined,
 }
 
 const saveLocally = (varName: string, value: any) => {
@@ -88,7 +90,7 @@ const getLocalState = (name: string) => {
   } else if (name === "scribearServerStatus") {
     return saveLocally("scribearServerStatus", initialScribearServerState);
   }
-  return {} ;
+  return {};
 };
 
 export const APIStatusReducer = (state = getLocalState("apiStatus") as ApiStatus, action) => {
@@ -105,15 +107,17 @@ export const APIStatusReducer = (state = getLocalState("apiStatus") as ApiStatus
   }
 }
 
-export const AzureReducer = (state = getLocalState("azureStatus") , action) => {
+export const AzureReducer = (state = getLocalState("azureStatus"), action) => {
   switch (action.type) {
     case 'CHANGE_AZURE_LOGIN':
       return { ...state, ...action.payload };
     case 'CHANGE_AZURE_STATUS':
       return { ...state, ...action.payload };
     case 'CHANGE_LIST':
-      return { ...state, 
-               phrases: action.payload }
+      return {
+        ...state,
+        phrases: action.payload
+      }
     default:
       return state;
   }
@@ -124,10 +128,10 @@ export const WhisperReducer = (state = getLocalState("whisperStatus"), action) =
 }
 
 export const StreamTextReducer = (state = getLocalState("streamTextStatus"), action) => {
-  switch(action.type) {
+  switch (action.type) {
     case 'CHANGE_STREAMTEXT_STATUS':
       return { ...state, ...action.payload };
-      
+
     default:
       return state;
   }
@@ -135,22 +139,22 @@ export const StreamTextReducer = (state = getLocalState("streamTextStatus"), act
 export const ScribearServerReducer = (state = getLocalState("scribearServerStatus"), action) => {
   switch (action.type) {
     case 'CHANGE_SCRIBEAR_SERVER_ADDRESS':
-      const newState =  { ...state, ...action.payload };
+      const newState = { ...state, ...action.payload };
       saveLocally('scribearServerStatus', newState);
       return newState;
-    
+
     default:
       return state;
   }
 }
 
 export const PlaybackReducer = (state = getLocalState("playbackStatus"), action) => {
-  
-  switch(action.type) {
+
+  switch (action.type) {
     case 'CHANGE_PLAYBACK_STATUS':
       console.log("PlaybackReducer CHANGE_PLAYBACK_STATUS: status & action", state, action);
       return { ...state, ...action.payload };
-      
+
     default:
       return state;
   }
@@ -195,13 +199,17 @@ export const PhraseListReducer = (state = initialPhraseListState, action) => {
           ...state,
         }
       }
-    case 'EDIT_PHRASE_LIST':     
-      return { ...state,
-               currentPhraseList: action.payload}
+    case 'EDIT_PHRASE_LIST':
+      return {
+        ...state,
+        currentPhraseList: action.payload
+      }
     // existing cases
-    case 'SET_FILE_CONTENT':     
-      return { ...state,
-               fileContent: action.payload}
+    case 'SET_FILE_CONTENT':
+      return {
+        ...state,
+        fileContent: action.payload
+      }
     case 'SET_PHRASE_OPTION_TO_CUSTOM': {
       const newPhraseListMap = new Map(state.phraseListMap);
       const phraseData: PhraseList = newPhraseListMap.get(action.payload.phraseName) || {

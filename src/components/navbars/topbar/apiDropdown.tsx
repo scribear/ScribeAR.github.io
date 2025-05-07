@@ -14,11 +14,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { ScribearServerStatus } from '../../../react-redux&middleware/redux/typesImports';
 
 const currTheme = createTheme({
-    palette: {
-        primary: {
-            main: '#ffffff'
-        }
-    },
+  palette: {
+    primary: {
+      main: '#ffffff'
+    }
+  },
 });
 
 export default function ApiDropdown(props) {
@@ -40,28 +40,30 @@ export default function ApiDropdown(props) {
 
   // Automatically use scribear server as sink when in student mode or as sourcesink if in kiosk mode
   useEffect(() => {
-    function switchToScribeARServer(scribearServerAddress: string) {
+    function switchToScribeARServer(scribearServerAddress: string, token: string | undefined) {
       // Set new scribear server address
       let copyScribearServerStatus = Object.assign({}, scribearServerStatus);
       copyScribearServerStatus.scribearServerAddress = scribearServerAddress
-  
-      dispatch({type: 'CHANGE_SCRIBEAR_SERVER_ADDRESS', payload: {scribearServerAddress}});
-      
-    // Switch to scribear server
-    let copyStatus = Object.assign({}, apiStatus);
-    copyStatus.currentApi = API.SCRIBEAR_SERVER;
-    copyStatus.webspeechStatus = STATUS.AVAILABLE;
-    copyStatus.azureConvoStatus = STATUS.AVAILABLE;
-    copyStatus.whisperStatus = STATUS.AVAILABLE;
-    copyStatus.streamTextStatus = STATUS.AVAILABLE;
-    copyStatus.playbackStatus = STATUS.AVAILABLE;
-    copyStatus.scribearServerStatus = STATUS.TRANSCRIBING;
+      copyScribearServerStatus.scribearServerKey = sourceToken as string;
+      copyScribearServerStatus.scribearServerSessionToken = token
 
-    dispatch({type: 'CHANGE_API_STATUS', payload: copyStatus});
-  }
+      dispatch({ type: 'CHANGE_SCRIBEAR_SERVER_ADDRESS', payload: copyScribearServerStatus });
+
+      // Switch to scribear server
+      let copyStatus = Object.assign({}, apiStatus);
+      copyStatus.currentApi = API.SCRIBEAR_SERVER;
+      copyStatus.webspeechStatus = STATUS.AVAILABLE;
+      copyStatus.azureConvoStatus = STATUS.AVAILABLE;
+      copyStatus.whisperStatus = STATUS.AVAILABLE;
+      copyStatus.streamTextStatus = STATUS.AVAILABLE;
+      copyStatus.playbackStatus = STATUS.AVAILABLE;
+      copyStatus.scribearServerStatus = STATUS.TRANSCRIBING;
+
+      dispatch({ type: 'CHANGE_API_STATUS', payload: copyStatus });
+    }
 
     if (mode === 'kiosk') {
-      switchToScribeARServer(`ws://${kioskServerAddress}/sourcesink?sourceToken=${sourceToken}`);
+      switchToScribeARServer(`ws://${kioskServerAddress}/sourcesink`, undefined);
     } else if (mode === 'student') {
       console.log("Sending startSession POST with accessToken:", accessToken);
       fetch(`http://${serverAddress}/startSession`, {
@@ -75,9 +77,9 @@ export default function ApiDropdown(props) {
         .then(data => {
           console.log('Session token:', data.sessionToken);
 
-          const scribearServerAddress = `ws://${serverAddress}/sink?sessionToken=${encodeURIComponent(data.sessionToken)}`;
+          const scribearServerAddress = `ws://${serverAddress}/sink`;
 
-          switchToScribeARServer(scribearServerAddress);
+          switchToScribeARServer(scribearServerAddress, data.sessionToken);
         })
         .catch(error => {
           console.error('Error starting session:', error);
@@ -97,7 +99,7 @@ export default function ApiDropdown(props) {
   // Make this a dropdown menu with the current api as the menu title
   return (
     <React.Fragment>
-      <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center'}}>
+      <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
         {props.apiDisplayName}
         <Tooltip title="API choice">
           <IconButton onClick={handleClick}>
@@ -141,7 +143,7 @@ export default function ApiDropdown(props) {
         transformOrigin={{ horizontal: 'center', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'center', vertical: 'bottom' }}
       >
-        <PickApi/>
+        <PickApi />
       </Menu>
     </React.Fragment>
   );

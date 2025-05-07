@@ -1,5 +1,7 @@
-import { APIStatusReducer, AzureReducer, PhraseListReducer, StreamTextReducer,
-    WhisperReducer,ScribearServerReducer,PlaybackReducer } from './react-redux&middleware/redux/reducers/apiReducers'
+import {
+   APIStatusReducer, AzureReducer, PhraseListReducer, StreamTextReducer,
+   WhisperReducer, ScribearServerReducer, PlaybackReducer
+} from './react-redux&middleware/redux/reducers/apiReducers'
 import { combineReducers } from 'redux'
 
 import { BucketStreamReducer } from './react-redux&middleware/redux/reducers/bucketStreamReducers'
@@ -10,6 +12,7 @@ import { TranscriptReducer } from './react-redux&middleware/redux/reducers/trans
 
 import { configureStore } from '@reduxjs/toolkit'
 import thunkMiddleware from 'redux-thunk'
+import { ModelSelectionReducer } from './react-redux&middleware/redux/reducers/modelSelectionReducers'
 
 const rootReducer = combineReducers({
    DisplayReducer,
@@ -23,7 +26,8 @@ const rootReducer = combineReducers({
    TranscriptReducer,
    SRecognitionReducer,
    ScribearServerReducer,
-   PlaybackReducer
+   PlaybackReducer,
+   ModelSelectionReducer
 })
 
 // export const store = createStore(rootReducer)

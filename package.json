@@ -4,8 +4,6 @@
   "private": true,
   "homepage": "https://scribear.illinois.edu/v/latest/",
   "dependencies": {
-    "@material-ui/core": "^4.12.4",
-    "@material-ui/icons": "^4.11.3",
     "@mui/icons-material": "^5.16.14",
     "@mui/material": "^5.16.14",
     "@reduxjs/toolkit": "^1.9.3",

@@ -1,42 +1,9 @@
 import React from 'react';
 
 import Slider, { SliderThumb } from '@mui/material/Slider';
-import { Grid, makeStyles, Typography } from '../../../../muiImports'
+import { Grid, Typography } from '../../../../muiImports'
 import { RootState, DisplayStatus } from '../../../../react-redux&middleware/redux/typesImports';
 import { useDispatch, useSelector } from 'react-redux';
-/*const useStyles = makeStyles({
-  slider: {
-    width: '16vw',
-    marginLeft: '2vw',
-  },
-  textBox: {
-    width: '2.5vw',
-    marginLeft: '1vw'
-  }
-});*/
-
-const useStyles = makeStyles({
-  slider: {
-    width: '60%',
-    margin: 'auto',
-    /*
-    // Responsive styles using media queries
-    '@media (min-width: 600px)': { // Small screens
-      width: '30vw',
-    },
-    '@media (min-width: 960px)': { // Medium screens
-      width: '16vw',
-    },
-    '@media (min-width: 1280px)': { // Large screens
-      width: '16vw',
-    },*/
-  },
-  textBox: {
-    width: '90%',
-    margin: '0 auto',
-  },
-});
-
 
 
 export default function PlusMinus(props) {
@@ -47,7 +14,6 @@ export default function PlusMinus(props) {
   const handleInputChangeSlider = (event) => {
     dispatch({ type: 'SET_ROW_NUM', payload: event })
   }
-  const styles = useStyles()
 
   interface HoverThumbProps extends React.HTMLAttributes<unknown> {}
 
@@ -72,7 +38,7 @@ function HoverThumb(props: HoverThumbProps) {
 
 const marks = [{value: 1, label: "1",}, {value: 5, label: "5",}, {value: 10, label: "10",}, {value: 15, label: "15",}];                                              
   return (
-    <div className={styles.slider}>
+    <div style={{ width: '60%', margin: 'auto' }}>
         <Typography gutterBottom>
         </Typography>
         <Grid container spacing={2} alignItems="center">

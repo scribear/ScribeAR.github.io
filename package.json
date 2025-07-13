@@ -10,7 +10,6 @@
     "@mui/material": "^7.2.0",
     "@reduxjs/toolkit": "^2.8.2",
     "@types/dom-speech-recognition": "^0.0.1",
-    "@types/material-ui": "^0.21.12",
     "@types/node": "^24.0.13",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",

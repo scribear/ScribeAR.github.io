@@ -21,7 +21,7 @@ import StreamTextSettings from './StreamTextSettings';
 import ScribearServerSettings from './ScribearServerSettings'
 import PlaybackSettings from './PlaybackSettings';
 import WhisperDropdown from './WhisperDropdown';
-import swal from 'sweetalert';
+import Swal from 'sweetalert2';
 import { testAzureTranslRecog } from '../../../api/azure/azureTranslRecog';
 
 const currTheme = createTheme({
@@ -126,7 +126,7 @@ export default function PickApi(props) {
          copyStatus.streamTextStatus = STATUS.AVAILABLE;
          copyStatus.playbackStatus = STATUS.AVAILABLE;
 
-         swal({
+         Swal.fire({
                title: "Success!",
                text: "Switching to Microsoft Azure",
                icon: "success", 
@@ -138,7 +138,7 @@ export default function PickApi(props) {
          // reject (test bad)
          console.log("error");
          copyStatus.azureTranslStatus = STATUS.ERROR;   
-         swal({
+         Swal.fire({
                title: "Warning!",
                text: `${error}`,
                icon: "warning",
@@ -200,7 +200,7 @@ export default function PickApi(props) {
                      }
                      console.log(88, copyStatus);
                      dispatch({type: 'CHANGE_API_STATUS', payload: copyStatus});
-                     swal({
+                     Swal.fire({
                         title: "Success!",
                         text: "Switching to " + apiName,
                         icon: "success", 

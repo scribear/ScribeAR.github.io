@@ -58,7 +58,7 @@ export default function AppNavBar(props) {
                     <Grid container alignItems="center" justifyContent="space-between">
                         <Grid container alignItems="center" justifyContent="space-between" sx={{ width: '100%' }}>
                             {/* Left Section: Menu Icon and Title */}
-                            <Grid item sx={{ display: 'flex', alignItems: 'center' }}>
+                            <Grid sx={{ display: 'flex', alignItems: 'center' }}>
                                 <IconButton edge="start" sx={{ color: 'white' }} aria-label="menu" onClick={toggleDrawer(true)}>
                                     <MenuIcon />
                                 </IconButton>
@@ -72,7 +72,6 @@ export default function AppNavBar(props) {
 
                             {/* Right Section: TopBar (Strictly on one line with padding) */}
                             <Grid 
-                                item 
                                 sx={{ 
                                     display: 'flex', 
                                     alignItems: 'center', 

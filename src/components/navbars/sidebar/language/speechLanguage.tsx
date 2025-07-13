@@ -214,7 +214,7 @@ export default function CustomizedMenus() {
           sx={{ width: '2vw', height: 30, padding: 0 }}
         >
 
-          <h2 className="tryout" style={{ fontSize: '12px' }}>{state.language}</h2>
+          <h2 className="tryout" style={{ fontSize: '12px' }}>{state.language.toString()}</h2>
         </Button>
         <StyledMenu
           id="demo-customized-menu"

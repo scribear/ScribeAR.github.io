@@ -59,7 +59,7 @@ const SpeakerShow: React.FC = (props) => {
    });
 
    const [audioRunning, setAudioRunning] = React.useState(false);
-   const btnRef = useRef<any>();
+   const btnRef = useRef<any>(null);
    // const [cluster, setCluster] = React.useState(new LinksCluster(0.1, 0.4, 0.5)); // bounced off to 4 or 5
    const [cluster0, setCluster0] = React.useState(new LinksCluster(0.1, 0.5, 0.5)); // was largely able to restrain to 0, 1, 2 for (silent, high, low), but seems not sensitive. Unstable if there is a pause
    // const [cluster1, setCluster1] = React.useState(new LinksCluster(0.3, 0.3, 0.5)); // bounced off to 8 or 9.

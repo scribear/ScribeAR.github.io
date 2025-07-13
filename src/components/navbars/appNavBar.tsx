@@ -55,10 +55,9 @@ export default function AppNavBar(props) {
         <ThemeProvider theme={theme}>
             <AppBar position="fixed" id="topbar-wrapper" sx={{ transition: '0.6s', backgroundColor: accentColor }}>
                 <Toolbar sx={{ width: '100%', minHeight: 56, color: 'white' }}>
-                    <Grid container alignItems="center" justifyContent="space-between">
-                        <Grid container alignItems="center" justifyContent="space-between" sx={{ width: '100%' }}>
+                    <Grid container alignItems="center" justifyContent="space-between"  sx={{width: '100%'}} >
                             {/* Left Section: Menu Icon and Title */}
-                            <Grid sx={{ display: 'flex', alignItems: 'center' }}>
+                            <Grid sx={{ display: 'flex', alignItems: 'center' }} size={{ lg: 8 }}>
                                 <IconButton edge="start" sx={{ color: 'white' }} aria-label="menu" onClick={toggleDrawer(true)}>
                                     <MenuIcon />
                                 </IconButton>
@@ -78,7 +77,7 @@ export default function AppNavBar(props) {
                                     whiteSpace: 'nowrap', 
                                     flexShrink: 0, 
                                     pr: 5
-                                }}
+                                }} size={{ lg: 4}}
                             >
                                 <TopBar
                                     theme={theme}
@@ -88,7 +87,6 @@ export default function AppNavBar(props) {
                                 />
                             </Grid>
                         </Grid>
-                    </Grid>
                 </Toolbar>
             </AppBar>
         </ThemeProvider>

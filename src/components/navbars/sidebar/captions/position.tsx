@@ -43,7 +43,7 @@ const marks = [{value: 0, label: "Top",}, {value: 4, label: "",}, {value: 8, lab
         <Typography gutterBottom>
         </Typography>
         <Grid container spacing={2} alignItems="center">
-          <Grid xs>
+          <Grid size={12}>
           <Slider
                   sx={{
                     '& .MuiSlider-thumb': {

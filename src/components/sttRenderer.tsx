@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { RootState } from '../store';
@@ -7,7 +7,7 @@ import { AudioVis } from './api/visualization/audioVis';
 import { KeyboardDoubleArrowDownIcon } from '../muiImports';
 
 
-export const STTRenderer = (transcript: string) : JSX.Element => {
+export const STTRenderer = (transcript: string) : React.JSX.Element => {
 
    const displayStatus = useSelector((state: RootState) => {
       return state.DisplayReducer as DisplayStatus;

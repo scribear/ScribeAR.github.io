@@ -1,0 +1,15 @@
+# https://editorconfig.org/
+# This file helps configure your code editor to match the project's formatting convention
+# You might need to install an extension to get support for .editorconfig (see editorconfig docs)
+
+# Indicate this is the top-most EditorConfig file
+root = true
+
+# Ensure your editor matches Prettier settings
+[*]
+charset = utf-8
+insert_final_newline = true
+end_of_line = lf
+indent_style = space
+indent_size = 2
+max_line_length = 80

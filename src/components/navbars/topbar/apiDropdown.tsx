@@ -37,6 +37,8 @@ export default function ApiDropdown(props) {
   const serverAddress = urlParams.get('serverAddress');
   const accessToken = urlParams.get('accessToken');
   const sourceToken = urlParams.get('sourceToken');
+  const wsProtocol = window.isSecureContext ? 'wss' : 'ws';
+  const httpProtocol = window.isSecureContext ? 'https' : 'http';
 
   // Automatically use scribear server as sink when in student mode or as sourcesink if in kiosk mode
   useEffect(() => {
@@ -63,10 +65,10 @@ export default function ApiDropdown(props) {
     }
 
     if (mode === 'kiosk') {
-      switchToScribeARServer(`ws://${kioskServerAddress}/api/sourcesink`, undefined);
+      switchToScribeARServer(`${wsProtocol}://${kioskServerAddress}/api/sourcesink`, undefined);
     } else if (mode === 'student') {
       console.log("Sending startSession POST with accessToken:", accessToken);
-      fetch(`http://${serverAddress}/api/startSession`, {
+      fetch(`${httpProtocol}://${serverAddress}/api/startSession`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -77,7 +79,7 @@ export default function ApiDropdown(props) {
         .then(data => {
           console.log('Session token:', data.sessionToken);
 
-          const scribearServerAddress = `ws://${serverAddress}/api/sink`;
+          const scribearServerAddress = `${wsProtocol}://${serverAddress}/api/sink`;
 
           switchToScribeARServer(scribearServerAddress, data.sessionToken);
         })
@@ -148,3 +150,4 @@ export default function ApiDropdown(props) {
     </React.Fragment>
   );
 }
+

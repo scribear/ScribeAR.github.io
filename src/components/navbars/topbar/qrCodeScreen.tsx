@@ -29,7 +29,7 @@ export default function QRCodeComponent() {
 
         let updateAccessTokenTimeout;
         function updateAccessToken() {
-            fetch(`http://${kioskServerAddress}/accessToken`, {
+            fetch(`http://${kioskServerAddress}/api/accessToken`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

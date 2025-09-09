@@ -127,7 +127,7 @@ export default function QRCodeComponent() {
                         Instructions:
                     </Typography>
                     <Typography variant="body1" gutterBottom>
-                        1. Make sure you are connected to <strong>illinois.net</strong> WiFi.
+                        1. Make sure you are connected to the <strong>IllinoisNet</strong> WiFi network.
                     </Typography>
                     <Typography variant="body1" gutterBottom>
                         2. Scan the QR code below.

@@ -47,7 +47,7 @@ const initialPlaybackStatus: PlaybackStatus = {
 }
 
 const initialScribearServerState: ScribearServerStatus = {
-  scribearServerAddress: 'ws://localhost:8080/sourcesink',
+  scribearServerAddress: 'ws://localhost:8080/api/sourcesink',
   scribearServerKey: '',
   scribearServerSessionToken: undefined,
 }

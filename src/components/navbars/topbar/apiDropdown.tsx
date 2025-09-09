@@ -63,10 +63,10 @@ export default function ApiDropdown(props) {
     }
 
     if (mode === 'kiosk') {
-      switchToScribeARServer(`ws://${kioskServerAddress}/sourcesink`, undefined);
+      switchToScribeARServer(`ws://${kioskServerAddress}/api/sourcesink`, undefined);
     } else if (mode === 'student') {
       console.log("Sending startSession POST with accessToken:", accessToken);
-      fetch(`http://${serverAddress}/startSession`, {
+      fetch(`http://${serverAddress}/api/startSession`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -77,7 +77,7 @@ export default function ApiDropdown(props) {
         .then(data => {
           console.log('Session token:', data.sessionToken);
 
-          const scribearServerAddress = `ws://${serverAddress}/sink`;
+          const scribearServerAddress = `ws://${serverAddress}/api/sink`;
 
           switchToScribeARServer(scribearServerAddress, data.sessionToken);
         })

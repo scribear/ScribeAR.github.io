@@ -76,7 +76,7 @@ export class ScribearRecognizer implements Recognizer {
         if (this.socket) { return; }
 
         const scribearURL = new URL(this.scribearServerStatus.scribearServerAddress)
-        if (scribearURL.pathname !== '/sink') {
+        if (scribearURL.pathname !== '/api/sink') {
             this._startRecording();
         }
 

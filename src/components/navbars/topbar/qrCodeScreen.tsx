@@ -16,6 +16,7 @@ export default function QRCodeComponent() {
     const isStudentMode = urlParams.get('mode') === 'student';
     const scribearURLParam = urlParams.get('scribearURL');
     const sourceToken = urlParams.get('sourceToken');
+    const httpProtocol = window.isSecureContext ? 'https' : 'http';
 
     useEffect(() => {
         if (!isKioskMode) return;
@@ -29,7 +30,7 @@ export default function QRCodeComponent() {
 
         let updateAccessTokenTimeout;
         function updateAccessToken() {
-            fetch(`${kioskServerAddress}/api/accessToken`, {
+            fetch(`${httpProtocol}://${kioskServerAddress}/api/accessToken`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

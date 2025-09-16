@@ -1,88 +1,92 @@
-import React, { useState  } from 'react';
-import { List, ListItem, Button } from '../../../../muiImports'
+import * as React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectSelectedModel } from
+  '../../../../react-redux&middleware/redux/reducers/modelSelectionReducers';
 
+import { IconButton, Tooltip, Popover, Stack, Chip, Typography } from '@mui/material';
+import SettingsIcon from '@mui/icons-material/Settings';
 
-export default function WhisperDropdown(props) {
+type Props = { onPicked?: () => void };
+type ModelKey = 'tiny' | 'base';
 
-    // const [isTrue, setIsTrue] = useState<boolean>(false);
-  // const [isClearCache, setIsClearCache] = useState<boolean>(false);
-  const [isDownloadTiny, setIsDownloadTiny] = useState<boolean>(false);
-  const [isDownloadBase, setIsDownloadBase] = useState<boolean>(false);
-  // const [progress, setProgress] = useState(null);
-  // const [showModal, setShowModal] = useState(false);
+export default function WhisperDropdown({ onPicked }: Props) {
+  const dispatch = useDispatch();
+  const selected = useSelector(selectSelectedModel);
 
+  const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
+  const open = Boolean(anchorEl);
+  const id = open ? 'whisper-model-popover' : undefined;
 
-    const handleTinyDownload = () => {
-        console.log("clicked download tiny")
-        setIsDownloadTiny(prevIsDownloadTiny => !prevIsDownloadTiny);
-        sessionStorage.setItem('isDownloadTiny', (!isDownloadTiny).toString());
-      };
+  // Normalize current selection -> 'tiny' | 'base' | undefined
+  const selectedKey: ModelKey | undefined = React.useMemo(() => {
+    if (typeof selected === 'string') {
+      return selected === 'tiny' || selected === 'base' ? selected : undefined;
+    }
+    if (selected && typeof selected === 'object' && 'key' in (selected as any)) {
+      const k = (selected as any).key;
+      return k === 'tiny' || k === 'base' ? k : undefined;
+    }
+    return undefined;
+  }, [selected]);
 
-      const handleBaseDownload = () => {
-        console.log("clicked download tiny")
-        setIsDownloadBase(prevIsDownloadBase => !prevIsDownloadBase);
-        sessionStorage.setItem('isDownloadBase', (!isDownloadBase).toString());
+  const pick = (which: ModelKey) => {
+    // Keep the legacy flags that your loader watches
+    sessionStorage.setItem('isDownloadTiny', String(which === 'tiny'));
+    sessionStorage.setItem('isDownloadBase', String(which === 'base'));
 
-        const intervalId = setInterval(() => {
-          let p = sessionStorage.getItem('whisper_progress');
-          if (p === '100') {
-              alert("Base model downloaded! trigger the mike by stopping and starting again");
-              clearInterval(intervalId); // Stop checking once it's 100%
-          }
-      }, 2000); // Check every 2000 milliseconds, or 2 seconds
-      };
+    // Update redux (adjust action type if your project uses a different one)
+    dispatch({ type: 'SET_SELECTED_MODEL', payload: which } as any);
 
-      // --------------- Using a modal to show the progress
+    setAnchorEl(null);
+    onPicked?.();
+  };
 
-      // const handleBaseDownload = () => {
-      //   console.log("clicked download base");
-      //   setIsDownloadBase(prevIsDownloadBase => !prevIsDownloadBase);
-      //   sessionStorage.setItem('isDownloadBase', (!isDownloadBase).toString());
-    
-      //   // Initially show the modal
-      //   setShowModal(true);
-    
-      //   const intervalId = setInterval(() => {
-      //     let p = sessionStorage.getItem('whisper_progress');
-      //     setProgress(p); // Update the progress
-      //     if (p === '100%') {
-      //       clearInterval(intervalId); // Stop checking once it's 100%
-      //     }
-      //   }, 2000);
-      // };
-    
-      // // Close the modal when progress reaches 100%
-      // useEffect(() => {
-      //   if (progress === '100%') {
-      //     setShowModal(false);
-      //   }
-      // }, [progress]);
+  return (
+    <>
+      {/* Right-side gear, aligned like the other rows */}
+      <Tooltip title="Whisper settings">
+        <IconButton
+          aria-describedby={id}
+          edge="end"
+          sx={{ color: 'action.active', ml: 'auto' }}
+          onClick={(e) => setAnchorEl(e.currentTarget)}
+        >
+          <SettingsIcon />
+        </IconButton>
+      </Tooltip>
 
-     
-
-      // const handleClickClearCache = () => {
-      //   console.log("clicked cache")
-      //   setIsClearCache(prevIsClearCache => !prevIsClearCache);
-      //   sessionStorage.setItem('isClearCache', (!isClearCache).toString());
-      // };
-
-
-    return (
-      <>
-        <div>
-            <List component="div" disablePadding>
-               <ListItem sx={{ pl: 4 }} style={{ width: '100%' }}>
-                    <Button onClick={()=>{handleTinyDownload()}} variant="contained" color="inherit" style={{ width: '100%' }}>tiny (75 MB)</Button>
-               </ListItem>
-               <ListItem sx={{ pl: 4 }} style={{ width: '100%' }}>
-                    <Button  onClick={()=>{handleBaseDownload()}} variant="contained" color="inherit" style={{ width: '100%' }}>base (145 MB)</Button>
-               </ListItem>
-               {/* TODO: add clear cache to delete the database with whisper.cpp models */}
-               {/* <ListItem sx={{ pl: 4 }} style={{ width: '100%' }}>
-                    <Button  onClick={()=>{handleClickClearCache()}} variant="contained" color="inherit" style={{ width: '100%' }}>Clear cache</Button>
-               </ListItem> */}
-            </List>
-        </div>
-        </>
-    )
+      {/* Small chooser window */}
+      <Popover
+        id={id}
+        open={open}
+        anchorEl={anchorEl}
+        onClose={() => setAnchorEl(null)}
+        anchorOrigin={{ vertical: 'center', horizontal: 'right' }}
+        transformOrigin={{ vertical: 'top', horizontal: 'left' }}
+        PaperProps={{ sx: { p: 1.5 } }}
+      >
+        <Typography variant="subtitle2" sx={{ px: 1, pb: 1 }}>
+          Whisper model
+        </Typography>
+        <Stack direction="row" spacing={1}>
+          <Chip
+            label="TINY (75 MB)"
+            clickable
+            onClick={() => pick('tiny')}
+            variant={selectedKey === 'tiny' ? 'filled' : 'outlined'}
+            color={selectedKey === 'tiny' ? 'primary' : 'default'}
+            size="small"
+          />
+          <Chip
+            label="BASE (145 MB)"
+            clickable
+            onClick={() => pick('base')}
+            variant={selectedKey === 'base' ? 'filled' : 'outlined'}
+            color={selectedKey === 'base' ? 'primary' : 'default'}
+            size="small"
+          />
+        </Stack>
+      </Popover>
+    </>
+  );
 }

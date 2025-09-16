@@ -11,6 +11,7 @@ import {
 } from '../../react-redux&middleware/redux/typesImports';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import WhisperIcon from '../icons/WhisperIcon';
 
 import { RootState } from '../../store';
 import { STTRenderer } from '../sttRenderer';

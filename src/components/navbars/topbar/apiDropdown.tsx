@@ -2,6 +2,7 @@ import * as React from 'react';
 import { useEffect } from "react";
 import { Box, Menu, ExpandLess, ExpandMore, ThemeProvider, IconButton, Tooltip } from '../../../muiImports';
 import { createTheme, useMediaQuery } from '@mui/material';
+import WhisperIcon from '../../icons/WhisperIcon';
 
 import PickApi from './api/pickApi';
 import {
@@ -90,6 +91,7 @@ export default function ApiDropdown(props) {
   }, [accessToken, dispatch, mode, kioskServerAddress, serverAddress, sourceToken]);
 
   const isMobile = useMediaQuery(currTheme.breakpoints.down('sm'));
+  const isWhisperActive = apiStatus?.currentApi === API.WHISPER || (typeof props.apiDisplayName === 'string' && props.apiDisplayName.toLowerCase().includes('whisper'));
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -101,8 +103,9 @@ export default function ApiDropdown(props) {
   // Make this a dropdown menu with the current api as the menu title
   return (
     <React.Fragment>
-      <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
-        {props.apiDisplayName}
+      <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center', gap: 1 }}>
+        {isWhisperActive ? <WhisperIcon /> : null}
+        <span>{props.apiDisplayName}</span>
         <Tooltip title="API choice">
           <IconButton onClick={handleClick}>
             <ThemeProvider theme={currTheme}>

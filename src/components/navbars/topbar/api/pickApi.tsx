@@ -15,6 +15,7 @@ import {
 } from '../../../../react-redux&middleware/redux/typesImports';
 import { CancelIcon, CheckCircleIcon, Collapse, DoNotDisturbOnIcon, ErrorIcon, ExpandLess, ExpandMore, IconButton, ListItemButton, ListItemIcon, ListItemText, ThemeProvider, createTheme } from '../../../../muiImports'
 import { ListItem } from '@mui/material';
+import WhisperIcon from '../../../icons/WhisperIcon';
 
 import AzureSettings from './AzureSettings';
 import StreamTextSettings from './StreamTextSettings';
@@ -269,19 +270,17 @@ export default function PickApi(props) {
             <StreamTextSettings/>
          </ListItem>
 
-         <ListItemButton onClick={toggleDrawer("whisperStatus", API.WHISPER, false)} >
+         <ListItem>
+            <ListItemButton disableGutters onClick={toggleDrawer("whisperStatus", API.WHISPER, false)}>
                <ListItemIcon>
-                  <IconStatus{...{currentApi: apiStatus.whisperStatus}}/>
-               </ListItemIcon>
+                  <IconStatus {...{ currentApi: apiStatus.whisperStatus }} />
+                </ListItemIcon>
                <ListItemText primary="Whisper" />
-               <IconButton onClick={toggleDrawer("whisperStatus", API.WHISPER, true)}>
-                  {state.showWhisperDropdown ? <ExpandLess /> : <ExpandMore />}
-               </IconButton>
-         </ListItemButton>
+            </ListItemButton>
+         {/* Right-side gear, same placement as other settings components */}
+         <WhisperDropdown onPicked={() => setState(s => ({ ...s, showWhisperDropdown: false }))} />
+         </ListItem>
 
-         <Collapse in={state.showWhisperDropdown} timeout="auto" unmountOnExit>
-               <WhisperDropdown apiStatus={apiStatus}/>
-         </Collapse>
       </div>
    );
 }

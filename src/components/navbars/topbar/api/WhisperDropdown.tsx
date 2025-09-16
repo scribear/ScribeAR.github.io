@@ -1,88 +1,63 @@
-import React, { useState  } from 'react';
-import { List, ListItem, Button } from '../../../../muiImports'
+import React from 'react';
+import { List, ListItem, Button } from '../../../../muiImports';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectSelectedModel } from
+  '../../../../react-redux&middleware/redux/reducers/modelSelectionReducers';
 
+type Props = { onPicked?: () => void };
 
-export default function WhisperDropdown(props) {
+export default function WhisperDropdown({ onPicked }: Props) {
+  const dispatch = useDispatch();
+  const selected = useSelector(selectSelectedModel); // could be a string or an object
 
-    // const [isTrue, setIsTrue] = useState<boolean>(false);
-  // const [isClearCache, setIsClearCache] = useState<boolean>(false);
-  const [isDownloadTiny, setIsDownloadTiny] = useState<boolean>(false);
-  const [isDownloadBase, setIsDownloadBase] = useState<boolean>(false);
-  // const [progress, setProgress] = useState(null);
-  // const [showModal, setShowModal] = useState(false);
+  // Normalize to a simple key we can compare
+  const selectedKey: 'tiny' | 'base' | undefined = (() => {
+    if (typeof selected === 'string') {
+      return (selected === 'tiny' || selected === 'base') ? selected : undefined;
+    }
+    if (selected && typeof selected === 'object' && 'key' in (selected as any)) {
+      const k = (selected as any).key;
+      return (k === 'tiny' || k === 'base') ? k : undefined;
+    }
+    return undefined;
+  })();
 
+  const pick = (which: 'tiny' | 'base') => {
+    // Keep your existing sessionStorage flags if your loader watches them
+    sessionStorage.setItem('isDownloadTiny', (which === 'tiny').toString());
+    sessionStorage.setItem('isDownloadBase', (which === 'base').toString());
 
-    const handleTinyDownload = () => {
-        console.log("clicked download tiny")
-        setIsDownloadTiny(prevIsDownloadTiny => !prevIsDownloadTiny);
-        sessionStorage.setItem('isDownloadTiny', (!isDownloadTiny).toString());
-      };
+    // Dispatch your model selection change
+    // If you have an action creator (e.g., setSelectedModel), use that instead.
+    dispatch({ type: 'SET_SELECTED_MODEL', payload: which as any });
 
-      const handleBaseDownload = () => {
-        console.log("clicked download tiny")
-        setIsDownloadBase(prevIsDownloadBase => !prevIsDownloadBase);
-        sessionStorage.setItem('isDownloadBase', (!isDownloadBase).toString());
+    onPicked?.();
+  };
 
-        const intervalId = setInterval(() => {
-          let p = sessionStorage.getItem('whisper_progress');
-          if (p === '100') {
-              alert("Base model downloaded! trigger the mike by stopping and starting again");
-              clearInterval(intervalId); // Stop checking once it's 100%
-          }
-      }, 2000); // Check every 2000 milliseconds, or 2 seconds
-      };
-
-      // --------------- Using a modal to show the progress
-
-      // const handleBaseDownload = () => {
-      //   console.log("clicked download base");
-      //   setIsDownloadBase(prevIsDownloadBase => !prevIsDownloadBase);
-      //   sessionStorage.setItem('isDownloadBase', (!isDownloadBase).toString());
-    
-      //   // Initially show the modal
-      //   setShowModal(true);
-    
-      //   const intervalId = setInterval(() => {
-      //     let p = sessionStorage.getItem('whisper_progress');
-      //     setProgress(p); // Update the progress
-      //     if (p === '100%') {
-      //       clearInterval(intervalId); // Stop checking once it's 100%
-      //     }
-      //   }, 2000);
-      // };
-    
-      // // Close the modal when progress reaches 100%
-      // useEffect(() => {
-      //   if (progress === '100%') {
-      //     setShowModal(false);
-      //   }
-      // }, [progress]);
-
-     
-
-      // const handleClickClearCache = () => {
-      //   console.log("clicked cache")
-      //   setIsClearCache(prevIsClearCache => !prevIsClearCache);
-      //   sessionStorage.setItem('isClearCache', (!isClearCache).toString());
-      // };
-
-
-    return (
-      <>
-        <div>
-            <List component="div" disablePadding>
-               <ListItem sx={{ pl: 4 }} style={{ width: '100%' }}>
-                    <Button onClick={()=>{handleTinyDownload()}} variant="contained" color="inherit" style={{ width: '100%' }}>tiny (75 MB)</Button>
-               </ListItem>
-               <ListItem sx={{ pl: 4 }} style={{ width: '100%' }}>
-                    <Button  onClick={()=>{handleBaseDownload()}} variant="contained" color="inherit" style={{ width: '100%' }}>base (145 MB)</Button>
-               </ListItem>
-               {/* TODO: add clear cache to delete the database with whisper.cpp models */}
-               {/* <ListItem sx={{ pl: 4 }} style={{ width: '100%' }}>
-                    <Button  onClick={()=>{handleClickClearCache()}} variant="contained" color="inherit" style={{ width: '100%' }}>Clear cache</Button>
-               </ListItem> */}
-            </List>
-        </div>
-        </>
-    )
+  return (
+    <div>
+      <List component="div" disablePadding>
+        <ListItem sx={{ pl: 4 }} style={{ width: '100%' }}>
+          <Button
+            onClick={() => pick('tiny')}
+            variant={selectedKey === 'tiny' ? 'contained' : 'outlined'}
+            color={selectedKey === 'tiny' ? 'primary' : 'inherit'}
+            style={{ width: '100%' }}
+          >
+            TINY (75 MB)
+          </Button>
+        </ListItem>
+        <ListItem sx={{ pl: 4 }} style={{ width: '100%' }}>
+          <Button
+            onClick={() => pick('base')}
+            variant={selectedKey === 'base' ? 'contained' : 'outlined'}
+            color={selectedKey === 'base' ? 'primary' : 'inherit'}
+            style={{ width: '100%' }}
+          >
+            BASE (145 MB)
+          </Button>
+        </ListItem>
+      </List>
+    </div>
+  );
 }

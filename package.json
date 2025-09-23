@@ -25,7 +25,6 @@
     "@types/webaudioapi": "^0.0.27",
     "@types/webvtt-parser": "^2.2.0",
     "axios": "^1.4.0",
-    "caniuse-lite": "^1.0.30001489",
     "linspace": "^1.0.2",
     "mathjs": "^11.5.1",
     "meyda": "^5.5.1",

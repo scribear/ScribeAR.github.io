@@ -55,6 +55,7 @@ import FormatColorTextIcon from '@mui/icons-material/FormatColorText';
 import Autocomplete from '@mui/material/Autocomplete';
 import { Switch } from '@mui/material';
 import MemoryIcon from '@mui/icons-material/Memory';
+import Chip from '@mui/material/Chip';
 export {
     createTheme,
     Autocomplete,
@@ -114,5 +115,6 @@ export {
     FormatColorTextIcon,
     ArchitectureIcon,
     Switch,
-    MemoryIcon
+    MemoryIcon,
+    Chip
 }

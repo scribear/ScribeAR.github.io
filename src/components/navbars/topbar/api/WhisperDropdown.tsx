@@ -1,88 +1,80 @@
-import React, { useState  } from 'react';
-import { List, ListItem, Button } from '../../../../muiImports'
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
+// Pull UI pieces from the same aggregator used elsewhere
+import {
+  IconButton,
+  Tooltip,
+  Menu,
+  MenuItem,
+  SettingsIcon,   // this should be re-exported by your muiImports like other icons
+} from '../../../../muiImports';
 
-export default function WhisperDropdown(props) {
+import { selectSelectedModel } from
+  '../../../../react-redux&middleware/redux/reducers/modelSelectionReducers';
 
-    // const [isTrue, setIsTrue] = useState<boolean>(false);
-  // const [isClearCache, setIsClearCache] = useState<boolean>(false);
-  const [isDownloadTiny, setIsDownloadTiny] = useState<boolean>(false);
-  const [isDownloadBase, setIsDownloadBase] = useState<boolean>(false);
-  // const [progress, setProgress] = useState(null);
-  // const [showModal, setShowModal] = useState(false);
+type Props = { onPicked?: () => void };
 
+type ModelKey = 'tiny' | 'base';
 
-    const handleTinyDownload = () => {
-        console.log("clicked download tiny")
-        setIsDownloadTiny(prevIsDownloadTiny => !prevIsDownloadTiny);
-        sessionStorage.setItem('isDownloadTiny', (!isDownloadTiny).toString());
-      };
+// Helper to normalize current selection into 'tiny' | 'base' | undefined
+function normalizeSelected(selected: unknown): ModelKey | undefined {
+  if (typeof selected === 'string') {
+    return selected === 'tiny' || selected === 'base' ? selected : undefined;
+  }
+  if (selected && typeof selected === 'object' && 'key' in (selected as any)) {
+    const k = (selected as any).key;
+    return k === 'tiny' || k === 'base' ? k : undefined;
+  }
+  return undefined;
+}
 
-      const handleBaseDownload = () => {
-        console.log("clicked download tiny")
-        setIsDownloadBase(prevIsDownloadBase => !prevIsDownloadBase);
-        sessionStorage.setItem('isDownloadBase', (!isDownloadBase).toString());
+export default function WhisperDropdown({ onPicked }: Props) {
+  const dispatch = useDispatch();
+  const selected = useSelector(selectSelectedModel);
+  const selectedKey = normalizeSelected(selected);
 
-        const intervalId = setInterval(() => {
-          let p = sessionStorage.getItem('whisper_progress');
-          if (p === '100') {
-              alert("Base model downloaded! trigger the mike by stopping and starting again");
-              clearInterval(intervalId); // Stop checking once it's 100%
-          }
-      }, 2000); // Check every 2000 milliseconds, or 2 seconds
-      };
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
 
-      // --------------- Using a modal to show the progress
+  const handleOpen = (e: React.MouseEvent<HTMLElement>) => setAnchorEl(e.currentTarget);
+  const handleClose = () => setAnchorEl(null);
 
-      // const handleBaseDownload = () => {
-      //   console.log("clicked download base");
-      //   setIsDownloadBase(prevIsDownloadBase => !prevIsDownloadBase);
-      //   sessionStorage.setItem('isDownloadBase', (!isDownloadBase).toString());
-    
-      //   // Initially show the modal
-      //   setShowModal(true);
-    
-      //   const intervalId = setInterval(() => {
-      //     let p = sessionStorage.getItem('whisper_progress');
-      //     setProgress(p); // Update the progress
-      //     if (p === '100%') {
-      //       clearInterval(intervalId); // Stop checking once it's 100%
-      //     }
-      //   }, 2000);
-      // };
-    
-      // // Close the modal when progress reaches 100%
-      // useEffect(() => {
-      //   if (progress === '100%') {
-      //     setShowModal(false);
-      //   }
-      // }, [progress]);
+  const pick = (which: ModelKey) => {
+    // Keep the existing flags your loader is watching
+    sessionStorage.setItem('isDownloadTiny', String(which === 'tiny'));
+    sessionStorage.setItem('isDownloadBase', String(which === 'base'));
 
-     
+    // Update Redux – if you have a real action creator, use it here
+    dispatch({ type: 'SET_SELECTED_MODEL', payload: which as any });
 
-      // const handleClickClearCache = () => {
-      //   console.log("clicked cache")
-      //   setIsClearCache(prevIsClearCache => !prevIsClearCache);
-      //   sessionStorage.setItem('isClearCache', (!isClearCache).toString());
-      // };
+    handleClose();
+    onPicked?.();
+  };
 
+  return (
+    <>
+      {/* Right-aligned gear like other providers */}
+      <Tooltip title="Whisper settings">
+        <IconButton onClick={handleOpen} size="large">
+          <SettingsIcon />
+        </IconButton>
+      </Tooltip>
 
-    return (
-      <>
-        <div>
-            <List component="div" disablePadding>
-               <ListItem sx={{ pl: 4 }} style={{ width: '100%' }}>
-                    <Button onClick={()=>{handleTinyDownload()}} variant="contained" color="inherit" style={{ width: '100%' }}>tiny (75 MB)</Button>
-               </ListItem>
-               <ListItem sx={{ pl: 4 }} style={{ width: '100%' }}>
-                    <Button  onClick={()=>{handleBaseDownload()}} variant="contained" color="inherit" style={{ width: '100%' }}>base (145 MB)</Button>
-               </ListItem>
-               {/* TODO: add clear cache to delete the database with whisper.cpp models */}
-               {/* <ListItem sx={{ pl: 4 }} style={{ width: '100%' }}>
-                    <Button  onClick={()=>{handleClickClearCache()}} variant="contained" color="inherit" style={{ width: '100%' }}>Clear cache</Button>
-               </ListItem> */}
-            </List>
-        </div>
-        </>
-    )
+      <Menu
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+      >
+        <MenuItem selected={selectedKey === 'tiny'} onClick={() => pick('tiny')}>
+          TINY (75 MB)
+        </MenuItem>
+        <MenuItem selected={selectedKey === 'base'} onClick={() => pick('base')}>
+          BASE (145 MB)
+        </MenuItem>
+      </Menu>
+    </>
+  );
 }

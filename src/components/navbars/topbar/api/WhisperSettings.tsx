@@ -24,7 +24,7 @@ export default function WhisperSettings() {
   const dispatch = useDispatch();
   const selected = useSelector(selectSelectedModel);
 
-  // normalize current selection to 'tiny' | 'base' | undefined
+  // Normalize current selection to 'tiny' | 'base' | undefined
   const selectedKey: ModelKey | undefined = React.useMemo(() => {
     if (typeof selected === 'string') {
       return selected === 'tiny' || selected === 'base' ? selected : undefined;
@@ -40,11 +40,11 @@ export default function WhisperSettings() {
   const closePopup = () => setAnchorEl(null);
 
   const pick = (which: ModelKey) => {
-    // keep existing flags your loader watches
+    // Keep flags if your loader watches them
     sessionStorage.setItem('isDownloadTiny', (which === 'tiny').toString());
     sessionStorage.setItem('isDownloadBase', (which === 'base').toString());
 
-    // update redux
+    // Update redux
     dispatch({ type: 'SET_SELECTED_MODEL', payload: which as any });
 
     closePopup();
@@ -52,7 +52,7 @@ export default function WhisperSettings() {
 
   return (
     <>
-      {/* Right-side gear, same pattern as Azure/ScribeAR Server */}
+      {/* Right-side gear (same pattern as Azure/ScribeAR Server) */}
       <IconButton onClick={showPopup}>
         <SettingsIcon />
       </IconButton>

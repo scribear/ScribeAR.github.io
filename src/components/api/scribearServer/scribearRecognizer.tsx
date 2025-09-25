@@ -56,7 +56,7 @@ export class ScribearRecognizer implements Recognizer {
             type: 'audio',
             mimeType: 'audio/wav',
             desiredSampRate: this.kSampleRate,
-            timeSlice: 1_000,
+            timeSlice: 50,
             ondataavailable: async (blob: Blob) => {
                 this.socket?.send(blob);
             },

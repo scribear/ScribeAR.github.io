@@ -56,6 +56,19 @@ export const returnRecogAPI = (api : ApiStatus, control : ControlStatus, azure :
 */
 
 
+
+function toWhisperCode(bcp47: string): string {
+   // Accept "en", "en-US", etc. Return "en" for "en-US".
+   if (!bcp47) return "en";
+   const base = bcp47.split('-')[0].toLowerCase();
+   const supported = new Set([
+     'en','es','fr','de','it','pt','nl','sv','da','nb','fi','pl','cs','sk','sl','hr','sr','bg','ro',
+     'hu','el','tr','ru','uk','ar','he','fa','ur','hi','bn','ta','te','ml','mr','gu','kn','pa',
+     'id','ms','vi','th','zh','ja','ko'
+   ]);
+   return supported.has(base) ? base : 'en';
+ }
+
 const createRecognizer = (currentApi: number, control: ControlStatus, azure: AzureStatus, streamTextConfig: StreamTextStatus, scribearServerStatus: ScribearServerStatus, selectedModelOption: SelectedOption, playbackStatus: PlaybackStatus): Recognizer => {
    if (currentApi === API.SCRIBEAR_SERVER) {
       return new ScribearRecognizer(scribearServerStatus, selectedModelOption, control.speechLanguage.CountryCode);
@@ -74,7 +87,11 @@ const createRecognizer = (currentApi: number, control: ControlStatus, azure: Azu
       // Placeholder - this is just WebSpeech for now
       return new StreamTextRecognizer(streamTextConfig.streamTextEvent, 'en', streamTextConfig.startPosition);
    } else if (currentApi === API.WHISPER) {
-      return new WhisperRecognizer(null, control.speechLanguage.CountryCode, 4);
+      return new WhisperRecognizer(
+         null,
+         toWhisperCode(control.speechLanguage.CountryCode),
+         4
+       );
    } else {
       throw new Error(`Unexpcted API_CODE: ${currentApi}`);
    }

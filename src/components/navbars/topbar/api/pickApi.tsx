@@ -17,14 +17,18 @@ import {
 import {
   CancelIcon,
   CheckCircleIcon,
+  Collapse,
   DoNotDisturbOnIcon,
   ErrorIcon,
+  ExpandLess,
+  ExpandMore,
+  IconButton,
   ListItemButton,
   ListItemIcon,
   ListItemText,
   ThemeProvider,
   createTheme,
-  Chip,
+  Chip, // from muiImports barrel
 } from '../../../../muiImports';
 import { ListItem } from '@mui/material';
 
@@ -32,23 +36,12 @@ import AzureSettings from './AzureSettings';
 import StreamTextSettings from './StreamTextSettings';
 import ScribearServerSettings from './ScribearServerSettings';
 import PlaybackSettings from './PlaybackSettings';
-import WhisperSettings from './WhisperSettings';
+import WhisperSettings from './WhisperSettings'; // gear dialog for Whisper
 
 import swal from 'sweetalert';
 import { testAzureTranslRecog } from '../../../api/azure/azureTranslRecog';
-import { selectSelectedModel } from '../../../../react-redux&middleware/redux/reducers/modelSelectionReducers';
-
-// helper to normalize selected model to 'tiny' | 'base' | undefined
-function getSelectedModelKey(selected: unknown): 'tiny' | 'base' | undefined {
-  if (typeof selected === 'string') {
-    return selected === 'tiny' || selected === 'base' ? selected : undefined;
-  }
-  if (selected && typeof selected === 'object' && 'key' in (selected as any)) {
-    const k = (selected as any).key;
-    return k === 'tiny' || k === 'base' ? k : undefined;
-  }
-  return undefined;
-}
+import { selectSelectedModel } from
+  '../../../../react-redux&middleware/redux/reducers/modelSelectionReducers';
 
 const currTheme = createTheme({
   palette: {
@@ -90,35 +83,44 @@ const IconStatus = (currentApi: any) => {
   }
 };
 
+function getSelectedModelKey(selected: unknown): 'tiny' | 'base' | undefined {
+  if (typeof selected === 'string') {
+    return selected === 'tiny' || selected === 'base' ? selected : undefined;
+  }
+  if (selected && typeof selected === 'object' && 'key' in (selected as any)) {
+    const k = (selected as any).key;
+    return k === 'tiny' || k === 'base' ? k : undefined;
+  }
+  return undefined;
+}
+
 export default function PickApi() {
   const dispatch = useDispatch();
   const myTheme = currTheme;
 
-  // ✅ hooks INSIDE the component
+  // ---- Redux state (all hooks inside component!) ----
   const apiStatus = useSelector((state: RootState) => state.APIStatusReducer as ApiStatus);
   const controlStatus = useSelector((state: RootState) => state.ControlReducer as ControlStatus);
   const azureStatus = useSelector((state: RootState) => state.AzureReducer as AzureStatus);
   const streamTextStatus = useSelector((state: RootState) => state.StreamTextReducer as StreamTextStatus);
   const scribearServerStatus = useSelector((state: RootState) => state.ScribearServerReducer as ScribearServerStatus);
   const playbackStatus = useSelector((state: RootState) => state.PlaybackReducer as PlaybackStatus);
-
-  const selectedModel = useSelector(selectSelectedModel as any);
-  const selectedModelKey = React.useMemo(
-    () => getSelectedModelKey(selectedModel),
-    [selectedModel]
-  );
+  const selectedModel = useSelector(selectSelectedModel);
+  const selectedModelKey = getSelectedModelKey(selectedModel);
 
   const [state, setState] = React.useState({
     showAzureDropdown: false,
     showWhisperDropdown: false,
   });
 
+  // ---- Actions / Switchers ----
   const switchToAzure = async () => {
     dispatch({ type: 'FLIP_RECORDING', payload: controlStatus });
     const copyStatus = { ...apiStatus };
     testAzureTranslRecog(controlStatus, azureStatus)
       .then(() => {
         localStorage.setItem('azureStatus', JSON.stringify(azureStatus));
+
         copyStatus.currentApi = API.AZURE_TRANSLATION;
         copyStatus.azureTranslStatus = STATUS.TRANSCRIBING;
         copyStatus.webspeechStatus = STATUS.AVAILABLE;
@@ -126,7 +128,14 @@ export default function PickApi() {
         copyStatus.whisperStatus = STATUS.AVAILABLE;
         copyStatus.streamTextStatus = STATUS.AVAILABLE;
         copyStatus.playbackStatus = STATUS.AVAILABLE;
-        swal({ title: 'Success!', text: 'Switching to Microsoft Azure', icon: 'success', timer: 1500 });
+
+        swal({
+          title: 'Success!',
+          text: 'Switching to Microsoft Azure',
+          icon: 'success',
+          timer: 1500,
+        });
+
         dispatch({ type: 'CHANGE_API_STATUS', payload: copyStatus });
       })
       .catch((error) => {
@@ -138,39 +147,65 @@ export default function PickApi() {
       });
   };
 
+  const switchToStreamText = (event: React.KeyboardEvent | React.MouseEvent) => {
+    localStorage.setItem('streamTextStatus', JSON.stringify(streamTextStatus));
+    return toggleDrawer('streamTextStatus', API.STREAM_TEXT, false)(event);
+  };
+
+  const switchToScribearServer = (event: React.KeyboardEvent | React.MouseEvent) => {
+    localStorage.setItem('scribearServerStatus', JSON.stringify(scribearServerStatus));
+    return toggleDrawer('scribearServerStatus', API.SCRIBEAR_SERVER, false)(event);
+  };
+
+  const switchToPlayback = (event: React.KeyboardEvent | React.MouseEvent) => {
+    localStorage.setItem('playbackStatus', JSON.stringify(playbackStatus));
+    return toggleDrawer('playbackStatus', API.PLAYBACK, false)(event);
+  };
+
   const toggleDrawer =
     (apiStat: string, api: ApiType, isArrow: boolean) =>
     (_event: React.KeyboardEvent | React.MouseEvent) => {
       if (apiStatus.currentApi !== api) {
         if (!isArrow) {
-          const copyStatus = { ...apiStatus, currentApi: api };
+          const copyStatus = { ...apiStatus };
+          copyStatus.currentApi = api;
 
           // reset all
-          copyStatus.azureTranslStatus = STATUS.AVAILABLE;
-          copyStatus.webspeechStatus = STATUS.AVAILABLE;
-          copyStatus.azureConvoStatus = STATUS.AVAILABLE;
-          copyStatus.whisperStatus = STATUS.AVAILABLE;
-          copyStatus.streamTextStatus = STATUS.AVAILABLE;
-          copyStatus.scribearServerStatus = STATUS.AVAILABLE;
-          copyStatus.playbackStatus = STATUS.AVAILABLE;
+          copyStatus.azureTranslStatus   = STATUS.AVAILABLE;
+          copyStatus.webspeechStatus     = STATUS.AVAILABLE;
+          copyStatus.azureConvoStatus    = STATUS.AVAILABLE;
+          copyStatus.whisperStatus       = STATUS.AVAILABLE;
+          copyStatus.streamTextStatus    = STATUS.AVAILABLE;
+          copyStatus.scribearServerStatus= STATUS.AVAILABLE;
+          copyStatus.playbackStatus      = STATUS.AVAILABLE;
 
           let apiName = '';
           if (api === API.AZURE_TRANSLATION) {
-            apiName = 'Microsoft Azure'; copyStatus.azureTranslStatus = STATUS.TRANSCRIBING;
+            apiName = 'Microsoft Azure';
+            copyStatus.azureTranslStatus = STATUS.TRANSCRIBING;
           } else if (api === API.WHISPER) {
-            apiName = 'Whisper';         copyStatus.whisperStatus = STATUS.TRANSCRIBING;
+            apiName = 'Whisper';
+            copyStatus.whisperStatus = STATUS.TRANSCRIBING;
           } else if (api === API.WEBSPEECH) {
-                                         copyStatus.webspeechStatus = STATUS.TRANSCRIBING;
+            copyStatus.webspeechStatus = STATUS.TRANSCRIBING;
           } else if (api === API.STREAM_TEXT) {
-            apiName = 'StreamText';      copyStatus.streamTextStatus = STATUS.TRANSCRIBING;
+            apiName = 'StreamText';
+            copyStatus.streamTextStatus = STATUS.TRANSCRIBING;
           } else if (api === API.SCRIBEAR_SERVER) {
-            apiName = 'ScribeAR Server'; copyStatus.scribearServerStatus = STATUS.TRANSCRIBING;
+            apiName = 'ScribeAR Server';
+            copyStatus.scribearServerStatus = STATUS.TRANSCRIBING;
           } else if (api === API.PLAYBACK) {
-            apiName = 'Playback';        copyStatus.playbackStatus = STATUS.TRANSCRIBING;
+            apiName = 'Playback';
+            copyStatus.playbackStatus = STATUS.TRANSCRIBING;
           }
 
           dispatch({ type: 'CHANGE_API_STATUS', payload: copyStatus });
-          swal({ title: 'Success!', text: 'Switching to ' + apiName, icon: 'success', timer: 2500 });
+          swal({
+            title: 'Success!',
+            text: 'Switching to ' + apiName,
+            icon: 'success',
+            timer: 2500,
+          });
         } else {
           setState((s) => ({ ...s, [apiStat]: !s[apiStat] }));
         }
@@ -179,24 +214,10 @@ export default function PickApi() {
       }
     };
 
-  const switchToStreamText = (e: React.KeyboardEvent | React.MouseEvent) => {
-    localStorage.setItem('streamTextStatus', JSON.stringify(streamTextStatus));
-    return toggleDrawer('streamTextStatus', API.STREAM_TEXT, false)(e);
-  };
-
-  const switchToScribearServer = (e: React.KeyboardEvent | React.MouseEvent) => {
-    localStorage.setItem('scribearServerStatus', JSON.stringify(scribearServerStatus));
-    return toggleDrawer('scribearServerStatus', API.SCRIBEAR_SERVER, false)(e);
-  };
-
-  const switchToPlayback = (e: React.KeyboardEvent | React.MouseEvent) => {
-    localStorage.setItem('playbackStatus', JSON.stringify(playbackStatus));
-    return toggleDrawer('playbackStatus', API.PLAYBACK, false)(e);
-  };
-
+  // ---- UI ----
   return (
     <div>
-      {/* Webspeech */}
+      {/* Webspeech (with language chip) */}
       <ListItem disableGutters>
         <ListItemButton onClick={toggleDrawer('webspeechStatus', API.WEBSPEECH, false)}>
           <ThemeProvider theme={myTheme}>
@@ -204,7 +225,22 @@ export default function PickApi() {
               <IconStatus {...{ currentApi: apiStatus.webspeechStatus }} />
             </ListItemIcon>
           </ThemeProvider>
-          <ListItemText primary="Webspeech" />
+
+          <ListItemText
+            primary={
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+                <span>Webspeech</span>
+                {/* Show current speech language (e.g., en-US) */}
+                {controlStatus?.speechLanguage?.CountryCode && (
+                  <Chip
+                    size="small"
+                    variant="outlined"
+                    label={controlStatus.speechLanguage.CountryCode}
+                  />
+                )}
+              </span>
+            }
+          />
         </ListItemButton>
       </ListItem>
 
@@ -225,7 +261,7 @@ export default function PickApi() {
           <ListItemIcon>
             <IconStatus {...{ currentApi: apiStatus.scribearServerStatus }} />
           </ListItemIcon>
-          <ListItemText primary="ScribeAR Server" />
+        <ListItemText primary="ScribeAR Server" />
         </ListItemButton>
         <ScribearServerSettings />
       </ListItem>
@@ -252,7 +288,7 @@ export default function PickApi() {
         <StreamTextSettings />
       </ListItem>
 
-      {/* Whisper (button + gear; inline chip shows selected model) */}
+      {/* Whisper (label + model chip + right gear) */}
       <ListItem>
         <ListItemButton
           disableGutters
@@ -267,12 +303,18 @@ export default function PickApi() {
               <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
                 <span>Whisper</span>
                 {selectedModelKey && (
-                  <Chip size="small" variant="outlined" label={selectedModelKey.toUpperCase()} />
+                  <Chip
+                    size="small"
+                    variant="outlined"
+                    label={selectedModelKey.toUpperCase()} // TINY | BASE
+                  />
                 )}
               </span>
             }
           />
         </ListItemButton>
+
+        {/* Right-aligned settings gear (same pattern as Azure/ScribeAR) */}
         <WhisperSettings />
       </ListItem>
     </div>

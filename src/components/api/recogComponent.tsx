@@ -89,5 +89,5 @@ export const RecogComponent: React.FC = (props) => {
    // if else for whisper transcript, apiStatus for 4=whisper and control status for listening
    const transcript = useRecognition(sRecog, apiStatus, controlStatus, azureStatus, streamTextStatus, scribearServerStatus, selectedModelOption, playbackStatus);
    // console.log("Recog component received new transcript: ", transcript)
-   return STTRenderer(transcript);
+   return STTRenderer({ transcript });
 };

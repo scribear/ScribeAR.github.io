@@ -40,6 +40,81 @@ export default function AppNavBar(props) {
     const apiDisplayName = API_Name(apiStatus.currentApi);
     const accentColor = displayStatus.secondaryColor;
 
+    const TOP_TRIGGER_ZONE = 48; // px from top to reveal
+    const HIDE_TIMEOUT_MS = 2500;
+    const [topbarLocked, setTopbarLocked] = React.useState<boolean>(false);
+    const [topbarVisible, setTopbarVisible] = React.useState<boolean>(true);
+    const hideRef = React.useRef<number | null>(null);
+    const pointerStartY = React.useRef<number | null>(null);
+    const pointerId = React.useRef<number | null>(null);
+
+    const showTopbar = React.useCallback(() => {
+        setTopbarVisible(true);
+        if (hideRef.current) {window.clearTimeout(hideRef.current); hideRef.current = null;}
+        if (!topbarLocked) {
+            hideRef.current = window.setTimeout(() => setTopbarVisible(false), HIDE_TIMEOUT_MS);
+        }
+    }, [topbarLocked]);
+
+    React.useEffect(() => {showTopbar();}, [showTopbar]); //to activate immediately
+
+    React.useEffect(() => {
+        const onPointerDown = (e: PointerEvent) => {
+            if(pointerId.current !== null) return;
+
+            const y = e.clientY;
+            pointerId.current = e.pointerId;
+            pointerStartY.current = y;
+
+            if (y <= TOP_TRIGGER_ZONE) {
+                showTopbar();
+            }
+        };
+
+        const onPointerMove = (e: PointerEvent) => {
+            // proximity check
+            if (e.clientY <= TOP_TRIGGER_ZONE) {
+                showTopbar();
+            }
+            // swipe down check
+            if (e.pointerId !== pointerId.current || pointerStartY.current === null) {
+                return;
+            }
+            const y = e.clientY
+            const delta = y - (pointerStartY.current ?? 0);
+            const SWIPE_THRESHOLD = 40; //how far to swipe
+
+            if(pointerStartY.current <= TOP_TRIGGER_ZONE && delta >= SWIPE_THRESHOLD) {
+                showTopbar();
+
+                // reset
+                pointerStartY.current = null;
+                pointerId.current = null;
+            }
+        };
+
+        const onPointerUp = (e: PointerEvent) => {
+            if(e.pointerId === pointerId.current) {
+                pointerId.current = null;
+                pointerStartY.current = null;
+            }
+        };
+
+        window.addEventListener('pointerdown', onPointerDown, {passive: true });
+        window.addEventListener('pointermove', onPointerMove, {passive: true });
+        window.addEventListener('pointerup', onPointerUp);
+        window.addEventListener('pointercancel', onPointerUp);
+
+        return () => {
+            window.removeEventListener('pointerdown', onPointerDown);
+            window.removeEventListener('pointermove', onPointerMove);
+            window.removeEventListener('pointerup', onPointerUp);
+            window.removeEventListener('pointercancel', onPointerUp);
+        };
+    }, [showTopbar]);
+
+    React.useEffect(() => () => {if (hideRef.current) window.clearTimeout(hideRef.current); }, []);
+
     const theme = useTheme();
     // const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -53,7 +128,7 @@ export default function AppNavBar(props) {
 
     return (
         <ThemeProvider theme={theme}>
-            <AppBar position="fixed" id="topbar-wrapper" sx={{ transition: '0.6s', backgroundColor: accentColor }}>
+            <AppBar position="fixed" id="topbar-wrapper" sx={{ transition: 'transform 240ms ease-in-out', transform: topbarVisible ? 'translateY(0)' : 'translateY(-100%)', backgroundColor: accentColor }}>
                 <Toolbar sx={{ width: '100%', minHeight: 56, color: 'white' }}>
                     <Grid container alignItems="center" justifyContent="space-between">
                         <Grid container alignItems="center" justifyContent="space-between" sx={{ width: '100%' }}>
@@ -86,6 +161,15 @@ export default function AppNavBar(props) {
                                     apiDisplayName={apiDisplayName}
                                     listening={controlStatus.listening}
                                     menuVisible={displayStatus.menuVisible}
+
+                                    topbarLocked={topbarLocked}
+                                    onTopBarToggle= {(v) => {
+                                        setTopbarLocked(v);
+                                        if(v) {
+                                            setTopbarVisible(true);
+                                            if (hideRef.current) {window.clearTimeout(hideRef.current); hideRef.current=null; }
+                                        }
+                                    }}
                                 />
                             </Grid>
                         </Grid>

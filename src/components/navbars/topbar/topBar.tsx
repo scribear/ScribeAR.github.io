@@ -5,6 +5,7 @@ import ApiDropdown from './apiDropdown';
 import Fullscreen from './fullScreen';
 import Listening from './listening';
 import QRCodeScreen from './qrCodeScreen';
+import LockToggle from './lock';
 import MenuHider from './menuHider';
 import TranscriptDownload from './transcriptDownload';
 
@@ -19,6 +20,8 @@ import {
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
     const iconSize = isMobile ? "small" : "medium";
+
+    const {topbarLocked, onTopBarToggle } = props;
 
     return (
         <Box sx={{
@@ -37,6 +40,7 @@ import {
             {/* Only display if there is enough space */}
             {<Listening listening={props.listening} iconSize={iconSize} />}
             {/* {!isMobile && <MenuHider menuVisible={props.menuVisible} iconSize={iconSize} />} */}
+            {<LockToggle locked = {topbarLocked} onToggle={onTopBarToggle}/>}
             {<TranscriptDownload />}
             { <Fullscreen iconSize={iconSize} />}
             {!isMobile && <QRCodeScreen />}

@@ -23,6 +23,7 @@ import { useHotkeys } from 'react-hotkeys-hook'
      const {myTheme} = Theme()
      
      useHotkeys('ctrl+m', (e) => {
+          e.preventDefault();
           handleClick(e)
      })
 

@@ -36,6 +36,8 @@
     "react-color": "^2.19.3",
     "react-dom": "^17.0.2",
     "react-google-charts": "^3.0.15",
+    "react-hotkeys-hook": "^3.4.7",
+    "react-keyboard": "^1.0.10",
     "react-qr-code": "^2.0.15",
     "react-redux": "^8.0.5",
     "react-scripts": "^5.0.1",
@@ -75,5 +77,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "prettier": "^3.6.2"
   }
 }

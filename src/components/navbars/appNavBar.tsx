@@ -10,6 +10,7 @@ import {
     AppBar,
     Toolbar,
     Typography,
+    Tooltip,
     // useMediaQuery,
     // useTheme
 } from '@mui/material';
@@ -59,9 +60,11 @@ export default function AppNavBar(props) {
                         <Grid container alignItems="center" justifyContent="space-between" sx={{ width: '100%' }}>
                             {/* Left Section: Menu Icon and Title */}
                             <Grid item sx={{ display: 'flex', alignItems: 'center' }}>
-                                <IconButton edge="start" sx={{ color: 'white' }} aria-label="menu" onClick={toggleDrawer(true)}>
-                                    <MenuIcon />
-                                </IconButton>
+                                <Tooltip title = "Menu">
+                                    <IconButton edge="start" sx={{ color: 'white' }} aria-label="menu" onClick={toggleDrawer(true)}>
+                                        <MenuIcon />
+                                    </IconButton>
+                                </Tooltip>
                                 <Drawer anchor="left" open={isDrawerOpen} onClose={toggleDrawer(false)}>
                                     <SideBar isRecording={props.isRecording} onClose={toggleDrawer(false)} />
                                 </Drawer>

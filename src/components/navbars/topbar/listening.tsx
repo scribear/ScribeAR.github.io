@@ -4,7 +4,6 @@ import { RootState } from '../../../store';
 import { ControlStatus } from '../../../react-redux&middleware/redux/typesImports';
 import Theme from '../../theme'
 import * as React from 'react';
-import { useHotkeys } from 'react-hotkeys-hook'
 
    export default function CustomizedMenus(props) {
     console.log(Theme())
@@ -21,11 +20,6 @@ import { useHotkeys } from 'react-hotkeys-hook'
      } 
 
      const {myTheme} = Theme()
-     
-     useHotkeys('ctrl+m', (e) => {
-          e.preventDefault();
-          handleClick(e)
-     })
 
      // color "primary" comes from Theme()
      return (

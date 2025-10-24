@@ -107,11 +107,11 @@ export default function ApiDropdown(props) {
         {isWhisperActive ? <WhisperIcon /> : null}
         <span>{props.apiDisplayName}</span>
         <Tooltip title="API choice">
-          <IconButton onClick={handleClick}>
-            <ThemeProvider theme={currTheme}>
-              {open ? <ExpandLess color="primary" fontSize="large" /> : <ExpandMore color="primary" fontSize="large" />}
-            </ThemeProvider>
-          </IconButton>
+          <ThemeProvider theme={currTheme}>
+            <IconButton color='primary' onClick={handleClick}>
+              {open ? <ExpandLess fontSize="large" /> : <ExpandMore fontSize="large" />}
+            </IconButton>
+          </ThemeProvider>
         </Tooltip>
       </Box>
       <Menu

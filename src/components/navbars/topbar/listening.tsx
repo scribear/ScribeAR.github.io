@@ -29,8 +29,8 @@ import * as React from 'react';
                         {props.listening === false ? "Begin Listening" : "Pause Listening"}>
                         <IconButton color="primary" onClick={handleClick}>
                             {props.listening ? 
-                                <MicIcon color="primary" fontSize="large"/> : 
-                                <MicOffIcon color="primary" fontSize="large"/>
+                                <MicIcon fontSize="large"/> : 
+                                <MicOffIcon fontSize="large"/>
                             }
                         </IconButton>
                     </Tooltip>

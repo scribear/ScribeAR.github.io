@@ -23,14 +23,14 @@ import {
   useTheme
 } from '@mui/material';
 
-const currTheme = createTheme({
-    palette: {
-        primary: {
-            main: '#ffffff',
-            contrastText: '#000000'
-        },
-    },
-});
+// const currTheme = createTheme({
+//     palette: {
+//         primary: {
+//             main: '#ffffff',
+//             contrastText: '#000000'
+//         },
+//     },
+// });
 
 export default function AppNavBar(props) {
     const [isDrawerOpen, setDrawerOpen] = React.useState(false);

@@ -28,7 +28,7 @@ import {
   ListItemText,
   ThemeProvider,
   createTheme,
-  Chip, // from muiImports barrel
+  Chip,
 } from '../../../../muiImports';
 import { ListItem } from '@mui/material';
 
@@ -83,15 +83,36 @@ const IconStatus = (currentApi: any) => {
   }
 };
 
-function getSelectedModelKey(selected: unknown): 'tiny' | 'base' | undefined {
+/** Normalize various saved shapes into one of our TWO tiny model keys; default to tiny-en-q5_1 */
+function getSelectedModelKey(
+  selected: unknown
+): 'tiny-en-q5_1' | 'tiny-q5_1' {
+  const allowed = new Set(['tiny-en-q5_1', 'tiny-q5_1']);
+
   if (typeof selected === 'string') {
-    return selected === 'tiny' || selected === 'base' ? selected : undefined;
+    if (selected === 'tiny') return 'tiny-en-q5_1';
+    // if someone still has 'base' persisted, fall back to tiny-en
+    if (selected === 'base') return 'tiny-en-q5_1';
+    return allowed.has(selected) ? (selected as any) : 'tiny-en-q5_1';
   }
-  if (selected && typeof selected === 'object' && 'key' in (selected as any)) {
-    const k = (selected as any).key;
-    return k === 'tiny' || k === 'base' ? k : undefined;
+
+  if (selected && typeof selected === 'object') {
+    const k = (selected as any).model_key ?? (selected as any).key;
+    if (k === 'tiny') return 'tiny-en-q5_1';
+    if (k === 'base') return 'tiny-en-q5_1';
+    return allowed.has(k) ? (k as any) : 'tiny-en-q5_1';
   }
-  return undefined;
+
+  return 'tiny-en-q5_1';
+}
+
+/** Short label for topbar chip */
+function getSelectedModelLabel(k?: string) {
+  switch (k) {
+    case 'tiny-en-q5_1':  return 'TINY-EN';
+    case 'tiny-q5_1':     return 'TINY-MULTI';
+    default:              return 'TINY-EN';
+  }
 }
 
 export default function PickApi() {
@@ -261,7 +282,7 @@ export default function PickApi() {
           <ListItemIcon>
             <IconStatus {...{ currentApi: apiStatus.scribearServerStatus }} />
           </ListItemIcon>
-        <ListItemText primary="ScribeAR Server" />
+          <ListItemText primary="ScribeAR Server" />
         </ListItemButton>
         <ScribearServerSettings />
       </ListItem>
@@ -306,7 +327,7 @@ export default function PickApi() {
                   <Chip
                     size="small"
                     variant="outlined"
-                    label={selectedModelKey.toUpperCase()} // TINY | BASE
+                    label={getSelectedModelLabel(selectedModelKey)}
                   />
                 )}
               </span>

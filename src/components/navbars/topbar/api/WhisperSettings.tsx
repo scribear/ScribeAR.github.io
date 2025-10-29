@@ -15,7 +15,7 @@ import {
 import { selectSelectedModel } from
   '../../../../react-redux&middleware/redux/reducers/modelSelectionReducers';
 
-type ModelKey = 'tiny' | 'base';
+type ModelKey = 'tiny-en-q5_1' | 'tiny-q5_1' | 'tiny';
 
 export default function WhisperSettings() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -24,36 +24,33 @@ export default function WhisperSettings() {
   const dispatch = useDispatch();
   const selected = useSelector(selectSelectedModel);
 
-  // Normalize current selection to 'tiny' | 'base' | undefined
-  const selectedKey: ModelKey | undefined = React.useMemo(() => {
+  const selectedKey: ModelKey = React.useMemo(() => {
+    const allowed = new Set(['tiny-en-q5_1', 'tiny-q5_1']);
     if (typeof selected === 'string') {
-      return selected === 'tiny' || selected === 'base' ? selected : undefined;
+      if (selected === 'tiny') return 'tiny-en-q5_1';
+      return allowed.has(selected) ? (selected as ModelKey) : 'tiny-en-q5_1';
     }
-    if (selected && typeof selected === 'object' && 'key' in (selected as any)) {
-      const k = (selected as any).key;
-      return k === 'tiny' || k === 'base' ? k : undefined;
+    if (selected && typeof selected === 'object') {
+      const k = (selected as any).model_key || (selected as any).key;
+      if (k === 'tiny') return 'tiny-en-q5_1';
+      return allowed.has(k) ? (k as ModelKey) : 'tiny-en-q5_1';
     }
-    return undefined;
+    return 'tiny-en-q5_1';
   }, [selected]);
 
   const showPopup = (e: React.MouseEvent<HTMLElement>) => setAnchorEl(e.currentTarget);
   const closePopup = () => setAnchorEl(null);
 
   const pick = (which: ModelKey) => {
-    // Keep flags if your loader watches them
-    sessionStorage.setItem('isDownloadTiny', (which === 'tiny').toString());
-    sessionStorage.setItem('isDownloadBase', (which === 'base').toString());
-
-    // Update redux
+    sessionStorage.setItem('isDownloadTiny', 'true');
+    sessionStorage.setItem('isDownloadBase', 'false');
     dispatch({ type: 'SET_SELECTED_MODEL', payload: which as any });
-
     closePopup();
   };
 
   return (
     <>
-      {/* Right-side gear (same pattern as Azure/ScribeAR Server) */}
-      <IconButton onClick={showPopup}>
+      <IconButton onClick={showPopup} aria-label="Whisper model settings">
         <SettingsIcon />
       </IconButton>
 
@@ -61,43 +58,33 @@ export default function WhisperSettings() {
         anchorEl={anchorEl}
         open={isShown}
         onClose={closePopup}
-        PaperProps={{
-          elevation: 0,
-          sx: {
-            position: 'unset',
-            ml: '25vw',
-            width: '50vw',
-            mt: '25vh',
-            height: '50vh',
-            filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
-          },
-        }}
-        transformOrigin={{ horizontal: 'center', vertical: 'top' }}
-        anchorOrigin={{ horizontal: 'center', vertical: 'bottom' }}
+        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
       >
-        <List component="div" disablePadding>
-          <ListItem sx={{ pl: 4 }} style={{ width: '100%' }}>
-            <Button
-              onClick={() => pick('tiny')}
-              variant={selectedKey === 'tiny' ? 'contained' : 'outlined'}
-              color={selectedKey === 'tiny' ? 'primary' : 'inherit'}
-              style={{ width: '100%' }}
-            >
-              tiny (75 MB)
-            </Button>
-          </ListItem>
-
-          <ListItem sx={{ pl: 4 }} style={{ width: '100%' }}>
-            <Button
-              onClick={() => pick('base')}
-              variant={selectedKey === 'base' ? 'contained' : 'outlined'}
-              color={selectedKey === 'base' ? 'primary' : 'inherit'}
-              style={{ width: '100%' }}
-            >
-              base (145 MB)
-            </Button>
-          </ListItem>
-        </List>
+        <Box sx={{ p: 1, width: 260 }}>
+          <List dense>
+            <ListItem>
+              <Button
+                onClick={() => pick('tiny-en-q5_1')}
+                variant={selectedKey === 'tiny-en-q5_1' ? 'contained' : 'outlined'}
+                color={selectedKey === 'tiny-en-q5_1' ? 'primary' : 'inherit'}
+                fullWidth
+              >
+                tiny (EN, q5_1) ~31 MB
+              </Button>
+            </ListItem>
+            <ListItem>
+              <Button
+                onClick={() => pick('tiny-q5_1')}
+                variant={selectedKey === 'tiny-q5_1' ? 'contained' : 'outlined'}
+                color={selectedKey === 'tiny-q5_1' ? 'primary' : 'inherit'}
+                fullWidth
+              >
+                tiny (Multi, q5_1) ~31 MB
+              </Button>
+            </ListItem>
+          </List>
+        </Box>
       </Menu>
     </>
   );

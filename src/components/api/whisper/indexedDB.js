@@ -1,169 +1,168 @@
-// HACK: moving global variables from index.html to here for loadRemote
+// Robust, silent caching + URL fallbacks for Whisper model binaries
 
-let dbVersion = 1
-let dbName    = 'whisper.ggerganov.com';
-let indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB
+var dbVersion = 1;
+var dbName    = 'whisper.ggerganov.com';
+var _indexedDB =
+  (window.indexedDB ||
+   window.mozIndexedDB ||
+   window.webkitIndexedDB ||
+   window.msIndexedDB);
 
-// fetch a remote file from remote URL using the Fetch API
-async function fetchRemote(url, cbProgress, cbPrint) {
-    cbPrint('fetchRemote: downloading with fetch()...');
+// --- tiny helpers -----------------------------------------------------------
 
-    const response = await fetch(
-        url,
-        {
-            method: 'GET',
-        }
-    );
+function log(cbPrint, msg){ try { cbPrint && cbPrint(msg); } catch(_){} }
 
-    if (!response.ok) {
-        cbPrint('fetchRemote: failed to fetch ' + url);
-        return;
-    }
-
-    const contentLength = response.headers.get('content-length');
-    const total = parseInt(contentLength, 10);
-    const reader = response.body.getReader();
-
-    var chunks = [];
-    var receivedLength = 0;
-    var progressLast = -1;
-
-    while (true) {
-        const { done, value } = await reader.read();
-
-        if (done) {
-            break;
-        }
-
-        chunks.push(value);
-        receivedLength += value.length;
-
-        if (contentLength) {
-            cbProgress(receivedLength/total);
-
-            var progressCur = Math.round((receivedLength / total) * 10);
-            if (progressCur != progressLast) {
-                cbPrint('fetchRemote: fetching ' + 10*progressCur + '% ...');
-                progressLast = progressCur;
-            }
-        }
-    }
-
-    var position = 0;
-    var chunksAll = new Uint8Array(receivedLength);
-
-    for (var chunk of chunks) {
-        chunksAll.set(chunk, position);
-        position += chunk.length;
-    }
-
-    return chunksAll;
+function isValidModelBytes(buf, contentType) {
+  if (!buf) return false;
+  // Reject obvious HTML/JSON or tiny payloads (typical CRA index.html ~2–5 KB)
+  if (buf.byteLength < 4096) return false;
+  if (!contentType) return true;
+  const ct = String(contentType).toLowerCase();
+  if (ct.includes('text/html')) return false;
+  if (ct.includes('json'))      return false;
+  return true;
 }
 
-// load remote data
-// - check if the data is already in the IndexedDB
-// - if not, fetch it from the remote URL and store it in the IndexedDB
-export function loadRemote(url, dst, size_mb, cbProgress, cbReady, cbCancel, cbPrint) {
-    if (!navigator.storage || !navigator.storage.estimate) {
-        cbPrint('loadRemote: navigator.storage.estimate() is not supported');
-    } else {
-        // query the storage quota and print it
-        navigator.storage.estimate().then(function (estimate) {
-            cbPrint('loadRemote: storage quota: ' + estimate.quota + ' bytes');
-            cbPrint('loadRemote: storage usage: ' + estimate.usage + ' bytes');
-        });
+// Fetch bytes from a URL (no prompt, no cache), return Uint8Array or null
+async function fetchBytes(url, cbProgress, cbPrint) {
+  log(cbPrint, 'fetchRemote: GET ' + url);
+  const res = await fetch(url, { cache: 'no-cache', method: 'GET' });
+  if (!res.ok) {
+    log(cbPrint, 'fetchRemote: HTTP ' + res.status + ' @ ' + url);
+    return null;
+  }
+  const totalHdr = res.headers.get('content-length');
+  const total = totalHdr ? parseInt(totalHdr, 10) : undefined;
+
+  // If stream not available, do arrayBuffer directly
+  if (!res.body || !res.body.getReader) {
+    const buf = await res.arrayBuffer();
+    if (!isValidModelBytes(buf, res.headers.get('content-type'))) return null;
+    cbProgress && cbProgress(1);
+    return new Uint8Array(buf);
+  }
+
+  const reader = res.body.getReader();
+  let received = 0, chunks = [], lastReport = -1;
+
+  while (true) {
+    const { value, done } = await reader.read();
+    if (done) break;
+    chunks.push(value);
+    received += value.length;
+    if (total) {
+      const frac = received / total;
+      cbProgress && cbProgress(frac);
+      const bucket = Math.round(frac * 10);
+      if (bucket !== lastReport) {
+        log(cbPrint, 'fetchRemote: fetching ' + (bucket * 10) + '% ...');
+        lastReport = bucket;
+      }
+    }
+  }
+
+  // Concat
+  const out = new Uint8Array(received);
+  let pos = 0;
+  for (let i = 0; i < chunks.length; i++) {
+    out.set(chunks[i], pos);
+    pos += chunks[i].length;
+  }
+
+  // Final sanity
+  const ct = res.headers.get('content-type');
+  if (!isValidModelBytes(out, ct)) return null;
+  if (!total) { cbProgress && cbProgress(1); }
+
+  return out;
+}
+
+// IDB helpers
+function idbGet(db, key) {
+  return new Promise(resolve => {
+    try {
+      const tx = db.transaction(['models'], 'readonly');
+      const os = tx.objectStore('models');
+      const rq = os.get(key);
+      rq.onsuccess = () => resolve(rq.result || null);
+      rq.onerror   = () => resolve(null);
+    } catch (_) { resolve(null); }
+  });
+}
+
+function idbPut(db, key, bytes, cbPrint) {
+  return new Promise(resolve => {
+    try {
+      const tx = db.transaction(['models'], 'readwrite');
+      const os = tx.objectStore('models');
+      const rq = os.put(bytes, key);
+      rq.onsuccess = () => { log(cbPrint, 'loadRemote: stored in IDB: ' + key); resolve(true); };
+      rq.onerror   = () => { log(cbPrint, 'loadRemote: IDB put failed (non-fatal)'); resolve(false); };
+    } catch (e) {
+      log(cbPrint, 'loadRemote: IDB exception: ' + e);
+      resolve(false);
+    }
+  });
+}
+
+function openDB(cbPrint) {
+  return new Promise(resolve => {
+    const rq = _indexedDB.open(dbName, dbVersion);
+    rq.onupgradeneeded = (ev) => {
+      const db = ev.target.result;
+      if (!db.objectStoreNames.contains('models')) {
+        db.createObjectStore('models', { autoIncrement: false });
+        log(cbPrint, 'loadRemote: created IDB store');
+      }
+    };
+    rq.onsuccess = () => resolve(rq.result);
+    rq.onerror   = () => resolve(null);
+    rq.onblocked = () => resolve(null);
+    rq.onabort   = () => resolve(null);
+  });
+}
+
+// --- PUBLIC: try a list of URLs, use cache per-URL, stop on first good one ---
+export async function loadRemoteWithFallbacks(urls, dst, size_mb, cbProgress, cbReady, cbCancel, cbPrint) {
+  try {
+    if (navigator.storage?.estimate) {
+      const est = await navigator.storage.estimate();
+      log(cbPrint, 'loadRemote: storage quota: ' + est.quota + ' bytes');
+      log(cbPrint, 'loadRemote: storage usage: ' + est.usage + ' bytes');
+    }
+  } catch (_) {}
+
+  // De-dup & filter falsy
+  const list = Array.from(new Set((urls || []).filter(Boolean)));
+  if (!list.length) { cbCancel && cbCancel(); return; }
+
+  const db = await openDB(cbPrint);
+
+  for (let i = 0; i < list.length; i++) {
+    const url = list[i];
+
+    // 1) Cache hit?
+    if (db) {
+      const cached = await idbGet(db, url);
+      if (cached && cached.byteLength > 4096) {
+        log(cbPrint, `loadRemote: cache hit for ${url}`);
+        cbReady && cbReady(dst, cached instanceof Uint8Array ? cached : new Uint8Array(cached));
+        return;
+      }
     }
 
-    // check if the data is already in the IndexedDB
-    var rq = indexedDB.open(dbName, dbVersion);
+    log(cbPrint, `loadRemote: cache miss; downloading ~${size_mb} MB`);
+    const bytes = await fetchBytes(url, cbProgress, cbPrint);
+    if (bytes && bytes.byteLength > 4096) {
+      if (db) { await idbPut(db, url, bytes, cbPrint); }
+      cbReady && cbReady(dst, bytes);
+      return;
+    } else {
+      log(cbPrint, `fetchWithFallbacks: "${url}" did not look like a model, trying next...`);
+    }
+  }
 
-    rq.onupgradeneeded = function (event) {
-        var db = event.target.result;
-        if (db.version == 1) {
-            var os = db.createObjectStore('models', { autoIncrement: false });
-            cbPrint('loadRemote: created IndexedDB ' + db.name + ' version ' + db.version);
-        } else {
-            // clear the database
-            var os = event.currentTarget.transaction.objectStore('models');
-            os.clear();
-            cbPrint('loadRemote: cleared IndexedDB ' + db.name + ' version ' + db.version);
-        }
-    };
-
-    rq.onsuccess = function (event) {
-        var db = event.target.result;
-        var tx = db.transaction(['models'], 'readonly');
-        var os = tx.objectStore('models');
-        var rq = os.get(url);
-
-        rq.onsuccess = function (event) {
-            if (rq.result) {
-                cbPrint('loadRemote: "' + url + '" is already in the IndexedDB');
-                cbReady(dst, rq.result);
-            } else {
-                // data is not in the IndexedDB
-                cbPrint('loadRemote: "' + url + '" is not in the IndexedDB');
-
-                // alert and ask the user to confirm
-                if (!confirm(
-                    'You are about to download ' + size_mb + ' MB of data.\n' +
-                    'The model data will be cached in the browser for future use.\n\n' +
-                    'Press OK to continue.')) {
-                    cbCancel();
-                    return;
-                }
-
-                fetchRemote(url, cbProgress, cbPrint).then(function (data) {
-                    if (data) {
-                        // store the data in the IndexedDB
-                        var rq = indexedDB.open(dbName, dbVersion);
-                        rq.onsuccess = function (event) {
-                            var db = event.target.result;
-                            var tx = db.transaction(['models'], 'readwrite');
-                            var os = tx.objectStore('models');
-
-                            var rq = null;
-                            try {
-                                var rq = os.put(data, url);
-                            } catch (e) {
-                                cbPrint('loadRemote: failed to store "' + url + '" in the IndexedDB: \n' + e);
-                                cbCancel();
-                                return;
-                            }
-
-                            rq.onsuccess = function (event) {
-                                cbPrint('loadRemote: "' + url + '" stored in the IndexedDB');
-                                cbReady(dst, data);
-                            };
-
-                            rq.onerror = function (event) {
-                                cbPrint('loadRemote: failed to store "' + url + '" in the IndexedDB');
-                                cbCancel();
-                            };
-                        };
-                    }
-                });
-            }
-        };
-
-        rq.onerror = function (event) {
-            cbPrint('loadRemote: failed to get data from the IndexedDB');
-            cbCancel();
-        };
-    };
-
-    rq.onerror = function (event) {
-        cbPrint('loadRemote: failed to open IndexedDB');
-        cbCancel();
-    };
-
-    rq.onblocked = function (event) {
-        cbPrint('loadRemote: failed to open IndexedDB: blocked');
-        cbCancel();
-    };
-
-    rq.onabort = function (event) {
-        cbPrint('loadRemote: failed to open IndexedDB: abort');
-        cbCancel();
-    };
+  // All failed
+  log(cbPrint, 'loadRemote: all fetch attempts failed');
+  cbCancel && cbCancel();
 }

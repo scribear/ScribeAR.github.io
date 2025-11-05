@@ -1,6 +1,6 @@
 import { Recognizer } from '../recognizer';
 import { TranscriptBlock } from '../../../react-redux&middleware/redux/types/TranscriptTypes';
-import { ScribearServerStatus } from '../../../react-redux&middleware/redux/typesImports';
+import { ScribearServerStatus, STATUS } from '../../../react-redux&middleware/redux/typesImports';
 import RecordRTC, { StereoAudioRecorder } from 'recordrtc';
 import { store } from '../../../store'
 import { setModelOptions, setSelectedModel } from '../../../react-redux&middleware/redux/reducers/modelSelectionReducers';
@@ -88,6 +88,12 @@ export class ScribearRecognizer implements Recognizer {
                 sourceToken: this.scribearServerStatus.scribearServerKey,
                 sessionToken: this.scribearServerStatus.scribearServerSessionToken,
             }));
+            // Notify UI that the socket is open/available
+            try {
+                store.dispatch({ type: 'CHANGE_API_STATUS', payload: { scribearServerStatus: STATUS.AVAILABLE } });
+            } catch (e) {
+                console.warn('Failed to dispatch API status AVAILABLE', e);
+            }
         }
 
         const inProgressBlock = new TranscriptBlock();
@@ -103,6 +109,12 @@ export class ScribearRecognizer implements Recognizer {
                 if (this.selectedModelOption) {
                     this.socket?.send(JSON.stringify(this.selectedModelOption));
                     this.ready = true;
+                    // Client has informed server which model to use — consider the connection active/ready
+                    try {
+                        store.dispatch({ type: 'CHANGE_API_STATUS', payload: { scribearServerStatus: STATUS.TRANSCRIBING } });
+                    } catch (e) {
+                        console.warn('Failed to dispatch API status TRANSCRIBING', e);
+                    }
                 }
                 return;
             }
@@ -127,12 +139,22 @@ export class ScribearRecognizer implements Recognizer {
         this.socket.onerror = (event) => {
             const error = new Error("WebSocket error");
             console.error("WebSocket error event:", event);
+            try {
+                store.dispatch({ type: 'CHANGE_API_STATUS', payload: { scribearServerStatus: STATUS.ERROR } });
+            } catch (e) {
+                console.warn('Failed to dispatch API status ERROR', e);
+            }
             this.errorCallback?.(error);
         };
 
         this.socket.onclose = (event) => {
             console.warn(`WebSocket closed: code=${event.code}, reason=${event.reason}`);
             this.socket = null;
+            try {
+                store.dispatch({ type: 'CHANGE_API_STATUS', payload: { scribearServerStatus: STATUS.UNAVAILABLE } });
+            } catch (e) {
+                console.warn('Failed to dispatch API status UNAVAILABLE', e);
+            }
             if (event.code !== 1000) { // 1000 = normal closure
                 const error = new Error(`WebSocket closed unexpectedly: code=${event.code}`);
                 this.errorCallback?.(error);

@@ -176,7 +176,6 @@ export default function PickApi() {
           copyStatus.azureConvoStatus     = STATUS.AVAILABLE;
           copyStatus.whisperStatus        = STATUS.AVAILABLE;
           copyStatus.streamTextStatus     = STATUS.AVAILABLE;
-          copyStatus.scribearServerStatus = STATUS.NULL;
           // NOTE: do not reset scribearServerStatus here — keep the last known server state
           copyStatus.playbackStatus       = STATUS.AVAILABLE;
 

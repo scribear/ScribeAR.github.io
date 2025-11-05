@@ -155,10 +155,17 @@ export class ScribearRecognizer implements Recognizer {
             } catch (e) {
                 console.warn('Failed to dispatch API status UNAVAILABLE', e);
             }
-            if (event.code !== 1000) { // 1000 = normal closure
+            if (event.code == 3000) { // API key error
+                try {
+                    store.dispatch({ type: 'CHANGE_API_STATUS', payload: { scribearServerStatus: STATUS.ERROR, scribearServerMessage: 'ScribeAR Server rejected credentials (invalid API key/token)' } });
+                } catch (e) {
+                    console.warn('Failed to dispatch API status for code 3000', e);
+                }
+            } else if (event.code !== 1000) { // 1000 = normal closure
                 const error = new Error(`WebSocket closed unexpectedly: code=${event.code}`);
                 this.errorCallback?.(error);
             }
+
         };
     }
 

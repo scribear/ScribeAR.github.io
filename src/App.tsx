@@ -15,15 +15,16 @@ function App() {
   });
 
   const scribearStatus = useSelector((state: RootState) => state.APIStatusReducer?.scribearServerStatus as number);
+  const scribearMessage = useSelector((state: RootState) => (state.APIStatusReducer as any)?.scribearServerMessage as string | undefined);
 
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMsg, setSnackbarMsg] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState<'error' | 'warning' | 'info' | 'success'>('info');
 
   useEffect(() => {
-    // Show a visible snackbar when ScribeAR server experiences error or disconnects
+    // Show a visible snackbar when ScribeAR server connects, sends error, or disconnects
     if (scribearStatus === STATUS.ERROR) {
-      setSnackbarMsg('ScribeAR Server error: connection problem');
+      setSnackbarMsg(scribearMessage ?? 'ScribeAR Server error: connection problem');
       setSnackbarSeverity('error');
       setSnackbarOpen(true);
     } else if (scribearStatus === STATUS.UNAVAILABLE) {
@@ -31,18 +32,11 @@ function App() {
       setSnackbarSeverity('warning');
       setSnackbarOpen(true);
     } else if (scribearStatus === STATUS.AVAILABLE || scribearStatus === STATUS.TRANSCRIBING) {
-      // Optionally notify successful connection briefly
       setSnackbarMsg('ScribeAR Server connected');
       setSnackbarSeverity('success');
       setSnackbarOpen(true);
       // auto-close success after short time handled by Snackbar props
     }
-    // else if (scribearStatus === STATUS.TRANSCRIBING) {
-    //   // keep transcribing as info; close any earlier error
-    //   setSnackbarMsg('ScribeAR Server connected');
-    //   setSnackbarSeverity('success');
-    //   setSnackbarOpen(true);
-    // }
   }, [scribearStatus]);
 
   const handleClose = (_event?: React.SyntheticEvent | Event, reason?: string) => {

@@ -1,13 +1,13 @@
+// src/components/navbars/topbar/api/WhisperDropdown.tsx
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-// Pull UI pieces from the same aggregator used elsewhere
 import {
   IconButton,
   Tooltip,
   Menu,
   MenuItem,
-  SettingsIcon,   // this should be re-exported by your muiImports like other icons
+  SettingsIcon,
 } from '../../../../muiImports';
 
 import { selectSelectedModel } from
@@ -15,64 +15,70 @@ import { selectSelectedModel } from
 
 type Props = { onPicked?: () => void };
 
-type ModelKey = 'tiny' | 'base';
-
-// Helper to normalize current selection into 'tiny' | 'base' | undefined
-function normalizeSelected(selected: unknown): ModelKey | undefined {
-  if (typeof selected === 'string') {
-    return selected === 'tiny' || selected === 'base' ? selected : undefined;
-  }
-  if (selected && typeof selected === 'object' && 'key' in (selected as any)) {
-    const k = (selected as any).key;
-    return k === 'tiny' || k === 'base' ? k : undefined;
-  }
-  return undefined;
-}
+// Only keep tiny models (keep legacy 'tiny' for backward-compat)
+type ModelKey = 'tiny-en-q5_1' | 'tiny-q5_1' | 'tiny';
 
 export default function WhisperDropdown({ onPicked }: Props) {
   const dispatch = useDispatch();
-  const selected = useSelector(selectSelectedModel);
-  const selectedKey = normalizeSelected(selected);
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
+  const isShown = Boolean(anchorEl);
 
-  const handleOpen = (e: React.MouseEvent<HTMLElement>) => setAnchorEl(e.currentTarget);
+  const selected = useSelector(selectSelectedModel);
+  const selectedKey: ModelKey = React.useMemo(() => {
+    const allowed = new Set(['tiny-en-q5_1', 'tiny-q5_1']);
+    if (typeof selected === 'string') {
+      if (selected === 'tiny') return 'tiny-en-q5_1';
+      return (allowed.has(selected) ? selected : 'tiny-en-q5_1') as ModelKey;
+    }
+    if (selected && typeof selected === 'object') {
+      const k = (selected as any).model_key || (selected as any).key;
+      if (k === 'tiny') return 'tiny-en-q5_1';
+      return (allowed.has(k) ? k : 'tiny-en-q5_1') as ModelKey;
+    }
+    return 'tiny-en-q5_1';
+  }, [selected]);
+
+  const showPopup = (e: React.MouseEvent<HTMLElement>) => setAnchorEl(e.currentTarget);
   const handleClose = () => setAnchorEl(null);
 
   const pick = (which: ModelKey) => {
-    // Keep the existing flags your loader is watching
-    sessionStorage.setItem('isDownloadTiny', String(which === 'tiny'));
-    sessionStorage.setItem('isDownloadBase', String(which === 'base'));
+    // Maintain legacy session flags for any old code paths
+    sessionStorage.setItem('isDownloadTiny', 'true');
+    sessionStorage.setItem('isDownloadBase', 'false');
 
-    // Update Redux – if you have a real action creator, use it here
     dispatch({ type: 'SET_SELECTED_MODEL', payload: which as any });
-
-    handleClose();
     onPicked?.();
+    handleClose();
   };
 
   return (
     <>
-      {/* Right-aligned gear like other providers */}
-      <Tooltip title="Whisper settings">
-        <IconButton onClick={handleOpen} size="large">
+      <Tooltip title="Model" placement="bottom">
+        <IconButton onClick={showPopup}>
           <SettingsIcon />
         </IconButton>
       </Tooltip>
 
       <Menu
+        keepMounted
+        open={isShown}
         anchorEl={anchorEl}
-        open={open}
         onClose={handleClose}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
       >
-        <MenuItem selected={selectedKey === 'tiny'} onClick={() => pick('tiny')}>
-          TINY (75 MB)
+        <MenuItem
+          selected={selectedKey === 'tiny-en-q5_1'}
+          onClick={() => pick('tiny-en-q5_1')}
+        >
+          TINY (EN, q5_1) ~31 MB
         </MenuItem>
-        <MenuItem selected={selectedKey === 'base'} onClick={() => pick('base')}>
-          BASE (145 MB)
+        <MenuItem
+          selected={selectedKey === 'tiny-q5_1'}
+          onClick={() => pick('tiny-q5_1')}
+        >
+          TINY (Multi, q5_1) ~31 MB
         </MenuItem>
       </Menu>
     </>

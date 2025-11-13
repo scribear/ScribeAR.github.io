@@ -171,13 +171,13 @@ export default function PickApi() {
           copyStatus.currentApi = api;
 
           // reset all
-          copyStatus.azureTranslStatus   = STATUS.AVAILABLE;
-          copyStatus.webspeechStatus     = STATUS.AVAILABLE;
-          copyStatus.azureConvoStatus    = STATUS.AVAILABLE;
-          copyStatus.whisperStatus       = STATUS.AVAILABLE;
-          copyStatus.streamTextStatus    = STATUS.AVAILABLE;
-          copyStatus.scribearServerStatus= STATUS.AVAILABLE;
-          copyStatus.playbackStatus      = STATUS.AVAILABLE;
+          copyStatus.azureTranslStatus    = STATUS.AVAILABLE;
+          copyStatus.webspeechStatus      = STATUS.AVAILABLE;
+          copyStatus.azureConvoStatus     = STATUS.AVAILABLE;
+          copyStatus.whisperStatus        = STATUS.AVAILABLE;
+          copyStatus.streamTextStatus     = STATUS.AVAILABLE;
+          // NOTE: do not reset scribearServerStatus here — keep the last known server state
+          copyStatus.playbackStatus       = STATUS.AVAILABLE;
 
           let apiName = '';
           if (api === API.AZURE_TRANSLATION) {

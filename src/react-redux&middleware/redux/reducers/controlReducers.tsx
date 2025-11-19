@@ -22,6 +22,7 @@ const initialControlState : ControlStatus = {
   showMFCC: false,
   showSpeaker: false,
   showIntent: false,
+  micNoAudio: false,
 }
 
 export function ControlReducer(state = initialControlState, action) {
@@ -41,6 +42,8 @@ export function ControlReducer(state = initialControlState, action) {
       return { ...state, showIntent: !state.showIntent };
     case 'FLIP_RECORDING_PHRASE':
       return { ...state, listening: action.payload};
+    case 'SET_MIC_INACTIVITY':
+      return { ...state, micNoAudio: action.payload };
     case 'SET_SPEECH_LANGUAGE':
         return {
           ...state,

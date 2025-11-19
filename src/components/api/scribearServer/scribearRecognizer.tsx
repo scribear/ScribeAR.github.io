@@ -31,6 +31,10 @@ export class ScribearRecognizer implements Recognizer {
     private language: string
     private recorder?: RecordRTC;
     private kSampleRate = 16000;
+    // last time we received an audio chunk (ms since epoch)
+    private lastAudioTimestamp: number | null = null;
+    // interval id for inactivity checks
+    private inactivityInterval: any = null;
 
     urlParams = new URLSearchParams(window.location.search);
     mode = this.urlParams.get('mode');
@@ -58,6 +62,18 @@ export class ScribearRecognizer implements Recognizer {
             desiredSampRate: this.kSampleRate,
             timeSlice: 50,
             ondataavailable: async (blob: Blob) => {
+                // update last audio timestamp and mark that we've received at least one audio chunk
+                this.lastAudioTimestamp = Date.now();
+                try { (window as any).__lastAudioTimestamp = this.lastAudioTimestamp; } catch (e) {}
+                try { (window as any).__hasReceivedAudio = true; if ((window as any).__initialAudioTimer) { clearTimeout((window as any).__initialAudioTimer); (window as any).__initialAudioTimer = null; } } catch (e) {}
+                try {
+                    const controlState = (store.getState() as any).ControlReducer;
+                    if (controlState?.micNoAudio === true) {
+                        store.dispatch({ type: 'SET_MIC_INACTIVITY', payload: false });
+                    }
+                } catch (e) {
+                    console.warn('Failed to clear mic inactivity', e);
+                }
                 this.socket?.send(blob);
             },
             recorderType: StereoAudioRecorder,
@@ -65,6 +81,34 @@ export class ScribearRecognizer implements Recognizer {
         });
 
         this.recorder.startRecording();
+
+        // start inactivity monitor: if mic is on but we haven't received audio for threshold -> set micNoAudio
+        const thresholdMs = 3000; // consider no audio if no chunks in 3s
+        if (this.inactivityInterval == null) {
+            this.inactivityInterval = setInterval(() => {
+                try {
+                    const state: any = store.getState();
+                    const listening = state.ControlReducer?.listening === true;
+                    const micNoAudio = state.ControlReducer?.micNoAudio === true;
+                    if (listening) {
+                        if (!this.lastAudioTimestamp || (Date.now() - this.lastAudioTimestamp > thresholdMs)) {
+                            if (!micNoAudio) {
+                                store.dispatch({ type: 'SET_MIC_INACTIVITY', payload: true });
+                            }
+                        } else {
+                            if (micNoAudio) {
+                                store.dispatch({ type: 'SET_MIC_INACTIVITY', payload: false });
+                            }
+                        }
+                    } else {
+                        // not listening: ensure flag is cleared
+                        if (micNoAudio) store.dispatch({ type: 'SET_MIC_INACTIVITY', payload: false });
+                    }
+                } catch (e) {
+                    console.warn('Error in mic inactivity interval', e);
+                }
+            }, 1000);
+        }
     }
 
     /**
@@ -179,6 +223,16 @@ export class ScribearRecognizer implements Recognizer {
         if (!this.socket) { return; }
         this.socket.close();
         this.socket = null;
+        // clear inactivity interval and reset mic inactivity flag
+        if (this.inactivityInterval) {
+            clearInterval(this.inactivityInterval);
+            this.inactivityInterval = null;
+        }
+        try {
+            store.dispatch({ type: 'SET_MIC_INACTIVITY', payload: false });
+        } catch (e) {
+            console.warn('Failed to clear mic inactivity on stop', e);
+        }
     }
 
     /**

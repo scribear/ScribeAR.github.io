@@ -37,3 +37,5 @@ export const store = configureStore({
 });
 
 export type RootState = ReturnType<typeof rootReducer>
+// Expose store on window for runtime helpers (used by mic inactivity monitor)
+(window as any).store = store;

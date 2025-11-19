@@ -48,6 +48,9 @@ export class WhisperRecognizer implements Recognizer {
     private num_threads: number;
 
     private transcribed_callback: ((newFinalBlocks: Array<TranscriptBlock>, newInProgressBlock: TranscriptBlock) => void) | null = null;
+    // mic activity tracking
+    private lastAudioTimestamp: number | null = null;
+    private inactivityInterval: any = null;
 
     /**
      * Creates an Whisper recognizer instance that listens to the default microphone
@@ -135,6 +138,22 @@ export class WhisperRecognizer implements Recognizer {
                 pcm_data = Float32Concat(last_suffix, pcm_data);
                 last_suffix = pcm_data.slice(-(pcm_data.length % 128))
 
+                // update last audio timestamp and mark that we've received at least one audio chunk
+                this.lastAudioTimestamp = Date.now();
+                try { (window as any).__lastAudioTimestamp = this.lastAudioTimestamp; } catch (e) {}
+                try { (window as any).__hasReceivedAudio = true; if ((window as any).__initialAudioTimer) { clearTimeout((window as any).__initialAudioTimer); (window as any).__initialAudioTimer = null; } } catch (e) {}
+                try {
+                    // clear micNoAudio if previously set
+                    // avoid importing store at top; use global store via require to prevent circular import issues
+                    const { store } = require('../../../store');
+                    const controlState = (store.getState() as any).ControlReducer;
+                    if (controlState?.micNoAudio === true) {
+                        store.dispatch({ type: 'SET_MIC_INACTIVITY', payload: false });
+                    }
+                } catch (e) {
+                    console.warn('Failed to clear mic inactivity (whisper)', e);
+                }
+
                 // Feed process_recorder_message audio in 128 sample chunks
                 for (let i = 0; i < pcm_data.length - 127; i+= 128) {
                     const audio_chunk = pcm_data.subarray(i, i + 128)
@@ -149,6 +168,29 @@ export class WhisperRecognizer implements Recognizer {
 
         this.recorder.startRecording();
         console.log("Whisper: Done setting up audio context");
+        // start inactivity monitor
+        const thresholdMs = 3000;
+        if (this.inactivityInterval == null) {
+            const { store } = require('../../../store');
+            this.inactivityInterval = setInterval(() => {
+                try {
+                    const state: any = store.getState();
+                    const listening = state.ControlReducer?.listening === true;
+                    const micNoAudio = state.ControlReducer?.micNoAudio === true;
+                    if (listening) {
+                        if (!this.lastAudioTimestamp || (Date.now() - this.lastAudioTimestamp > thresholdMs)) {
+                            if (!micNoAudio) store.dispatch({ type: 'SET_MIC_INACTIVITY', payload: true });
+                        } else {
+                            if (micNoAudio) store.dispatch({ type: 'SET_MIC_INACTIVITY', payload: false });
+                        }
+                    } else {
+                        if (micNoAudio) store.dispatch({ type: 'SET_MIC_INACTIVITY', payload: false });
+                    }
+                } catch (e) {
+                    console.warn('Error in whisper mic inactivity interval', e);
+                }
+            }, 1000);
+        }
     }
 
     private async load_model(model: string) {
@@ -257,6 +299,17 @@ export class WhisperRecognizer implements Recognizer {
         this.whisper.set_status("paused");
         this.context.suspend();
         this.recorder?.stopRecording();
+        // clear inactivity interval and reset mic inactivity flag
+        if (this.inactivityInterval) {
+            clearInterval(this.inactivityInterval);
+            this.inactivityInterval = null;
+        }
+        try {
+            const { store } = require('../../../store');
+            store.dispatch({ type: 'SET_MIC_INACTIVITY', payload: false });
+        } catch (e) {
+            console.warn('Failed to clear mic inactivity on whisper stop', e);
+        }
     }
 
     /**

@@ -16,4 +16,5 @@ export type ControlStatus = {
    showMFCC: boolean
    showSpeaker: boolean
    showIntent: boolean
+   micNoAudio?: boolean
 }

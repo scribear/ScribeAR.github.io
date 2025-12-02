@@ -37,3 +37,5 @@ export const store = configureStore({
 });
 
 export type RootState = ReturnType<typeof rootReducer>
+(window as any).store = store;
+

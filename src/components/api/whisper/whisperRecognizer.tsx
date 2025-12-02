@@ -48,7 +48,6 @@ export class WhisperRecognizer implements Recognizer {
     private num_threads: number;
 
     private transcribed_callback: ((newFinalBlocks: Array<TranscriptBlock>, newInProgressBlock: TranscriptBlock) => void) | null = null;
-    // mic activity tracking
     private lastAudioTimestamp: number | null = null;
     private inactivityInterval: any = null;
 
@@ -143,8 +142,6 @@ export class WhisperRecognizer implements Recognizer {
                 try { (window as any).__lastAudioTimestamp = this.lastAudioTimestamp; } catch (e) {}
                 try { (window as any).__hasReceivedAudio = true; if ((window as any).__initialAudioTimer) { clearTimeout((window as any).__initialAudioTimer); (window as any).__initialAudioTimer = null; } } catch (e) {}
                 try {
-                    // clear micNoAudio if previously set
-                    // avoid importing store at top; use global store via require to prevent circular import issues
                     const { store } = require('../../../store');
                     const controlState = (store.getState() as any).ControlReducer;
                     if (controlState?.micNoAudio === true) {
@@ -168,7 +165,7 @@ export class WhisperRecognizer implements Recognizer {
 
         this.recorder.startRecording();
         console.log("Whisper: Done setting up audio context");
-        // start inactivity monitor
+        
         const thresholdMs = 3000;
         if (this.inactivityInterval == null) {
             const { store } = require('../../../store');
@@ -299,7 +296,7 @@ export class WhisperRecognizer implements Recognizer {
         this.whisper.set_status("paused");
         this.context.suspend();
         this.recorder?.stopRecording();
-        // clear inactivity interval and reset mic inactivity flag
+        
         if (this.inactivityInterval) {
             clearInterval(this.inactivityInterval);
             this.inactivityInterval = null;

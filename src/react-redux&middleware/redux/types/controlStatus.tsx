@@ -16,6 +16,5 @@ export type ControlStatus = {
    showMFCC: boolean
    showSpeaker: boolean
    showIntent: boolean
-   // true when microphone is on but no audio chunks have been received for a short time
    micNoAudio?: boolean
 }

@@ -36,7 +36,7 @@ import AzureSettings from './AzureSettings';
 import StreamTextSettings from './StreamTextSettings';
 import ScribearServerSettings from './ScribearServerSettings';
 import PlaybackSettings from './PlaybackSettings';
-import WhisperSettings from './WhisperSettings'; // gear dialog for Whisper
+import WhisperSettings from './WhisperDropdown';
 
 import swal from 'sweetalert';
 import { testAzureTranslRecog } from '../../../api/azure/azureTranslRecog';

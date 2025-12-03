@@ -1,56 +1,64 @@
+// src/components/navbars/sidebar/model/menu.tsx
+
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  Autocomplete,
+  TextField,
+  Tooltip,
+  ListItem,
+} from '../../../../muiImports';
 
-import { List, ListItemText, Collapse, ListItem, MemoryIcon, Autocomplete, TextField, Tooltip } from '../../../../muiImports';
-import { useSelector } from 'react-redux';
 import type { RootState } from '../../../../store';
-import { API, type ApiStatus } from '../../../../react-redux&middleware/redux/typesImports';
-import { useDispatch } from 'react-redux';
-import { selectModelOptions, selectSelectedModel, setSelectedModel } from '../../../../react-redux&middleware/redux/reducers/modelSelectionReducers';
+import type { SelectedOption } from '../../../../react-redux&middleware/redux/types/modelSelection';
+import {
+  selectModelOptions,
+  selectSelectedModel,
+  setSelectedModel,
+} from '../../../../react-redux&middleware/redux/reducers/modelSelectionReducers';
 
-export default function ModelMenu(props) {
+export default function ModelMenu(_props: any) {
   const dispatch = useDispatch();
-  const APIStatus = useSelector((state: RootState) => {
-    return state.APIStatusReducer as ApiStatus;
-  });
-  const modelOptions = useSelector(selectModelOptions);
-  const selected = useSelector(selectSelectedModel);
-  const modelSelectEnable = APIStatus.currentApi !== API.SCRIBEAR_SERVER;
+
+  const modelOptions = useSelector((state: RootState) =>
+    selectModelOptions(state),
+  );
+  const selected = useSelector((state: RootState) =>
+    selectSelectedModel(state),
+  );
 
   return (
-    <div>
-      {props.listItemHeader("Model", "model", MemoryIcon)}
-
-      <Collapse in={props.open} timeout="auto" unmountOnExit>
-        <List component="div" disablePadding>
-          <ListItem sx={{ pl: 4 }}>
-            <ListItemText primary="Select Model" />
-          </ListItem>
-
-          <ListItem sx={{ pl: 4 }}>
-            <Autocomplete
-              disabled={modelSelectEnable}
-              sx={{ width: 300 }}
-              disablePortal
-              options={modelOptions}
-              onChange={(_, val) => {
-                dispatch(setSelectedModel(val))
-              }}
-              defaultValue={selected}
-              getOptionLabel={(v) => v.display_name}
-              isOptionEqualToValue={(a, b) => a.model_key === b.model_key}
-              renderInput={(params) => <TextField {...params} />}
-              renderOption={(props, option) => {
-                return <Tooltip key={props.key} title={option.description} placement='right'>
-                  <ListItem {...props}>
-                    {option.display_name}
-                  </ListItem>
-                </Tooltip>
-              }}
-            />
-          </ListItem>
-
-        </List>
-      </Collapse>
-    </div>
+    <Autocomplete<SelectedOption>
+      sx={{ width: 300 }}
+      disablePortal
+      options={modelOptions}
+      value={selected}
+      onChange={(_, val) => {
+        if (val) {
+          dispatch(setSelectedModel(val));
+        }
+      }}
+      getOptionLabel={(v: SelectedOption | null) =>
+        v ? v.display_name : ''
+      }
+      isOptionEqualToValue={(
+        a: SelectedOption | null,
+        b: SelectedOption | null,
+      ) => !!a && !!b && a.model_key === b.model_key}
+      renderInput={(params) => <TextField {...params} />}
+      renderOption={(props, option) => {
+        const opt = option as SelectedOption | null;
+        if (!opt) return null;
+        return (
+          <Tooltip
+            key={props.key}
+            title={opt.description}
+            placement="right"
+          >
+            <ListItem {...props}>{opt.display_name}</ListItem>
+          </Tooltip>
+        );
+      }}
+    />
   );
 }

@@ -1,168 +1,133 @@
-// Robust, silent caching + URL fallbacks for Whisper model binaries
+// src/components/api/whisper/indexedDB.js
+// Silent IndexedDB caching loader with multi-URL fallbacks.
 
 var dbVersion = 1;
-var dbName    = 'whisper.ggerganov.com';
-var _indexedDB =
+var dbName = 'whisper.ggerganov.com';
+var indexedDB =
   (window.indexedDB ||
    window.mozIndexedDB ||
    window.webkitIndexedDB ||
    window.msIndexedDB);
 
-// --- tiny helpers -----------------------------------------------------------
+// fetch a URL as a Uint8Array (progress callback optional)
+async function fetchBinary(url, cbProgress, cbPrint) {
+  cbPrint && cbPrint('fetchBinary: GET ' + url);
 
-function log(cbPrint, msg){ try { cbPrint && cbPrint(msg); } catch(_){} }
+  const res = await fetch(url, { method: 'GET', cache: 'no-cache' });
+  if (!res.ok) throw new Error('http-' + res.status);
 
-function isValidModelBytes(buf, contentType) {
-  if (!buf) return false;
-  // Reject obvious HTML/JSON or tiny payloads (typical CRA index.html ~2–5 KB)
-  if (buf.byteLength < 4096) return false;
-  if (!contentType) return true;
-  const ct = String(contentType).toLowerCase();
-  if (ct.includes('text/html')) return false;
-  if (ct.includes('json'))      return false;
-  return true;
-}
-
-// Fetch bytes from a URL (no prompt, no cache), return Uint8Array or null
-async function fetchBytes(url, cbProgress, cbPrint) {
-  log(cbPrint, 'fetchRemote: GET ' + url);
-  const res = await fetch(url, { cache: 'no-cache', method: 'GET' });
-  if (!res.ok) {
-    log(cbPrint, 'fetchRemote: HTTP ' + res.status + ' @ ' + url);
-    return null;
-  }
-  const totalHdr = res.headers.get('content-length');
-  const total = totalHdr ? parseInt(totalHdr, 10) : undefined;
-
-  // If stream not available, do arrayBuffer directly
+  // No stream? Just read all at once.
   if (!res.body || !res.body.getReader) {
-    const buf = await res.arrayBuffer();
-    if (!isValidModelBytes(buf, res.headers.get('content-type'))) return null;
+    const buf = new Uint8Array(await res.arrayBuffer());
     cbProgress && cbProgress(1);
-    return new Uint8Array(buf);
+    return buf;
   }
 
+  const total = parseInt(res.headers.get('content-length') || '0', 10) || 0;
   const reader = res.body.getReader();
-  let received = 0, chunks = [], lastReport = -1;
 
+  let received = 0;
+  const chunks = [];
   while (true) {
-    const { value, done } = await reader.read();
+    const { done, value } = await reader.read();
     if (done) break;
     chunks.push(value);
     received += value.length;
-    if (total) {
-      const frac = received / total;
-      cbProgress && cbProgress(frac);
-      const bucket = Math.round(frac * 10);
-      if (bucket !== lastReport) {
-        log(cbPrint, 'fetchRemote: fetching ' + (bucket * 10) + '% ...');
-        lastReport = bucket;
-      }
-    }
+    if (total && cbProgress) cbProgress(received / total);
   }
 
-  // Concat
   const out = new Uint8Array(received);
   let pos = 0;
-  for (let i = 0; i < chunks.length; i++) {
-    out.set(chunks[i], pos);
-    pos += chunks[i].length;
-  }
-
-  // Final sanity
-  const ct = res.headers.get('content-type');
-  if (!isValidModelBytes(out, ct)) return null;
-  if (!total) { cbProgress && cbProgress(1); }
-
+  for (const c of chunks) { out.set(c, pos); pos += c.length; }
+  if (!total && cbProgress) cbProgress(1);
   return out;
 }
 
-// IDB helpers
-function idbGet(db, key) {
-  return new Promise(resolve => {
-    try {
-      const tx = db.transaction(['models'], 'readonly');
-      const os = tx.objectStore('models');
-      const rq = os.get(key);
-      rq.onsuccess = () => resolve(rq.result || null);
-      rq.onerror   = () => resolve(null);
-    } catch (_) { resolve(null); }
-  });
-}
-
-function idbPut(db, key, bytes, cbPrint) {
-  return new Promise(resolve => {
-    try {
-      const tx = db.transaction(['models'], 'readwrite');
-      const os = tx.objectStore('models');
-      const rq = os.put(bytes, key);
-      rq.onsuccess = () => { log(cbPrint, 'loadRemote: stored in IDB: ' + key); resolve(true); };
-      rq.onerror   = () => { log(cbPrint, 'loadRemote: IDB put failed (non-fatal)'); resolve(false); };
-    } catch (e) {
-      log(cbPrint, 'loadRemote: IDB exception: ' + e);
-      resolve(false);
-    }
-  });
-}
-
-function openDB(cbPrint) {
-  return new Promise(resolve => {
-    const rq = _indexedDB.open(dbName, dbVersion);
+function openDB() {
+  return new Promise((resolve, reject) => {
+    const rq = indexedDB.open(dbName, dbVersion);
     rq.onupgradeneeded = (ev) => {
       const db = ev.target.result;
       if (!db.objectStoreNames.contains('models')) {
         db.createObjectStore('models', { autoIncrement: false });
-        log(cbPrint, 'loadRemote: created IDB store');
       }
     };
     rq.onsuccess = () => resolve(rq.result);
-    rq.onerror   = () => resolve(null);
-    rq.onblocked = () => resolve(null);
-    rq.onabort   = () => resolve(null);
+    rq.onerror = () => reject(new Error('idb-open'));
+    rq.onblocked = () => reject(new Error('idb-blocked'));
+    rq.onabort = () => reject(new Error('idb-abort'));
   });
 }
 
-// --- PUBLIC: try a list of URLs, use cache per-URL, stop on first good one ---
-export async function loadRemoteWithFallbacks(urls, dst, size_mb, cbProgress, cbReady, cbCancel, cbPrint) {
+async function getCached(db, key) {
   try {
-    if (navigator.storage?.estimate) {
+    return await new Promise((resolve) => {
+      const tx = db.transaction(['models'], 'readonly');
+      const os = tx.objectStore('models');
+      const g = os.get(key);
+      g.onsuccess = () => {
+        let v = g.result;
+        if (v && v instanceof ArrayBuffer) v = new Uint8Array(v);
+        resolve(v || null);
+      };
+      g.onerror = () => resolve(null);
+    });
+  } catch { return null; }
+}
+
+async function putCached(db, key, data, cbPrint) {
+  try {
+    await new Promise((resolve) => {
+      const tx = db.transaction(['models'], 'readwrite');
+      const os = tx.objectStore('models');
+      const p = os.put(data, key);
+      p.onsuccess = () => { cbPrint && cbPrint('IDB: stored ' + key); resolve(); };
+      p.onerror = () => resolve();
+    });
+  } catch (e) { cbPrint && cbPrint('IDB store error: ' + e); }
+}
+
+// MAIN: try urls in order; cache successful one under that exact url key.
+export async function loadRemoteWithFallbacks(urls, dst, sizeMB, cbProgress, cbReady, cbCancel, cbPrint) {
+  try {
+    if (navigator.storage && navigator.storage.estimate) {
       const est = await navigator.storage.estimate();
-      log(cbPrint, 'loadRemote: storage quota: ' + est.quota + ' bytes');
-      log(cbPrint, 'loadRemote: storage usage: ' + est.usage + ' bytes');
+      cbPrint && cbPrint(`IDB quota ~${est.quota}, used ~${est.usage}`);
     }
-  } catch (_) {}
+  } catch {}
 
-  // De-dup & filter falsy
-  const list = Array.from(new Set((urls || []).filter(Boolean)));
-  if (!list.length) { cbCancel && cbCancel(); return; }
+  let db = null;
+  try { db = await openDB(); } catch { db = null; }
 
-  const db = await openDB(cbPrint);
+  const tinyBlob = (b) => !b || (b.length || 0) < 4096;
+  const urlList = (Array.isArray(urls) ? urls : [urls]).filter(Boolean);
 
-  for (let i = 0; i < list.length; i++) {
-    const url = list[i];
+  if (urlList.length === 0) {
+    cbCancel && cbCancel();
+    return;
+  }
 
-    // 1) Cache hit?
-    if (db) {
-      const cached = await idbGet(db, url);
-      if (cached && cached.byteLength > 4096) {
-        log(cbPrint, `loadRemote: cache hit for ${url}`);
-        cbReady && cbReady(dst, cached instanceof Uint8Array ? cached : new Uint8Array(cached));
-        return;
+  for (const url of urlList) {
+    try {
+      // cache hit?
+      if (db) {
+        const cached = await getCached(db, url);
+        if (cached && !tinyBlob(cached)) {
+          cbReady(dst, cached);
+          return;
+        }
       }
-    }
 
-    log(cbPrint, `loadRemote: cache miss; downloading ~${size_mb} MB`);
-    const bytes = await fetchBytes(url, cbProgress, cbPrint);
-    if (bytes && bytes.byteLength > 4096) {
-      if (db) { await idbPut(db, url, bytes, cbPrint); }
-      cbReady && cbReady(dst, bytes);
+      cbPrint && cbPrint(`loadRemote: fetching ~${sizeMB} MB from ${url}`);
+      const data = await fetchBinary(url, cbProgress, cbPrint);
+      if (tinyBlob(data)) throw new Error('tiny-blob');
+      if (db) await putCached(db, url, data, cbPrint);
+      cbReady(dst, data);
       return;
-    } else {
-      log(cbPrint, `fetchWithFallbacks: "${url}" did not look like a model, trying next...`);
+    } catch (e) {
+      cbPrint && cbPrint(`loadRemote: failed on ${url} (${e}), trying next...`);
     }
   }
 
-  // All failed
-  log(cbPrint, 'loadRemote: all fetch attempts failed');
-  cbCancel && cbCancel();
+  cbCancel();
 }

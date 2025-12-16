@@ -16,6 +16,8 @@ function App() {
 
   const scribearStatus = useSelector((state: RootState) => state.APIStatusReducer?.scribearServerStatus as number);
   const scribearMessage = useSelector((state: RootState) => (state.APIStatusReducer as any)?.scribearServerMessage as string | undefined);
+  const listening = useSelector((state: RootState) => (state as any).ControlReducer?.listening === true);
+  const micNoAudio = useSelector((state: RootState) => (state as any).ControlReducer?.micNoAudio === true);
 
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMsg, setSnackbarMsg] = useState('');
@@ -38,6 +40,15 @@ function App() {
       // auto-close success after short time handled by Snackbar props
     }
   }, [scribearStatus]);
+
+  useEffect(() => {
+    // Show a snackbar if we expect mic audio but none is coming through
+    if (listening && micNoAudio) {
+      setSnackbarMsg('No microphone audio detected. Please check permissions, input device, or mic level.');
+      setSnackbarSeverity('warning');
+      setSnackbarOpen(true);
+    }
+  }, [listening, micNoAudio]);
 
   const handleClose = (_event?: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') return;

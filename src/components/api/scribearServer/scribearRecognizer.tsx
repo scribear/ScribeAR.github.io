@@ -31,6 +31,8 @@ export class ScribearRecognizer implements Recognizer {
     private language: string
     private recorder?: RecordRTC;
     private kSampleRate = 16000;
+    private lastAudioTimestamp: number | null = null;
+    private inactivityInterval: any = null;
 
     urlParams = new URLSearchParams(window.location.search);
     mode = this.urlParams.get('mode');
@@ -50,7 +52,24 @@ export class ScribearRecognizer implements Recognizer {
     }
 
     private async _startRecording() {
-        let mic_stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+        let mic_stream: MediaStream;
+        try {
+            mic_stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+        } catch (e) {
+            console.error('Failed to access microphone', e);
+            try {
+                store.dispatch({ type: 'SET_MIC_INACTIVITY', payload: true });
+            } catch (dispatchErr) {
+                console.error('Failed to dispatch SET_MIC_INACTIVITY after mic access error', dispatchErr);
+            }
+            // Surface an API status error to prompt UI; recognizer encapsulates flag setting here
+            try {
+                store.dispatch({ type: 'CHANGE_API_STATUS', payload: { scribearServerStatus: STATUS.ERROR, scribearServerMessage: 'Microphone permission denied or unavailable' } });
+            } catch (dispatchErr) {
+                console.error('Failed to dispatch CHANGE_API_STATUS after mic access error', dispatchErr);
+            }
+            throw e;
+        }
 
         this.recorder = new RecordRTC(mic_stream, {
             type: 'audio',
@@ -58,6 +77,16 @@ export class ScribearRecognizer implements Recognizer {
             desiredSampRate: this.kSampleRate,
             timeSlice: 50,
             ondataavailable: async (blob: Blob) => {
+                // update last audio timestamp and mark that we've received at least one audio chunk
+                this.lastAudioTimestamp = performance.now();
+                try {
+                    const controlState = (store.getState() as any).ControlReducer;
+                    if (controlState?.micNoAudio === true) {
+                        store.dispatch({ type: 'SET_MIC_INACTIVITY', payload: false });
+                    }
+                } catch (e) {
+                    console.warn('Failed to clear mic inactivity', e);
+                }
                 this.socket?.send(blob);
             },
             recorderType: StereoAudioRecorder,
@@ -65,6 +94,33 @@ export class ScribearRecognizer implements Recognizer {
         });
 
         this.recorder.startRecording();
+
+        // start inactivity monitor
+        const thresholdMs = 3000;
+        if (this.inactivityInterval == null) {
+            this.inactivityInterval = setInterval(() => {
+                try {
+                    const state: any = store.getState();
+                    const listening = state.ControlReducer?.listening === true;
+                    const micNoAudio = state.ControlReducer?.micNoAudio === true;
+                    if (listening) {
+                        if (!this.lastAudioTimestamp || (Date.now() - this.lastAudioTimestamp > thresholdMs)) {
+                            if (!micNoAudio) {
+                                store.dispatch({ type: 'SET_MIC_INACTIVITY', payload: true });
+                            }
+                        } else {
+                            if (micNoAudio) {
+                                store.dispatch({ type: 'SET_MIC_INACTIVITY', payload: false });
+                            }
+                        }
+                    } else {
+                        if (micNoAudio) store.dispatch({ type: 'SET_MIC_INACTIVITY', payload: false });
+                    }
+                } catch (e) {
+                    console.warn('Error in mic inactivity interval', e);
+                }
+            }, 1000);
+        }
     }
 
     /**
@@ -179,6 +235,15 @@ export class ScribearRecognizer implements Recognizer {
         if (!this.socket) { return; }
         this.socket.close();
         this.socket = null;
+        if (this.inactivityInterval) {
+            clearInterval(this.inactivityInterval);
+            this.inactivityInterval = null;
+        }
+        try {
+            store.dispatch({ type: 'SET_MIC_INACTIVITY', payload: false });
+        } catch (e) {
+            console.warn('Failed to clear mic inactivity on stop', e);
+        }
     }
 
     /**

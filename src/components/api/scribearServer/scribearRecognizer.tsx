@@ -57,9 +57,17 @@ export class ScribearRecognizer implements Recognizer {
             mic_stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
         } catch (e) {
             console.error('Failed to access microphone', e);
-            try { store.dispatch({ type: 'SET_MIC_INACTIVITY', payload: true }); } catch (_) {}
+            try {
+                store.dispatch({ type: 'SET_MIC_INACTIVITY', payload: true });
+            } catch (dispatchErr) {
+                console.error('Failed to dispatch SET_MIC_INACTIVITY after mic access error', dispatchErr);
+            }
             // Surface an API status error to prompt UI; recognizer encapsulates flag setting here
-            try { store.dispatch({ type: 'CHANGE_API_STATUS', payload: { scribearServerStatus: STATUS.ERROR, scribearServerMessage: 'Microphone permission denied or unavailable' } }); } catch (_) {}
+            try {
+                store.dispatch({ type: 'CHANGE_API_STATUS', payload: { scribearServerStatus: STATUS.ERROR, scribearServerMessage: 'Microphone permission denied or unavailable' } });
+            } catch (dispatchErr) {
+                console.error('Failed to dispatch CHANGE_API_STATUS after mic access error', dispatchErr);
+            }
             throw e;
         }
 
@@ -70,9 +78,7 @@ export class ScribearRecognizer implements Recognizer {
             timeSlice: 50,
             ondataavailable: async (blob: Blob) => {
                 // update last audio timestamp and mark that we've received at least one audio chunk
-                this.lastAudioTimestamp = Date.now();
-                try { (window as any).__lastAudioTimestamp = this.lastAudioTimestamp; } catch (e) {}
-                try { (window as any).__hasReceivedAudio = true; if ((window as any).__initialAudioTimer) { clearTimeout((window as any).__initialAudioTimer); (window as any).__initialAudioTimer = null; } } catch (e) {}
+                this.lastAudioTimestamp = performance.now();
                 try {
                     const controlState = (store.getState() as any).ControlReducer;
                     if (controlState?.micNoAudio === true) {
